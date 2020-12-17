@@ -1,0 +1,39 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+html, body {
+  font-size: 16px;
+  overflow: hidden;
+  height: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body ::-webkit-scrollbar {
+	width: 14px;
+	height: 14px;
+}
+body ::-webkit-scrollbar-track {
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 1px;
+}
+body ::-webkit-scrollbar-corner {
+	background-color: transparent;
+}
+
+body ::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, .1);
+	background-clip: padding-box;
+	border: solid transparent;
+	border-radius: 10px;
+}
+body ::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, .4);
+}
