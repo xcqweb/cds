@@ -1,34 +1,39 @@
 <template>
   <div>
-    <a-input-number v-model="gridSize" :min="1" :max="100" @change="sizeChange" />
-    {{gridSize}}
-    <color-picker @colorChange="colorChange"/>
+    <a-input-number
+      v-model="gridSize"
+      :min="1"
+      :max="100"
+      @change="sizeChange"
+    />
+    {{ gridSize }}
+    <color-picker @colorChange="colorChange" />
     <button @click="undo">undo</button>
     <button @click="redo">redo</button>
   </div>
 </template>
 <script>
-import ColorPicker from '@c/color-picker'
-import undoManager from '@u/undo-manager'
+import ColorPicker from "@c/color-picker"
+import undoManager from "@u/undo-manager"
 export default {
-  components:{
+  components: {
     ColorPicker
   },
   data() {
     return {
-      gridSize:10,
+      gridSize: 10
     }
   },
   created() {
-    undoManager.saveApplyChange()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+    undoManager.saveApplyChange()
   },
-  methods:{
+  methods: {
     sizeChange(size) {
-      this.$store.commit('setGridSize',size)
+      this.$store.commit("setGridSize", size)
       undoManager.saveApplyChange()
     },
     colorChange(color) {
-      this.$store.commit('setGridColor',color)
+      this.$store.commit("setGridColor", color)
       undoManager.saveApplyChange()
     },
     undo() {
@@ -36,7 +41,7 @@ export default {
     },
     redo() {
       undoManager.applyRedo()
-    },
+    }
   }
 }
 </script>

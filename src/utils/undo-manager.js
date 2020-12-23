@@ -1,22 +1,23 @@
 import Vue from "vue"
-import VuexHistory from 'vuex-history'
+import VuexHistory from "vuex-history"
 import store from "@/store"
-Vue.use(VuexHistory )
-const watchStateNames = [ 'apply' ]
+Vue.use(VuexHistory)
+const watchStateNames = ["apply"]
 const maxHistoryLength = 50
-const vuexHistory = new VuexHistory( store, watchStateNames, maxHistoryLength )
+const vuexHistory = new VuexHistory(store, watchStateNames, maxHistoryLength)
 export default {
-  saveApplyChange() {// 存储当前应用数据的变化
+  saveApplyChange() {
+    // 存储当前应用数据的变化
     vuexHistory.saveSnapshot()
   },
   applyUndo() {
-    if ( vuexHistory.canUndo ) {
+    if (vuexHistory.canUndo) {
       vuexHistory.undo()
-    } 
+    }
   },
   applyRedo() {
-    if ( vuexHistory.canRedo ) {
+    if (vuexHistory.canRedo) {
       vuexHistory.redo()
-    } 
+    }
   }
 }

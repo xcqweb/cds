@@ -19,7 +19,7 @@ export function createGridBg(size, color, scale) {
         tmp3 +
         " 0 L " +
         tmp3 +
-        " " +                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+        " " +
         tmp2
     )
   }

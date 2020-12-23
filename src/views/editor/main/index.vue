@@ -1,19 +1,38 @@
 <template>
   <div class="view-con-wrap">
     <div class="view-con" ref="viewCon" @scroll="handleScroll">
-      <div class="view-port-con" :style="portConStyle">
-        <div class="view-port" :style="portStyle" ref="viewport"></div>
+      <div class="viewport-con" :style="portConStyle">
+        <div class="viewport" :style="portStyle" ref="viewport">
+          <draggable class="goup-list" :group="{ name: 'design', put: true, pull: false }">
+            <component
+              class="group-item"
+              v-for="item in widgets"
+              :key="item.id"
+              :is="item.cname"
+              v-bind="item"
+            />
+          </draggable>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import draggable from "vuedraggable"
 import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
+import components from '@/widgets/index'
 export default {
   name: "EditorMain",
+  components: {
+    draggable,
+    ...components
+  },
   computed: {
+    widgets() {
+      return this.$store.getters.currentPage.widgets
+    },
     portConStyle() {
       const { scale, width, height } = this.$store.state.apply
       let conWidth = width * 2
@@ -56,13 +75,15 @@ export default {
       this.dealRulerSize()
       window.addEventListener("resize", this.resizeFun)
     },
-    
-    resizeFun: throttle(function() {// 窗口大小变化
+
+    resizeFun: throttle(function() {
+      // 窗口大小变化
       this.centerView()
       this.dealRulerSize()
       this.handleScroll()
     }, 100),
-    centerView() { // 居中视图
+    centerView() {
+      // 居中视图
       this.$nextTick(() => {
         const ele = this.$refs.viewCon
         const { centerX, centerY } = this.viewProps()
@@ -70,11 +91,12 @@ export default {
         ele.scrollTop = centerY
       })
     },
-    viewProps() {// 滚动容器的属性
+    viewProps() {
+      // 滚动容器的属性
       const ele = this.$refs.viewCon
       const { width, height, left, top } = ele.getBoundingClientRect()
       const { width: conW, height: conH } = this.portConStyle
-      return {
+      const res = {
         scrollLeft: ele.scrollLeft,
         scrollTop: ele.scrollTop,
         centerX: (parseFloat(conW) - width) / 2,
@@ -84,8 +106,10 @@ export default {
         width,
         height
       }
+      return res
     },
-    portProps() {// 视图层的属性
+    portProps() {
+      // 视图层的属性
       const ele = this.$refs.viewport
       const { width, height, left, top } = ele.getBoundingClientRect()
       return {
@@ -95,13 +119,15 @@ export default {
         top
       }
     },
-    dealRulerSize() { // 刻度尺大小
+    dealRulerSize() {
+      // 刻度尺大小
       this.$nextTick(() => {
         const { width, height } = this.viewProps()
         this.$store.commit("setRulerSize", { width, height })
       })
     },
-    dealRulerStartPos() { // 刻度尺起始坐标
+    dealRulerStartPos() {
+      // 刻度尺起始坐标
       const { scale } = this.$store.state.apply
       const { left: viewLeft, top: viewTop } = this.viewProps()
       const { left: portLeft, top: portTop } = this.portProps()
@@ -109,13 +135,15 @@ export default {
       const y = parseInt((viewTop - portTop - 4) / scale)
       this.$store.commit("setRulerStartPos", { x, y })
     },
-    dealRulerCorner() { // 刻度尺左上角
+    dealRulerCorner() {
+      // 刻度尺左上角
       const { scrollLeft, scrollTop, centerX, centerY } = this.viewProps()
       const distanceX = Math.abs(centerX - scrollLeft) > 1
       const distanceY = Math.abs(centerY - scrollTop) > 1
       this.$store.commit("setRulerCornerActive", distanceX || distanceY)
     },
-    handleScroll: throttle(function() { // 滚动处理
+    handleScroll: throttle(function() {
+      // 滚动处理
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100)
@@ -130,9 +158,7 @@ export default {
   right: 0px;
   bottom: 0px;
   display: flex;
-  -webkit-box-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
   align-items: center;
   transition: background 0.2s ease-in-out 0s;
   background-color: rgb(245, 245, 245);
@@ -144,7 +170,7 @@ export default {
     bottom: 0;
     overflow: auto;
   }
-  .view-port-con {
+  .viewport-con {
     position: absolute;
     left: 0;
     top: 0;
@@ -152,7 +178,16 @@ export default {
     justify-content: center;
     align-items: center;
   }
-  .view-port {
+  .viewport {
+    position:relative;
+    .goup-list {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+    }
+    .group-item {
+      position: absolute;
+    }
   }
 }
 </style>

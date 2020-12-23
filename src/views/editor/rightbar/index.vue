@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import Page from './page.vue'
+import Page from "./page.vue"
 export default {
-  components:{
+  components: {
     Page
-  },
+  }
 }
 </script>
 <style lang="less">

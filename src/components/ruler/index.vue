@@ -14,6 +14,7 @@
       :cornerActive="cornerActive"
       @handleLine="handleLine"
       @onCornerClick="handleCornerClick"
+      @hook:mounted="rulerMounted"
     />
   </div>
 </template>
@@ -24,6 +25,14 @@ export default {
   name: "Ruler",
   components: { SketchRule },
   computed: {
+    lines:{
+      get() {
+        return this.$store.getters.currentPage.lines
+      },
+      set(val) {
+        this.$store.commit('setLines',val)
+      }
+    },
     scale() {
       return this.$store.state.apply.scale
     },
@@ -54,10 +63,6 @@ export default {
   },
   data() {
     return {
-      lines: {
-        h: [],
-        v: []
-      },
       thick: 20,
       lang: "zh-CN" // 中英文
     }
@@ -69,9 +74,17 @@ export default {
     this.$bus.$off()
   },
   methods: {
-    handleLine() {},
+    handleLine(lines) {
+      this.lines = lines
+    },
     handleCornerClick() {
       this.$bus.$emit("handleCornerClick")
+    },
+    rulerMounted() {
+      const el = document.querySelector(".corner")
+      if (el) {
+        el.setAttribute("title", "点我回到原点")
+      }
     }
   }
 }
