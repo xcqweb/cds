@@ -1,7 +1,10 @@
 // 指定长度和基数
 export function uuid(len, radix) {
-  let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split("")
-  let uuid = [], i
+  let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split(
+    ""
+  )
+  let uuid = [],
+    i
   radix = radix || chars.length
   if (len) {
     for (i = 0; i < len; i++) {

@@ -2,32 +2,26 @@
   <div class="left-con">
     <h2>基本组件</h2>
     <div class="widget-con">
-      <draggable
-        class="widget-item-list"
-        :group="{ name: 'design', pull: 'clone', put: false }"
-        :forceFallback="true"
-        tag="ul"
-        v-model="widgets"
-        :move="move"
-        @end="end"
-      >
-        <li class="widget-item" v-for="item in widgets" :key="item.name">
+      <ul class="widget-item-list" @dragstart="dragstart">
+        <li
+          class="widget-item"
+          v-for="(item, index) in widgets"
+          :key="item.name"
+          draggable="true"
+          :data-index="index"
+        >
           <div class="img-wrapper">
             {{ item.cname }}
           </div>
           <span>{{ item.name }}</span>
         </li>
-      </draggable>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable"
 export default {
-  components: {
-    draggable
-  },
   data() {
     return {}
   },
@@ -38,20 +32,13 @@ export default {
   },
   created() {},
   methods: {
-    move(a, b, c) {
-      this.isMoveToCanvas = true // 是否移动到画布
-      return false
-    },
-    end(evt) {
-      if (this.isMoveToCanvas) { // 拖动组件到画布上
-        console.log("---end--", evt)
-        this.isMoveToCanvas = false
-        const { oldIndex } = evt
-        const item = this.widgets[oldIndex]
-        evt.cname = item.cname
-        evt.name = item.name
-        this.$store.commit("widgetAdd", evt)
-      }
+    dragstart(evt) {
+      const {x,y,srcElement} = evt // 开始拖拽时候，鼠标的位置
+      const {left, top} = srcElement.getBoundingClientRect() // 拖拽元素与html文档的距离
+      let dx = x - left
+      let dy = y - top
+      const item = this.widgets[srcElement.dataset.index]
+      evt.dataTransfer.setData("item", JSON.stringify({ ...item,dx,dy}))
     }
   }
 }

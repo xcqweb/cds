@@ -1,10 +1,8 @@
-import Text from './text'
+import Text from "./text"
 
-const components = [
-  Text,
-]
+const components = [Text]
 const widgets = {}
-components.forEach(item=>{
+components.forEach(item => {
   widgets[item.name] = item
 })
 export default widgets

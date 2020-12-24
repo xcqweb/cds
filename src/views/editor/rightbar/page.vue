@@ -25,7 +25,6 @@ export default {
     }
   },
   created() {
-    undoManager.saveApplyChange()
   },
   methods: {
     sizeChange(size) {

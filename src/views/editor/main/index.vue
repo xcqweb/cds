@@ -3,15 +3,16 @@
     <div class="view-con" ref="viewCon" @scroll="handleScroll">
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
-          <draggable class="goup-list" :group="{ name: 'design', put: true, pull: false }">
+          <div class="goup-list" @dragover.prevent @drop="drop">
             <component
               class="group-item"
               v-for="item in widgets"
               :key="item.id"
               :is="item.cname"
-              v-bind="item"
+              v-bind="item.attrs"
+              @click="clickFun"
             />
-          </draggable>
+          </div>
         </div>
       </div>
     </div>
@@ -19,14 +20,13 @@
 </template>
 
 <script>
-import draggable from "vuedraggable"
 import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
-import components from '@/widgets/index'
+import components from "@/widgets/index"
+import undoManager from "@u/undo-manager"
 export default {
   name: "EditorMain",
   components: {
-    draggable,
     ...components
   },
   computed: {
@@ -49,11 +49,12 @@ export default {
     portStyle() {
       const { size, color } = this.$store.getters.currentPage.grid
       const { scale } = this.$store.state.apply
-      const { width, height } = this.$store.getters.currentPage
+      const { width, height, backgroundColor } = this.$store.getters.currentPage
       return {
         width: width + "px",
         height: height + "px",
         backgroundImage: createGridBg(size, color, scale),
+        backgroundColor,
         transform: `scale(${scale})`
       }
     }
@@ -67,15 +68,32 @@ export default {
     })
     this.init()
   },
+  mounted() {
+    this.$nextTick(()=>{
+      undoManager.saveApplyChange()
+    })
+  },
   beforeDestroy() {
     window.removeEventListener("resize", this.resizeFun)
   },
   methods: {
+    clickFun() {
+      console.log("a----------b")
+    },
     init() {
       this.dealRulerSize()
       window.addEventListener("resize", this.resizeFun)
     },
-
+    drop(evt) {
+      const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
+      const item = JSON.parse(dataTransfer.getData("item"))
+      const {dx, dy} = item
+      let {left,top} = this.portProps() // 画布与文档的距离
+      item.left = x - left - dx
+      item.top = y - top - dy
+      this.$store.commit("widgetAdd", {...item})
+      undoManager.saveApplyChange()
+    },
     resizeFun: throttle(function() {
       // 窗口大小变化
       this.centerView()
@@ -179,7 +197,7 @@ export default {
     align-items: center;
   }
   .viewport {
-    position:relative;
+    position: relative;
     .goup-list {
       position: relative;
       z-index: 1;

@@ -1,31 +1,29 @@
 <template>
-  <div class="gt-text" :style="this.$props">
+  <div class="gt-text" :style="styleObj">
     输入文本
   </div>
 </template>
 <script>
+import baseComponent from "@/mixins/base"
 export default {
-  name:'GtText',
-  props:{
-    left:{default:0,type:String},
-    top:{default:0,type:String},
-    width:{default:'60px',type:String},
-    height:{default:'30px',type:String},
-    name:{type:String},
-    cname:{type:String},
-    isEdit:{type:Boolean}
+  name: "GtText",
+  mixins: [baseComponent],
+  data() {
+    return {
+      styleObj: {
+        width: "60px",
+        height: "30px"
+      }
+    }
   },
-  created() {
-    this.left = parseFloat(this.left) - parseFloat(this.width) + 'px'
-    this.top = parseFloat(this.top) - parseFloat(this.height) + 'px'
-  },
+  created() {}
 }
 </script>
 <style lang="less" scoped>
-.gt-text{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  border:solid 1px red
+.gt-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px red;
 }
 </style>

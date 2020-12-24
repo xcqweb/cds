@@ -25,12 +25,12 @@ export default {
   name: "Ruler",
   components: { SketchRule },
   computed: {
-    lines:{
+    lines: {
       get() {
         return this.$store.getters.currentPage.lines
       },
       set(val) {
-        this.$store.commit('setLines',val)
+        this.$store.commit("setLines", val)
       }
     },
     scale() {
