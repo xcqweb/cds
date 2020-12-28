@@ -24,8 +24,7 @@ export default {
       gridSize: 10
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     sizeChange(size) {
       this.$store.commit("setGridSize", size)

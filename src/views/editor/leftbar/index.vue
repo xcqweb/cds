@@ -33,12 +33,12 @@ export default {
   created() {},
   methods: {
     dragstart(evt) {
-      const {x,y,srcElement} = evt // 开始拖拽时候，鼠标的位置
-      const {left, top} = srcElement.getBoundingClientRect() // 拖拽元素与html文档的距离
+      const { x, y, srcElement } = evt // 开始拖拽时候，鼠标的位置
+      const { left, top } = srcElement.getBoundingClientRect() // 拖拽元素与html文档的距离
       let dx = x - left
       let dy = y - top
       const item = this.widgets[srcElement.dataset.index]
-      evt.dataTransfer.setData("item", JSON.stringify({ ...item,dx,dy}))
+      evt.dataTransfer.setData("item", JSON.stringify({ ...item, dx, dy }))
     }
   }
 }

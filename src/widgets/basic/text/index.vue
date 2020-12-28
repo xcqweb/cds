@@ -4,16 +4,14 @@
   </div>
 </template>
 <script>
-import baseComponent from "@/mixins/base"
+import baseComponent from "@/mixins/base-editor"
+const cname = "GtText"
 export default {
-  name: "GtText",
+  name: cname,
   mixins: [baseComponent],
   data() {
     return {
-      styleObj: {
-        width: "60px",
-        height: "30px"
-      }
+      cname
     }
   },
   created() {}

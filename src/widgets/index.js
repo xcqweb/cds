@@ -1,4 +1,4 @@
-import Text from "./text"
+import Text from "./basic/text"
 
 const components = [Text]
 const widgets = {}

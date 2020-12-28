@@ -4,14 +4,28 @@
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="goup-list" @dragover.prevent @drop="drop">
-            <component
+            <vue-draggable-resizable
               class="group-item"
               v-for="item in widgets"
+              :w="item.attrs.width"
+              :h="item.attrs.height"
+              :x="item.attrs.left"
+              :y="item.attrs.top"
+              :r="item.rotate"
+              :parent="true"
+              :active="true"
               :key="item.id"
-              :is="item.cname"
-              v-bind="item.attrs"
-              @click="clickFun"
-            />
+              @rotating="onRotate"
+              @dragging="onDrag"
+              @resizing="onResize"
+              @resizestop="onResizeStop"
+              @dragstop="onDragStop"
+              @rotatestop="onRotateStop"
+              @activated="onActivated(item.cid)"
+            >
+              <component :is="item.cname" v-bind="item.attrs" />
+              {{ item.attrs }}
+            </vue-draggable-resizable>
           </div>
         </div>
       </div>
@@ -24,9 +38,11 @@ import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
+import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 export default {
   name: "EditorMain",
   components: {
+    VueDraggableResizable,
     ...components
   },
   computed: {
@@ -69,7 +85,7 @@ export default {
     this.init()
   },
   mounted() {
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       undoManager.saveApplyChange()
     })
   },
@@ -77,9 +93,6 @@ export default {
     window.removeEventListener("resize", this.resizeFun)
   },
   methods: {
-    clickFun() {
-      console.log("a----------b")
-    },
     init() {
       this.dealRulerSize()
       window.addEventListener("resize", this.resizeFun)
@@ -87,11 +100,11 @@ export default {
     drop(evt) {
       const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
       const item = JSON.parse(dataTransfer.getData("item"))
-      const {dx, dy} = item
-      let {left,top} = this.portProps() // 画布与文档的距离
+      const { dx, dy } = item
+      let { left, top } = this.portProps() // 画布与文档的距离
       item.left = x - left - dx
       item.top = y - top - dy
-      this.$store.commit("widgetAdd", {...item})
+      this.$store.commit("widgetAdd", { ...item })
       undoManager.saveApplyChange()
     },
     resizeFun: throttle(function() {
@@ -164,7 +177,28 @@ export default {
       // 滚动处理
       this.dealRulerCorner()
       this.dealRulerStartPos()
-    }, 100)
+    }, 100),
+    onRotate(rotate) {
+      this.$store.commit("updateWidget", { rotate })
+    },
+    onDrag(left, top) {
+      this.$store.commit("updateWidget", { left, top })
+    },
+    onResize(left, top, width, height) {
+      this.$store.commit("updateWidget", { left, top, width, height })
+    },
+    onResizeStop() {
+      undoManager.saveApplyChange()
+    },
+    onRotateStop() {
+      undoManager.saveApplyChange()
+    },
+    onDragStop() {
+      undoManager.saveApplyChange()
+    },
+    onActivated(cid) {
+      this.$store.commit("setCurrentWidgetId", cid)
+    }
   }
 }
 </script>
@@ -204,7 +238,68 @@ export default {
       height: 100%;
     }
     .group-item {
-      position: absolute;
+      &:hover::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
+        border: 2px solid rgb(30, 152, 234);
+        z-index: 999999999;
+      }
+      &.active:before {
+        border: 1px dashed #298df8;
+      }
+      .handle {
+        width: 18px;
+        height: 18px;
+        border: none;
+        background: url("../../../assets/images/icon/resize-dot.svg") 100% 100%;
+        &.handle-tl {
+          top: -9px;
+          left: -9px;
+        }
+        &.handle-tm {
+          top: -9px;
+          left: 50%;
+          margin-left: -9px;
+        }
+        &.handle-tr {
+          top: -9px;
+          right: -9px;
+        }
+        &.handle-mr {
+          right: -9px;
+          margin-top: -9px;
+        }
+        &.handle-br {
+          bottom: -9px;
+          right: -9px;
+        }
+        &.handle-bm {
+          bottom: -9px;
+          margin-left: -9px;
+        }
+        &.handle-bl {
+          bottom: -9px;
+          left: -9px;
+        }
+        &.handle-ml {
+          left: -9px;
+          margin-top: -9px;
+        }
+        &.handle-rot {
+          background: url("../../../assets/images/icon/rotate-dot.svg") 100%
+            100% no-repeat;
+          margin-top: -28px;
+          &:before {
+            width: 0;
+            height: 0;
+            border: 0;
+          }
+        }
+      }
     }
   }
 }
