@@ -43,7 +43,8 @@ export default new Vuex.Store({
       width: 0,
       height: 0
     },
-    widgets: config.widgets
+    widgets: config.widgets,// 左侧组件区域
+    hint:{}, // 控件提示信息
   },
   mutations: {
     setGridSize(state, data) {
@@ -84,6 +85,9 @@ export default new Vuex.Store({
       // 设置当前控件id
       state.currentWidgetId = data
     },
+    setHint(state,data) {// 设置提示信息
+      state.hint = data
+    },
     widgetAdd(state, data) {
       const { name, cname, dname, left, top, width, height } = data
       let currentPage = this.getters.currentPage
@@ -99,7 +103,7 @@ export default new Vuex.Store({
           width,
           height,
           left,
-          top,
+          top
         }
       }
       currentPage.widgets.push(widget)

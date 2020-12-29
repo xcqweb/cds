@@ -3,29 +3,33 @@
     <div class="view-con" ref="viewCon" @scroll="handleScroll">
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
-          <div class="goup-list" @dragover.prevent @drop="drop">
-            <vue-draggable-resizable
-              class="group-item"
-              v-for="item in widgets"
-              :w="item.attrs.width"
-              :h="item.attrs.height"
-              :x="item.attrs.left"
-              :y="item.attrs.top"
-              :r="item.rotate"
-              :parent="true"
-              :active="true"
-              :key="item.id"
-              @rotating="onRotate"
-              @dragging="onDrag"
-              @resizing="onResize"
-              @resizestop="onResizeStop"
-              @dragstop="onDragStop"
-              @rotatestop="onRotateStop"
-              @activated="onActivated(item.cid)"
-            >
-              <component :is="item.cname" v-bind="item.attrs" />
-              {{ item.attrs }}
-            </vue-draggable-resizable>
+          <div class="canvas-pos">
+            <hint />
+          </div>
+          <div class="canvas-pos" :style="widgetConStyle">
+            <div class="goup-list" @dragover.prevent @drop="drop">
+              <vue-draggable-resizable
+                class="group-item"
+                v-for="item in widgets"
+                :w="item.attrs.width"
+                :h="item.attrs.height"
+                :x="item.attrs.left"
+                :y="item.attrs.top"
+                :r="item.rotate"
+                :parent="true"
+                :active="true"
+                :key="item.id"
+                @rotating="onRotate"
+                @dragging="onDrag"
+                @resizing="onResize"
+                @resizestop="onResizeStop"
+                @dragstop="onDragStop"
+                @rotatestop="onRotateStop"
+                @activated="onActivated(item.cid)"
+              >
+                <component :is="item.cname" v-bind="item.attrs" />
+              </vue-draggable-resizable>
+            </div>
           </div>
         </div>
       </div>
@@ -39,10 +43,13 @@ import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
+import Hint from '@c/hint/'
+import {dealRotatePos} from '@u/deal'
 export default {
   name: "EditorMain",
   components: {
     VueDraggableResizable,
+    Hint,
     ...components
   },
   computed: {
@@ -71,9 +78,17 @@ export default {
         height: height + "px",
         backgroundImage: createGridBg(size, color, scale),
         backgroundColor,
+      }
+    },
+    currentWidget() {
+      return this.$store.getters.currentWidget
+    },
+    widgetConStyle() {
+      const { scale } = this.$store.state.apply
+      return {
         transform: `scale(${scale})`
       }
-    }
+    },
   },
   data() {
     return {}
@@ -178,26 +193,39 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    onRotate(rotate) {
+    onRotate(rotate,left,top,width,height) {
+      const rotatePos = dealRotatePos(rotate,left,top,width,height)
+      console.log(rotatePos)
       this.$store.commit("updateWidget", { rotate })
+      this.dealHintProp({left:rotatePos.left, top:rotatePos.top, text:`${rotate}`,display:'block'})
     },
     onDrag(left, top) {
       this.$store.commit("updateWidget", { left, top })
+      this.dealHintProp({text:`${left},${top}`,display:'block'})
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidget", { left, top, width, height })
+      this.dealHintProp({text:`${width}x${height}`,display:'block'})
     },
     onResizeStop() {
       undoManager.saveApplyChange()
+      this.dealHintProp({display:'none'})
     },
     onRotateStop() {
       undoManager.saveApplyChange()
+      this.dealHintProp({display:'none'})
     },
     onDragStop() {
       undoManager.saveApplyChange()
+      this.dealHintProp({display:'none'})
     },
     onActivated(cid) {
       this.$store.commit("setCurrentWidgetId", cid)
+      this.dealHintProp({display:'none'})
+    },
+    dealHintProp(prop) {
+      const {left,top,width,height} = this.currentWidget.attrs
+      this.$store.commit('setHint',{left,top:top + height + 10,width,...prop})
     }
   }
 }
@@ -231,7 +259,16 @@ export default {
     align-items: center;
   }
   .viewport {
-    position: relative;
+    position: absolute;
+    width:100%;
+    height:100%;
+    .canvas-pos{
+      position: absolute;
+      left:0;
+      top:0;
+      width:100%;
+      height:100%;
+    }
     .goup-list {
       position: relative;
       z-index: 1;

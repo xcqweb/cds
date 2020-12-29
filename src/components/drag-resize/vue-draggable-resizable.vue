@@ -63,7 +63,7 @@ export default {
         if (typeof val === "string") {
           return val === "auto"
         }
-        return val > 0
+        return val >= 0
       }
     },
     h: {
@@ -73,7 +73,7 @@ export default {
         if (typeof val === "string") {
           return val === "auto"
         }
-        return val > 0
+        return val >= 0
       }
     },
     minw: {
@@ -234,7 +234,7 @@ export default {
     this.elmW = this.$el.offsetWidth || this.$el.clientWidth
     this.elmH = this.$el.offsetHeight || this.$el.clientHeight
 
-    this.reviewDimensions()
+    // this.reviewDimensions() // 先注释掉
   },
   beforeDestroy() {
     document.documentElement.removeEventListener(
@@ -575,7 +575,7 @@ export default {
         let y = mouseY - this.lastCenterY
         let x = mouseX - this.lastCenterX
         this.rotate = (this.getAngle(x, y) + 90) % 360
-        this.$emit("rotating", this.rotate)
+        this.$emit("rotating", this.rotate, this.left, this.top, this.width, this.height)
       }
     },
     handleUp(e) {
