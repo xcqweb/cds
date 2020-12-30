@@ -1,10 +1,19 @@
 <template>
   <div class="view-con-wrap">
-    <div class="view-con" ref="viewCon" @scroll="handleScroll">
+    <div
+      class="view-con"
+      ref="viewCon"
+      @scroll="handleScroll"
+      @mousedown="viewBgMouseDown"
+      @mousemove="viewBgMouseMove"
+      @mouseup="viewBgMouseUp"
+    >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
             <hint />
+            <selection-widget />
+            <widget-help-line />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">
@@ -15,7 +24,7 @@
                 :h="item.attrs.height"
                 :x="item.attrs.left"
                 :y="item.attrs.top"
-                :r="item.rotate"
+                :r="item.attrs.rotate"
                 :parent="true"
                 :active="true"
                 :key="item.id"
@@ -43,12 +52,16 @@ import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
-import Hint from '@c/hint/'
-import {dealRotatePos} from '@u/deal'
+import Hint from "@c/hint/"
+import SelectionWidget from "@c/selection-widget/"
+import { dealRotatePos } from "@u/deal"
+import WidgetHelpLine from "@c/widget-help-line/"
 export default {
   name: "EditorMain",
   components: {
     VueDraggableResizable,
+    SelectionWidget,
+    WidgetHelpLine,
     Hint,
     ...components
   },
@@ -77,7 +90,7 @@ export default {
         width: width + "px",
         height: height + "px",
         backgroundImage: createGridBg(size, color, scale),
-        backgroundColor,
+        backgroundColor
       }
     },
     currentWidget() {
@@ -88,7 +101,7 @@ export default {
       return {
         transform: `scale(${scale})`
       }
-    },
+    }
   },
   data() {
     return {}
@@ -193,39 +206,74 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    onRotate(rotate,left,top,width,height) {
-      const rotatePos = dealRotatePos(rotate,left,top,width,height)
-      console.log(rotatePos)
+    onRotate(rotate, left, top, width, height) {
       this.$store.commit("updateWidget", { rotate })
-      this.dealHintProp({left:rotatePos.left, top:rotatePos.top, text:`${rotate}`,display:'block'})
+      this.dealHintProp({
+        text: `${rotate}`,
+        display: "block"
+      })
     },
     onDrag(left, top) {
       this.$store.commit("updateWidget", { left, top })
-      this.dealHintProp({text:`${left},${top}`,display:'block'})
+      const rotateY = dealRotatePos(this.currentWidget.attrs)
+      this.dealHintProp({ text: `${left},${top}`, display: "block" })
+      this.$store.commit("setShowHelpLine", true)
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidget", { left, top, width, height })
-      this.dealHintProp({text:`${width}x${height}`,display:'block'})
+      this.dealHintProp({ text: `${width}x${height}`, display: "block" })
     },
     onResizeStop() {
       undoManager.saveApplyChange()
-      this.dealHintProp({display:'none'})
+      this.dealHintProp({ display: "none" })
     },
     onRotateStop() {
       undoManager.saveApplyChange()
-      this.dealHintProp({display:'none'})
+      this.dealHintProp({ display: "none" })
     },
     onDragStop() {
       undoManager.saveApplyChange()
-      this.dealHintProp({display:'none'})
+      this.dealHintProp({ display: "none" })
+      this.$store.commit("setShowHelpLine", false)
     },
     onActivated(cid) {
       this.$store.commit("setCurrentWidgetId", cid)
-      this.dealHintProp({display:'none'})
+      this.dealHintProp({ display: "none" })
     },
     dealHintProp(prop) {
-      const {left,top,width,height} = this.currentWidget.attrs
-      this.$store.commit('setHint',{left,top:top + height + 10,width,...prop})
+      const { left, top, width, height } = this.currentWidget.attrs
+      const rotateY = dealRotatePos(this.currentWidget.attrs)
+      this.$store.commit("setHint", {
+        left,
+        top: rotateY + 10,
+        width,
+        ...prop
+      })
+    },
+    viewBgMouseDown(evt) {
+      this.viewBgMoving = true
+      const { x, y } = evt
+      const { left, top } = this.portProps()
+      this.viewportLeft = x
+      this.viewportTop = y
+      this.viewBgLeft = x - left
+      this.viewBgTop = y - top
+    },
+    viewBgMouseMove(evt) {
+      if (this.viewBgMoving) {
+        const { x, y } = evt
+        this.$store.commit("setSelection", {
+          right: x,
+          top: y,
+          left: this.viewBgLeft,
+          top: this.viewBgTop,
+          display: "block"
+        })
+      }
+    },
+    viewBgMouseUp(evt) {
+      this.viewBgMoving = false
+      this.$store.commit("setSelection", {})
     }
   }
 }
@@ -260,14 +308,14 @@ export default {
   }
   .viewport {
     position: absolute;
-    width:100%;
-    height:100%;
-    .canvas-pos{
+    width: 100%;
+    height: 100%;
+    .canvas-pos {
       position: absolute;
-      left:0;
-      top:0;
-      width:100%;
-      height:100%;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
     }
     .goup-list {
       position: relative;

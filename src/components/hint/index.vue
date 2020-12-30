@@ -5,17 +5,18 @@
 </template>
 <script>
 export default {
+  name: "Hint",
   computed: {
     objStyle() {
-      let {left,top,display,width} = this.$store.state.hint
-      if(this.$el) {
-        const {width:elWidth} = this.$el.getBoundingClientRect()
-        left = left + width/2 - elWidth/2
+      let { left, top, display, width } = this.$store.state.hint
+      if (this.$el) {
+        const { width: elWidth } = this.$el.getBoundingClientRect()
+        left = left + width / 2 - elWidth / 2
       }
       return {
-        left:`${left}px`,
-        top:`${top}px`,
-        display:`${display || 'none'}`
+        left: `${left}px`,
+        top: `${top}px`,
+        display: `${display || "none"}`
       }
     }
   },
@@ -34,7 +35,7 @@ export default {
   padding: 4px 16px;
   border-radius: 3px;
   box-shadow: 1px 1px 2px 0 #ddd;
-  opacity: .8;
+  opacity: 0.8;
   filter: alpha(opacity=80);
   font-size: 12px;
 }

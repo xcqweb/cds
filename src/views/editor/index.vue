@@ -18,7 +18,13 @@ import Rightbar from "./rightbar"
 import SubContent from "./sub"
 export default {
   name: "EditorIndex",
-  components: { EditorMain, Toolbar, Leftbar, Rightbar, SubContent },
+  components: {
+    EditorMain,
+    Toolbar,
+    Leftbar,
+    Rightbar,
+    SubContent
+  },
   data() {
     return {}
   }
@@ -37,7 +43,6 @@ export default {
   flex-direction: column;
   height: 100%;
   color: rgb(91, 107, 115);
-  z-index: 1;
   .main-con {
     position: relative;
     flex: 1 1 0%;

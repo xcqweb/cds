@@ -575,7 +575,14 @@ export default {
         let y = mouseY - this.lastCenterY
         let x = mouseX - this.lastCenterX
         this.rotate = (this.getAngle(x, y) + 90) % 360
-        this.$emit("rotating", this.rotate, this.left, this.top, this.width, this.height)
+        this.$emit(
+          "rotating",
+          this.rotate,
+          this.left,
+          this.top,
+          this.width,
+          this.height
+        )
       }
     },
     handleUp(e) {

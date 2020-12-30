@@ -5,20 +5,53 @@ export const dealWidget = (type, cname) => {
 
 /**
  * 获取旋转后的坐标
- * @param {*} left 
- * @param {*} top 
- * @param {*} width 
- * @param {*} height 
+ * @param {*} left
+ * @param {*} top
+ * @param {*} width
+ * @param {*} height
  */
-export const dealRotatePos = (rotate,left,top,width,height) => {
-  let x0 = left + width/2 // 矩形中心点
-  let y0 = top + height/2
-  rotate = rotate * (Math.PI / 180)
-  x1 = Math.cos(rotate)*(left-x0) - Math.sin(rotate)*(top-y0) + x0
-  y1 = Math.sin(rotate)*(left-x0) + Math.cos(rotate)*(top-y0) + y0
-  x2 = Math.cos(rotate)*(left-x0) - Math.sin(rotate)*(top-y0) + x0
+export const dealRotatePos = ({ rotate, left, top, width, height }) => {
+  const rect = transform({ x: left, y: top, width, height }, rotate)
+  return rect.bottom
+}
+function transform(options, angle) {
+  const { x, y, width, height } = options
+  const r = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / 2
+  const a = Math.round((Math.atan(height / width) * 180) / Math.PI)
+  const tlbra = 180 - angle - a
+  const trbla = a - angle
+  const topLeft = {
+    x: x + width / 2 + r * Math.cos((tlbra * Math.PI) / 180),
+    y: y + height / 2 - r * Math.sin((tlbra * Math.PI) / 180)
+  }
+  const topRight = {
+    x: x + width / 2 + r * Math.cos((trbla * Math.PI) / 180),
+    y: y + height / 2 - r * Math.sin((trbla * Math.PI) / 180)
+  }
+  const bottomRight = {
+    x: x + width / 2 - r * Math.cos((tlbra * Math.PI) / 180),
+    y: y + height / 2 + r * Math.sin((tlbra * Math.PI) / 180)
+  }
+  const bottomLeft = {
+    x: x + width / 2 - r * Math.cos((trbla * Math.PI) / 180),
+    y: y + height / 2 + r * Math.sin((trbla * Math.PI) / 180)
+  }
+  const minX = Math.min(topLeft.x, topRight.x, bottomRight.x, bottomLeft.x)
+  const maxX = Math.max(topLeft.x, topRight.x, bottomRight.x, bottomLeft.x)
+  const minY = Math.min(topLeft.y, topRight.y, bottomRight.y, bottomLeft.y)
+  const maxY = Math.max(topLeft.y, topRight.y, bottomRight.y, bottomLeft.y)
   return {
-    left:Math.round(left),
-    top:Math.round(top),
+    point: {
+      topLeft,
+      topRight,
+      bottomLeft,
+      bottomRight
+    },
+    width: maxX - minX,
+    height: maxY - minY,
+    left: minX,
+    right: maxX,
+    top: minY,
+    bottom: maxY
   }
 }
