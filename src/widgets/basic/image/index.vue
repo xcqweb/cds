@@ -8,7 +8,7 @@
 </template>
 <script>
 import baseComponent from "@/mixins/base-editor"
-import { validateImage } from '@u/imageHelpers'
+import { validateImage } from '@u/image-helpers'
 import { uploadActivityImgAssets } from '@a/activity'
 let imgUrl = require('./logo.png')
 const cname = "GtImage"
