@@ -3,17 +3,16 @@
     <name-position></name-position>
     <text-info></text-info>
     <text-color></text-color>
-
   </div>
 </template>
 
 <script>
-import namePosition from './name-position'
-import textColor from './text-color'
-import textInfo from './text-info'
+import namePosition from "./name-position"
+import textColor from "./text-color"
+import textInfo from "./text-info"
 export default {
-name: "index",
-  components:{
+  name: "index",
+  components: {
     namePosition,
     textColor,
     textInfo
@@ -21,6 +20,4 @@ name: "index",
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

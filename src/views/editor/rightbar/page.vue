@@ -11,13 +11,12 @@
     <button @click="undo">undo</button>
     <button @click="redo">redo</button>
     <basic-style></basic-style>
-
   </div>
 </template>
 <script>
 import ColorPicker from "@c/color-picker"
 import undoManager from "@u/undo-manager"
-import basicStyle from './basicStyle'
+import basicStyle from "./basicStyle"
 export default {
   components: {
     ColorPicker,

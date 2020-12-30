@@ -1,19 +1,16 @@
 <template>
   <div class="view-con-wrap">
-     <div
+    <div
       class="view-con"
       ref="viewCon"
       @scroll="handleScroll"
-      @mousedown="viewBgMouseDown"
-      @mousemove="viewBgMouseMove"
-      @mouseup="viewBgMouseUp"
-    >      
-    <div class="viewport-con" :style="portConStyle">
+    >
+      <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
-            <hint />
-            <selection-widget />
-            <widget-help-line />
+            <hint :text="hintText" :show="showHint"/>  <!-- 提示框 -->
+            <selection-widget />  <!-- 框选组件 -->
+            <widget-help-line :show="showHelpLine"/> <!-- 辅助线 -->
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">
@@ -42,8 +39,7 @@
           </div>
         </div>
       </div>
-  </div>
-    <custom-contextmenu ref="open" :menuList="menuList"></custom-contextmenu>
+    </div>
   </div>
 </template>
 
@@ -52,12 +48,11 @@ import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
-import { menuList } from '@/views/widgetConstructor/helpers/commandStrat'
-import customContextmenu from '@/widgets/custom-contextmenu'
+import { menuList } from "@/views/widgetConstructor/helpers/commandStrat"
+import customContextmenu from "@/widgets/custom-contextmenu"
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
-import { dealRotatePos } from "@u/deal"
 import WidgetHelpLine from "@c/widget-help-line/"
 export default {
   name: "EditorMain",
@@ -111,7 +106,10 @@ export default {
     return {
       contextmenuVisible: false,
       contextmenuPosition: { x: 0, y: 0 },
-      menuList: []
+      menuList: [],
+      hintText:'',// 提示信息
+      showHint:false,// 是否显示提示
+      showHelpLine:false,
     }
   },
   created() {
@@ -218,80 +216,44 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    onRotate(rotate, left, top, width, height) {
+    onRotate(rotate) {
       this.$store.commit("updateWidget", { rotate })
-      this.dealHintProp({
-        text: `${rotate}`,
-        display: "block"
-      })
+      this.showHint = true
+      this.hintText = `${rotate}`
     },
     onDrag(left, top) {
       this.$store.commit("updateWidget", { left, top })
-      const rotateY = dealRotatePos(this.currentWidget.attrs)
-      this.dealHintProp({ text: `${left},${top}`, display: "block" })
-      this.$store.commit("setShowHelpLine", true)
+      this.showHint = true
+      this.hintText = `${left},${top}`
+      this.showHelpLine = true
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidget", { left, top, width, height })
-      this.dealHintProp({ text: `${width}x${height}`, display: "block" })
+      this.showHint = true
+      this.hintText = `${width}x${height}`
     },
     onResizeStop() {
       undoManager.saveApplyChange()
-      this.dealHintProp({ display: "none" })
+      this.showHint = false
     },
     onRotateStop() {
       undoManager.saveApplyChange()
-      this.dealHintProp({ display: "none" })
+      this.showHint = false
     },
     onDragStop() {
       undoManager.saveApplyChange()
-      this.dealHintProp({ display: "none" })
-      this.$store.commit("setShowHelpLine", false)
+      this.showHint = false
+      this.showHelpLine = false
     },
     onActivated(cid) {
       this.$store.commit("setCurrentWidgetId", cid)
-      this.dealHintProp({ display: "none" })
+      this.showHint = false
     },
-    dealHintProp(prop) {
-      const { left, top, width, height } = this.currentWidget.attrs
-      const rotateY = dealRotatePos(this.currentWidget.attrs)
-      this.$store.commit("setHint", {
-        left,
-        top: rotateY + 10,
-        width,
-        ...prop
-      })
-    },
-    viewBgMouseDown(evt) {
-      this.viewBgMoving = true
-      const { x, y } = evt
-      const { left, top } = this.portProps()
-      this.viewportLeft = x
-      this.viewportTop = y
-      this.viewBgLeft = x - left
-      this.viewBgTop = y - top
-    },
-    viewBgMouseMove(evt) {
-      if (this.viewBgMoving) {
-        const { x, y } = evt
-        this.$store.commit("setSelection", {
-          right: x,
-          top: y,
-          left: this.viewBgLeft,
-          top: this.viewBgTop,
-          display: "block"
-        })
-      }
-    },
-    viewBgMouseUp(evt) {
-      this.viewBgMoving = false
-      this.$store.commit("setSelection", {})
-    }
   }
 }
 </script>
 <style lang="less">
-@import '~vue-context/dist/css/vue-context.css';
+@import "~vue-context/dist/css/vue-context.css";
 .view-con-wrap {
   position: fixed;
   top: 52px;

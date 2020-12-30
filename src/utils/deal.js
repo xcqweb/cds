@@ -11,8 +11,7 @@ export const dealWidget = (type, cname) => {
  * @param {*} height
  */
 export const dealRotatePos = ({ rotate, left, top, width, height }) => {
-  const rect = transform({ x: left, y: top, width, height }, rotate)
-  return rect.bottom
+  return transform({ x: left, y: top, width, height }, rotate)
 }
 function transform(options, angle) {
   const { x, y, width, height } = options

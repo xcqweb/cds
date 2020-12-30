@@ -44,9 +44,6 @@ export default new Vuex.Store({
       height: 0
     },
     widgets: config.widgets, // 左侧组件区域
-    hint: {}, // 控件提示信息
-    selection: {}, // 框选组件阴影
-    showHelpLine: false // 是否显示辅助线
   },
   mutations: {
     setGridSize(state, data) {
@@ -86,16 +83,6 @@ export default new Vuex.Store({
     setCurrentWidgetId(state, data) {
       // 设置当前控件id
       state.currentWidgetId = data
-    },
-    setHint(state, data) {
-      // 设置提示信息
-      state.hint = data
-    },
-    setSelection(state, data) {
-      state.selection = data
-    },
-    setShowHelpLine(state, data) {
-      state.showHelpLine = data
     },
     widgetAdd(state, data) {
       const { name, cname, dname, left, top, width, height } = data

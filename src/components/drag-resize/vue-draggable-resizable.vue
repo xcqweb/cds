@@ -307,6 +307,7 @@ export default {
       this.$emit("resizing", this.left, this.top, this.width, this.height)
     },
     elmDown(e) {
+      debugger
       const target = e.target || e.srcElement
 
       if (this.$el.contains(target)) {
@@ -323,7 +324,7 @@ export default {
           return
         }
 
-        this.reviewDimensions()
+        // this.reviewDimensions() // 调整到下方，保证activated先于resizing执行
 
         if (!this.enabled) {
           this.enabled = true
@@ -331,6 +332,7 @@ export default {
           this.$emit("activated")
           this.$emit("update:active", true)
         }
+        this.reviewDimensions()
         this.lastElmX = this.elmX
         this.lastElmY = this.elmY
         this.lastElmW = this.elmW
@@ -575,14 +577,7 @@ export default {
         let y = mouseY - this.lastCenterY
         let x = mouseX - this.lastCenterX
         this.rotate = (this.getAngle(x, y) + 90) % 360
-        this.$emit(
-          "rotating",
-          this.rotate,
-          this.left,
-          this.top,
-          this.width,
-          this.height
-        )
+        this.$emit("rotating", this.rotate)
       }
     },
     handleUp(e) {

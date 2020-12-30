@@ -1,15 +1,11 @@
 <template>
- <div>
-
- </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-name: "name-position"
+  name: "name-position"
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

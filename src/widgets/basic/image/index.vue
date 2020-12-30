@@ -1,16 +1,16 @@
 <template>
   <div class="add-image-widget" :style="styleObj">
-    <input ref="input" type="file" style="display:none" @change="selectImg">
+    <input ref="input" type="file" style="display:none" @change="selectImg" />
     <div @click="selectImgHandler" v-if="src" :style="styleObj">
-      <img :src="src" alt="">
+      <img :src="src" alt="" />
     </div>
   </div>
 </template>
 <script>
 import baseComponent from "@/mixins/base-editor"
-import { validateImage } from '@u/image-helpers'
-import { uploadActivityImgAssets } from '@a/activity'
-let imgUrl = require('./logo.png')
+import { validateImage } from "@u/image-helpers"
+import { uploadActivityImgAssets } from "@a/activity"
+let imgUrl = require("./logo.png")
 const cname = "GtImage"
 export default {
   name: "GtImage",
@@ -18,10 +18,10 @@ export default {
   data() {
     return {
       cname,
-      src:imgUrl
+      src: imgUrl
     }
   },
-  computed:{},
+  computed: {},
   created() {},
   methods: {
     selectImgHandler() {
@@ -37,12 +37,13 @@ export default {
       } catch (e) {
         console.error(e)
       } finally {
-        inputNode.value = ''
+        inputNode.value = ""
       }
     },
-    addImage({ src }) { //base的图片路径
+    addImage({ src }) {
+      //base的图片路径
       console.log(src)
-      this.src= src
+      this.src = src
       // this.addItem(new ImageWidget({ wState: { src }}))
     }
   }
@@ -56,7 +57,7 @@ export default {
   .add-image {
     width: 100%;
   }
-  img{
+  img {
     width: 100%;
     height: 100%;
   }

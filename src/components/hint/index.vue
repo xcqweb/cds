@@ -1,14 +1,30 @@
 <template>
-  <div class="hint-con" :style="objStyle">
-    {{ $store.state.hint.text }}
+  <div class="hint-con" :style="objStyle" v-show="show">
+    {{ text }}
   </div>
 </template>
 <script>
+import { dealRotatePos } from "@u/deal"
 export default {
   name: "Hint",
+  props:{
+    text: String,
+    show: {
+      type:Boolean,
+      default:false,
+    }
+  },
   computed: {
     objStyle() {
-      let { left, top, display, width } = this.$store.state.hint
+      let left=0
+      let top = 0
+      let width = 0
+      const currentWidget = this.$store.getters.currentWidget
+      if(currentWidget) {
+        left = currentWidget.attrs.left
+        width = currentWidget.attrs.width
+        top = dealRotatePos(currentWidget.attrs).bottom + 10
+      }
       if (this.$el) {
         const { width: elWidth } = this.$el.getBoundingClientRect()
         left = left + width / 2 - elWidth / 2
@@ -16,7 +32,6 @@ export default {
       return {
         left: `${left}px`,
         top: `${top}px`,
-        display: `${display || "none"}`
       }
     }
   },

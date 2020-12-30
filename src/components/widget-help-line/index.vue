@@ -1,5 +1,5 @@
 <template>
-  <div class="help-line-con" v-show="showHelpLine">
+  <div class="help-line-con" v-show="show">
     <div :style="line1" class="line" />
     <div :style="line2" class="line" />
     <div :style="line3" class="line" />
@@ -10,6 +10,12 @@
 const borderStyle = "dashed 1px #298df8"
 export default {
   name: "WidgetHelpLine",
+  props:{
+    show:{
+      default: false,
+      type: Boolean
+    }
+  },
   computed: {
     line1() {
       const currentWidget = this.$store.getters.currentWidget
@@ -108,12 +114,11 @@ export default {
         borderBottom: "none"
       }
     },
-    showHelpLine() {
-      return this.$store.state.showHelpLine
-    }
   },
   data() {
-    return {}
+    return {
+       
+    }
   },
   created() {}
 }
