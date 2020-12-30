@@ -16,6 +16,12 @@ export default {
         name: "文本", // 控件显示名称
         width: 60, // 控件默认宽高
         height: 30
+      },
+      {
+        cname: "GtImage", // 控件所属组件名称
+        name: "图片", // 控件显示名称
+        width: 60, // 控件默认宽高
+        height: 30
       }
     ]
   }

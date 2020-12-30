@@ -1,14 +1,14 @@
 <template>
   <div class="view-con-wrap">
-    <div
+     <div
       class="view-con"
       ref="viewCon"
       @scroll="handleScroll"
       @mousedown="viewBgMouseDown"
       @mousemove="viewBgMouseMove"
       @mouseup="viewBgMouseUp"
-    >
-      <div class="viewport-con" :style="portConStyle">
+    >      
+    <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
             <hint />
@@ -42,7 +42,8 @@
           </div>
         </div>
       </div>
-    </div>
+  </div>
+    <custom-contextmenu ref="open" :menuList="menuList"></custom-contextmenu>
   </div>
 </template>
 
@@ -51,6 +52,8 @@ import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
+import { menuList } from '@/views/widgetConstructor/helpers/commandStrat'
+import customContextmenu from '@/widgets/custom-contextmenu'
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
@@ -63,6 +66,7 @@ export default {
     SelectionWidget,
     WidgetHelpLine,
     Hint,
+    customContextmenu,
     ...components
   },
   computed: {
@@ -104,7 +108,11 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      contextmenuVisible: false,
+      contextmenuPosition: { x: 0, y: 0 },
+      menuList: []
+    }
   },
   created() {
     this.$bus.$on("handleCornerClick", () => {
@@ -121,6 +129,10 @@ export default {
     window.removeEventListener("resize", this.resizeFun)
   },
   methods: {
+    openContextmenu(event) {
+      this.menuList = menuList
+      this.$refs.open.openContextmenu(event)
+    },
     init() {
       this.dealRulerSize()
       window.addEventListener("resize", this.resizeFun)
@@ -279,6 +291,7 @@ export default {
 }
 </script>
 <style lang="less">
+@import '~vue-context/dist/css/vue-context.css';
 .view-con-wrap {
   position: fixed;
   top: 52px;
