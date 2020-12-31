@@ -6,7 +6,7 @@
       @scroll="handleScroll"
     >
       <div class="viewport-con" :style="portConStyle">
-        <div class="viewport" :style="portStyle" ref="viewport">
+        <div class="viewport" :style="portStyle" ref="viewport" @contextmenu.prevent="openContextmenu">
           <div class="canvas-pos">
             <hint :text="hintText" :show="showHint"/>  <!-- 提示框 -->
             <selection-widget />  <!-- 框选组件 -->
@@ -40,6 +40,7 @@
         </div>
       </div>
     </div>
+    <custom-contextmenu ref="open"></custom-contextmenu>
   </div>
 </template>
 
@@ -48,14 +49,15 @@ import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
-import { menuList } from "@/views/widgetConstructor/helpers/commandStrat"
-import customContextmenu from "@/widgets/custom-contextmenu"
+import customContextmenu from "@/components/custom-contextmenu"
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
+import baseComponent from "@/mixins/base-editor"
 export default {
   name: "EditorMain",
+  mixins: [baseComponent],
   components: {
     VueDraggableResizable,
     SelectionWidget,
@@ -128,7 +130,6 @@ export default {
   },
   methods: {
     openContextmenu(event) {
-      this.menuList = menuList
       this.$refs.open.openContextmenu(event)
     },
     init() {

@@ -44,6 +44,7 @@ export default new Vuex.Store({
       height: 0
     },
     widgets: config.widgets, // 左侧组件区域
+    menuList: config.menuList //右键菜单
   },
   mutations: {
     setGridSize(state, data) {

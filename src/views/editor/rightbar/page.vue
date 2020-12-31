@@ -10,17 +10,14 @@
     <color-picker @colorChange="colorChange" />
     <button @click="undo">undo</button>
     <button @click="redo">redo</button>
-    <basic-style></basic-style>
   </div>
 </template>
 <script>
-import ColorPicker from "@c/color-picker"
 import undoManager from "@u/undo-manager"
-import basicStyle from "./basicStyle"
+import ColorPicker from "@c/color-picker/index"
 export default {
   components: {
-    ColorPicker,
-    basicStyle
+    ColorPicker
   },
   data() {
     return {
@@ -33,10 +30,7 @@ export default {
       this.$store.commit("setGridSize", size)
       undoManager.saveApplyChange()
     },
-    colorChange(color) {
-      this.$store.commit("setGridColor", color)
-      undoManager.saveApplyChange()
-    },
+
     undo() {
       undoManager.applyUndo()
     },
@@ -46,3 +40,5 @@ export default {
   }
 }
 </script>
+<style>
+</style>

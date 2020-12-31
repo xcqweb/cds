@@ -1,14 +1,18 @@
 <template>
-  <div class="right-con">
-    <page />
+  <div class="right-con ge-mt">
+    <!--    <page />-->
+    <basicStyle />
   </div>
 </template>
 
 <script>
-import Page from "./page.vue"
+// import Page from "./page.vue"
+import basicStyle from "./basicStyle"
+
 export default {
   components: {
-    Page
+    // Page,
+    basicStyle
   }
 }
 </script>
@@ -19,5 +23,8 @@ export default {
   display: flex;
   box-shadow: rgba(39, 54, 78, 0.11) 0px -2px 10px 0px;
   z-index: 4;
+}
+.ge-mt {
+  padding: 10px;
 }
 </style>

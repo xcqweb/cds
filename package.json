@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
     "vue": "^2.6.11",
+    "vue-click-outside": "^1.1.0",
     "vue-color": "^2.7.1",
     "vue-context": "^6.0.0",
     "vue-router": "^3.2.0",
