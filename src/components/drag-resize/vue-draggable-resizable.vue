@@ -44,6 +44,10 @@ export default {
       type: Boolean,
       default: false
     },
+    preventDeactivation: {
+      type: Boolean,
+      default: false
+    },
     draggable: {
       type: Boolean,
       default: true
@@ -307,9 +311,8 @@ export default {
       this.$emit("resizing", this.left, this.top, this.width, this.height)
     },
     elmDown(e) {
-      debugger
       const target = e.target || e.srcElement
-
+      debugger
       if (this.$el.contains(target)) {
         if (
           (this.dragHandle &&
@@ -332,7 +335,7 @@ export default {
           this.$emit("activated")
           this.$emit("update:active", true)
         }
-        this.reviewDimensions()
+        // this.reviewDimensions() // 先注释掉
         this.lastElmX = this.elmX
         this.lastElmY = this.elmY
         this.lastElmW = this.elmW
@@ -359,7 +362,7 @@ export default {
       }
 
       if (!this.$el.contains(target) && !regex.test(target.className)) {
-        if (this.enabled) {
+        if (this.enabled && !this.preventDeactivation) {
           this.enabled = false
 
           this.$emit("deactivated")

@@ -1,13 +1,22 @@
 <template>
-  <div class="selection-con" :style="objStyle" v-show="show"/>
+  <div class="selection-con" :style="objStyle" v-show="isShowSelection"/>
 </template>
 <script>
 export default {
   name: "SelectionWidget",
   data() {
     return {
-      show:false,
       objStyle:{},
+    }
+  },
+  computed:{
+    isShowSelection:{
+      get() {
+        return this.$store.state.isShowSelection
+      },
+      set(val) {
+        this.$store.commit('setIsShowSelection',val)
+      }
     }
   },
   created() {
@@ -31,7 +40,7 @@ export default {
   methods: {
     mousedown(evt) {
       this.viewBgMoving = true
-      this.show = true
+      this.isShowSelection = true
       const { x, y } = evt
       const ele = document.querySelector('.viewport')
       const { left, top } = ele.getBoundingClientRect()
@@ -39,6 +48,7 @@ export default {
       this.viewportTop = top
       this.startX = x 
       this.startY = y
+      this.$store.commit('setsSelectWidgets',[])
     },
     mousemove(evt) {
       if (this.viewBgMoving) {
@@ -49,6 +59,7 @@ export default {
         const height = Math.abs(y - this.startY)
         x = minX - this.viewportLeft
         y = minY - this.viewportTop
+        this.checkContainWidgets(x,y,width,height)
         this.objStyle = {
           left: `${x}px`,
           top: `${y}px`,
@@ -57,8 +68,20 @@ export default {
         }
       }
     },
+    checkContainWidgets(x,y,width,height) {
+      const widgets = this.$store.getters.currentPage.widgets
+      let res = false
+      widgets.forEach(item=>{
+        const {left,top,width:w,height:h} = item.attrs
+        res = left>x && left + w<x+width&&top>y&&top+h<y+height
+        if(res) {
+          this.$set(item,'active',res)
+        }
+      })
+    },
     hideSelection() {
-      this.show = false
+      this.isShowSelection = false
+      this.objStyle.left="-10000px"
       this.objStyle.width = 0
       this.objStyle.height = 0
     },

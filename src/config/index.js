@@ -24,5 +24,6 @@ export default {
         height: 30
       }
     ]
-  }
+  },
+  widgetInitZIndex:5,
 }

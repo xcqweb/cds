@@ -9,7 +9,7 @@
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
             <hint :text="hintText" :show="showHint"/>  <!-- 提示框 -->
-            <selection-widget />  <!-- 框选组件 -->
+            <selection-widget/>  <!-- 框选组件 -->
             <widget-help-line :show="showHelpLine"/> <!-- 辅助线 -->
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
@@ -23,8 +23,9 @@
                 :y="item.attrs.top"
                 :r="item.attrs.rotate"
                 :parent="true"
-                :active="true"
+                :active.sync="item.active"
                 :key="item.id"
+                :prevent-deactivation="true"
                 @rotating="onRotate"
                 @dragging="onDrag"
                 @resizing="onResize"
@@ -217,18 +218,22 @@ export default {
       this.dealRulerStartPos()
     }, 100),
     onRotate(rotate) {
-      this.$store.commit("updateWidget", { rotate })
+      this.$store.commit("updateWidgetAttrs", { rotate })
       this.showHint = true
       this.hintText = `${rotate}`
     },
     onDrag(left, top) {
-      this.$store.commit("updateWidget", { left, top })
+      this.$store.commit("updateWidgetAttrs", { left, top })
       this.showHint = true
       this.hintText = `${left},${top}`
-      this.showHelpLine = true
+      const {rotate} = this.currentWidget.attrs
+      if(rotate % 180 == 0) {
+        this.showHelpLine = true
+      }
     },
     onResize(left, top, width, height) {
-      this.$store.commit("updateWidget", { left, top, width, height })
+      console.log('resize---')
+      this.$store.commit("updateWidgetAttrs", { left, top, width, height })
       this.showHint = true
       this.hintText = `${width}x${height}`
     },
