@@ -1,54 +1,52 @@
 <template>
-  <div class="selection-con" :style="objStyle" v-show="isShowSelection"/>
+  <div class="selection-con" :style="objStyle" v-show="isShowSelection" />
 </template>
 <script>
 export default {
   name: "SelectionWidget",
   data() {
     return {
-      objStyle:{},
+      objStyle: {}
     }
   },
-  computed:{
-    isShowSelection:{
+  computed: {
+    isShowSelection: {
       get() {
         return this.$store.state.isShowSelection
       },
       set(val) {
-        this.$store.commit('setIsShowSelection',val)
+        this.$store.commit("setIsShowSelection", val)
       }
     }
   },
-  created() {
-
-  },
+  created() {},
   mounted() {
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.el = document.querySelector(".view-con")
-      if(this.el) {
-        this.el.addEventListener('mousedown',this.mousedown)
-        this.el.addEventListener('mousemove',this.mousemove)
-        document.body.addEventListener('mouseup',this.mouseup)
+      if (this.el) {
+        this.el.addEventListener("mousedown", this.mousedown)
+        this.el.addEventListener("mousemove", this.mousemove)
+        document.body.addEventListener("mouseup", this.mouseup)
       }
     })
   },
   beforeDestroy() {
-    document.body.removeEventListener('mouseup',this.mouseup)
-    this.el.removeEventListener('mousedown',this.mousedown)
-    this.el.removeEventListener('mousemove',this.mousemove)
+    document.body.removeEventListener("mouseup", this.mouseup)
+    this.el.removeEventListener("mousedown", this.mousedown)
+    this.el.removeEventListener("mousemove", this.mousemove)
   },
   methods: {
     mousedown(evt) {
       this.viewBgMoving = true
       this.isShowSelection = true
       const { x, y } = evt
-      const ele = document.querySelector('.viewport')
+      const ele = document.querySelector(".viewport")
       const { left, top } = ele.getBoundingClientRect()
       this.viewportLeft = left
       this.viewportTop = top
-      this.startX = x 
+      this.startX = x
       this.startY = y
-      this.$store.commit('setsSelectWidgets',[])
+      this.$store.commit("setsSelectWidgets", [])
     },
     mousemove(evt) {
       if (this.viewBgMoving) {
@@ -59,29 +57,30 @@ export default {
         const height = Math.abs(y - this.startY)
         x = minX - this.viewportLeft
         y = minY - this.viewportTop
-        this.checkContainWidgets(x,y,width,height)
+        this.checkContainWidgets(x, y, width, height)
         this.objStyle = {
           left: `${x}px`,
           top: `${y}px`,
           width: `${width}px`,
-          height: `${height}px`,
+          height: `${height}px`
         }
       }
     },
-    checkContainWidgets(x,y,width,height) {
+    checkContainWidgets(x, y, width, height) {
       const widgets = this.$store.getters.currentPage.widgets
       let res = false
-      widgets.forEach(item=>{
-        const {left,top,width:w,height:h} = item.attrs
-        res = left>x && left + w<x+width&&top>y&&top+h<y+height
-        if(res) {
-          this.$set(item,'active',res)
+      widgets.forEach(item => {
+        const { left, top, width: w, height: h } = item.attrs
+        res =
+          left > x && left + w < x + width && top > y && top + h < y + height
+        if (res) {
+          this.$set(item, "active", res)
         }
       })
     },
     hideSelection() {
       this.isShowSelection = false
-      this.objStyle.left="-10000px"
+      this.objStyle.left = "-10000px"
       this.objStyle.width = 0
       this.objStyle.height = 0
     },
@@ -89,7 +88,7 @@ export default {
       this.viewBgMoving = false
       this.hideSelection()
     }
-  },
+  }
 }
 </script>
 <style lang="less" scoped>

@@ -5,7 +5,7 @@ export default {
     width: { default: 0, type: String | Number },
     height: { default: 0, type: String | Number },
     rotate: { default: 0, type: Number },
-    zIndex: {default: 5, type: Number}
+    zIndex: { default: 5, type: Number }
   },
   computed: {
     styleObj() {
@@ -16,7 +16,7 @@ export default {
         left: `0`,
         top: `0`,
         transform: `rotate(0deg)`,
-        zIndex: `${this.zIndex}`,
+        zIndex: `${this.zIndex}`
       }
     }
   },

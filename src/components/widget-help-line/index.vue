@@ -10,8 +10,8 @@
 const borderStyle = "dashed 1px #298df8"
 export default {
   name: "WidgetHelpLine",
-  props:{
-    show:{
+  props: {
+    show: {
       default: false,
       type: Boolean
     }
@@ -113,12 +113,10 @@ export default {
         borderRight: "none",
         borderBottom: "none"
       }
-    },
+    }
   },
   data() {
-    return {
-       
-    }
+    return {}
   },
   created() {}
 }

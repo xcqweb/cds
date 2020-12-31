@@ -24,7 +24,7 @@ export default new Vuex.Store({
             h: [],
             v: []
           },
-          backgroundColor: "#fff",
+          backgroundColor: "#fff"
         }
       ],
       scale: config.scale,
@@ -43,7 +43,8 @@ export default new Vuex.Store({
       height: 0
     },
     widgets: config.widgets, // 左侧组件区域
-    isShowSelection:false,// 是否显示框选
+    isShowSelection: false, // 是否显示框选，
+    menuList: config.menuList //右键菜单，
   },
   mutations: {
     setGridSize(state, data) {
@@ -85,7 +86,7 @@ export default new Vuex.Store({
       state.currentWidgetId = data
     },
     widgetAdd(state, data) {
-      const { name, cname, dname, left, top, width, height, rotate} = data
+      const { name, cname, dname, left, top, width, height, rotate } = data
       let currentPage = this.getters.currentPage
       let widgetNum = currentPage.widgetsInfo[cname] || 0
       currentPage.widgetsInfo[cname] = ++widgetNum
@@ -94,17 +95,17 @@ export default new Vuex.Store({
       let widget = {
         cid,
         cname,
-        name: dname || `${name} ${widgetNum === 1 ? '' : widgetNum}`,
+        name: dname || `${name} ${widgetNum === 1 ? "" : widgetNum}`,
         isEdit: true,
         copyNum: 0,
-        active:true,// 激活当前控件
+        active: true, // 激活当前控件
         attrs: {
           width,
           height,
           left,
           top,
           rotate: rotate || 0,
-          zIndex,
+          zIndex
         }
       }
       currentPage.widgets.push(widget)
@@ -125,17 +126,20 @@ export default new Vuex.Store({
       const currentWidgetIndex = this.getters.currentWidgetIndex
       const currentPage = this.getters.currentPage
       if (currentWidget) {
-        currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget,...data })
+        currentPage.widgets.splice(currentWidgetIndex, 1, {
+          ...currentWidget,
+          ...data
+        })
       }
     },
-    widgetDel(state) {
+    widgetDel() {
       const currentPage = this.getters.currentPage
       const currentWidgetIndex = this.getters.currentWidgetIndex
-      currentPage.widgets.splice(currentWidgetIndex,1)
+      currentPage.widgets.splice(currentWidgetIndex, 1)
     },
-    setIsShowSelection(state,data) {
+    setIsShowSelection(state, data) {
       state.isShowSelection = data
-    },
+    }
   },
   actions: {
     addPage() {
@@ -161,8 +165,8 @@ export default new Vuex.Store({
         item => item.cid === currentWidgetId
       )
     },
-    selectWidgets: (state,getters) => {
-      return getters.currentPage.widgets.filter(item=>item.active)
+    selectWidgets: (state, getters) => {
+      return getters.currentPage.widgets.filter(item => item.active)
     },
     ...moduleGetters
   }

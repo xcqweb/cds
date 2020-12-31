@@ -1,16 +1,20 @@
 <template>
   <div class="view-con-wrap">
-    <div
-      class="view-con"
-      ref="viewCon"
-      @scroll="handleScroll"
-    >
+    <div class="view-con" ref="viewCon" @scroll="handleScroll">
       <div class="viewport-con" :style="portConStyle">
-        <div class="viewport" :style="portStyle" ref="viewport">
+        <div
+          class="viewport"
+          :style="portStyle"
+          ref="viewport"
+          @contextmenu.prevent="openContextmenu"
+        >
           <div class="canvas-pos">
-            <hint :text="hintText" :show="showHint"/>  <!-- 提示框 -->
-            <selection-widget/>  <!-- 框选组件 -->
-            <widget-help-line :show="showHelpLine"/> <!-- 辅助线 -->
+            <hint :text="hintText" :show="showHint" />
+            <!-- 提示框 -->
+            <selection-widget />
+            <!-- 框选组件 -->
+            <widget-help-line :show="showHelpLine" />
+            <!-- 辅助线 -->
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">
@@ -41,6 +45,7 @@
         </div>
       </div>
     </div>
+    <custom-contextmenu ref="open"></custom-contextmenu>
   </div>
 </template>
 
@@ -49,14 +54,15 @@ import { createGridBg } from "@u/grid-bg"
 import { throttle } from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
-import { menuList } from "@/views/widgetConstructor/helpers/commandStrat"
-import customContextmenu from "@/widgets/custom-contextmenu"
+import customContextmenu from "@/components/custom-contextmenu"
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
+import baseComponent from "@/mixins/base-editor"
 export default {
   name: "EditorMain",
+  mixins: [baseComponent],
   components: {
     VueDraggableResizable,
     SelectionWidget,
@@ -108,9 +114,9 @@ export default {
       contextmenuVisible: false,
       contextmenuPosition: { x: 0, y: 0 },
       menuList: [],
-      hintText:'',// 提示信息
-      showHint:false,// 是否显示提示
-      showHelpLine:false,
+      hintText: "", // 提示信息
+      showHint: false, // 是否显示提示
+      showHelpLine: false
     }
   },
   created() {
@@ -129,7 +135,6 @@ export default {
   },
   methods: {
     openContextmenu(event) {
-      this.menuList = menuList
       this.$refs.open.openContextmenu(event)
     },
     init() {
@@ -226,13 +231,13 @@ export default {
       this.$store.commit("updateWidgetAttrs", { left, top })
       this.showHint = true
       this.hintText = `${left},${top}`
-      const {rotate} = this.currentWidget.attrs
-      if(rotate % 180 == 0) {
+      const { rotate } = this.currentWidget.attrs
+      if (rotate % 180 == 0) {
         this.showHelpLine = true
       }
     },
     onResize(left, top, width, height) {
-      console.log('resize---')
+      console.log("resize---")
       this.$store.commit("updateWidgetAttrs", { left, top, width, height })
       this.showHint = true
       this.hintText = `${width}x${height}`
@@ -253,7 +258,7 @@ export default {
     onActivated(cid) {
       this.$store.commit("setCurrentWidgetId", cid)
       this.showHint = false
-    },
+    }
   }
 }
 </script>

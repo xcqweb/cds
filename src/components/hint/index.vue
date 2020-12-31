@@ -7,20 +7,20 @@
 import { dealRotatePos } from "@u/deal"
 export default {
   name: "Hint",
-  props:{
+  props: {
     text: String,
     show: {
-      type:Boolean,
-      default:false,
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     objStyle() {
-      let left=0
+      let left = 0
       let top = 0
       let width = 0
       const currentWidget = this.$store.getters.currentWidget
-      if(currentWidget) {
+      if (currentWidget) {
         left = currentWidget.attrs.left
         width = currentWidget.attrs.width
         top = dealRotatePos(currentWidget.attrs).bottom + 10
@@ -31,7 +31,7 @@ export default {
       }
       return {
         left: `${left}px`,
-        top: `${top}px`,
+        top: `${top}px`
       }
     }
   },

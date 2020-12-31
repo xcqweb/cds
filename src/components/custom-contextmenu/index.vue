@@ -20,12 +20,9 @@ export default {
   components: {
     VueContext
   },
-  props: {
-    menuList: {
-      type: Array,
-      default() {
-        return []
-      }
+  data() {
+    return {
+      menuList: []
     }
   },
   watch: {},
@@ -37,6 +34,7 @@ export default {
       alert(`You clicked ${item.command}!`)
     },
     openContextmenu(event) {
+      this.menuList = this.$store.state.menuList
       this.$refs.menu.open(event)
     }
   }
@@ -44,5 +42,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "~vue-context/dist/css/vue-context.css";
+@import "../../../node_modules/vue-context/dist/css/vue-context.css";
 </style>

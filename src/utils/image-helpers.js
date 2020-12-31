@@ -134,7 +134,7 @@ export function getBase64(imgUrl) {
         }
         oFileReader.readAsDataURL(blob)
         const img = document.createElement("img")
-        img.onload = function(e) {
+        img.onload = function() {
           window.URL.revokeObjectURL(img.src)
         }
         const src = window.URL.createObjectURL(blob)
