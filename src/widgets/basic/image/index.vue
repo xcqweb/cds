@@ -17,7 +17,6 @@ export default {
   mixins: [baseComponent],
   data() {
     return {
-      cname,
       src: imgUrl
     }
   },

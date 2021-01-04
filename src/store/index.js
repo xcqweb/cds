@@ -24,7 +24,7 @@ export default new Vuex.Store({
             h: [],
             v: []
           },
-          backgroundColor: "#fff"
+          backgroundColor: "#fff",
         }
       ],
       scale: config.scale,
@@ -32,7 +32,6 @@ export default new Vuex.Store({
       height: 768
     },
     currentPageId: "p1", // 当前页面id
-    currentWidgetId: "", // 当前选中组件id
     delWidgets: [], // 当前页面删除的控件
     ruler: {
       // 刻度尺
@@ -81,19 +80,16 @@ export default new Vuex.Store({
       // 设置当前页
       state.currentPageId = data
     },
-    setCurrentWidgetId(state, data) {
-      // 设置当前控件id
-      state.currentWidgetId = data
-    },
     widgetAdd(state, data) {
-      const { name, cname, dname, left, top, width, height, rotate } = data
+      let { cid, name, cname, dname, left, top, width, height, rotate, zIndex } = data
       let currentPage = this.getters.currentPage
       let widgetNum = currentPage.widgetsInfo[cname] || 0
       currentPage.widgetsInfo[cname] = ++widgetNum
-      const cid = `w${uuid(16, 16)}`
-      const zIndex = currentPage.widgets.length + config.widgetInitZIndex
+      cid = cid || `w${uuid(16, 16)}`
+      zIndex = zIndex || currentPage.widgets.length + config.widgetInitZIndex
       let widget = {
         cid,
+        pid:'',
         cname,
         name: dname || `${name} ${widgetNum === 1 ? "" : widgetNum}`,
         isEdit: true,
@@ -110,7 +106,6 @@ export default new Vuex.Store({
         }
       }
       currentPage.widgets.push(widget)
-      this.commit("setCurrentWidgetId", cid)
     },
     updateWidgetAttrs(state, attrs) {
       const currentWidget = this.getters.currentWidget
@@ -127,11 +122,6 @@ export default new Vuex.Store({
       const currentPage = this.getters.currentPage
       selectWidgets.forEach(item=>{
         let resIndex = currentPage.widgets.findIndex(w=>w.cid==item.cid)
-        console.log(attrs.disLeft,attrs.disTop)
-        if(attrs.disLeft || attrs.disTop) {
-          attrs.left = item.attrs.left + attrs.disLeft
-          attrs.top = item.attrs.top + attrs.disTop
-        }
         let resAttrs = {...item.attrs,...attrs}
         item.attrs = resAttrs
         currentPage.widgets.splice(resIndex, 1, { ...item })
@@ -147,6 +137,14 @@ export default new Vuex.Store({
           ...data
         })
       }
+    },
+    updateWidgetPatch(state,data) {
+      const selectWidgets = this.getters.selectWidgets
+      const currentPage = this.getters.currentPage
+      selectWidgets.forEach(item=>{
+        let resIndex = currentPage.widgets.findIndex(w=>w.cid==item.cid)
+        currentPage.widgets.splice(resIndex, 1, { ...item,...data})
+      })
     },
     widgetDel() {
       const currentPage = this.getters.currentPage
@@ -164,6 +162,14 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
+    currentWidgetId: (state,getters) => {
+      let widgetId = ''
+      const currentWidget = getters.currentPage.widgets.find(item=>item.active)
+      if(currentWidget) {
+        widgetId = currentWidget.cid
+      }
+      return widgetId
+    },
     currentPageIndex: state => {
       let { apply, currentPageId } = state
       return apply.pages.findIndex(item => item.id == currentPageId)
@@ -171,14 +177,14 @@ export default new Vuex.Store({
     currentPage: ({ apply }, getters) => {
       return apply.pages[getters.currentPageIndex]
     },
-    currentWidget: ({ currentWidgetId }, getters) => {
+    currentWidget: (state, getters) => {
       return getters.currentPage.widgets.find(
-        item => item.cid === currentWidgetId
+        item => item.cid === getters.currentWidgetId
       )
     },
-    currentWidgetIndex: ({ currentWidgetId }, getters) => {
+    currentWidgetIndex: (state, getters) => {
       return getters.currentPage.widgets.findIndex(
-        item => item.cid === currentWidgetId
+        item => item.cid === getters.currentWidgetId
       )
     },
     selectWidgets: (state, getters) => {

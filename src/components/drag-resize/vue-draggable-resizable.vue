@@ -208,26 +208,27 @@ export default {
     this.fixedY = 0
   },
   mounted() {
-    document.documentElement.addEventListener(
+    this.elBase = document.querySelector('.view-con')
+    this.elBase.addEventListener(
       "mousemove",
       this.handleMove,
       true
     )
-    document.documentElement.addEventListener("mousedown", this.deselect, true)
-    document.documentElement.addEventListener("mouseup", this.handleUp, true)
+    this.elBase.addEventListener("mousedown", this.deselect, true)
+    this.elBase.addEventListener("mouseup", this.handleUp, true)
 
     // touch events bindings
-    document.documentElement.addEventListener(
+    this.elBase.addEventListener(
       "touchmove",
       this.handleMove,
       true
     )
-    document.documentElement.addEventListener(
+    this.elBase.addEventListener(
       "touchend touchcancel",
       this.deselect,
       true
     )
-    document.documentElement.addEventListener("touchstart", this.handleUp, true)
+    this.elBase.addEventListener("touchstart", this.handleUp, true)
 
     this.elmX = parseInt(this.$el.style.left)
     this.elmY = parseInt(this.$el.style.top)
@@ -237,30 +238,30 @@ export default {
     // this.reviewDimensions() // 先注释掉
   },
   beforeDestroy() {
-    document.documentElement.removeEventListener(
+    this.elBase.removeEventListener(
       "mousemove",
       this.handleMove,
       true
     )
-    document.documentElement.removeEventListener(
+    this.elBase.removeEventListener(
       "mousedown",
       this.deselect,
       true
     )
-    document.documentElement.removeEventListener("mouseup", this.handleUp, true)
+    this.elBase.removeEventListener("mouseup", this.handleUp, true)
 
     // touch events bindings removed
-    document.documentElement.addEventListener(
+    this.elBase.addEventListener(
       "touchmove",
       this.handleMove,
       true
     )
-    document.documentElement.addEventListener(
+    this.elBase.addEventListener(
       "touchend touchcancel",
       this.deselect,
       true
     )
-    document.documentElement.addEventListener("touchstart", this.handleUp, true)
+    this.elBase.addEventListener("touchstart", this.handleUp, true)
   },
 
   data() {
@@ -341,8 +342,6 @@ export default {
       }
     },
     deselect(e) {
-      const {srcElement} = e
-
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
 
       this.lastMouseX = mouseX
@@ -358,7 +357,7 @@ export default {
         return
       }
       if (!this.$el.contains(target) && !regex.test(target.className)) {
-        if (this.enabled) {
+        if (this.enabled && e.button == 0) {
           this.enabled = false
           this.$emit("deactivated")
           this.$emit("update:active", false)

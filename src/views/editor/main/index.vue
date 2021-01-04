@@ -28,16 +28,44 @@
                 :r="item.attrs.rotate"
                 :parent="true"
                 :active.sync="item.active"
-                :key="item.id"
+                :key="item.cid"
+                :id="item.cid"
                 @rotating="onRotate"
                 @dragging="onDrag"
                 @resizing="onResize"
                 @resizestop="onResizeStop"
                 @dragstop="onDragStop"
                 @rotatestop="onRotateStop"
-                @activated="onActivated(item.cid)"
+                @activated="onActivated"
+                @deactivated="onDeactivated"
+                @dblclick.native="dblclick(item,$event)"
               >
-                <component :is="item.cname" v-bind="item.attrs" />
+                <component :is="item.cname" v-bind="item.attrs" v-if="item.children">
+                  <vue-draggable-resizable
+                    class="group-item"
+                    v-for="d in item.children"
+                    :w="d.attrs.width"
+                    :h="d.attrs.height"
+                    :x="d.attrs.left"
+                    :y="d.attrs.top"
+                    :r="d.attrs.rotate"
+                    :parent="true"
+                    :active.sync="d.active"
+                    :key="d.cid"
+                    :id="d.cid"
+                    @rotating="onRotate"
+                    @dragging="onDrag"
+                    @resizing="onResize"
+                    @resizestop="onResizeStop"
+                    @dragstop="onDragStop"
+                    @rotatestop="onRotateStop"
+                    @activated="onActivated"
+                    @deactivated="onDeactivated"
+                    @dblclick.native="dblclick(d,$event)">
+                    <component :is="d.cname" v-bind="d.attrs"/>
+                  </vue-draggable-resizable>
+                </component>
+                <component :is="item.cname" v-bind="item.attrs" v-else/>
               </vue-draggable-resizable>
             </div>
           </div>
@@ -59,6 +87,7 @@ import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import baseComponent from "@/mixins/base-editor"
+import {arrayToTree} from "@u/deal"
 export default {
   name: "EditorMain",
   mixins: [baseComponent],
@@ -72,7 +101,9 @@ export default {
   },
   computed: {
     widgets() {
-      return this.$store.getters.currentPage.widgets
+      let widgets = this.$store.getters.currentPage.widgets
+       widgets = arrayToTree(widgets)
+      return widgets
     },
     portConStyle() {
       const { scale, width, height } = this.$store.state.apply
@@ -246,7 +277,6 @@ export default {
       }
     },
     onResize(left, top, width, height) {
-      console.log('on-resize--')
       this.$store.commit("updateWidgetAttrs", { left, top, width, height })
       this.showHint = true
       this.hintText = `${width}x${height}`
@@ -264,10 +294,14 @@ export default {
       this.showHint = false
       this.showHelpLine = false
     },
-    onActivated(cid) {
-      console.log('onActivated--')
-      this.$store.commit("setCurrentWidgetId", cid)
+    onActivated() {
       this.showHint = false
+    },
+    onDeactivated() {
+
+    },
+    dblclick(item,evt) {
+      console.log(item,evt)
     }
   }
 }

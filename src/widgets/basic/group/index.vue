@@ -1,11 +1,11 @@
 <template>
-  <div class="gt-text" :style="styleObj">
-     {{this.text || '输入文本'}}
+  <div class="gt-group" :style="styleObj">
+    <slot/> 
   </div>
 </template>
 <script>
 import baseComponent from "@/mixins/base-editor"
-const cname = "GtText"
+const cname = "GtGroup"
 export default {
   name: cname,
   mixins: [baseComponent],
@@ -17,10 +17,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.gt-text {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: solid 1px red;
+.gt-group {
+  
 }
 </style>
