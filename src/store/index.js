@@ -80,6 +80,38 @@ export default new Vuex.Store({
       // 设置当前页
       state.currentPageId = data
     },
+    setCurrentWidgetId(state, data) {
+      // 设置当前控件id
+      state.currentWidgetId = data
+    },
+    /****************控件样式设置start*************/
+    setCurrentContent(state, data){ //设置当前文本内容
+      let currentWidget = this.getters.currentWidget
+      currentWidget.attrs.content = data
+    },
+    setName(state, data){ //设置控件名称
+      let currentWidget = this.getters.currentWidget
+      currentWidget.name = data
+    },
+    setLeft(state, data){ // 设置控件left
+      let currentWidget = this.getters.currentWidget
+      currentWidget.attrs.left = data
+    },
+    setTop(state, data){ // 设置控件top
+      let currentWidget = this.getters.currentWidget
+      currentWidget.attrs.top = data
+      console.log(data)
+    },
+    setWidth(state, data){ // 设置控件width
+      let currentWidget = this.getters.currentWidget
+      currentWidget.attrs.width = data
+    },
+    setHeight(state, data){ // 设置控件height
+      let currentWidget = this.getters.currentWidget
+      currentWidget.attrs.height = data
+    },
+
+    /****************控件样式设置end*************/
     widgetAdd(state, data) {
       let { cid, name, cname, dname, left, top, width, height, rotate, zIndex } = data
       let currentPage = this.getters.currentPage
@@ -103,6 +135,7 @@ export default new Vuex.Store({
           rotate: rotate || 0,
           zIndex,
           text:'',// 显示文本
+          content:'默认文本333',
         }
       }
       currentPage.widgets.push(widget)
