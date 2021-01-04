@@ -53,5 +53,6 @@ export default {
   opacity: 0.8;
   filter: alpha(opacity=80);
   font-size: 12px;
+  z-index: 999;
 }
 </style>

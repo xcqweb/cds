@@ -7,22 +7,16 @@
       @change="sizeChange"
     />
     {{ gridSize }}
-    <color-picker @colorChange="colorChange" />
     <button @click="undo">undo</button>
     <button @click="redo">redo</button>
     <button @click="copy">copy</button>
     <button @click="cut">cut</button>
     <button @click="paste">paste</button>
-    <basic-style></basic-style>
   </div>
 </template>
 <script>
 import undoManager from "@u/undo-manager"
-import ColorPicker from "@c/color-picker/index"
 export default {
-  components: {
-    ColorPicker
-  },
   data() {
     return {
       gridSize: 10
@@ -64,7 +58,6 @@ export default {
     paste() {
       if (this.isCopy || this.isCut) {
         if (this.isCut) {
-          // ��֤��һ��cut��pastesʱ����ԭλճ����֮����ճ�����Ǹ���ճ����λ��+20)
           this.isCut = false
           this.isCopy = true
         } else {

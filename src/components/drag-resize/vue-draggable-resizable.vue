@@ -44,10 +44,6 @@ export default {
       type: Boolean,
       default: false
     },
-    preventDeactivation: {
-      type: Boolean,
-      default: false
-    },
     draggable: {
       type: Boolean,
       default: true
@@ -312,7 +308,6 @@ export default {
     },
     elmDown(e) {
       const target = e.target || e.srcElement
-      debugger
       if (this.$el.contains(target)) {
         if (
           (this.dragHandle &&
@@ -346,6 +341,8 @@ export default {
       }
     },
     deselect(e) {
+      const {srcElement} = e
+
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
 
       this.lastMouseX = mouseX
@@ -360,11 +357,9 @@ export default {
       ) {
         return
       }
-
       if (!this.$el.contains(target) && !regex.test(target.className)) {
-        if (this.enabled && !this.preventDeactivation) {
+        if (this.enabled) {
           this.enabled = false
-
           this.$emit("deactivated")
           this.$emit("update:active", false)
         }

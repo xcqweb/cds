@@ -105,7 +105,8 @@ export default new Vuex.Store({
           left,
           top,
           rotate: rotate || 0,
-          zIndex
+          zIndex,
+          text:'',// 显示文本
         }
       }
       currentPage.widgets.push(widget)
@@ -120,6 +121,21 @@ export default new Vuex.Store({
         currentWidget.attrs = resAttrs
         currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
       }
+    },
+    updateWidgetAttrsPatch(state,attrs) {
+      const selectWidgets = this.getters.selectWidgets
+      const currentPage = this.getters.currentPage
+      selectWidgets.forEach(item=>{
+        let resIndex = currentPage.widgets.findIndex(w=>w.cid==item.cid)
+        console.log(attrs.disLeft,attrs.disTop)
+        if(attrs.disLeft || attrs.disTop) {
+          attrs.left = item.attrs.left + attrs.disLeft
+          attrs.top = item.attrs.top + attrs.disTop
+        }
+        let resAttrs = {...item.attrs,...attrs}
+        item.attrs = resAttrs
+        currentPage.widgets.splice(resIndex, 1, { ...item })
+      })
     },
     updateWidget(state, data) {
       const currentWidget = this.getters.currentWidget

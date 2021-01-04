@@ -1,17 +1,16 @@
 <template>
   <div class="right-con ge-mt">
-    <!--    <page />-->
-    <basicStyle />
+    <page />
   </div>
 </template>
 
 <script>
-// import Page from "./page.vue"
+import Page from "./page.vue"
 import basicStyle from "./basicStyle"
 
 export default {
   components: {
-    // Page,
+    Page,
     basicStyle
   }
 }

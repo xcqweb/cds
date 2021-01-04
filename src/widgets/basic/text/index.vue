@@ -1,6 +1,6 @@
 <template>
   <div class="gt-text" :style="styleObj">
-    输入文本
+     {{this.text || '输入文本'}}
   </div>
 </template>
 <script>

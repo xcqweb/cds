@@ -9,12 +9,12 @@
           @contextmenu.prevent="openContextmenu"
         >
           <div class="canvas-pos">
-            <hint :text="hintText" :show="showHint" />
             <!-- 提示框 -->
-            <selection-widget />
+            <hint :text="hintText" :show="showHint" />
             <!-- 框选组件 -->
-            <widget-help-line :show="showHelpLine" />
+            <selection-widget />
             <!-- 辅助线 -->
+            <widget-help-line :show="showHelpLine" />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">
@@ -29,7 +29,6 @@
                 :parent="true"
                 :active.sync="item.active"
                 :key="item.id"
-                :prevent-deactivation="true"
                 @rotating="onRotate"
                 @dragging="onDrag"
                 @resizing="onResize"
@@ -106,6 +105,16 @@ export default {
       const { scale } = this.$store.state.apply
       return {
         transform: `scale(${scale})`
+      }
+    },
+    selectWidgetsCount() {
+      return this.$store.getters.selectWidgets.length
+    }
+  },
+  watch:{
+    selectWidgetsCount(val) {
+      if(val>1) {
+        this.showHelpLine = false
       }
     }
   },
@@ -237,7 +246,7 @@ export default {
       }
     },
     onResize(left, top, width, height) {
-      console.log("resize---")
+      console.log('on-resize--')
       this.$store.commit("updateWidgetAttrs", { left, top, width, height })
       this.showHint = true
       this.hintText = `${width}x${height}`
@@ -256,6 +265,7 @@ export default {
       this.showHelpLine = false
     },
     onActivated(cid) {
+      console.log('onActivated--')
       this.$store.commit("setCurrentWidgetId", cid)
       this.showHint = false
     }
