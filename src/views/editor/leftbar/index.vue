@@ -1,26 +1,26 @@
 <template>
-  <div class="left-con" style="width:381px">
+  <div class="left-con">
     <div>
       <a-tabs tab-position="left">
         <a-tab-pane key="1">
           <span slot="tab">
-             <a-tooltip placement="right">
-            <template slot="title">
-              <span>页面</span>
-            </template>
-            <a-icon type="android" />
-          </a-tooltip>
-        </span>
+            <a-tooltip placement="right">
+              <template slot="title">
+                <span>页面</span>
+              </template>
+              <a-icon type="android" />
+            </a-tooltip>
+          </span>
           <pageMenu></pageMenu>
         </a-tab-pane>
         <a-tab-pane key="2">
           <span slot="tab">
-           <a-tooltip placement="right">
-            <template slot="title">
-              <span>基本组件</span>
-            </template>
-            <a-icon type="apple" />
-          </a-tooltip>
+            <a-tooltip placement="right">
+              <template slot="title">
+                <span>基本组件</span>
+              </template>
+              <a-icon type="apple" />
+            </a-tooltip>
           </span>
           <div class="widget-con">
             <ul class="widget-item-list" @dragstart="dragstart">
@@ -47,7 +47,7 @@
 <script>
 import pageMenu from "@v/editor/leftbar/pageMenu"
 export default {
-  components:{
+  components: {
     pageMenu
   },
   data() {

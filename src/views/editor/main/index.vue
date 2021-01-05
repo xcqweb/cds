@@ -36,11 +36,15 @@
                 @resizestop="onResizeStop"
                 @dragstop="onDragStop"
                 @rotatestop="onRotateStop"
-                @activated="onActivated"
+                @activated="onActivated(item)"
                 @deactivated="onDeactivated"
-                @dblclick.native="dblclick(item,$event)"
+                @dblclick.native="dblclick(item, $event)"
               >
-                <component :is="item.cname" v-bind="item.attrs" v-if="item.children">
+                <component
+                  :is="item.cname"
+                  v-bind="item.attrs"
+                  v-if="item.children"
+                >
                   <vue-draggable-resizable
                     class="group-item"
                     v-for="d in item.children"
@@ -59,13 +63,14 @@
                     @resizestop="onResizeStop"
                     @dragstop="onDragStop"
                     @rotatestop="onRotateStop"
-                    @activated="onActivated"
+                    @activated="onActivated(d)"
                     @deactivated="onDeactivated"
-                    @dblclick.native="dblclick(d,$event)">
-                    <component :is="d.cname" v-bind="d.attrs"/>
+                    @dblclick.native="dblclick(d, $event)"
+                  >
+                    <component :is="d.cname" v-bind="d.attrs" />
                   </vue-draggable-resizable>
                 </component>
-                <component :is="item.cname" v-bind="item.attrs" v-else/>
+                <component :is="item.cname" v-bind="item.attrs" v-else />
               </vue-draggable-resizable>
             </div>
           </div>
@@ -87,7 +92,7 @@ import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import baseComponent from "@/mixins/base-editor"
-import {arrayToTree} from "@u/deal"
+import { arrayToTree } from "@u/deal"
 export default {
   name: "EditorMain",
   mixins: [baseComponent],
@@ -102,7 +107,7 @@ export default {
   computed: {
     widgets() {
       let widgets = this.$store.getters.currentPage.widgets
-       widgets = arrayToTree(widgets)
+      widgets = arrayToTree(widgets)
       return widgets
     },
     portConStyle() {
@@ -142,9 +147,9 @@ export default {
       return this.$store.getters.selectWidgets.length
     }
   },
-  watch:{
+  watch: {
     selectWidgetsCount(val) {
-      if(val>1) {
+      if (val > 1) {
         this.showHelpLine = false
       }
     }
@@ -238,7 +243,7 @@ export default {
       // 刻度尺大小
       this.$nextTick(() => {
         const { width, height } = this.viewProps()
-        this.$store.commit("setRulerSize", { width, height })
+        this.$store.commit("setRuler", { width, height })
       })
     },
     dealRulerStartPos() {
@@ -248,14 +253,14 @@ export default {
       const { left: portLeft, top: portTop } = this.portProps()
       const x = parseInt((viewLeft - portLeft) / scale)
       const y = parseInt((viewTop - portTop - 4) / scale)
-      this.$store.commit("setRulerStartPos", { x, y })
+      this.$store.commit("setRuler", { startPos: { x, y } })
     },
     dealRulerCorner() {
       // 刻度尺左上角
       const { scrollLeft, scrollTop, centerX, centerY } = this.viewProps()
       const distanceX = Math.abs(centerX - scrollLeft) > 1
       const distanceY = Math.abs(centerY - scrollTop) > 1
-      this.$store.commit("setRulerCornerActive", distanceX || distanceY)
+      this.$store.commit("setRuler", { cornerActive: distanceX || distanceY })
     },
     handleScroll: throttle(function() {
       // 滚动处理
@@ -271,15 +276,21 @@ export default {
       this.$store.commit("updateWidgetAttrs", { left, top })
       this.showHint = true
       this.hintText = `${left},${top}`
-      const { rotate } = this.currentWidget.attrs
+      const { rotate, width, height } = this.currentWidget.attrs
       if (rotate % 180 == 0) {
         this.showHelpLine = true
       }
+      this.$store.commit("setRuler", {
+        shadow: { x: left, y: top, width, height }
+      })
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidgetAttrs", { left, top, width, height })
       this.showHint = true
       this.hintText = `${width}x${height}`
+      this.$store.commit("setRuler", {
+        shadow: { x: left, y: top, width, height }
+      })
     },
     onResizeStop() {
       undoManager.saveApplyChange()
@@ -294,14 +305,13 @@ export default {
       this.showHint = false
       this.showHelpLine = false
     },
-    onActivated() {
-      this.showHint = false
+    onActivated(item) {
+      console.log(item)
+      this.$store.commit("setCurrentWidgetId", item.cid)
     },
-    onDeactivated() {
-
-    },
-    dblclick(item,evt) {
-      console.log(item,evt)
+    onDeactivated() {},
+    dblclick(item, evt) {
+      console.log(item, evt)
     }
   }
 }

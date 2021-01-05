@@ -1,6 +1,6 @@
 <template>
   <div class="gt-text" :style="styleObj">
-    {{textContent || '输入文本'}}
+    {{ textContent || "输入文本" }}
   </div>
 </template>
 <script>
@@ -10,8 +10,7 @@ export default {
   name: cname,
   mixins: [baseComponent],
   data() {
-    return {
-    }
+    return {}
   },
   created() {}
 }

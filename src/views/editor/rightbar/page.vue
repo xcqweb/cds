@@ -28,7 +28,7 @@ export default {
   created() {},
   methods: {
     sizeChange(size) {
-      this.$store.commit("setGridSize", size)
+      this.$store.commit("setGrid", { size })
       undoManager.saveApplyChange()
     },
 
@@ -77,30 +77,36 @@ export default {
       const cname = `GtGroup`
       const name = `组合`
       const attrs = this.computeGroup(selectWidgets)
-      this.$store.commit('updateWidgetPatch',{pid:cid})
-      this.$store.commit('widgetAdd',{cid,cname,name,...attrs})
+      this.$store.commit("updateWidgetAttrsPatch", {
+        disLeft: attrs.left,
+        disTop: attrs.top
+      })
+      this.$store.commit("updateWidgetPatch", { pid: cid, active: false })
+      this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
     },
-    ungroup() {
-
-    },
+    ungroup() {},
     computeGroup(selectWidgets) {
-      let minX = 10000,minY = 10000,maxX = 0,maxY = 0,maxZIndex = 0
-      selectWidgets.forEach(item=>{
-        let {left,top,width,height,zIndex} = item.attrs
-        minX = Math.min(left,minX)
-        minY = Math.min(top,minY)
-        maxX = Math.max(left + width,maxX)
-        maxY = Math.max(top + height,maxY)
-        maxZIndex = Math.max(zIndex,maxZIndex)
+      let minX = 10000,
+        minY = 10000,
+        maxX = 0,
+        maxY = 0,
+        maxZIndex = 0
+      selectWidgets.forEach(item => {
+        let { left, top, width, height, zIndex } = item.attrs
+        minX = Math.min(left, minX)
+        minY = Math.min(top, minY)
+        maxX = Math.max(left + width, maxX)
+        maxY = Math.max(top + height, maxY)
+        maxZIndex = Math.max(zIndex, maxZIndex)
       })
       return {
-        left:minX,
-        top:minY,
-        width:maxX - minX,
-        height:maxY - minY,
-        zIndex:maxZIndex,
+        left: minX,
+        top: minY,
+        width: maxX - minX,
+        height: maxY - minY,
+        zIndex: maxZIndex
       }
-    },
+    }
   }
 }
 </script>

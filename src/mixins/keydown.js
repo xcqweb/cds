@@ -8,48 +8,48 @@ const UNDO_KEY = 90 // z
 const BACKUP_KEY = 83 // s
 const SELECT_ALL_KEY = 65 // a
 
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from "vuex"
 export default {
   data() {
     return {}
   },
-  computed:{
+  computed: {
     ...mapState([
-      'posterItems',
-      'layerPanelOpened',
-      'activeItems',
-      'copiedWidgets',
-      'referenceLineOpened',
-      'isUnsavedState'
+      "posterItems",
+      "layerPanelOpened",
+      "activeItems",
+      "copiedWidgets",
+      "referenceLineOpened",
+      "isUnsavedState"
     ]),
-    ...mapGetters(['activeItemIds']) //获取选中的控件
+    ...mapGetters(["activeItemIds"]) //获取选中的控件
   },
   created() {},
   async mounted() {
-    document.addEventListener('keydown', this.keydownHandle)
+    document.addEventListener("keydown", this.keydownHandle)
     this.body = document.body
     this.viewport = this.$refs.main.$refs.viewport
   },
   beforeDestroy() {
-    document.removeEventListener('keydown', this.keydownHandle)
+    document.removeEventListener("keydown", this.keydownHandle)
     this.killAutoSaveTask()
   },
-  methods:{
+  methods: {
     ...mapActions([
-      'replacePosterItems',
-      'replaceActiveItems',
-      'pasteWidget',
-      'copyWidget',
-      'setLayerPanel',
-      'setReferenceLineVisible',
-      'resetState'
+      "replacePosterItems",
+      "replaceActiveItems",
+      "pasteWidget",
+      "copyWidget",
+      "setLayerPanel",
+      "setReferenceLineVisible",
+      "resetState"
     ]),
     ...mapActions({
-      undo: 'history/undo',
-      redo: 'history/redo',
-      backupInit: 'backup/init',
-      killAutoSaveTask: 'backup/killAutoSaveTask',
-      backupInvoker: 'backup/invoker'
+      undo: "history/undo",
+      redo: "history/redo",
+      backupInit: "backup/init",
+      killAutoSaveTask: "backup/killAutoSaveTask",
+      backupInvoker: "backup/invoker"
     }),
     keydownHandle(e) {
       if (e.target !== this.body) {
@@ -82,7 +82,7 @@ export default {
             // copiedWidgets.push(getCopyData(widgetRef.item, widgetRef._self))
             // })
             const copiedWidgets = [...this.activeItems].map(item => {
-              item._copyFrom = 'command'
+              item._copyFrom = "command"
               return item
             })
             this.copyWidget(copiedWidgets)

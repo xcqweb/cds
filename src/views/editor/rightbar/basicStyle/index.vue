@@ -11,7 +11,7 @@
 import namePosition from "./name-position"
 import textColor from "./text-color"
 import textInfo from "./text-info"
-import textContent from './text-content'
+import textContent from "./text-content"
 export default {
   name: "index",
   components: {
@@ -49,6 +49,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

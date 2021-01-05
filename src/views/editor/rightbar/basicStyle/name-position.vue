@@ -2,7 +2,7 @@
   <div>
     <div class="fs ge-h40">
       <label>组件名</label>
-      <a-input :value="name"  @change="setName" placeholder="Basic usage" />
+      <a-input :value="name" @change="setName" placeholder="Basic usage" />
     </div>
     <div class="fs ge-h40">
       <label>X</label>
@@ -31,63 +31,96 @@ export default {
   data() {
     return {}
   },
-  computed:{
+  computed: {
     name() {
-      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].name
+      return this.currentWidget === null ||
+        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        ? ""
+        : this.$store.state.apply.pages[this.currentPageIndex].widgets[
+            this.currentWidgetIndex
+          ].name
     },
     width() {
-      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.width
+      return this.currentWidget === null ||
+        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        ? ""
+        : this.$store.state.apply.pages[this.currentPageIndex].widgets[
+            this.currentWidgetIndex
+          ].attrs.width
     },
     height() {
-      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.height
+      return this.currentWidget === null ||
+        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        ? ""
+        : this.$store.state.apply.pages[this.currentPageIndex].widgets[
+            this.currentWidgetIndex
+          ].attrs.height
     },
     top() {
-      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.top
+      return this.currentWidget === null ||
+        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        ? ""
+        : this.$store.state.apply.pages[this.currentPageIndex].widgets[
+            this.currentWidgetIndex
+          ].attrs.top
     },
     left() {
-      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.left
+      return this.currentWidget === null ||
+        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        ? ""
+        : this.$store.state.apply.pages[this.currentPageIndex].widgets[
+            this.currentWidgetIndex
+          ].attrs.left
     }
   },
   methods: {
     setName(ev) {
       let value = ev.target.value
-      if ( value ) {
+      if (value) {
         ev.target.value = value
-        this.$store.commit('setName',value)
+        this.$store.commit("setName", value)
       }
     },
     setLeft(ev) {
-      let value =  parseInt(ev.target.value)
-      if (typeof value !== 'number' || isNaN(value)){
-        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.left
+      let value = parseInt(ev.target.value)
+      if (typeof value !== "number" || isNaN(value)) {
+        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[
+          this.currentWidgetIndex
+        ].attrs.left
         ev.target.value = value
       }
-      this.$store.commit('setLeft',value)
+      this.$store.commit("setLeft", value)
     },
     setTop(ev) {
-      let value =  parseInt(ev.target.value)
-      if (typeof value !== 'number' || isNaN(value)){
-        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.top
+      let value = parseInt(ev.target.value)
+      if (typeof value !== "number" || isNaN(value)) {
+        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[
+          this.currentWidgetIndex
+        ].attrs.top
         ev.target.value = value
       }
-      this.$store.commit('setTop',value)
+      this.$store.commit("setTop", value)
     },
     setWidth(ev) {
-      let value =  parseInt(ev.target.value)
-      if (typeof value !== 'number' || isNaN(value)){
-        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.width
+      let value = parseInt(ev.target.value)
+      if (typeof value !== "number" || isNaN(value)) {
+        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[
+          this.currentWidgetIndex
+        ].attrs.width
         ev.target.value = value
       }
-      this.$store.commit('setWidth',value)
+      this.$store.commit("setWidth", value)
     },
     setHeight(ev) {
-      let value =  parseInt(ev.target.value)
-      if (typeof value !== 'number' || isNaN(value)){
-        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.height
+      let value = parseInt(ev.target.value)
+      if (typeof value !== "number" || isNaN(value)) {
+        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[
+          this.currentWidgetIndex
+        ].attrs.height
         ev.target.value = value
       }
-      this.$store.commit('setHeight',value)
-    },
+      this.$store.commit("setHeight", value)
+    }
   }
 }
 </script>

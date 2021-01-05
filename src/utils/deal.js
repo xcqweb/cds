@@ -55,9 +55,11 @@ function transform(options, angle) {
   }
 }
 
-export const arrayToTree = (list,pid='') => {
-  return list.filter(item => item.pid === pid).map(item => ({
-    ...item,
-    children: arrayToTree(list, item.cid),
-  }))
+export const arrayToTree = (list, pid = "") => {
+  return list
+    .filter(item => item.pid === pid)
+    .map(item => ({
+      ...item,
+      children: arrayToTree(list, item.cid)
+    }))
 }

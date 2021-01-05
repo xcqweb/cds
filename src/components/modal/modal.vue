@@ -1,41 +1,38 @@
 <template>
   <div>
     <a-modal v-model="visibleFlag" title="Basic Modal" @ok="handleOk">
-
     </a-modal>
   </div>
 </template>
 
 <script>
 export default {
-  name:'modal',
+  name: "modal",
   props: {
     visible: {
       type: Boolean,
-      default(){
+      default() {
         return false
       }
     }
   },
-  watch:{
+  watch: {
     visible(curVal) {
       this.visibleFlag = curVal
-    },
+    }
   },
   data() {
     return {
-      visibleFlag:false
-    };
+      visibleFlag: false
+    }
   },
   methods: {
     handleOk(e) {
-      console.log(e);
-      this.$emit('hideDialog',false)
-    },
-  },
+      console.log(e)
+      this.$emit("hideDialog", false)
+    }
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

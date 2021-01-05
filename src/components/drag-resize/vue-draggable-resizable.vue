@@ -208,26 +208,14 @@ export default {
     this.fixedY = 0
   },
   mounted() {
-    this.elBase = document.querySelector('.view-con')
-    this.elBase.addEventListener(
-      "mousemove",
-      this.handleMove,
-      true
-    )
+    this.elBase = document.querySelector(".view-con")
+    this.elBase.addEventListener("mousemove", this.handleMove, true)
     this.elBase.addEventListener("mousedown", this.deselect, true)
     this.elBase.addEventListener("mouseup", this.handleUp, true)
 
     // touch events bindings
-    this.elBase.addEventListener(
-      "touchmove",
-      this.handleMove,
-      true
-    )
-    this.elBase.addEventListener(
-      "touchend touchcancel",
-      this.deselect,
-      true
-    )
+    this.elBase.addEventListener("touchmove", this.handleMove, true)
+    this.elBase.addEventListener("touchend touchcancel", this.deselect, true)
     this.elBase.addEventListener("touchstart", this.handleUp, true)
 
     this.elmX = parseInt(this.$el.style.left)
@@ -238,29 +226,13 @@ export default {
     // this.reviewDimensions() // 先注释掉
   },
   beforeDestroy() {
-    this.elBase.removeEventListener(
-      "mousemove",
-      this.handleMove,
-      true
-    )
-    this.elBase.removeEventListener(
-      "mousedown",
-      this.deselect,
-      true
-    )
+    this.elBase.removeEventListener("mousemove", this.handleMove, true)
+    this.elBase.removeEventListener("mousedown", this.deselect, true)
     this.elBase.removeEventListener("mouseup", this.handleUp, true)
 
     // touch events bindings removed
-    this.elBase.addEventListener(
-      "touchmove",
-      this.handleMove,
-      true
-    )
-    this.elBase.addEventListener(
-      "touchend touchcancel",
-      this.deselect,
-      true
-    )
+    this.elBase.addEventListener("touchmove", this.handleMove, true)
+    this.elBase.addEventListener("touchend touchcancel", this.deselect, true)
     this.elBase.addEventListener("touchstart", this.handleUp, true)
   },
 

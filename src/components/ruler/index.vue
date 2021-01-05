@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import SketchRule from "vue-sketch-ruler"
+import SketchRule from "../sketch-ruler"
 export default {
   name: "Ruler",
   components: { SketchRule },
@@ -30,7 +30,7 @@ export default {
         return this.$store.getters.currentPage.lines
       },
       set(val) {
-        this.$store.commit("setLines", val)
+        this.$store.commit("setRuler", { lines: val })
       }
     },
     scale() {
@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       thick: 20,
-      lang: "zh-CN" // 中英文
+      lang: "zh-CN" // 中英文,
     }
   },
   created() {

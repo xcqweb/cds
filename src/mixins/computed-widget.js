@@ -1,13 +1,13 @@
 export default {
-  computed:{
+  computed: {
     currentPageIndex() {
-      return this.$store.getters['currentPageIndex'];
+      return this.$store.getters["currentPageIndex"]
     },
     currentWidget() {
-      return this.$store.getters['currentWidget'];
+      return this.$store.getters["currentWidget"]
     },
-    currentWidgetIndex(){
-      return this.$store.getters['currentWidgetIndex']
+    currentWidgetIndex() {
+      return this.$store.getters["currentWidgetIndex"]
     }
   },
   data() {

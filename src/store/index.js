@@ -24,7 +24,7 @@ export default new Vuex.Store({
             h: [],
             v: []
           },
-          backgroundColor: "#fff",
+          backgroundColor: "#fff"
         }
       ],
       scale: config.scale,
@@ -32,6 +32,7 @@ export default new Vuex.Store({
       height: 768
     },
     currentPageId: "p1", // 当前页面id
+    currentWidgetId: "", // 当前激活的控件
     delWidgets: [], // 当前页面删除的控件
     ruler: {
       // 刻度尺
@@ -46,35 +47,21 @@ export default new Vuex.Store({
     menuList: config.menuList //右键菜单，
   },
   mutations: {
-    setGridSize(state, data) {
-      // 设置grid大小
+    setGrid(state, data) {
+      // 设置grid
       let currentPage = this.getters.currentPage
-      currentPage.grid.size = data
+      const tempGrid = { ...currentPage.grid, ...data }
+      currentPage.grid = tempGrid
     },
-    setGridColor(state, data) {
-      // 设置grid颜色
+    setRuler(state, data) {
+      // 设置标尺
+      const tempRuler = { ...state.ruler, ...data }
+      state.ruler = tempRuler
+    },
+    setCurrentPageInfo(state, data) {
+      // 设置当前页面信息
       let currentPage = this.getters.currentPage
-      currentPage.grid.color = data
-    },
-    setRulerCornerActive(state, data) {
-      // 设置标尺左上角的状态
-      state.ruler.cornerActive = data
-    },
-    setRulerStartPos(state, data) {
-      state.ruler.startPos = data
-    },
-    setRulerShadow(state, data) {
-      // 设置标尺横轴、竖轴选中范围
-      state.ruler.shadow = data
-    },
-    setRulerSize(state, data) {
-      state.ruler.width = data.width
-      state.ruler.height = data.height
-    },
-    setLines(state, data) {
-      // 设置每个页面刻度尺的辅助线
-      let currentPage = this.getters.currentPage
-      currentPage.lines = data
+      currentPage = { ...currentPage, ...data }
     },
     setCurrentPageId(state, data) {
       // 设置当前页
@@ -84,36 +71,19 @@ export default new Vuex.Store({
       // 设置当前控件id
       state.currentWidgetId = data
     },
-    /****************控件样式设置start*************/
-    setCurrentContent(state, data){ //设置当前文本内容
-      let currentWidget = this.getters.currentWidget
-      currentWidget.attrs.content = data
-    },
-    setName(state, data){ //设置控件名称
-      let currentWidget = this.getters.currentWidget
-      currentWidget.name = data
-    },
-    setLeft(state, data){ // 设置控件left
-      let currentWidget = this.getters.currentWidget
-      currentWidget.attrs.left = data
-    },
-    setTop(state, data){ // 设置控件top
-      let currentWidget = this.getters.currentWidget
-      currentWidget.attrs.top = data
-      console.log(data)
-    },
-    setWidth(state, data){ // 设置控件width
-      let currentWidget = this.getters.currentWidget
-      currentWidget.attrs.width = data
-    },
-    setHeight(state, data){ // 设置控件height
-      let currentWidget = this.getters.currentWidget
-      currentWidget.attrs.height = data
-    },
-
-    /****************控件样式设置end*************/
     widgetAdd(state, data) {
-      let { cid, name, cname, dname, left, top, width, height, rotate, zIndex } = data
+      let {
+        cid,
+        name,
+        cname,
+        dname,
+        left,
+        top,
+        width,
+        height,
+        rotate,
+        zIndex
+      } = data
       let currentPage = this.getters.currentPage
       let widgetNum = currentPage.widgetsInfo[cname] || 0
       currentPage.widgetsInfo[cname] = ++widgetNum
@@ -121,7 +91,7 @@ export default new Vuex.Store({
       zIndex = zIndex || currentPage.widgets.length + config.widgetInitZIndex
       let widget = {
         cid,
-        pid:'',
+        pid: "",
         cname,
         name: dname || `${name} ${widgetNum === 1 ? "" : widgetNum}`,
         isEdit: true,
@@ -134,11 +104,20 @@ export default new Vuex.Store({
           top,
           rotate: rotate || 0,
           zIndex,
-          text:'',// 显示文本
-          content:'默认文本333',
+          text: "", // 显示文本
+          content: "默认文本333"
         }
       }
+      const currentWidgetIndex = this.getters.currentWidgetIndex
+      if (currentWidgetIndex !== -1) {
+        // 连续拖拽时候 取消之前激活的控件
+        let currentWidget = this.getters.currentWidget
+        currentWidget.active = false
+        currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
+      }
       currentPage.widgets.push(widget)
+      state.currentWidgetId = cid
+      state.ruler.shadow = { x: left, y: top, width, height }
     },
     updateWidgetAttrs(state, attrs) {
       const currentWidget = this.getters.currentWidget
@@ -150,12 +129,16 @@ export default new Vuex.Store({
         currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
       }
     },
-    updateWidgetAttrsPatch(state,attrs) {
+    updateWidgetAttrsPatch(state, attrs) {
       const selectWidgets = this.getters.selectWidgets
       const currentPage = this.getters.currentPage
-      selectWidgets.forEach(item=>{
-        let resIndex = currentPage.widgets.findIndex(w=>w.cid==item.cid)
-        let resAttrs = {...item.attrs,...attrs}
+      selectWidgets.forEach(item => {
+        let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
+        let resAttrs = { ...item.attrs, ...attrs }
+        if (resAttrs.disLeft || resAttrs.disTop) {
+          resAttrs.left -= resAttrs.disLeft
+          resAttrs.top -= resAttrs.disTop
+        }
         item.attrs = resAttrs
         currentPage.widgets.splice(resIndex, 1, { ...item })
       })
@@ -171,18 +154,20 @@ export default new Vuex.Store({
         })
       }
     },
-    updateWidgetPatch(state,data) {
+    updateWidgetPatch(state, data) {
       const selectWidgets = this.getters.selectWidgets
       const currentPage = this.getters.currentPage
-      selectWidgets.forEach(item=>{
-        let resIndex = currentPage.widgets.findIndex(w=>w.cid==item.cid)
-        currentPage.widgets.splice(resIndex, 1, { ...item,...data})
+      selectWidgets.forEach(item => {
+        let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
+        currentPage.widgets.splice(resIndex, 1, { ...item, ...data })
       })
     },
     widgetDel() {
       const currentPage = this.getters.currentPage
       const currentWidgetIndex = this.getters.currentWidgetIndex
-      currentPage.widgets.splice(currentWidgetIndex, 1)
+      if (currentPageIndex != -1) {
+        currentPage.widgets.splice(currentWidgetIndex, 1)
+      }
     },
     setIsShowSelection(state, data) {
       state.isShowSelection = data
@@ -195,14 +180,6 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
-    currentWidgetId: (state,getters) => {
-      let widgetId = ''
-      const currentWidget = getters.currentPage.widgets.find(item=>item.active)
-      if(currentWidget) {
-        widgetId = currentWidget.cid
-      }
-      return widgetId
-    },
     currentPageIndex: state => {
       let { apply, currentPageId } = state
       return apply.pages.findIndex(item => item.id == currentPageId)
@@ -212,13 +189,14 @@ export default new Vuex.Store({
     },
     currentWidget: (state, getters) => {
       return getters.currentPage.widgets.find(
-        item => item.cid === getters.currentWidgetId
+        item => item.cid === state.currentWidgetId
       )
     },
     currentWidgetIndex: (state, getters) => {
-      return getters.currentPage.widgets.findIndex(
-        item => item.cid === getters.currentWidgetId
+      let res = getters.currentPage.widgets.findIndex(
+        item => item.cid === state.currentWidgetId
       )
+      return res
     },
     selectWidgets: (state, getters) => {
       return getters.currentPage.widgets.filter(item => item.active)

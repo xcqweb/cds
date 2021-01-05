@@ -1,17 +1,15 @@
 <template>
-    <mutuals></mutuals>
+  <mutuals></mutuals>
 </template>
 
 <script>
 import mutuals from "./mutuals"
 export default {
-name: "index",
+  name: "index",
   components: {
     mutuals
-  },
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

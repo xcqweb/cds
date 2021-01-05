@@ -1,6 +1,6 @@
 <template>
   <div class="gt-group" :style="styleObj">
-    <slot/> 
+    <slot />
   </div>
 </template>
 <script>
@@ -10,14 +10,12 @@ export default {
   name: cname,
   mixins: [baseComponent],
   data() {
-    return {
-    }
+    return {}
   },
   created() {}
 }
 </script>
 <style lang="less" scoped>
 .gt-group {
-  
 }
 </style>
