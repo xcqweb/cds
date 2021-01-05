@@ -2,11 +2,11 @@
   <div class="right-con ge-mt">
       <a-tabs @change="callback">
         <a-tab-pane key="1" tab="交互">
-          <mutual></mutual>
-          <!-- <Page />        -->
+<!--          <basicStyle></basicStyle>-->
+                     <Page />
         </a-tab-pane>
         <a-tab-pane key="2" tab="样式" force-render>
-          <basicStyle></basicStyle>
+          <mutual></mutual>
         </a-tab-pane>
       </a-tabs>
   </div>

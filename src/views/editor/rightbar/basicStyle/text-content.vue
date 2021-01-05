@@ -2,7 +2,7 @@
   <div class="ge-border">
     <div class="fs ge-h40">
       <label>内容</label>
-      <a-input class="ge-lg40" :value="content" @change="setCurrentContent" placeholder="Basic usage" />
+      <a-input class="ge-lg40" :value="text" @change="setCurrentContent" placeholder="Basic usage" />
     </div>
 
   </div>
@@ -16,12 +16,11 @@ name: "text-content",
   mixins: [computedWidget],
   data() {
     return {
-      textContent:''
     }
   },
   computed:{
-    content() {
-      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.content
+    text() {
+      return this.currentWidget === null || this.currentWidget === undefined && this.currentWidgetIndex === -1 ? '' : this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.text
     }
   },
   watch:{},
@@ -30,7 +29,7 @@ name: "text-content",
       let value = ev.target.value
       if ( value ) {
         ev.target.value = value
-        this.$store.commit('setCurrentContent',value)
+        this.$store.commit('updateWidgetAttrs',{text:value})
       }
     },
 

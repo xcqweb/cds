@@ -117,6 +117,7 @@ export default {
         width: conWidth + "px",
         height: conHeight + "px"
       }
+
     },
     portStyle() {
       const { size, color } = this.$store.getters.currentPage.grid

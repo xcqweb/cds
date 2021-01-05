@@ -14,12 +14,18 @@
     <button @click="paste">paste</button>
     <button @click="group">group</button>
     <button @click="ungroup">ungroup</button>
+    <!--调整控件位置-->
+    <adjuist-position></adjuist-position>
   </div>
 </template>
 <script>
+import adjuistPosition from "@/components/adjust-position"
 import undoManager from "@u/undo-manager"
 import { uuid } from "@u/uuid"
 export default {
+  components:{
+    adjuistPosition,
+  },
   data() {
     return {
       gridSize: 10
@@ -73,6 +79,7 @@ export default {
     },
     group() {
       const selectWidgets = this.$store.getters.selectWidgets
+      console.log(selectWidgets)
       const cid = `g${uuid(16, 16)}`
       const cname = `GtGroup`
       const name = `组合`
@@ -104,4 +111,9 @@ export default {
   }
 }
 </script>
-<style></style>
+<style>
+button{
+  width: 60px;
+  margin: 6px;
+}
+</style>

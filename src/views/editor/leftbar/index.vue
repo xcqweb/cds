@@ -1,18 +1,8 @@
 <template>
-  <div class="left-con" style="width:381px">
+<!--  <div class="left-con" style="width:381px">-->
+  <div class="left-con">
     <div>
       <a-tabs tab-position="left">
-        <a-tab-pane key="1">
-          <span slot="tab">
-             <a-tooltip placement="right">
-            <template slot="title">
-              <span>页面</span>
-            </template>
-            <a-icon type="android" />
-          </a-tooltip>
-        </span>
-          <pageMenu></pageMenu>
-        </a-tab-pane>
         <a-tab-pane key="2">
           <span slot="tab">
            <a-tooltip placement="right">
@@ -38,6 +28,17 @@
               </li>
             </ul>
           </div>
+        </a-tab-pane>
+        <a-tab-pane key="1">
+          <span slot="tab">
+             <a-tooltip placement="right">
+            <template slot="title">
+              <span>页面</span>
+            </template>
+            <a-icon type="android" />
+          </a-tooltip>
+        </span>
+          <pageMenu></pageMenu>
         </a-tab-pane>
       </a-tabs>
     </div>

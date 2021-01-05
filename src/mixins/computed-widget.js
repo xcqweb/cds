@@ -9,9 +9,5 @@ export default {
     currentWidgetIndex(){
       return this.$store.getters['currentWidgetIndex']
     }
-  },
-  data() {
-    return {}
-  },
-  created() {}
+  }
 }

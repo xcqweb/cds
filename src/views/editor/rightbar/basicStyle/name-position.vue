@@ -62,7 +62,7 @@ export default {
         value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.left
         ev.target.value = value
       }
-      this.$store.commit('setLeft',value)
+      this.$store.commit('updateWidgetAttrs',{left:value})
     },
     setTop(ev) {
       let value =  parseInt(ev.target.value)
@@ -70,7 +70,8 @@ export default {
         value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.top
         ev.target.value = value
       }
-      this.$store.commit('setTop',value)
+      this.$store.commit('updateWidgetAttrs',{top:value})
+
     },
     setWidth(ev) {
       let value =  parseInt(ev.target.value)
@@ -78,7 +79,7 @@ export default {
         value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.width
         ev.target.value = value
       }
-      this.$store.commit('setWidth',value)
+      this.$store.commit('updateWidgetAttrs',{width:value})
     },
     setHeight(ev) {
       let value =  parseInt(ev.target.value)
@@ -86,7 +87,7 @@ export default {
         value = this.$store.state.apply.pages[this.currentPageIndex].widgets[this.currentWidgetIndex].attrs.height
         ev.target.value = value
       }
-      this.$store.commit('setHeight',value)
+      this.$store.commit('updateWidgetAttrs',{height:value})
     },
   }
 }

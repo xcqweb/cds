@@ -87,7 +87,7 @@ export default new Vuex.Store({
     /****************控件样式设置start*************/
     setCurrentContent(state, data){ //设置当前文本内容
       let currentWidget = this.getters.currentWidget
-      currentWidget.attrs.content = data
+      currentWidget.attrs.text = data
     },
     setName(state, data){ //设置控件名称
       let currentWidget = this.getters.currentWidget
@@ -134,8 +134,7 @@ export default new Vuex.Store({
           top,
           rotate: rotate || 0,
           zIndex,
-          text:'',// 显示文本
-          content:'默认文本333',
+          text:'输入文本',// 显示文本
         }
       }
       currentPage.widgets.push(widget)
