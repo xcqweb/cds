@@ -85,7 +85,7 @@ export default new Vuex.Store({
       let currentPage = this.getters.currentPage
       let widgetNum = currentPage.widgetsInfo[cname] || 0
       currentPage.widgetsInfo[cname] = ++widgetNum
-      cid = cid || `w${uuid(16, 16)}`
+      cid = cid || `${uuid(16, 16)}`
       zIndex = zIndex || currentPage.widgets.length + config.widgetInitZIndex
       let widget = {
         cid,

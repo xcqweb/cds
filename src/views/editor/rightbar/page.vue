@@ -73,7 +73,7 @@ export default {
     },
     group() {
       const selectWidgets = this.$store.getters.selectWidgets
-      const cid = `g${uuid(16, 16)}`
+      const cid = `${uuid(16, 16)}`
       const cname = `GtGroup`
       const name = `组合`
       const attrs = this.computeGroup(selectWidgets)
