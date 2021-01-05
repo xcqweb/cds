@@ -13,7 +13,7 @@ import { uploadActivityImgAssets } from "@a/activity"
 let imgUrl = require("./logo.png")
 const cname = "GtImage"
 export default {
-  name: "GtImage",
+  name: cname,
   mixins: [baseComponent],
   data() {
     return {

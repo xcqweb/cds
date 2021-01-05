@@ -8,6 +8,12 @@ export default {
     },
     currentWidgetIndex() {
       return this.$store.getters["currentWidgetIndex"]
+    },
+    currentPage() {
+      return this.$store.getters["currentPage"]
+    },
+    selectWidgets() {
+      return this.$store.getters["selectWidgets"]
     }
   }
 }

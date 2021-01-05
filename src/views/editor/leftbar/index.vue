@@ -4,17 +4,6 @@
       <a-tabs tab-position="left">
         <a-tab-pane key="1">
           <span slot="tab">
-             <a-tooltip placement="right">
-            <template slot="title">
-              <span>页面</span>
-            </template>
-            <a-icon type="android" />
-          </a-tooltip>
-        </span>
-          <pageMenu></pageMenu>
-        </a-tab-pane>
-        <a-tab-pane key="1">
-          <span slot="tab">
             <a-tooltip placement="right">
               <template slot="title">
                 <span>页面</span>
@@ -26,12 +15,23 @@
         </a-tab-pane>
         <a-tab-pane key="2">
           <span slot="tab">
-           <a-tooltip placement="right">
-            <template slot="title">
-              <span>基本组件</span>
-            </template>
-            <a-icon type="apple" />
-          </a-tooltip>
+            <a-tooltip placement="right">
+              <template slot="title">
+                <span>页面</span>
+              </template>
+              <a-icon type="android" />
+            </a-tooltip>
+          </span>
+          <pageMenu></pageMenu>
+        </a-tab-pane>
+        <a-tab-pane key="3">
+          <span slot="tab">
+            <a-tooltip placement="right">
+              <template slot="title">
+                <span>基本组件</span>
+              </template>
+              <a-icon type="apple" />
+            </a-tooltip>
             <a-tooltip placement="right">
               <template slot="title">
                 <span>基本组件</span>
@@ -63,7 +63,7 @@
 
 <script>
 import pageMenu from "@v/editor/leftbar/pageMenu"
-export default { 
+export default {
   components: {
     pageMenu
   },

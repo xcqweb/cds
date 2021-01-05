@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import computedWidget from "@/mixins/computed-widget"
+import helpComputed from "@/mixins/help-computed"
 export default {
   name: "name-position",
-  mixins: [computedWidget],
+  mixins: [helpComputed],
   data() {
     return {}
   },

@@ -2,7 +2,12 @@
   <div class="ge-border">
     <div class="fs ge-h40">
       <label>内容</label>
-      <a-input class="ge-lg40" :value="content" @change="setCurrentContent" placeholder="Basic usage" />
+      <a-input
+        class="ge-lg40"
+        :value="content"
+        @change="setCurrentContent"
+        placeholder="Basic usage"
+      />
       <a-input
         class="ge-lg40"
         :value="content"
@@ -10,19 +15,17 @@
         placeholder="Basic usage"
       />
     </div>
-
   </div>
 </template>
 
 <script>
-import computedWidget from "@/mixins/computed-widget"
+import helpComputed from "@/mixins/help-computed"
 export default {
   name: "text-content",
   props: {},
-  mixins: [computedWidget],
+  mixins: [helpComputed],
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     content() {
@@ -40,12 +43,11 @@ export default {
       let value = ev.target.value
       if (value) {
         ev.target.value = value
-        this.$store.commit('setCurrentContent',value)
+        this.$store.commit("setCurrentContent", value)
         this.$store.commit("setCurrentContent", value)
       }
-    },
-
     }
+  }
 }
 </script>
 

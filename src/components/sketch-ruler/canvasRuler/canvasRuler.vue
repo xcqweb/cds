@@ -34,11 +34,11 @@ export default {
     start() {
       this.drawRuler()
     },
-    width(val) {
+    width() {
       this.updateCanvasContext()
       this.drawRuler()
     },
-    height(val) {
+    height() {
       this.updateCanvasContext()
       this.drawRuler()
     },

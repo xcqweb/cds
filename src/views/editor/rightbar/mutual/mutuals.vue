@@ -2,7 +2,7 @@
   <div>
     <a-collapse v-model="activeKey" :bordered="false">
       <a-collapse-panel
-        v-for="(item, index) in data"
+        v-for="item in data"
         :key="item.key"
         :header="item.title"
         :style="customStyle"

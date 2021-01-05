@@ -32,17 +32,15 @@ export default {
   },
   computed: {
     offset() {
-      const offset = (this.startValue - this.start) * this.scale
-      if (offset < 0) {
-        this.showLine = false
-      } else {
-        this.showLine = true
-      }
-      const positionValue = offset + "px"
+      const offsetTemp = (this.startValue - this.start) * this.scale
+      const positionValue = offsetTemp + "px"
       const position = this.vertical
         ? { top: positionValue }
         : { left: positionValue }
       return position
+    },
+    offsetTemp() {
+      return (this.startValue - this.start) * this.scale
     },
     borderCursor() {
       const borderValue = `1px solid ${this.palette.lineColor}`
@@ -58,6 +56,15 @@ export default {
       return {
         cursor: cursorValue,
         ...border
+      }
+    },
+    watch: {
+      offsetTemp(val) {
+        if (val < 0) {
+          this.showLine = false
+        } else {
+          this.showLine = true
+        }
       }
     },
     actionStyle() {

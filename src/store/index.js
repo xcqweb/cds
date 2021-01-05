@@ -62,6 +62,7 @@ export default new Vuex.Store({
       // 设置当前页面信息
       let currentPage = this.getters.currentPage
       currentPage = { ...currentPage, ...data }
+      console.log(currentPage)
     },
     setCurrentPageId(state, data) {
       // 设置当前页
@@ -119,9 +120,14 @@ export default new Vuex.Store({
       state.ruler.shadow = { x: left, y: top, width, height }
     },
     updateWidgetAttrs(state, attrs) {
-      const currentWidget = this.getters.currentWidget
-      const currentWidgetIndex = this.getters.currentWidgetIndex
+      let currentWidget = this.getters.currentWidget
       const currentPage = this.getters.currentPage
+      if (attrs.cid) {
+        currentWidget = currentPage.widgets.find(item => item.cid == attrs.cid)
+      }
+      const currentWidgetIndex = currentPage.widgets.findIndex(
+        item => item.cid == currentWidget.cid
+      )
       if (currentWidget) {
         const resAttrs = { ...currentWidget.attrs, ...attrs }
         currentWidget.attrs = resAttrs
@@ -164,7 +170,7 @@ export default new Vuex.Store({
     widgetDel() {
       const currentPage = this.getters.currentPage
       const currentWidgetIndex = this.getters.currentWidgetIndex
-      if (currentPageIndex != -1) {
+      if (currentWidgetIndex != -1) {
         currentPage.widgets.splice(currentWidgetIndex, 1)
       }
     },

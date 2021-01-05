@@ -19,13 +19,15 @@
   </div>
 </template>
 <script>
-import adjuistPosition from "@/components/adjust-position"
+import adjuistPosition from "../header/adjust-position"
 import undoManager from "@u/undo-manager"
 import { uuid } from "@u/uuid"
+import helpMethods from "@/mixins/help-methods"
 export default {
-  components:{
-    adjuistPosition,
+  components: {
+    adjuistPosition
   },
+  mixins: [helpMethods],
   data() {
     return {
       gridSize: 10
@@ -79,10 +81,10 @@ export default {
     },
     group() {
       const selectWidgets = this.$store.getters.selectWidgets
-      const cid = `${uuid(16, 16)}`       
+      const cid = `${uuid(16, 16)}`
       const cname = `GtGroup`
       const name = `组合`
-      const attrs = this.computeGroup(selectWidgets)
+      const attrs = this.calculateSelectWidgets(selectWidgets)
       this.$store.commit("updateWidgetAttrsPatch", {
         disLeft: attrs.left,
         disTop: attrs.top
@@ -90,34 +92,12 @@ export default {
       this.$store.commit("updateWidgetPatch", { pid: cid, active: false })
       this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
     },
-    ungroup() {},
-    computeGroup(selectWidgets) {
-      let minX = 10000,
-        minY = 10000,
-        maxX = 0,
-        maxY = 0,
-        maxZIndex = 0
-      selectWidgets.forEach(item => {
-        let { left, top, width, height, zIndex } = item.attrs
-        minX = Math.min(left, minX)
-        minY = Math.min(top, minY)
-        maxX = Math.max(left + width, maxX)
-        maxY = Math.max(top + height, maxY)
-        maxZIndex = Math.max(zIndex, maxZIndex)
-      })
-      return {
-        left: minX,
-        top: minY,
-        width: maxX - minX,
-        height: maxY - minY,
-        zIndex: maxZIndex
-      }
-    }
+    ungroup() {}
   }
 }
 </script>
 <style>
-button{
+button {
   width: 60px;
   margin: 6px;
 }
