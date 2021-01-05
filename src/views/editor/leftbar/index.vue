@@ -1,27 +1,55 @@
 <template>
-  <div class="left-con">
-    <h2>基本组件</h2>
-    <div class="widget-con">
-      <ul class="widget-item-list" @dragstart="dragstart">
-        <li
-          class="widget-item"
-          v-for="(item, index) in widgets"
-          :key="item.name"
-          draggable="true"
-          :data-index="index"
-        >
-          <div class="img-wrapper">
-            {{ item.cname }}
+  <div class="left-con" style="width:381px">
+    <div>
+      <a-tabs tab-position="left">
+        <a-tab-pane key="1">
+          <span slot="tab">
+             <a-tooltip placement="right">
+            <template slot="title">
+              <span>页面</span>
+            </template>
+            <a-icon type="android" />
+          </a-tooltip>
+        </span>
+          <pageMenu></pageMenu>
+        </a-tab-pane>
+        <a-tab-pane key="2">
+          <span slot="tab">
+           <a-tooltip placement="right">
+            <template slot="title">
+              <span>基本组件</span>
+            </template>
+            <a-icon type="apple" />
+          </a-tooltip>
+          </span>
+          <div class="widget-con">
+            <ul class="widget-item-list" @dragstart="dragstart">
+              <li
+                class="widget-item"
+                v-for="(item, index) in widgets"
+                :key="item.name"
+                draggable="true"
+                :data-index="index"
+              >
+                <div class="img-wrapper">
+                  {{ item.cname }}
+                </div>
+                <span>{{ item.name }}</span>
+              </li>
+            </ul>
           </div>
-          <span>{{ item.name }}</span>
-        </li>
-      </ul>
+        </a-tab-pane>
+      </a-tabs>
     </div>
   </div>
 </template>
 
 <script>
+import pageMenu from "@v/editor/leftbar/pageMenu"
 export default {
+  components:{
+    pageMenu
+  },
   data() {
     return {}
   },

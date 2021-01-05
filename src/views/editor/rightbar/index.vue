@@ -1,18 +1,33 @@
 <template>
   <div class="right-con ge-mt">
-    <page />
+      <a-tabs @change="callback">
+        <a-tab-pane key="1" tab="交互">
+          <mutual></mutual>
+          <!-- <Page />        -->
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="样式" force-render>
+          <basicStyle></basicStyle>
+        </a-tab-pane>
+      </a-tabs>
   </div>
 </template>
 
 <script>
 import Page from "./page.vue"
 import basicStyle from "./basicStyle"
+import mutual from "./mutual"
 
 export default {
   components: {
     Page,
+    mutual,
     basicStyle
-  }
+  },
+  methods: {
+    callback(key) {
+      console.log(key);
+    },
+  },
 }
 </script>
 <style lang="less">

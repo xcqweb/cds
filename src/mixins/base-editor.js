@@ -7,6 +7,7 @@ export default {
     rotate: { default: 0, type: Number },
     zIndex: { default: 5, type: Number },
     text: { default:'', type: String},
+    content: { default: '', type: String }
   },
   computed: {
     styleObj() {
@@ -19,7 +20,11 @@ export default {
         transform: `rotate(0deg)`,
         zIndex: `${this.zIndex}`
       }
+    },
+    textContent(){
+      return this.content
     }
+
   },
   data() {
     return {}
