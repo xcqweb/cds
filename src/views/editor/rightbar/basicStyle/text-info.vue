@@ -212,6 +212,7 @@ export default {
       this.handleChange(value)
     },
     handleChange(value) {
+      this.textStyle.fontSize.sort()
       this.fontSize = value != null && value != "" ? value : []
       if (this.textStyle.fontSize.indexOf(value) == -1) {
         this.textStyle.fontSize.unshift(value)

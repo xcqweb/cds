@@ -62,7 +62,7 @@ export default {
   },
   data() {
     return {
-      vertical: true,
+      vertical: true
     }
   },
   props: {

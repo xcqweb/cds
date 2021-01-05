@@ -1,5 +1,14 @@
 <template>
   <div class="right-con ge-mt">
+      <a-tabs @change="callback">
+        <a-tab-pane key="1" tab="交互">
+          <mutual></mutual>
+          <!-- <Page />        -->
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="样式" force-render>
+          <basicStyle></basicStyle>
+        </a-tab-pane>
+      </a-tabs>
     <a-tabs @change="callback">
       <a-tab-pane key="1" tab="交互">
         <!-- <mutual></mutual>   -->
@@ -25,9 +34,9 @@ export default {
   },
   methods: {
     callback(key) {
-      console.log(key)
-    }
-  }
+      console.log(key);
+    },
+  },
 }
 </script>
 <style lang="less">

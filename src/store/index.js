@@ -71,6 +71,7 @@ export default new Vuex.Store({
       // 设置当前控件id
       state.currentWidgetId = data
     },
+
     widgetAdd(state, data) {
       let {
         cid,
@@ -103,9 +104,7 @@ export default new Vuex.Store({
           left,
           top,
           rotate: rotate || 0,
-          zIndex,
-          text: "", // 显示文本
-          content: "默认文本333"
+          zIndex
         }
       }
       const currentWidgetIndex = this.getters.currentWidgetIndex

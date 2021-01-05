@@ -119,7 +119,6 @@ export default {
         ].attrs.height
         ev.target.value = value
       }
-      this.$store.commit("setHeight", value)
     }
   }
 }
