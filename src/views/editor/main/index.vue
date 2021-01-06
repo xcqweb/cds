@@ -29,9 +29,9 @@
                 :parent="true"
                 :active.sync="item.active"
                 :key="item.cid"
-                :id="item.cid"
                 @rotating="onRotate"
                 @dragging="onDrag"
+                @resizeStart="onResizeStart"
                 @resizing="onResize"
                 @resizestop="onResizeStop"
                 @dragstop="onDragStop"
@@ -56,7 +56,6 @@
                     :parent="true"
                     :active.sync="d.active"
                     :key="d.cid"
-                    :id="d.cid"
                     @rotating="onRotate"
                     @dragging="onDrag"
                     @resizing="onResize"
@@ -283,6 +282,10 @@ export default {
       this.$store.commit("setRuler", {
         shadow: { x: left, y: top, width, height }
       })
+    },
+    onResizeStart(left,top,width,height) {
+      this.initWidgetWidth = width
+      this.initWidgetHeight = height
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidgetAttrs", { left, top, width, height })

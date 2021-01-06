@@ -5,7 +5,8 @@
 </template>
 <script>
 import baseComponent from "@/mixins/base-editor"
-const cname = "GtGroup"
+import config from "@/config"
+const cname = config.groupName
 export default {
   name: cname,
   mixins: [baseComponent],

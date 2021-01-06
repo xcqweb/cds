@@ -231,9 +231,9 @@ export default {
     this.elBase.removeEventListener("mouseup", this.handleUp, true)
 
     // touch events bindings removed
-    this.elBase.addEventListener("touchmove", this.handleMove, true)
-    this.elBase.addEventListener("touchend touchcancel", this.deselect, true)
-    this.elBase.addEventListener("touchstart", this.handleUp, true)
+    this.elBase.removeEventListener("touchmove", this.handleMove, true)
+    this.elBase.removeEventListener("touchend touchcancel", this.deselect, true)
+    this.elBase.removeEventListener("touchstart", this.handleUp, true)
   },
 
   data() {
@@ -303,7 +303,7 @@ export default {
           this.$emit("activated")
           this.$emit("update:active", true)
         }
-        // this.reviewDimensions() // 先注释掉
+        this.reviewDimensions() // 先注释掉
         this.lastElmX = this.elmX
         this.lastElmY = this.elmY
         this.lastElmW = this.elmW
@@ -348,7 +348,7 @@ export default {
         bottom: this.top + this.height,
         left: this.left
       }
-
+      this.$emit('resizeStart',this.left,this.top,this.width,this.height)
       let fixedCoordinate = this.rotatedPoint(rect, this.rotate, fixed)
 
       this.fixedXName = fixed.x

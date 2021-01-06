@@ -11,6 +11,7 @@
     <button @click="redo">redo</button>
     <button @click="copy">copy</button>
     <button @click="cut">cut</button>
+    <button @click="del">delete</button>
     <button @click="paste">paste</button>
     <button @click="group">group</button>
     <button @click="ungroup">ungroup</button>
@@ -23,6 +24,8 @@ import adjuistPosition from "../header/adjust-position"
 import undoManager from "@u/undo-manager"
 import { uuid } from "@u/uuid"
 import helpMethods from "@/mixins/help-methods"
+import config from "@/config"
+import {isGroup,findWidgetChildren} from '@u/deal'
 export default {
   components: {
     adjuistPosition
@@ -53,9 +56,9 @@ export default {
     dealCopyData() {
       const currentWidget = this.$store.getters.currentWidget
       if (currentWidget) {
-        this.copyData = { ...currentWidget.attrs, ...currentWidget }
         let widgetCopyNum = currentWidget.copyNum
         widgetCopyNum++
+        this.copyData = { ...currentWidget.attrs, ...currentWidget }
         this.copyData.dname = `${this.copyData.cname} Copy ${
           widgetCopyNum === 1 ? "" : widgetCopyNum
         }`
@@ -80,19 +83,44 @@ export default {
       }
     },
     group() {
-      const selectWidgets = this.$store.getters.selectWidgets
+      let widgets = this.$store.getters.selectWidgets
       const cid = `${uuid(16, 16)}`
-      const cname = `GtGroup`
+      const cname = config.groupName
       const name = `组合`
-      const attrs = this.calculateSelectWidgets(selectWidgets)
-      this.$store.commit("updateWidgetAttrsPatch", {
-        disLeft: attrs.left,
-        disTop: attrs.top
+      const attrs = this.calculateSelectWidgets(widgets)
+      widgets.forEach(item=>{
+        if(isGroup(item)) {
+          this.ungroup(null,item)
+        } 
       })
-      this.$store.commit("updateWidgetPatch", { pid: cid, active: false })
+      widgets = this.$store.getters.selectWidgets
+      widgets.forEach(item=>{
+        let left = item.attrs.left - attrs.left
+        let top = item.attrs.top - attrs.top
+        this.$store.commit('updateWidgetAttrs',{left,top,cid:item.cid})
+        this.$store.commit('updateWidget',{pid:cid,active:false,cid:item.cid})
+      })
       this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
     },
-    ungroup() {}
+    ungroup(evt,widget) {
+      if(!widget) {
+        widget = this.$store.getters.currentWidget
+      }
+      if(isGroup(widget)) {
+        const childWidgets = findWidgetChildren(this.$store.getters.currentPage.widgets,widget)
+        childWidgets.forEach(item=>{
+          let {left,top} = widget.attrs
+          this.$store.commit("updateWidget",{pid:'',cid:item.cid,active:true})
+          left = item.attrs.left + left
+          top = item.attrs.top + top
+          this.$store.commit('updateWidgetAttrs',{left,top,cid:item.cid})
+        })
+        this.$store.commit('widgetDel',[widget])
+      }
+    },
+    del() {
+      this.$store.commit('widgetDel')
+    }
   }
 }
 </script>

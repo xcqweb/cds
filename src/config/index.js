@@ -72,5 +72,6 @@ export default {
       operate: "del"
     }
   ],
-  widgetInitZIndex: 5
+  widgetInitZIndex: 5,
+  groupName:'GtGroup',
 }

@@ -72,7 +72,9 @@ export default new Vuex.Store({
       // 设置当前控件id
       state.currentWidgetId = data
     },
-
+    setDelWidgets(state,data) {// 设置删除的控件
+      state.delWidgets = data
+    },
     widgetAdd(state, data) {
       let {
         cid,
@@ -125,10 +127,11 @@ export default new Vuex.Store({
       if (attrs.cid) {
         currentWidget = currentPage.widgets.find(item => item.cid == attrs.cid)
       }
-      const currentWidgetIndex = currentPage.widgets.findIndex(
-        item => item.cid == currentWidget.cid
-      )
+      delete attrs.cid
       if (currentWidget) {
+        const currentWidgetIndex = currentPage.widgets.findIndex(
+          item => item.cid == currentWidget.cid
+        )
         const resAttrs = { ...currentWidget.attrs, ...attrs }
         currentWidget.attrs = resAttrs
         currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
@@ -140,18 +143,17 @@ export default new Vuex.Store({
       selectWidgets.forEach(item => {
         let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
         let resAttrs = { ...item.attrs, ...attrs }
-        if (resAttrs.disLeft || resAttrs.disTop) {
-          resAttrs.left -= resAttrs.disLeft
-          resAttrs.top -= resAttrs.disTop
-        }
         item.attrs = resAttrs
         currentPage.widgets.splice(resIndex, 1, { ...item })
       })
     },
     updateWidget(state, data) {
-      const currentWidget = this.getters.currentWidget
-      const currentWidgetIndex = this.getters.currentWidgetIndex
+      let currentWidget = this.getters.currentWidget
       const currentPage = this.getters.currentPage
+      if(data.cid) {
+        currentWidget = currentPage.widgets.find(item => item.cid == data.cid)
+      }
+      const currentWidgetIndex = currentPage.widgets.findIndex(item => item.cid == currentWidget.cid)
       if (currentWidget) {
         currentPage.widgets.splice(currentWidgetIndex, 1, {
           ...currentWidget,
@@ -167,12 +169,26 @@ export default new Vuex.Store({
         currentPage.widgets.splice(resIndex, 1, { ...item, ...data })
       })
     },
-    widgetDel() {
+    updatePageAllWidgets(state,data) {// 更新画布上所有控件的信息
       const currentPage = this.getters.currentPage
-      const currentWidgetIndex = this.getters.currentWidgetIndex
-      if (currentWidgetIndex != -1) {
-        currentPage.widgets.splice(currentWidgetIndex, 1)
+      currentPage.widgets.forEach(item,index=>{
+        currentPage.widgets.splice(index, 1, { ...item, ...data })
+      })
+    },
+    widgetDel(state,widgets) {
+      if(!widgets) {
+        widgets = this.getters.selectWidgets
       }
+      const currentPage = this.getters.currentPage
+      widgets.forEach(item=>{
+        let currentWidgetIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
+        if(!item.isEdit) {// 已经被保存过的再删除，过滤掉未保存就删除的
+          state.delWidgets.push(item)
+        }
+        if (currentWidgetIndex != -1) {
+          currentPage.widgets.splice(currentWidgetIndex, 1)
+        }
+      })
     },
     setIsShowSelection(state, data) {
       state.isShowSelection = data

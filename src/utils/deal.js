@@ -1,8 +1,4 @@
 import config from "@/config"
-export const dealWidget = (type, cname) => {
-  return config.widgets[type].find(item => item.cname === cname)
-}
-
 /**
  * 获取旋转后的坐标
  * @param {*} left
@@ -54,7 +50,6 @@ function transform(options, angle) {
     bottom: maxY
   }
 }
-
 export const arrayToTree = (list, pid = "") => {
   return list
     .filter(item => item.pid === pid)
@@ -62,4 +57,18 @@ export const arrayToTree = (list, pid = "") => {
       ...item,
       children: arrayToTree(list, item.cid)
     }))
+}
+/**
+ * 判断当前控件是否是组合
+ * @param  widget 
+ */
+export const isGroup = (widget)=>{
+  return widget.cname === config.groupName
+}
+
+export const findWidgetChildren = (widgetList,widget) =>{
+  if(!isGroup(widget)) {
+    return []
+  }
+  return widgetList.filter(item => item.pid === widget.cid)
 }
