@@ -58,20 +58,20 @@ export default {
         ...border
       }
     },
-    watch: {
-      offsetTemp(val) {
-        if (val < 0) {
-          this.showLine = false
-        } else {
-          this.showLine = true
-        }
-      }
-    },
     actionStyle() {
       const actionStyle = this.vertical
         ? { left: this.thick + "px" }
         : { top: this.thick + "px" }
       return actionStyle
+    }
+  },
+  watch: {
+    offsetTemp(val) {
+      if (val < 0) {
+        this.showLine = false
+      } else {
+        this.showLine = true
+      }
     }
   },
   methods: {

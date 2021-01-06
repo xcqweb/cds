@@ -78,14 +78,7 @@ export default {
         case "center":
           if (selectWidgetsCount > 1) {
             this.selectWidgets.forEach(item => {
-              if (item.attrs.left < attrs.centerX) {
-                left =
-                  item.attrs.left + (attrs.width / 2 - item.attrs.width / 2)
-              } else {
-                left =
-                  item.attrs.left - (attrs.width / 2 - item.attrs.width / 2)
-              }
-              console.log(left, "a------")
+              left = attrs.centerX - item.attrs.width / 2
               this.$store.commit("updateWidgetAttrs", { left, cid: item.cid })
             })
           } else {
@@ -97,13 +90,7 @@ export default {
         case "middle":
           if (selectWidgetsCount > 1) {
             this.selectWidgets.forEach(item => {
-              if (item.attrs.top < attrs.centerY) {
-                top =
-                  item.attrs.top + (attrs.height / 2 - item.attrs.height / 2)
-              } else {
-                top =
-                  item.attrs.top - (attrs.height / 2 - item.attrs.height / 2)
-              }
+              top = attrs.centerY - item.attrs.height / 2
               this.$store.commit("updateWidgetAttrs", { top, cid: item.cid })
             })
           } else {
