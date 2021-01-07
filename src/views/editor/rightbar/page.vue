@@ -17,6 +17,9 @@
     <button @click="ungroup">ungroup</button>
     <!--调整控件位置-->
     <adjuist-position></adjuist-position>
+
+
+    
   </div>
 </template>
 <script>

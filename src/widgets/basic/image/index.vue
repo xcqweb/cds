@@ -9,7 +9,6 @@
 <script>
 import baseComponent from "@/mixins/base-editor"
 import { validateImage } from "@u/image-helpers"
-import { uploadActivityImgAssets } from "@a/activity"
 let imgUrl = require("./logo.png")
 const cname = "GtImage"
 export default {
@@ -31,7 +30,7 @@ export default {
         const file = inputNode.files
         const imgFile = file && file[0]
         await validateImage(imgFile)
-        const src = await uploadActivityImgAssets(imgFile)
+        const src = ''
         this.addImage({ src })
       } catch (e) {
         console.error(e)

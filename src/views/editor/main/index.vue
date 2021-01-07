@@ -37,12 +37,13 @@
                 @dragstop="onDragStop"
                 @rotatestop="onRotateStop"
                 @activated="onActivated(item)"
-                @deactivated="onDeactivated"
+                @deactivated="onDeactivated(item)"
                 @dblclick.native="dblclick(item, $event)"
               >
                 <component
                   :is="item.cname"
                   v-bind="item.attrs"
+                  :aa-name="item.name"
                   v-if="item.children"
                 >
                   <vue-draggable-resizable
@@ -63,10 +64,10 @@
                     @dragstop="onDragStop"
                     @rotatestop="onRotateStop"
                     @activated="onActivated(d)"
-                    @deactivated="onDeactivated"
+                    @deactivated="onDeactivated(d)"
                     @dblclick.native="dblclick(d, $event)"
                   >
-                    <component :is="d.cname" v-bind="d.attrs" />
+                    <component :is="d.cname" v-bind="d.attrs"/>
                   </vue-draggable-resizable>
                 </component>
                 <component :is="item.cname" v-bind="item.attrs" v-else />
@@ -91,10 +92,11 @@ import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import baseComponent from "@/mixins/base-editor"
+import helpComputed from "@/mixins/help-computed"
 import { arrayToTree } from "@u/deal"
 export default {
   name: "EditorMain",
-  mixins: [baseComponent],
+  mixins: [baseComponent,helpComputed],
   components: {
     VueDraggableResizable,
     SelectionWidget,
@@ -123,18 +125,15 @@ export default {
       }
     },
     portStyle() {
-      const { size, color } = this.$store.getters.currentPage.grid
+      const { size, color } = this.currentPage.grid
       const { scale } = this.$store.state.apply
-      const { width, height, backgroundColor } = this.$store.getters.currentPage
+      const { width, height, backgroundColor } = this.currentPage
       return {
         width: width + "px",
         height: height + "px",
         backgroundImage: createGridBg(size, color, scale),
         backgroundColor
       }
-    },
-    currentWidget() {
-      return this.$store.getters.currentWidget
     },
     widgetConStyle() {
       const { scale } = this.$store.state.apply
@@ -143,7 +142,7 @@ export default {
       }
     },
     selectWidgetsCount() {
-      return this.$store.getters.selectWidgets.length
+      return this.length
     }
   },
   watch: {
@@ -309,10 +308,13 @@ export default {
       this.showHelpLine = false
     },
     onActivated(item) {
-      console.log(item)
       this.$store.commit("setCurrentWidgetId", item.cid)
+      this.$store.commit('updateWidget',{active:true,cid:item.icd})
     },
-    onDeactivated() {},
+    onDeactivated() {
+      console.log("a----")
+      this.$store.commit("setCurrentWidgetId",'')
+    },
     dblclick(item, evt) {
       console.log(item, evt)
     }

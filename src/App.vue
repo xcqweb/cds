@@ -13,7 +13,10 @@ export default {
     return {
       locale: zhCN
     }
-  }
+  },
+  created() {
+    
+  },
 }
 </script>
 <style lang="less">
