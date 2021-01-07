@@ -17,93 +17,35 @@
             <widget-help-line :show="showHelpLine" />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
-            <div class="goup-list" @dragover.prevent @drop="drop">
-              <vue-draggable-resizable
-                class="group-item"
-                v-for="item in widgets"
-                :w="item.attrs.width"
-                :h="item.attrs.height"
-                :x="item.attrs.left"
-                :y="item.attrs.top"
-                :r="item.attrs.rotate"
-                :parent="true"
-                :active.sync="item.active"
-                :key="item.cid"
-                @rotating="onRotate"
-                @dragStart="onDragStart"
-                @dragging="onDrag"
-                @resizeStart="onResizeStart"
-                @resizing="onResize"
-                @resizestop="onResizeStop"
-                @dragstop="onDragStop"
-                @rotatestop="onRotateStop"
-                @activated="onActivated(item)"
-                @deactivated="onDeactivated(item)"
-              >
-                <component
-                  :is="item.cname"
-                  v-bind="item.attrs"
-                  :aa-name="item.name"
-                  v-if="item.children"
-                >
-                  <vue-draggable-resizable
-                    class="group-item"
-                    v-for="d in item.children"
-                    :w="d.attrs.width"
-                    :h="d.attrs.height"
-                    :x="d.attrs.left"
-                    :y="d.attrs.top"
-                    :r="d.attrs.rotate"
-                    :parent="true"
-                    :active.sync="d.active"
-                    :key="d.cid"
-                    @rotating="onRotate"
-                    @dragStart="onDragStart"
-                    @dragging="onDrag"
-                    @resizing="onResize"
-                    @resizestop="onResizeStop"
-                    @dragstop="onDragStop"
-                    @rotatestop="onRotateStop"
-                    @activated="onActivated(d)"
-                    @deactivated="onDeactivated(d)"
-                  >
-                    <component :is="d.cname" v-bind="d.attrs"/>
-                  </vue-draggable-resizable>
-                </component>
-                <component :is="item.cname" v-bind="item.attrs" v-else />
-              </vue-draggable-resizable>
-            </div>
+            <gt-drag-resize 
+              :widgets="widgets" 
+              @updateHelpLine="updateHelpLine" 
+              @updateHint="updateHint" />
           </div>
         </div>
       </div>
     </div>
-    <custom-contextmenu ref="open"></custom-contextmenu>
   </div>
 </template>
 
 <script>
 import { createGridBg } from "@u/grid-bg"
-import { throttle,cloneDeep} from "lodash"
-import components from "@/widgets/index"
+import { throttle} from "lodash"
 import undoManager from "@u/undo-manager"
-import customContextmenu from "@/components/custom-contextmenu"
-import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
-import baseComponent from "@/mixins/base-editor"
 import helpComputed from "@/mixins/help-computed"
 import { arrayToTree } from "@u/deal"
+import GtDragResize from './components/gt-drag-resize'
 export default {
   name: "EditorMain",
-  mixins: [baseComponent,helpComputed],
+  mixins: [helpComputed],
   components: {
-    VueDraggableResizable,
     SelectionWidget,
     WidgetHelpLine,
     Hint,
-    customContextmenu,
-    ...components
+    GtDragResize,
   },
   computed: {
     widgets() {
@@ -184,16 +126,6 @@ export default {
       this.dealRulerSize()
       window.addEventListener("resize", this.resizeFun)
     },
-    drop(evt) {
-      const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
-      const item = JSON.parse(dataTransfer.getData("item"))
-      const { dx, dy } = item
-      let { left, top } = this.portProps() // 画布与文档的距离
-      item.left = x - left - dx
-      item.top = y - top - dy
-      this.$store.commit("widgetAdd", { ...item })
-      undoManager.saveApplyChange()
-    },
     resizeFun: throttle(function() {
       // 窗口大小变化
       this.centerView()
@@ -265,12 +197,17 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    
+    updateHint(showHint,hintText) {
+      this.showHint = showHint
+      this.hintText = hintText
+    },
+    updateHelpLine(val) {
+      this.showHelpLine = val
+    },
   }
 }
 </script>
 <style lang="less">
-@import "~vue-context/dist/css/vue-context.css";
 .view-con-wrap {
   position: fixed;
   top: 52px;
@@ -308,75 +245,6 @@ export default {
       top: 0;
       width: 100%;
       height: 100%;
-    }
-    .goup-list {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-    }
-    .group-item {
-      &:hover::before {
-        content: "";
-        position: absolute;
-        top: -1px;
-        right: -1px;
-        bottom: -1px;
-        left: -1px;
-        border: 2px solid rgb(30, 152, 234);
-        z-index: 999999999;
-      }
-      &.active:before {
-        border: 1px dashed #298df8;
-      }
-      .handle {
-        width: 18px;
-        height: 18px;
-        border: none;
-        background: url("../../../assets/images/icon/resize-dot.svg") 100% 100%;
-        &.handle-tl {
-          top: -9px;
-          left: -9px;
-        }
-        &.handle-tm {
-          top: -9px;
-          left: 50%;
-          margin-left: -9px;
-        }
-        &.handle-tr {
-          top: -9px;
-          right: -9px;
-        }
-        &.handle-mr {
-          right: -9px;
-          margin-top: -9px;
-        }
-        &.handle-br {
-          bottom: -9px;
-          right: -9px;
-        }
-        &.handle-bm {
-          bottom: -9px;
-          margin-left: -9px;
-        }
-        &.handle-bl {
-          bottom: -9px;
-          left: -9px;
-        }
-        &.handle-ml {
-          left: -9px;
-          margin-top: -9px;
-        }
-        &.handle-rot {
-          background: url("../../../assets/images/icon/rotate-dot.svg") 100%
-            100% no-repeat;
-          margin-top: -28px;
-          &:before {
-            width: 0;
-            height: 0;
-            border: 0;
-          }
-        }
-      }
     }
   }
 }
