@@ -13,7 +13,6 @@
     }"
     @mousedown.stop="elmDown"
     @touchstart.prevent.stop="elmDown"
-    @dblclick="fillParent"
   >
     <template v-if="resizable">
       <div
@@ -277,7 +276,7 @@ export default {
       this.elmW = this.width
       this.elmH = this.height
 
-      this.$emit("resizing", this.left, this.top, this.width, this.height)
+      // this.$emit("resizing", this.left, this.top, this.width, this.height) // 先注释掉
     },
     elmDown(e) {
       const target = e.target || e.srcElement
@@ -294,27 +293,27 @@ export default {
         ) {
           return
         }
-
-        // this.reviewDimensions() // 调整到下方，保证activated先于resizing执行
-
         if (!this.enabled) {
-          this.enabled = true
-
+          this.enabled = true 
           this.$emit("activated")
           this.$emit("update:active", true)
         }
-        this.reviewDimensions() // 先注释掉
+        this.reviewDimensions()
         this.lastElmX = this.elmX
         this.lastElmY = this.elmY
         this.lastElmW = this.elmW
         this.lastElmH = this.elmH
         if (this.draggable) {
+          this.$emit('dragStart',this.left,this.top)
           this.dragging = true
         }
       }
     },
     deselect(e) {
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
+
+      this.startDownX = mouseX
+      this.startDownY = mouseY
 
       this.lastMouseX = mouseX
       this.lastMouseY = mouseY
@@ -328,8 +327,10 @@ export default {
       ) {
         return
       }
-      if (!this.$el.contains(target) && !regex.test(target.className)) {
-        if (this.enabled && e.button == 0) {
+      const selectWidgetsCount = this.$store.getters.selectWidgets.length
+      // 多选控件 激活
+      if (!this.$el.contains(target) && !regex.test(target.className)&&selectWidgetsCount==1 || selectWidgetsCount>1&&!target.classList.contains('group-item')) {
+        if (this.enabled) {
           this.enabled = false
           this.$emit("deactivated")
           this.$emit("update:active", false)
@@ -381,61 +382,6 @@ export default {
       } else {
         this.handleResizeDown(handle, e)
       }
-    },
-    fillParent() {
-      if (!this.parent || !this.resizable || !this.maximize) return
-
-      let done = false
-
-      const animate = () => {
-        if (!done) {
-          window.requestAnimationFrame(animate)
-        }
-
-        if (this.axis === "x") {
-          if (this.width === this.parentW && this.left === this.parentX)
-            done = true
-        } else if (this.axis === "y") {
-          if (this.height === this.parentH && this.top === this.parentY)
-            done = true
-        } else if (this.axis === "both") {
-          if (
-            this.width === this.parentW &&
-            this.height === this.parentH &&
-            this.top === this.parentY &&
-            this.left === this.parentX
-          )
-            done = true
-        }
-
-        if (this.axis === "x" || this.axis === "both") {
-          if (this.width < this.parentW) {
-            this.width++
-            this.elmW++
-          }
-
-          if (this.left > this.parentX) {
-            this.left--
-            this.elmX--
-          }
-        }
-
-        if (this.axis === "y" || this.axis === "both") {
-          if (this.height < this.parentH) {
-            this.height++
-            this.elmH++
-          }
-
-          if (this.top > this.parentY) {
-            this.top--
-            this.elmY--
-          }
-        }
-
-        this.$emit("resizing", this.left, this.top, this.width, this.height)
-      }
-
-      window.requestAnimationFrame(animate)
     },
     handleMove(e) {
       if (!this.enabled) {
@@ -551,6 +497,17 @@ export default {
     },
     handleUp(e) {
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
+      if(Math.abs(mouseX - this.startDownX) < 1 || Math.abs(mouseY - this.startDownY) < 1)  {// 鼠标没有进行移动
+        const target = e.target || e.srcElement
+        const regex = new RegExp("handle-([trmbl]{2})", "")
+        if (!this.$el.contains(target) && !regex.test(target.className)) {
+          if (this.enabled) {
+            this.enabled = false
+            this.$emit("deactivated")
+            this.$emit("update:active", false)
+          }
+        }
+      }
       this.lastMouseX = mouseX
       this.lastMouseY = mouseY
 
@@ -677,7 +634,7 @@ export default {
       }
 
       return cursorStyleArray
-    }
+    },
   },
 
   watch: {

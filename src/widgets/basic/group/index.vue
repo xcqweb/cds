@@ -18,5 +18,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .gt-group {
+  pointer-events: none;
 }
 </style>

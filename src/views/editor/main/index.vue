@@ -30,6 +30,7 @@
                 :active.sync="item.active"
                 :key="item.cid"
                 @rotating="onRotate"
+                @dragStart="onDragStart"
                 @dragging="onDrag"
                 @resizeStart="onResizeStart"
                 @resizing="onResize"
@@ -38,7 +39,6 @@
                 @rotatestop="onRotateStop"
                 @activated="onActivated(item)"
                 @deactivated="onDeactivated(item)"
-                @dblclick.native="dblclick(item, $event)"
               >
                 <component
                   :is="item.cname"
@@ -58,6 +58,7 @@
                     :active.sync="d.active"
                     :key="d.cid"
                     @rotating="onRotate"
+                    @dragStart="onDragStart"
                     @dragging="onDrag"
                     @resizing="onResize"
                     @resizestop="onResizeStop"
@@ -65,7 +66,6 @@
                     @rotatestop="onRotateStop"
                     @activated="onActivated(d)"
                     @deactivated="onDeactivated(d)"
-                    @dblclick.native="dblclick(d, $event)"
                   >
                     <component :is="d.cname" v-bind="d.attrs"/>
                   </vue-draggable-resizable>
@@ -83,7 +83,7 @@
 
 <script>
 import { createGridBg } from "@u/grid-bg"
-import { throttle } from "lodash"
+import { throttle,cloneDeep} from "lodash"
 import components from "@/widgets/index"
 import undoManager from "@u/undo-manager"
 import customContextmenu from "@/components/custom-contextmenu"
@@ -142,7 +142,7 @@ export default {
       }
     },
     selectWidgetsCount() {
-      return this.length
+      return this.selectWidgets.length
     }
   },
   watch: {
@@ -265,59 +265,7 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    onRotate(rotate) {
-      this.$store.commit("updateWidgetAttrs", { rotate })
-      this.showHint = true
-      this.hintText = `${rotate}`
-    },
-    onDrag(left, top) {
-      this.$store.commit("updateWidgetAttrs", { left, top })
-      this.showHint = true
-      this.hintText = `${left},${top}`
-      const { rotate, width, height } = this.currentWidget.attrs
-      if (rotate % 180 == 0) {
-        this.showHelpLine = true
-      }
-      this.$store.commit("setRuler", {
-        shadow: { x: left, y: top, width, height }
-      })
-    },
-    onResizeStart(left,top,width,height) {
-      this.initWidgetWidth = width
-      this.initWidgetHeight = height
-    },
-    onResize(left, top, width, height) {
-      this.$store.commit("updateWidgetAttrs", { left, top, width, height })
-      this.showHint = true
-      this.hintText = `${width}x${height}`
-      this.$store.commit("setRuler", {
-        shadow: { x: left, y: top, width, height }
-      })
-    },
-    onResizeStop() {
-      undoManager.saveApplyChange()
-      this.showHint = false
-    },
-    onRotateStop() {
-      undoManager.saveApplyChange()
-      this.showHint = false
-    },
-    onDragStop() {
-      undoManager.saveApplyChange()
-      this.showHint = false
-      this.showHelpLine = false
-    },
-    onActivated(item) {
-      this.$store.commit("setCurrentWidgetId", item.cid)
-      this.$store.commit('updateWidget',{active:true,cid:item.icd})
-    },
-    onDeactivated() {
-      console.log("a----")
-      this.$store.commit("setCurrentWidgetId",'')
-    },
-    dblclick(item, evt) {
-      console.log(item, evt)
-    }
+    
   }
 }
 </script>
