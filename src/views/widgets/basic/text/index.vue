@@ -1,6 +1,6 @@
 <template>
-  <div class="gt-text" :style="styleObj">
-    {{ text || "输入文本" }} {{left}}
+  <div class="gt-text" :style="styleObj" @dblclick.capture="dblclick">
+    {{ text || "输入文本" }}
   </div>
 </template>
 <script>
@@ -12,7 +12,12 @@ export default {
   data() {
     return {}
   },
-  created() {}
+  created() {},
+  methods: {
+    dblclick(){
+      console.log("a--------")
+    }
+  },
 }
 </script>
 <style lang="less" scoped>

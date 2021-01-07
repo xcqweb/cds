@@ -17,10 +17,12 @@
             <widget-help-line :show="showHelpLine" />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
-            <gt-drag-resize 
-              :widgets="widgets" 
-              @updateHelpLine="updateHelpLine" 
-              @updateHint="updateHint" />
+            <gt-drag-resize
+              class="goup-list" 
+              :widgets="widgets"
+              @updateHelpLine="updateHelpLine"
+              @updateHint="updateHint"
+            />
           </div>
         </div>
       </div>
@@ -30,14 +32,14 @@
 
 <script>
 import { createGridBg } from "@u/grid-bg"
-import { throttle} from "lodash"
+import { throttle } from "lodash"
 import undoManager from "@u/undo-manager"
 import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import { arrayToTree } from "@u/deal"
-import GtDragResize from './components/gt-drag-resize'
+import GtDragResize from "./components/gt-drag-resize"
 export default {
   name: "EditorMain",
   mixins: [helpComputed],
@@ -45,7 +47,7 @@ export default {
     SelectionWidget,
     WidgetHelpLine,
     Hint,
-    GtDragResize,
+    GtDragResize
   },
   computed: {
     widgets() {
@@ -197,13 +199,13 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    updateHint(showHint,hintText) {
+    updateHint(showHint, hintText) {
       this.showHint = showHint
       this.hintText = hintText
     },
     updateHelpLine(val) {
       this.showHelpLine = val
-    },
+    }
   }
 }
 </script>
@@ -246,6 +248,11 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+  .goup-list {
+    position: relative;
+    z-index: 1;
+    height: 100%;
   }
 }
 </style>

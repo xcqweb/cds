@@ -294,7 +294,7 @@ export default {
           return
         }
         if (!this.enabled) {
-          this.enabled = true 
+          this.enabled = true
           this.$emit("activated")
           this.$emit("update:active", true)
         }
@@ -304,7 +304,7 @@ export default {
         this.lastElmW = this.elmW
         this.lastElmH = this.elmH
         if (this.draggable) {
-          this.$emit('dragStart',this.left,this.top)
+          this.$emit("dragstart", this.left, this.top)
           this.dragging = true
         }
       }
@@ -329,7 +329,12 @@ export default {
       }
       const selectWidgetsCount = this.$store.getters.selectWidgets.length
       // 多选控件 激活
-      if (!this.$el.contains(target) && !regex.test(target.className)&&selectWidgetsCount==1 || selectWidgetsCount>1&&!target.classList.contains('group-item')) {
+      if (
+        (!this.$el.contains(target) &&
+          !regex.test(target.className) &&
+          selectWidgetsCount == 1) ||
+        (selectWidgetsCount > 1 && !target.classList.contains("group-item"))
+      ) {
         if (this.enabled) {
           this.enabled = false
           this.$emit("deactivated")
@@ -349,7 +354,7 @@ export default {
         bottom: this.top + this.height,
         left: this.left
       }
-      this.$emit('resizeStart',this.left,this.top,this.width,this.height)
+      this.$emit("resizestart", this.left, this.top, this.width, this.height)
       let fixedCoordinate = this.rotatedPoint(rect, this.rotate, fixed)
 
       this.fixedXName = fixed.x
@@ -497,7 +502,11 @@ export default {
     },
     handleUp(e) {
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
-      if(Math.abs(mouseX - this.startDownX) < 1 || Math.abs(mouseY - this.startDownY) < 1)  {// 鼠标没有进行移动
+      if (
+        Math.abs(mouseX - this.startDownX) < 1 ||
+        Math.abs(mouseY - this.startDownY) < 1
+      ) {
+        // 鼠标没有进行移动
         const target = e.target || e.srcElement
         const regex = new RegExp("handle-([trmbl]{2})", "")
         if (!this.$el.contains(target) && !regex.test(target.className)) {
@@ -634,7 +643,7 @@ export default {
       }
 
       return cursorStyleArray
-    },
+    }
   },
 
   watch: {

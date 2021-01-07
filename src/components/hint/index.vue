@@ -8,7 +8,10 @@ import { dealRotatePos } from "@u/deal"
 export default {
   name: "Hint",
   props: {
-    text: String | Number,
+    text: {
+      type: String,
+      default: ""
+    },
     show: {
       type: Boolean,
       default: false

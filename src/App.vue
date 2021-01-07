@@ -14,9 +14,7 @@ export default {
       locale: zhCN
     }
   },
-  created() {
-    
-  },
+  created() {}
 }
 </script>
 <style lang="less">

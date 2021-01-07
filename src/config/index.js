@@ -73,5 +73,5 @@ export default {
     }
   ],
   widgetInitZIndex: 5,
-  groupName:'GtGroup',
+  groupName: "GtGroup"
 }

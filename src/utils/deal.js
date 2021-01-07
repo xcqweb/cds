@@ -60,14 +60,14 @@ export const arrayToTree = (list, pid = "") => {
 }
 /**
  * 判断当前控件是否是组合
- * @param  widget 
+ * @param  widget
  */
-export const isGroup = (widget)=>{
+export const isGroup = widget => {
   return widget.cname === config.groupName
 }
 
-export const findWidgetChildren = (widgetList,widget) =>{
-  if(!isGroup(widget)) {
+export const findWidgetChildren = (widgetList, widget) => {
+  if (!isGroup(widget)) {
     return []
   }
   return widgetList.filter(item => item.pid === widget.cid)

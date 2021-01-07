@@ -70,7 +70,8 @@ export default {
       let res = false
       widgets.forEach(item => {
         const { left, top, width: w, height: h } = item.attrs
-        res = left > x && left + w < x + width && top > y && top + h < y + height
+        res =
+          left > x && left + w < x + width && top > y && top + h < y + height
         this.$set(item, "active", res)
       })
     },

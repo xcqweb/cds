@@ -30,7 +30,7 @@ export default {
         const file = inputNode.files
         const imgFile = file && file[0]
         await validateImage(imgFile)
-        const src = ''
+        const src = ""
         this.addImage({ src })
       } catch (e) {
         console.error(e)
