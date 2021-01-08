@@ -1,23 +1,16 @@
 <template>
-  <div class="hint-con" :style="objStyle" v-show="show">
-    {{ text }}
+  <div class="hint-con" :style="objStyle" v-show="hint.show">
+    {{ hint.text }}
   </div>
 </template>
 <script>
 import { dealRotatePos } from "@u/deal"
 export default {
   name: "Hint",
-  props: {
-    text: {
-      type: String,
-      default: ""
-    },
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
   computed: {
+    hint() {
+      return this.$store.state.hint
+    },
     objStyle() {
       let left = 0
       let top = 0

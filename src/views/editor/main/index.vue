@@ -5,11 +5,13 @@
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
             <!-- 提示框 -->
-            <hint :text="hintText" :show="showHint" />
+            <hint />
             <!-- 框选组件 -->
             <selection-widget />
             <!-- 辅助线 -->
-            <widget-help-line :show="showHelpLine" />
+            <widget-help-line />
+            <!-- 组合选择框 -->
+            <group-selection />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">
@@ -17,8 +19,6 @@
                 v-for="widget in widgets"
                 :key="widget.cid"
                 :widget="widget"
-                @updateHelpLine="updateHelpLine"
-                @updateHint="updateHint"
               />
             </div>
           </div>
@@ -38,6 +38,7 @@ import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import { arrayToTree } from "@u/deal"
 import DragWidget from "./components/drag-widget"
+import GroupSelection from '@c/group-selection/'
 import components from "@/views/widgets/index"
 export default {
   name: "EditorMain",
@@ -47,6 +48,7 @@ export default {
     WidgetHelpLine,
     Hint,
     DragWidget,
+    GroupSelection,
     ...components
   },
   computed: {
@@ -92,15 +94,13 @@ export default {
   watch: {
     selectWidgetsCount(val) {
       if (val > 1) {
-        this.showHelpLine = false
+        this.$store.commit('setShowHelpLine',false)
       }
     }
   },
   data() {
     return {
-      hintText: "", // 提示信息
-      showHint: false, // 是否显示提示
-      showHelpLine: false
+      
     }
   },
   created() {
@@ -204,13 +204,6 @@ export default {
       this.dealRulerCorner()
       this.dealRulerStartPos()
     }, 100),
-    updateHint(showHint, hintText) {
-      this.showHint = showHint
-      this.hintText = hintText
-    },
-    updateHelpLine(val) {
-      this.showHelpLine = val
-    }
   }
 }
 </script>
@@ -258,6 +251,71 @@ export default {
     position: relative;
     z-index: 1;
     height: 100%;
+  }
+  .group-item {
+    position:absolute;
+    &:hover::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      border: 2px solid rgb(30, 152, 234);
+      z-index: 999999999;
+    }
+    &.active:before {
+      border: 1px dashed #298df8;
+    }
+    .handle {
+      width: 18px;
+      height: 18px;
+      border: none;
+      background: url("~@/assets/images/icon/resize-dot.svg") 100% 100%;
+      &.handle-tl {
+        top: -9px;
+        left: -9px;
+      }
+      &.handle-tm {
+        top: -9px;
+        left: 50%;
+        margin-left: -9px;
+      }
+      &.handle-tr {
+        top: -9px;
+        right: -9px;
+      }
+      &.handle-mr {
+        right: -9px;
+        margin-top: -9px;
+      }
+      &.handle-br {
+        bottom: -9px;
+        right: -9px;
+      }
+      &.handle-bm {
+        bottom: -9px;
+        margin-left: -9px;
+      }
+      &.handle-bl {
+        bottom: -9px;
+        left: -9px;
+      }
+      &.handle-ml {
+        left: -9px;
+        margin-top: -9px;
+      }
+      &.handle-rot {
+        background: url("~@/assets/images/icon/rotate-dot.svg") 100% 100%
+          no-repeat;
+        margin-top: -28px;
+        &:before {
+          width: 0;
+          height: 0;
+          border: 0;
+        }
+      }
+    }
   }
 }
 </style>

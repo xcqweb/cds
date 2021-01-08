@@ -14,6 +14,9 @@ export default {
     },
     selectWidgets() {
       return this.$store.getters["selectWidgets"]
-    }
+    },
+    showHelpLine() {
+      return this.$store.getters["showHelpLine"]
+    },
   }
 }

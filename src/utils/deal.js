@@ -84,3 +84,7 @@ export const pointIsInWidget = (point, widget, pWidget) => {
   }
   return x >= left && x <= left + width && y >= top && y <= top + height
 }
+
+export const findWidgetById = (widgets,id) => {
+  return widgets.find(item=>item.cid === id)
+}

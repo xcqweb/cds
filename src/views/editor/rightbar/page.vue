@@ -25,7 +25,7 @@ import undoManager from "@u/undo-manager"
 import { uuid } from "@u/uuid"
 import helpMethods from "@/mixins/help-methods"
 import config from "@/config"
-import { isGroup, findWidgetChildren } from "@u/deal"
+import { isGroup, findWidgetChildren, findWidgetById } from "@u/deal"
 export default {
   components: {
     adjuistPosition
@@ -105,6 +105,8 @@ export default {
         })
       })
       this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
+      const tempWidget = findWidgetById(this.$store.getters.currentPage.widgets,cid)
+      this.$store.commit('setGroupSelection',{show:true,widget:tempWidget})
     },
     ungroup(evt, widget) {
       if (!widget) {
