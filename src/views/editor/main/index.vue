@@ -2,12 +2,7 @@
   <div class="view-con-wrap">
     <div class="view-con" ref="viewCon" @scroll="handleScroll">
       <div class="viewport-con" :style="portConStyle">
-        <div
-          class="viewport"
-          :style="portStyle"
-          ref="viewport"
-          @contextmenu.prevent="openContextmenu"
-        >
+        <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
             <!-- 提示框 -->
             <hint :text="hintText" :show="showHint" />
@@ -17,12 +12,15 @@
             <widget-help-line :show="showHelpLine" />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
-            <gt-drag-resize
-              class="goup-list" 
-              :widgets="widgets"
-              @updateHelpLine="updateHelpLine"
-              @updateHint="updateHint"
-            />
+            <div class="goup-list" @dragover.prevent @drop="drop">
+              <drag-widget
+                v-for="widget in widgets"
+                :key="widget.cid"
+                :widget="widget"
+                @updateHelpLine="updateHelpLine"
+                @updateHint="updateHint"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -39,7 +37,8 @@ import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import { arrayToTree } from "@u/deal"
-import GtDragResize from "./components/gt-drag-resize"
+import DragWidget from "./components/drag-widget"
+import components from "@/views/widgets/index"
 export default {
   name: "EditorMain",
   mixins: [helpComputed],
@@ -47,7 +46,8 @@ export default {
     SelectionWidget,
     WidgetHelpLine,
     Hint,
-    GtDragResize
+    DragWidget,
+    ...components
   },
   computed: {
     widgets() {
@@ -98,9 +98,6 @@ export default {
   },
   data() {
     return {
-      contextmenuVisible: false,
-      contextmenuPosition: { x: 0, y: 0 },
-      menuList: [],
       hintText: "", // 提示信息
       showHint: false, // 是否显示提示
       showHelpLine: false
@@ -121,8 +118,16 @@ export default {
     window.removeEventListener("resize", this.resizeFun)
   },
   methods: {
-    openContextmenu(event) {
-      this.$refs.open.openContextmenu(event)
+    drop(evt) {
+      const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
+      const item = JSON.parse(dataTransfer.getData("item"))
+      const { dx, dy } = item
+      const ele = document.querySelector(".viewport")
+      let { left, top } = ele.getBoundingClientRect() // 画布与文档的距离
+      item.left = x - left - dx
+      item.top = y - top - dy
+      this.$store.commit("widgetAdd", { ...item })
+      undoManager.saveApplyChange()
     },
     init() {
       this.dealRulerSize()

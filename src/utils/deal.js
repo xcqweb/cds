@@ -75,12 +75,12 @@ export const findWidgetChildren = (widgetList, widget) => {
 /**
  * 当前点击的点是否在控件内部
  */
-export const pointIsInWidget = (point,widget,pWidget) => {
-  const {x,y} = point
-  let {left,top,width,height} = widget.attrs
-  if(pWidget) {
+export const pointIsInWidget = (point, widget, pWidget) => {
+  const { x, y } = point
+  let { left, top, width, height } = widget.attrs
+  if (pWidget) {
     left += pWidget.attrs.left
     top += pWidget.attrs.top
   }
-  return x>=left && x<=(left + width) && y>=top && y<=(top+height)
+  return x >= left && x <= left + width && y >= top && y <= top + height
 }

@@ -16,7 +16,7 @@ export default {
         height: `${this.height}px`,
         left: `0`,
         top: `0`,
-        transform: `rotate(0deg)`,
+        transform: `rotate(0deg)`
         // zIndex: `${this.zIndex}`
       }
     }

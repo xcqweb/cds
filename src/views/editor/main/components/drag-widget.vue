@@ -1,35 +1,43 @@
 <template>
-  <div @dragover.prevent @drop="drop">
-    <vue-draggable-resizable
-      class="group-item"
-      v-for="d in widgets"
-      :w="d.attrs.width"
-      :h="d.attrs.height"
-      :x="d.attrs.left"
-      :y="d.attrs.top"
-      :r="d.attrs.rotate"
-      :z="d.attrs.zIndex"
-      :parent="true"
-      :active.sync="d.active"
-      :key="d.cid"
-      @rotating="onRotate"
-      @dragstart="onDragStart"
-      @dragging="onDrag"
-      @resizestart="(left,top,width,height)=>onResizeStart(left,top,width,height,d)"
-      @resizing="onResize"
-      @dragstop="onDragStop"
-      @resizestop="onResizeStop"
-      @rotatestop="onRotateStop"
-      @activated="onActivated(d)"
-      @deactivated="onDeactivated(d)"
-      @dblclick.native="dblclick(d,$event)"
-    >
-      <component :is="d.cname" v-bind="d.attrs" v-if="d.children">
-        <gt-drag-resize :widgets="d.children" />
-      </component>
-      <component :is="d.cname" v-bind="d.attrs" v-else />
-    </vue-draggable-resizable>
-  </div>
+  <vue-draggable-resizable
+    class="group-item"
+    :w="widget.attrs.width"
+    :h="widget.attrs.height"
+    :x="widget.attrs.left"
+    :y="widget.attrs.top"
+    :r="widget.attrs.rotate"
+    :z="widget.attrs.zIndex"
+    :parent="true"
+    :active.sync="widget.active"
+    :key="widget.cid"
+    @rotating="onRotate"
+    @dragstart="onDragStart"
+    @dragging="onDrag"
+    @resizestart="
+      (left, top, width, height) =>
+        onResizeStart(left, top, width, height, widget)
+    "
+    @resizing="onResize"
+    @dragstop="onDragStop"
+    @resizestop="onResizeStop"
+    @rotatestop="onRotateStop"
+    @activated="onActivated(widget)"
+    @deactivated="onDeactivated(widget)"
+    @dblclick.native="dblclick(widget, $event)"
+  >
+    <component
+      v-if="!widget.children || !widget.children.length"
+      :is="widget.cname"
+      v-bind="widget.attrs"
+    />
+    <template v-else>
+      <drag-widget
+        v-for="item in widget.children"
+        :key="item.cid"
+        :widget="item"
+      />
+    </template>
+  </vue-draggable-resizable>
 </template>
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
@@ -37,16 +45,16 @@ import { cloneDeep } from "lodash"
 import components from "@/views/widgets/index"
 import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
-import { isGroup, pointIsInWidget} from "@u/deal"
+import { isGroup, pointIsInWidget } from "@u/deal"
 export default {
-  name: "GtDragResize",
+  name: "DragWidget",
+  props: {
+    widget: Object
+  },
   mixins: [helpComputed],
   components: {
     VueDraggableResizable,
     ...components
-  },
-  props: {
-    widgets: Array
   },
   computed: {
     selectWidgetsCount() {
@@ -54,17 +62,6 @@ export default {
     }
   },
   methods: {
-    drop(evt) {
-      const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
-      const item = JSON.parse(dataTransfer.getData("item"))
-      const { dx, dy } = item
-      const ele = document.querySelector(".viewport")
-      let { left, top } = ele.getBoundingClientRect() // 画布与文档的距离
-      item.left = x - left - dx
-      item.top = y - top - dy
-      this.$store.commit("widgetAdd", { ...item })
-      undoManager.saveApplyChange()
-    },
     onRotate(rotate) {
       const opWidget = this.selectWidgets[0]
       this.$store.commit("updateWidgetAttrs", {
@@ -106,10 +103,10 @@ export default {
         })
       }
     },
-    onResizeStart(left, top, width, height,item) {
+    onResizeStart(left, top, width, height, item) {
       this.startResizeWidth = width
       this.startResizeHeight = height
-      if(item.children && item.children.length) {
+      if (item.children && item.children.length) {
         this.groupWidgetChildrenCopy = cloneDeep(item.children)
       } else {
         this.groupWidgetChildrenCopy = []
@@ -124,25 +121,26 @@ export default {
         height,
         cid: opWidget.cid
       })
-      if(!isGroup(opWidget)) {// 非组合
+      if (!isGroup(opWidget)) {
+        // 非组合
         this.updateHint(true, `${width}x${height}`)
         this.$store.commit("setRuler", {
           shadow: { x: left, y: top, width, height }
         })
       } else {
         this.groupWidgetChildrenCopy.forEach(item => {
-          let rateW = item.attrs.width/this.startResizeWidth
-          let rateH = item.attrs.height/this.startResizeHeight
+          let rateW = item.attrs.width / this.startResizeWidth
+          let rateH = item.attrs.height / this.startResizeHeight
           const disW = width - this.startResizeWidth
           const disH = height - this.startResizeHeight
           let obj = {
-            width: width*rateW,
-            height: height*rateH,
+            width: width * rateW,
+            height: height * rateH
           }
-          if(item.attrs.left!=0) {
+          if (item.attrs.left != 0) {
             obj.left = disW - obj.width + item.attrs.left + item.attrs.width
           }
-          if(item.attrs.top!=0) {
+          if (item.attrs.top != 0) {
             obj.top = disH - obj.height + item.attrs.top + item.attrs.height
           }
           this.$store.commit("updateWidgetAttrs", {
@@ -181,25 +179,28 @@ export default {
       this.$emit("updateHelpLine", show)
     },
     dblclick(item, evt) {
-      console.log(evt,'a----')
-      if(isGroup(item)) {
-        let {x,y} = evt
-        const ele = document.querySelector('.viewport')
-        const {left, top } = ele.getBoundingClientRect()
-        x = x -left
+      console.log(evt, "a----",item)
+      if (isGroup(item)) {
+        let { x, y } = evt
+        const ele = document.querySelector(".viewport")
+        const { left, top } = ele.getBoundingClientRect()
+        x = x - left
         y = y - top
         let targetWidget
-        for(let i=0;i<item.children.length;i++) {
-          if(pointIsInWidget({x,y},item.children[i],item)) {
+        for (let i = 0; i < item.children.length; i++) {
+          if (pointIsInWidget({ x, y }, item.children[i], item)) {
             targetWidget = item.children[i]
-            this.$store.commit("updateWidget", { active: true, cid: targetWidget.cid })
+            this.$store.commit("updateWidget", {
+              active: true,
+              cid: targetWidget.cid
+            })
             this.$store.commit("setCurrentWidgetId", targetWidget.cid)
             break
           }
         }
         this.$store.commit("updateWidget", { active: false, cid: item.cid })
       } else {
-        
+        console.log("t--a--")
       }
     }
   }
