@@ -37,7 +37,7 @@
       :class="cornerActiveClass"
       :style="cornerStyle"
       @click="onCornerClick"
-      title="点我回到原点"
+      title="点我居中画布"
     ></a>
   </div>
 </template>

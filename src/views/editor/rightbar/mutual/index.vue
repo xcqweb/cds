@@ -5,7 +5,7 @@
 <script>
 import mutuals from "./mutuals"
 export default {
-  name: "index",
+  name: "Mutual",
   components: {
     mutuals
   }

@@ -698,7 +698,7 @@ export default {
   right: -1px;
   bottom: -1px;
   left: -1px;
-  border: 1px solid #1baee1;
+  border: 1px dashed #298df8;
 }
 .handle {
   box-sizing: border-box;

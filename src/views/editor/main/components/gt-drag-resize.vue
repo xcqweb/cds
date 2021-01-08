@@ -8,6 +8,7 @@
       :x="d.attrs.left"
       :y="d.attrs.top"
       :r="d.attrs.rotate"
+      :z="d.attrs.zIndex"
       :parent="true"
       :active.sync="d.active"
       :key="d.cid"
@@ -21,7 +22,7 @@
       @rotatestop="onRotateStop"
       @activated="onActivated(d)"
       @deactivated="onDeactivated(d)"
-      @dblclick.native.capture="dblclick(d,$event)"
+      @dblclick.native="dblclick(d,$event)"
     >
       <component :is="d.cname" v-bind="d.attrs" v-if="d.children">
         <gt-drag-resize :widgets="d.children" />
@@ -36,7 +37,7 @@ import { cloneDeep } from "lodash"
 import components from "@/views/widgets/index"
 import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
-import { isGroup, findWidgetChildren} from "@u/deal"
+import { isGroup, pointIsInWidget} from "@u/deal"
 export default {
   name: "GtDragResize",
   mixins: [helpComputed],
@@ -179,9 +180,28 @@ export default {
     updateHelpLine(show) {
       this.$emit("updateHelpLine", show)
     },
-    dblclick(d,evt) {
-      console.log(d,evt)
-    },
+    dblclick(item, evt) {
+      console.log(evt,'a----')
+      if(isGroup(item)) {
+        let {x,y} = evt
+        const ele = document.querySelector('.viewport')
+        const {left, top } = ele.getBoundingClientRect()
+        x = x -left
+        y = y - top
+        let targetWidget
+        for(let i=0;i<item.children.length;i++) {
+          if(pointIsInWidget({x,y},item.children[i],item)) {
+            targetWidget = item.children[i]
+            this.$store.commit("updateWidget", { active: true, cid: targetWidget.cid })
+            this.$store.commit("setCurrentWidgetId", targetWidget.cid)
+            break
+          }
+        }
+        this.$store.commit("updateWidget", { active: false, cid: item.cid })
+      } else {
+        
+      }
+    }
   }
 }
 </script>

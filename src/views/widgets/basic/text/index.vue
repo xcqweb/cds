@@ -14,10 +14,10 @@ export default {
   },
   created() {},
   methods: {
-    dblclick(){
+    dblclick() {
       console.log("a--------")
     }
-  },
+  }
 }
 </script>
 <style lang="less" scoped>
