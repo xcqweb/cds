@@ -30,13 +30,13 @@
       :is="widget.cname"
       v-bind="widget.attrs"
     />
-    <template v-else>
+    <component v-else :is="widget.cname" v-bind="widget.attrs">
       <drag-widget
         v-for="item in widget.children"
         :key="item.cid"
         :widget="item"
       />
-    </template>
+    </component>
   </vue-draggable-resizable>
 </template>
 <script>
@@ -179,7 +179,7 @@ export default {
       this.$emit("updateHelpLine", show)
     },
     dblclick(item, evt) {
-      console.log(evt, "a----",item)
+      console.log(evt, "a----")
       if (isGroup(item)) {
         let { x, y } = evt
         const ele = document.querySelector(".viewport")
