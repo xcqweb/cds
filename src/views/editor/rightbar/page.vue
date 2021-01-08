@@ -105,8 +105,14 @@ export default {
         })
       })
       this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
-      const tempWidget = findWidgetById(this.$store.getters.currentPage.widgets,cid)
-      this.$store.commit('setGroupSelection',{show:true,widget:tempWidget})
+      const tempWidget = findWidgetById(
+        this.$store.getters.currentPage.widgets,
+        cid
+      )
+      this.$store.commit("setGroupSelection", {
+        show: true,
+        widget: tempWidget
+      })
     },
     ungroup(evt, widget) {
       if (!widget) {

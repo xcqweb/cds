@@ -17,6 +17,6 @@ export default {
     },
     showHelpLine() {
       return this.$store.getters["showHelpLine"]
-    },
+    }
   }
 }

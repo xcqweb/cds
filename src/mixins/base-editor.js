@@ -7,10 +7,10 @@ export default {
     rotate: { default: 0, type: Number },
     zIndex: { default: 5, type: Number },
     text: { default: "", type: String },
-    cid:  { default: "", type: String },
+    cid: { default: "", type: String }
   },
   computed: {
-    styleObj:{
+    styleObj: {
       get() {
         return {
           position: "absolute",
@@ -20,7 +20,7 @@ export default {
           top: `0`,
           transform: `rotate(0deg)`,
           zIndex: `${this.zIndex}`
-       }
+        }
       },
       set(val) {
         this.styleObj = val

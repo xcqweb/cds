@@ -44,9 +44,9 @@ export default new Vuex.Store({
     },
     widgets: config.widgets, // 左侧组件区域
     isShowSelection: false, // 是否显示框选,
-    groupSelection: {show:false,widget:{}},
-    showHelpLine:false,// 辅助线
-    hint:{show:false,text:''},// 提示信息
+    groupSelection: { show: false, widget: {} },
+    showHelpLine: false, // 辅助线
+    hint: { show: false, text: "" } // 提示信息
   },
   mutations: {
     setGrid(state, data) {
@@ -78,13 +78,13 @@ export default new Vuex.Store({
       // 设置删除的控件
       state.delWidgets = data
     },
-    setGroupSelection(state,data) {
+    setGroupSelection(state, data) {
       state.groupSelection = data
     },
-    setShowHelpLine(state,data) {
+    setShowHelpLine(state, data) {
       state.showHelpLine = data
     },
-    setHint(state,data) {
+    setHint(state, data) {
       state.hint = data
     },
     widgetAdd(state, data) {

@@ -22,11 +22,7 @@
     @deactivated="onDeactivated"
     @dblclick.native="dblclick"
   >
-    <component
-      :is="widget.cname"
-      :cid="widget.cid"
-      v-bind="widget.attrs"
-    />
+    <component :is="widget.cname" :cid="widget.cid" v-bind="widget.attrs" />
   </vue-draggable-resizable>
   <component v-else :is="widget.cname" v-bind="widget.attrs" :cid="widget.cid">
     <drag-widget
@@ -40,15 +36,15 @@
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import { cloneDeep } from "lodash"
 import components from "@/views/widgets/index"
-import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
+import helpDrag from "@/mixins/help-drag"
 export default {
   name: "DragWidget",
   props: {
     widget: Object
   },
-  mixins: [helpComputed],
-  components:{
+  mixins: [helpComputed, helpDrag],
+  components: {
     VueDraggableResizable,
     ...components
   },
@@ -58,13 +54,6 @@ export default {
     }
   },
   methods: {
-    onRotate(rotate) {
-      this.$store.commit("updateWidgetAttrs", {
-        rotate,
-        cid: this.widget.cid
-      })
-      this.updateHint(true, `${rotate}`)
-    },
     onDragStart(left, top) {
       this.startDragLeft = left
       this.startDargTop = top
@@ -80,7 +69,7 @@ export default {
         this.updateHint(true, `${left},${top}`)
         const { rotate, width, height } = this.widget.attrs
         if (rotate % 180 == 0) {
-          this.$store.commit('setShowHelpLine',true)
+          this.$store.commit("setShowHelpLine", true)
         }
         this.$store.commit("setRuler", {
           shadow: { x: left, y: top, width, height }
@@ -114,37 +103,10 @@ export default {
         shadow: { x: left, y: top, width, height }
       })
     },
-    onResizeStop() {
-      undoManager.saveApplyChange()
-      this.updateHint(false, "")
-    },
-    onRotateStop() {
-      undoManager.saveApplyChange()
-      this.updateHint(false, "")
-    },
-    onDragStop() {
-      undoManager.saveApplyChange()
-      this.updateHint(false, "")
-      this.$store.commit('setShowHelpLine',false)
-    },
-    onActivated() {
-      this.$store.commit("setCurrentWidgetId", this.widget.cid)
-      this.$store.commit("updateWidget", { active: true, cid: this.widget.cid })
-      undoManager.saveApplyChange()
-    },
-    onDeactivated() {
-      this.$store.commit("setCurrentWidgetId", "")
-      this.$store.commit("updateWidget", { active: false, cid: this.widget.cid })
-    },
-    updateHint(show, text) {
-      this.$store.commit("setHint", {show,text})
-    },
-    dblclick( evt) {
+    dblclick(evt) {
       console.log(evt)
     }
   }
 }
 </script>
-<style lang="less">
-
-</style>
+<style lang="less"></style>

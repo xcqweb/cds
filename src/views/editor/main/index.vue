@@ -38,7 +38,7 @@ import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import { arrayToTree } from "@u/deal"
 import DragWidget from "./components/drag-widget"
-import GroupSelection from '@c/group-selection/'
+import GroupSelection from "@c/group-selection/"
 import components from "@/views/widgets/index"
 export default {
   name: "EditorMain",
@@ -94,14 +94,12 @@ export default {
   watch: {
     selectWidgetsCount(val) {
       if (val > 1) {
-        this.$store.commit('setShowHelpLine',false)
+        this.$store.commit("setShowHelpLine", false)
       }
     }
   },
   data() {
-    return {
-      
-    }
+    return {}
   },
   created() {
     this.$bus.$on("handleCornerClick", () => {
@@ -203,7 +201,7 @@ export default {
       // 滚动处理
       this.dealRulerCorner()
       this.dealRulerStartPos()
-    }, 100),
+    }, 100)
   }
 }
 </script>
@@ -253,7 +251,7 @@ export default {
     height: 100%;
   }
   .group-item {
-    position:absolute;
+    position: absolute;
     &:hover::before {
       content: "";
       position: absolute;

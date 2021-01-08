@@ -23,30 +23,24 @@
 </template>
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
-import undoManager from "@u/undo-manager"
 import { cloneDeep } from "lodash"
-import { isGroup, findWidgetChildren, } from "@u/deal"
+import { isGroup, findWidgetChildren, pointIsInWidget } from "@u/deal"
+import helpDrag from "@/mixins/help-drag"
 export default {
-  name:'GroupSelection',
-    components:{
-    VueDraggableResizable,
+  name: "GroupSelection",
+  components: {
+    VueDraggableResizable
   },
-  computed:{
+  mixins: [helpDrag],
+  computed: {
     groupSelection() {
       return this.$store.state.groupSelection
     },
     widget() {
       return this.groupSelection.widget
-    },
+    }
   },
   methods: {
-    onRotate(rotate) {
-      this.$store.commit("updateWidgetAttrs", {
-        rotate,
-        cid: this.widget.cid
-      })
-      this.updateHint(true, `${rotate}`)
-    },
     onDrag(left, top) {
       this.$store.commit("updateWidgetAttrs", {
         left,
@@ -56,7 +50,7 @@ export default {
       this.updateHint(true, `${left},${top}`)
       const { rotate, width, height } = this.widget.attrs
       if (rotate % 180 == 0) {
-        this.$store.commit('setShowHelpLine',true)
+        this.$store.commit("setShowHelpLine", true)
       }
       this.$store.commit("setRuler", {
         shadow: { x: left, y: top, width, height }
@@ -65,7 +59,10 @@ export default {
     onResizeStart(left, top, width, height) {
       this.startResizeWidth = width
       this.startResizeHeight = height
-      const childWidgets = findWidgetChildren(this.$store.getters.currentPage.widgets,this.widget)
+      const childWidgets = findWidgetChildren(
+        this.$store.getters.currentPage.widgets,
+        this.widget
+      )
       if (childWidgets && childWidgets.length) {
         this.groupWidgetChildrenCopy = cloneDeep(childWidgets)
       } else {
@@ -105,32 +102,7 @@ export default {
         shadow: { x: left, y: top, width, height }
       })
     },
-    onResizeStop() {
-      undoManager.saveApplyChange()
-      this.updateHint(false, "")
-    },
-    onRotateStop() {
-      undoManager.saveApplyChange()
-      this.updateHint(false, "")
-    },
-    onDragStop() {
-      undoManager.saveApplyChange()
-      this.updateHint(false, "")
-      this.$store.commit('setShowHelpLine',false)
-    },
-    onActivated() {
-      this.$store.commit("setCurrentWidgetId", this.widget.cid)
-      this.$store.commit("updateWidget", { active: true, cid: this.widget.cid })
-      undoManager.saveApplyChange()
-    },
-    onDeactivated() {
-      this.$store.commit("setCurrentWidgetId", "")
-      this.$store.commit("updateWidget", { active: false, cid: this.widget.cid })
-    },
-    updateHint(show, text) {
-      this.$store.commit("setHint", {show,text})
-    },
-    dblclick( evt) {
+    dblclick(evt) {
       console.log(evt, "a----")
       const item = this.widget
       if (isGroup(this.widget)) {
