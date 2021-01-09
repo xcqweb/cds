@@ -41,7 +41,7 @@ export default {
       return this.groupSelection.widget
     },
     widgetChildren() {
-      if(this.widget) {
+      if (this.widget) {
         return findWidgetChildren(
           this.$store.getters.currentPage.widgets,
           this.widget
@@ -70,7 +70,6 @@ export default {
       this.startResizeWidth = width
       this.startResizeHeight = height
       this.groupWidgetChildrenCopy = cloneDeep(this.widgetChildren)
-     
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidgetAttrs", {
@@ -117,15 +116,21 @@ export default {
           targetWidget = this.widgetChildren[i]
           this.$store.commit("updateWidget", {
             active: true,
-            cid: targetWidget.cid
+            cid: targetWidget.cid,
           })
           this.$store.commit("setCurrentWidgetId", targetWidget.cid)
           break
         }
       }
-      if(targetWidget) {
-        this.$store.commit("setGroupSelection", { show: false, widget:this.widget })
-        this.$store.commit("updateWidget", { active: false, cid: this.widget.cid })
+      if (targetWidget) {
+        this.$store.commit("setGroupSelection", {
+          show: false,
+          widget: this.widget
+        })
+        this.$store.commit("updateWidget", {
+          active: false,
+          cid: this.widget.cid,
+        })
       }
     }
   }

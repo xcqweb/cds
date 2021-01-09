@@ -15,6 +15,7 @@
     <button @click="paste">paste</button>
     <button @click="group">group</button>
     <button @click="ungroup">ungroup</button>
+    <button @click="saveApply">saveApply</button>
     <!--调整控件位置-->
     <adjuist-position></adjuist-position>
   </div>
@@ -139,7 +140,10 @@ export default {
     },
     del() {
       this.$store.commit("widgetDel")
-    }
+    },
+    saveApply() {
+      this.$store.dispatch('patchModifyWidgets')
+    },
   }
 }
 </script>

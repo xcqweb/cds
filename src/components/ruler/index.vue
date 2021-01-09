@@ -27,7 +27,11 @@ export default {
   computed: {
     lines: {
       get() {
-        return this.$store.getters.currentPage.lines
+        const currentPage = this.$store.getters.currentPage
+        if(currentPage) {
+          return currentPage.lines
+        }
+        return {h:[],v:[]}
       },
       set(val) {
         this.$store.commit("setRuler", { lines: val })
@@ -59,6 +63,16 @@ export default {
         height: height + "px",
         transform: `scale(${this.scale})`
       }
+    },
+    isApplyInit() {
+      return this.$store.state.isApplyInit
+    },
+  },
+  watch: {
+    isApplyInit(val) {
+      if(val) {
+        this.init()
+      }
     }
   },
   data() {
@@ -68,12 +82,15 @@ export default {
     }
   },
   created() {
-    this.$bus.$emit("handleCornerClick")
+    
   },
   beforeDestroy() {
     this.$bus.$off()
   },
   methods: {
+    init() {
+      this.$bus.$emit("handleCornerClick")
+    },
     handleLine(lines) {
       this.lines = lines
     },

@@ -26,7 +26,7 @@
       >
         B
       </div>
-      <div class="ge-pr" v-click-outside="hide">
+      <div class="ge-pr">
         <div
           @click="toggle"
           class="ge-block"
@@ -168,15 +168,11 @@
 
 <script>
 import ColorPicker from "@c/color-picker/index"
-import ClickOutside from "vue-click-outside"
 
 export default {
   name: "text-color",
   components: {
     ColorPicker
-  },
-  directives: {
-    ClickOutside
   },
   props: {
     textStyle: {

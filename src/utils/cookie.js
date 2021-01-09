@@ -3,8 +3,8 @@ const HOST_NAME = window.location.hostname
 // 获取有效期：一个自然月
 const getExpires = () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 
-const COOKIE_TOKEN_KEY = "access_token"
-const COOKIE_TOKENTYPE_KEY = "token_type"
+const COOKIE_TOKEN_KEY = "dev_access_token"
+const COOKIE_TOKENTYPE_KEY = "dev_token_type"
 
 export function getToken() {
   const tokenType = Cookie.get(COOKIE_TOKENTYPE_KEY, { domain: HOST_NAME })

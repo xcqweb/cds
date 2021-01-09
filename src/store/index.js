@@ -3,35 +3,31 @@ import Vuex from "vuex"
 import moduleGetters from "./getters"
 import config from "@/config"
 import { uuid } from "@u/uuid"
+import appApi from "@a/apply"
+import pageApi from "@a/page"
+import widgetApi from '@a/widget'
+import { cloneDeep } from "lodash"
 Vue.use(Vuex)
+function dealPageData(data) {
+  return {
+    grid:data.grid,
+    pageId:data.pageId,
+    widgets:[],
+    width:data.width,
+    height:data.height,
+    widgetsInfo:data.widgetsInfo,
+    lines:data.lines,
+    sort:data.sort,
+    backgroundColor:data.backgroundColor || config.defaultPageColor,
+  }
+}
 export default new Vuex.Store({
   state: {
+    isApplyInit:false,// 应用是否初始化成功
     apply: {
-      pages: [
-        {
-          id: "p1",
-          grid: {
-            size: config.grid.size, //默认值，可逐步增加
-            color: config.grid.color,
-            enable: true
-          },
-          widgets: [],
-          width: 1024,
-          height: 768,
-          widgetsInfo: {}, // 控件信息
-          lines: {
-            // 坐标辅助线
-            h: [],
-            v: []
-          },
-          backgroundColor: "#fff"
-        }
-      ],
-      scale: config.scale,
-      width: 1024,
-      height: 768
+      pages: [],
     },
-    currentPageId: "p1", // 当前页面id
+    currentPageId: "", // 当前页面id
     currentWidgetId: "", // 当前激活的控件
     delWidgets: [], // 当前页面删除的控件
     ruler: {
@@ -60,11 +56,12 @@ export default new Vuex.Store({
       const tempRuler = { ...state.ruler, ...data }
       state.ruler = tempRuler
     },
-    setCurrentPageInfo(state, data) {
-      // 设置当前页面信息
-      let currentPage = this.getters.currentPage
-      currentPage = { ...currentPage, ...data }
-      console.log(currentPage)
+    addPage(state,data) {
+      state.apply.pages.push(data)
+    },
+    setCurrentPageWidgets(state, data) {// 设置当前页面信息
+      const currentPage = this.getters.currentPage
+      currentPage.widgets = data
     },
     setCurrentPageId(state, data) {
       // 设置当前页
@@ -86,6 +83,12 @@ export default new Vuex.Store({
     },
     setHint(state, data) {
       state.hint = data
+    },
+    setIsApplyInit(state,data) {
+      state.isApplyInit = data
+    },
+    setApply(state,data) {
+      state.apply = {...state.apply,...data}
     },
     widgetAdd(state, data) {
       let {
@@ -146,6 +149,7 @@ export default new Vuex.Store({
         )
         const resAttrs = { ...currentWidget.attrs, ...attrs }
         currentWidget.attrs = resAttrs
+        currentWidget.isEdit = true
         currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
       }
     },
@@ -156,6 +160,7 @@ export default new Vuex.Store({
         let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
         let resAttrs = { ...item.attrs, ...attrs }
         item.attrs = resAttrs
+        item.isEdit = true
         currentPage.widgets.splice(resIndex, 1, { ...item })
       })
     },
@@ -171,7 +176,8 @@ export default new Vuex.Store({
       if (currentWidget) {
         currentPage.widgets.splice(currentWidgetIndex, 1, {
           ...currentWidget,
-          ...data
+          ...data,
+          isEdit:true,
         })
       }
     },
@@ -180,14 +186,14 @@ export default new Vuex.Store({
       const currentPage = this.getters.currentPage
       selectWidgets.forEach(item => {
         let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
-        currentPage.widgets.splice(resIndex, 1, { ...item, ...data })
+        currentPage.widgets.splice(resIndex, 1, { ...item, ...data, isEdit:true})
       })
     },
     updatePageAllWidgets(state, data) {
       // 更新画布上所有控件的信息
       const currentPage = this.getters.currentPage
       currentPage.widgets.forEach((item, index) => {
-        currentPage.widgets.splice(index, 1, { ...item, ...data })
+        currentPage.widgets.splice(index, 1, { ...item, ...data, isEdit:true })
       })
     },
     widgetDel(state, widgets) {
@@ -199,10 +205,7 @@ export default new Vuex.Store({
         let currentWidgetIndex = currentPage.widgets.findIndex(
           w => w.cid == item.cid
         )
-        if (!item.isEdit) {
-          // 已经被保存过的再删除，过滤掉未保存就删除的
-          state.delWidgets.push(item)
-        }
+        state.delWidgets.push(item)
         if (currentWidgetIndex != -1) {
           currentPage.widgets.splice(currentWidgetIndex, 1)
         }
@@ -210,38 +213,171 @@ export default new Vuex.Store({
     },
     setIsShowSelection(state, data) {
       state.isShowSelection = data
-    }
+    },
   },
   actions: {
-    updateGroupSelection(store,data) {
-      store.commit('setGroupSelection',data)
+    updateGroupSelection(store, data) {
+      store.commit("setGroupSelection", data)
     },
-    addPage() {
-      // 请求后端接口，创建应用新页面
+    initApply(store,applyId) {
+      store.dispatch('queryApply',applyId)
+      store.dispatch('queryAllPage',{applyId})
     },
+    queryApply(store,id) {
+      appApi.query(id).then(res=>{
+        if(res.code === 0) {
+          const {data} = res
+          store.commit('setApply',{
+            scale: +data.scale || config.scale,
+            width: +data.width,
+            height: +data.height,
+          })
+        }
+      })
+    },
+    queryAllPage(store,data) {
+      pageApi.queryAll(data).then(res=>{
+        if(res.code === 0) {
+          if(res.data.length) {
+            const pageId = res.data[0].pageId
+            store.commit('setCurrentPageId',pageId)
+            store.dispatch('queryPage',pageId)
+          } else {
+            store.dispatch('addPage',{appId:data.applyId,isInit:true})
+          }
+        }
+      })
+    },
+    addPage(store,{appId,isInit}) {
+      const params = {
+        appId,
+        ...config.defaultPage
+      }
+      pageApi.add(params).then(res=>{
+        if(res.code === 0) {
+          store.commit('addPage',dealPageData(res.data))
+          if(isInit) {
+            store.commit('setIsApplyInit',true)
+          }
+        }
+      })
+    },
+    queryPage(store,pageId) {
+      pageApi.query(pageId).then(res=>{
+        if(res.code === 0) {
+          store.commit('addPage',dealPageData(res.data))
+          store.dispatch('queryWidgets',pageId)
+          store.commit('setIsApplyInit',true)
+        }
+      })
+    },
+    queryWidgets(store,pageId) {
+      widgetApi.queryAll({pageId}).then(res=>{
+        if(res.code === 0) {
+          const {data} = res
+          let widgets = []
+          if(data.length) {
+            data.forEach(item=>{
+              widgets.push({
+                cid:item.widgetId,
+                name:item.widgetName,
+                cname:item.cname,
+                isEdit:item.isEdit,
+                copyNum:item.copyNum,
+                pid:item.pid,
+                attrs:{
+                  width:item.width,
+                  height:item.height,
+                  left:item.left,
+                  top:item.top,
+                  rotate:item.rotate,
+                  zIndex:item.zIndex,
+                },
+              })
+            })
+          }
+          store.commit('setCurrentPageWidgets',widgets)
+        }
+      })
+    },
+    patchModifyWidgets(store) {
+      const widgets = store.getters.currentPage.widgets
+      let params = cloneDeep(widgets)
+      params = params.filter(item=>item.isEdit)
+      params = params.map(item=>{
+        return {
+          "cname":item.cname,
+          "copyNum": item.copyNum,
+          "isEdit": false,
+          "pageId": store.state.currentPageId,
+          "pid": item.pid,
+          "widgetId": item.cid,
+          "widgetName": item.name,
+          ...item.attrs,
+        }
+      })
+      const delWidgets = store.state.delWidgets
+      const delIds = delWidgets.map(item=>item.cid)
+      if(delIds.length) {
+        store.dispatch('patchDelWidgets',delIds)
+      }
+      if(params.length) {
+        widgetApi.modifyPatch(params).then(res=>{
+          if(res.code === 0) {
+            console.log('保存成功')
+          }
+        })
+      }
+    },
+    patchDelWidgets(store,data) {
+      widgetApi.delPatch(data).then(res=>{
+        if(res.code === 0) {
+          console.log('删除成功')
+          store.commit('setDelWidgets',[])
+        }
+      })
+    }
   },
   modules: {},
   getters: {
     currentPageIndex: state => {
       let { apply, currentPageId } = state
-      return apply.pages.findIndex(item => item.id == currentPageId)
+      let resIndex = apply.pages.findIndex(item => item.id == currentPageId)
+      if(resIndex == -1) {
+        resIndex = 0
+      }
+      return resIndex
     },
     currentPage: ({ apply }, getters) => {
-      return apply.pages[getters.currentPageIndex]
+      if(getters.currentPageIndex != -1) {
+        return apply.pages[getters.currentPageIndex]
+      }
+      return 
     },
     currentWidget: (state, getters) => {
-      return getters.currentPage.widgets.find(
-        item => item.cid === state.currentWidgetId
-      )
+      const currentPage = getters.currentPage
+      if(currentPage) {
+        return currentPage.widgets.find(
+          item => item.cid === state.currentWidgetId
+        )
+      }
+      return {}
     },
     currentWidgetIndex: (state, getters) => {
-      let res = getters.currentPage.widgets.findIndex(
-        item => item.cid === state.currentWidgetId
-      )
+      const currentPage = getters.currentPage
+      let res = -1
+      if(currentPage) {
+        res = currentPage.widgets.findIndex(
+          item => item.cid === state.currentWidgetId
+        )
+      }
       return res
     },
     selectWidgets: (state, getters) => {
-      return getters.currentPage.widgets.filter(item => item.active)
+      if(getters.currentPage) {
+        return getters.currentPage.widgets.filter(item => item.active)
+      }
+      return []
     },
     ...moduleGetters
   }

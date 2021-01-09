@@ -35,7 +35,7 @@ module.exports = {
     },
     proxy: {
       "/api": {
-        target: "http://kong.poros-platform.10.74.158.71.nip.io", //sit
+        target: "http://kong.poros-platform.10.74.158.69.nip.io/", 
         changeOrigin: true,
         pathRewrite: {"^/api": "/api"}
       },

@@ -4,7 +4,7 @@
     <div>
       <label>填充</label>
       <div class="fs ge-h40">
-        <div class="ge-pr ge-w100" v-click-outside="hide">
+        <div class="ge-pr ge-w100">
           <div
             @click="toggle"
             class="ge-block"
@@ -22,7 +22,7 @@
       <label>边框</label>
       <div class="fs ge-h40">
         <!--边框颜色-->
-        <div class="ge-w60 ge-pr " v-click-outside="hide1">
+        <div class="ge-w60 ge-pr ">
           <div
             @click="toggle1"
             class="ge-block "
@@ -37,7 +37,6 @@
         <!--边框style-->
         <div class="stylePage">
           <div
-            v-click-outside="hideBorderLineChart"
             class="item-container fontSet"
             style="justify-content:space-between;position:relative;flex:1;"
             @click="showBorderLineChart = true"
@@ -90,15 +89,11 @@
 
 <script>
 import ColorPicker from "@c/color-picker/index"
-import ClickOutside from "vue-click-outside"
 
 export default {
   name: "text-color",
   components: {
     ColorPicker
-  },
-  directives: {
-    ClickOutside
   },
   props: {
     textColor: {

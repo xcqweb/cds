@@ -50,14 +50,6 @@ function transform(options, angle) {
     bottom: maxY
   }
 }
-export const arrayToTree = (list, pid = "") => {
-  return list
-    .filter(item => item.pid === pid)
-    .map(item => ({
-      ...item,
-      children: arrayToTree(list, item.cid)
-    }))
-}
 /**
  * 判断当前控件是否是组合
  * @param  widget

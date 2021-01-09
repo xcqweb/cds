@@ -1,8 +1,9 @@
 import instance from "@/api/index"
 
-const add = params =>
-  instance.get(`/api/poros-bpmengine/actGroup/tree/parentId`, { params }) // 获取流程组树
+const add = params => instance.post(`/api/ruban-cds/studioApplyInfo`, params) // 新建应用
+const query = id => instance.get(`/api/ruban-cds/studioApplyInfo/${id}`)
 
 export default {
-  add
+  add,
+  query,
 }

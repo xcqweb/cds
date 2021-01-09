@@ -1,9 +1,8 @@
 import Vue from "vue"
 import axios from "axios"
 import { getToken } from "@/utils/cookie"
-// 创建 axios 实例
 const instance = axios.create({
-  timeout: 6000 // 请求超时时间
+  timeout: 6000
 })
 axios.defaults.baseURL = ""
 const errDeal = error => {
@@ -14,7 +13,7 @@ const errDeal = error => {
       Vue.prototype.$message.error(data.message)
     }
     if (data.status === 401) {
-      console.log("登录已失效")
+      Vue.prototype.$message.error("登录已失效")
     } else {
       Vue.prototype.$message.error(
         data.msg || data.message || "服务端异常，请联系技术支持"
@@ -41,8 +40,7 @@ instance.interceptors.response.use(response => {
         console.log("登录已失效")
         break
       default:
-        Vue.prototype.$message.destroy()
-        Vue.prototype.$message.error(data.msg || "服务端异常，请联系技术支持")
+        Vue.prototype.$message.error(data.msg)
     }
   }
   if (data.code === 0 || data.code === 406) {
