@@ -19,6 +19,7 @@
     @rotatestop="onRotateStop"
     @activated="onActivated"
     @deactivated="onDeactivated"
+    @dblclick.native="dblclick"
   />
 </template>
 <script>
@@ -38,6 +39,15 @@ export default {
     },
     widget() {
       return this.groupSelection.widget
+    },
+    widgetChildren() {
+      if(this.widget) {
+        return findWidgetChildren(
+          this.$store.getters.currentPage.widgets,
+          this.widget
+        )
+      }
+      return []
     }
   },
   methods: {
@@ -59,15 +69,8 @@ export default {
     onResizeStart(left, top, width, height) {
       this.startResizeWidth = width
       this.startResizeHeight = height
-      const childWidgets = findWidgetChildren(
-        this.$store.getters.currentPage.widgets,
-        this.widget
-      )
-      if (childWidgets && childWidgets.length) {
-        this.groupWidgetChildrenCopy = cloneDeep(childWidgets)
-      } else {
-        this.groupWidgetChildrenCopy = []
-      }
+      this.groupWidgetChildrenCopy = cloneDeep(this.widgetChildren)
+     
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidgetAttrs", {
@@ -103,29 +106,26 @@ export default {
       })
     },
     dblclick(evt) {
-      console.log(evt, "a----")
-      const item = this.widget
-      if (isGroup(this.widget)) {
-        let { x, y } = evt
-        const ele = document.querySelector(".viewport")
-        const { left, top } = ele.getBoundingClientRect()
-        x = x - left
-        y = y - top
-        let targetWidget
-        for (let i = 0; i < item.children.length; i++) {
-          if (pointIsInWidget({ x, y }, item.children[i], item)) {
-            targetWidget = item.children[i]
-            this.$store.commit("updateWidget", {
-              active: true,
-              cid: targetWidget.cid
-            })
-            this.$store.commit("setCurrentWidgetId", targetWidget.cid)
-            break
-          }
+      let { x, y } = evt
+      const ele = document.querySelector(".viewport")
+      const { left, top } = ele.getBoundingClientRect()
+      x = x - left
+      y = y - top
+      let targetWidget
+      for (let i = 0; i < this.widgetChildren.length; i++) {
+        if (pointIsInWidget({ x, y }, this.widgetChildren[i], this.widget)) {
+          targetWidget = this.widgetChildren[i]
+          this.$store.commit("updateWidget", {
+            active: true,
+            cid: targetWidget.cid
+          })
+          this.$store.commit("setCurrentWidgetId", targetWidget.cid)
+          break
         }
-        this.$store.commit("updateWidget", { active: false, cid: item.cid })
-      } else {
-        console.log("t--a--")
+      }
+      if(targetWidget) {
+        this.$store.commit("setGroupSelection", { show: false, widget:this.widget })
+        this.$store.commit("updateWidget", { active: false, cid: this.widget.cid })
       }
     }
   }

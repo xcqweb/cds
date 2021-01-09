@@ -1,5 +1,5 @@
 <template>
-  <div class="group-item" :style="styleGropObj" @click="groupClick">
+  <div class="group-item" :style="styleGropObj" @click="groupClick" @dblclick="dblclick">
     <slot />
   </div>
 </template>
@@ -17,22 +17,47 @@ export default {
         ...this.styleObj,
         left: `${this.left}px`,
         top: `${this.top}px`,
-        transform: `rotate(${this.rotate}deg)`
+        transform: `rotate(${this.rotate}deg)`,
       }
-    }
+    },
+    widget() {
+      return findWidgetById(
+        this.$store.getters.currentPage.widgets,
+        this.cid
+      )
+    },
+    groupSelection() {
+      return this.$store.state.groupSelection
+    },
   },
   data() {
-    return {}
+    return {
+    }
   },
   created() {},
   methods: {
     groupClick() {
-      const widget = findWidgetById(
-        this.$store.getters.currentPage.widgets,
-        this.cid
-      )
-      this.$store.commit("setGroupSelection", { show: true, widget })
-    }
+      if(this.timer) {
+        this.clearTimer()
+      }
+      this.timer = setTimeout(()=>{
+         console.log(`oneclick`)
+        this.$store.dispatch("updateGroupSelection", { show: true, widget:this.widget })
+      },300)
+    },
+    clearTimer(){
+      clearTimeout(this.timer)
+      this.timer = null
+    },
+    dblclick() {
+      if(this.timer) {
+        this.clearTimer()
+      }
+      console.log(`dblClick`)
+      if(!this.groupSelection.show) {
+        this.$store.commit("setGroupSelection", { show: true, widget:this.widget })
+      }
+    },
   }
 }
 </script>

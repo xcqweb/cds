@@ -104,7 +104,7 @@ export default {
       })
     },
     dblclick(evt) {
-      console.log(evt)
+      console.log(evt,"c--------")
     }
   }
 }

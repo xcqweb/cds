@@ -213,9 +213,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    updateGroupSelection(store,data) {
+      store.commit('setGroupSelection',data)
+    },
     addPage() {
       // 请求后端接口，创建应用新页面
-    }
+    },
   },
   modules: {},
   getters: {
