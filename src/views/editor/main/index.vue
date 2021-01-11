@@ -11,7 +11,7 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <!-- 组合选择框 -->
-            <group-selection />
+            <group-selection style="z-index:99999;"/>
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">

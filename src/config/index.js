@@ -4,7 +4,6 @@ const grid = {
 }
 const defaultPageColor = '#fff'
 export default {
-  // 应用全局常量配置
   grid: {
     // 网格
     minSize: 4,
@@ -35,7 +34,6 @@ export default {
   defaultPage:{
     grid: {
       ...grid,
-      enable: true
     },
     widgets: [],
     width: 1024,

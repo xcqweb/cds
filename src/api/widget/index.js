@@ -4,7 +4,7 @@ const queryAll = params => instance.get(`/api/ruban-cds/studio/widget/list`,{par
 
 const modifyPatch = params => instance.post(`/api/ruban-cds/studio/widget/addBatchOrUpdate`, params)
 
-const delPatch = params => instance.delete(`/api/ruban-cds/studio/widget/{ids}`,{params})
+const delPatch = params => instance.delete(`/api/ruban-cds/studio/widget/${params}`)
 
 export default {
   queryAll,

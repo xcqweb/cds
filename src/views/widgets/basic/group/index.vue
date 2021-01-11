@@ -42,12 +42,12 @@ export default {
         this.clearTimer()
       }
       this.timer = setTimeout(() => {
-        console.log(`oneclick`)
+        this.widget.active = true
         this.$store.dispatch("updateGroupSelection", {
           show: true,
-          widget: this.widget
+          widget: this.widget,
         })
-      }, 300)
+      }, 200)
     },
     clearTimer() {
       clearTimeout(this.timer)

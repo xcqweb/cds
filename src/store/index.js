@@ -217,6 +217,7 @@ export default new Vuex.Store({
   },
   actions: {
     updateGroupSelection(store, data) {
+      store.commit('updateWidget',{active:true,cid:data.widget.cid})
       store.commit("setGroupSelection", data)
     },
     initApply(store,applyId) {
@@ -285,6 +286,7 @@ export default new Vuex.Store({
                 isEdit:item.isEdit,
                 copyNum:item.copyNum,
                 pid:item.pid,
+                active:false,
                 attrs:{
                   width:item.width,
                   height:item.height,
@@ -330,7 +332,7 @@ export default new Vuex.Store({
       }
     },
     patchDelWidgets(store,data) {
-      widgetApi.delPatch(data).then(res=>{
+      widgetApi.delPatch(data.join(',')).then(res=>{
         if(res.code === 0) {
           console.log('删除成功')
           store.commit('setDelWidgets',[])
