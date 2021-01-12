@@ -60,21 +60,7 @@ export default {
             {
               name: "订单模块",
               url: "http://192.168.1.100:8890//swagger-ui.html",
-              iconType: "italic",
-              children: [
-                {
-                  name: "模块接口",
-                  url: null,
-                  iconType: "bars",
-                  children: [
-                    {
-                      name: "订单模块",
-                      url: "http://192.168.1.100:8890//swagger-ui.html",
-                      iconType: "italic"
-                    }
-                  ]
-                }
-              ]
+              iconType: "italic"
             }
           ]
         },
@@ -94,8 +80,7 @@ export default {
   methods: {
     handleClick(e) {
       console.log("click", e)
-      this.openKeys = ["sub1", "订单模块", "模块接口"]
-      // this.menuList
+      // this.openKeys = ["sub1", "订单模块", "模块接口"] //设置默认展开
     },
     hideDialog(val) {
       this.visible = val

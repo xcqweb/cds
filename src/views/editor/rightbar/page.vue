@@ -143,14 +143,14 @@ export default {
       this.$store.commit("widgetDel")
     },
     saveApply() {
-      this.$store.dispatch('patchModifyWidgets')
+      this.$store.dispatch("patchModifyWidgets")
     },
     preview() {
       const url = this.$router.resolve({
-        path: "/preview-app",
+        path: "/preview-app"
       })
-      window.open(url.href,'_blank')
-    },
+      window.open(url.href, "_blank")
+    }
   }
 }
 </script>

@@ -16,6 +16,7 @@ import Toolbar from "./header"
 import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
+import api from '@a/apply'
 export default {
   name: "EditorIndex",
   components: {
@@ -29,33 +30,11 @@ export default {
     return {}
   },
   created() {
-    //this.addApply()
-    this.queryApply()
+    const applyId = this.$route.query.appId
+    this.$store.dispatch("initApply",applyId)
   },
   methods: {
-    addApply() {
-      const params = {
-        "appType": 0,
-        "classifyId": "",
-        "descript": "test",
-        "height": "768",
-        "picUrl": "",
-        "scale": "1",
-        "studioName": "测试应用",
-        "tenantId": "",
-        "theme": "",
-        "width": "1024"
-      }
-      api.add(params).then(res=>{
-        if(res.code === 0) {
-          this.$message.success('新建应用成功')
-        }
-      })
-    },
-    queryApply() {
-      this.$store.dispatch('initApply','d82692156aab552c3ac1ce0fe51ae38c')
-    }
-  },
+  }
 }
 </script>
 <style lang="less">

@@ -27,7 +27,7 @@ module.exports = {
   chainWebpack: () => {},
   devServer: {
     hot: true,
-    historyApiFallback: true,  
+    historyApiFallback: true,
     open: false,
     overlay: {
       warning: false,
@@ -46,7 +46,7 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'less',
       patterns: [
-        path.resolve(__dirname, 'src/assets/styles/theme.less'), 
+        path.resolve(__dirname, 'src/assets/styles/theme.less'),
       ]
     }
   }

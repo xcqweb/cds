@@ -78,8 +78,11 @@ export default {
         const disLeft = left - this.startDragLeft
         const disTop = top - this.startDargTop
         this.selectWidgetsCopy.forEach(item => {
-          if(isGroup(item)) {
-            this.$store.commit("setGroupSelection", {show:false,widget:item})
+          if (isGroup(item)) {
+            this.$store.commit("setGroupSelection", {
+              show: false,
+              widget: item
+            })
           }
           this.$store.commit("updateWidgetAttrs", {
             left: item.attrs.left + disLeft,

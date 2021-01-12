@@ -5,12 +5,13 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: "*",
-    redirect: "/editor"
+    path: "/",
+    redirect: "/app"
   },
   {
-    path: "/",
-    redirect: "/editor"
+    path: "/app",
+    name: "app",
+    component: () => import(/* webpackChunkName: "apply" */ "@v/app/index.vue")
   },
   {
     path: "/editor",
@@ -27,7 +28,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   routes
 })

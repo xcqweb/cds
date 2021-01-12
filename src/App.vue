@@ -8,18 +8,15 @@
 
 <script>
 import zhCN from "ant-design-vue/es/locale/zh_CN"
-import api from "@a/apply"
 export default {
   data() {
     return {
-      locale: zhCN
+      locale: zhCN,
+      appId: ""
     }
   },
-  created() {
-  },
-  methods: {
-     
-  },
+  created() {},
+  methods: {}
 }
 </script>
 <style lang="less">

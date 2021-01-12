@@ -45,7 +45,7 @@ export default {
         this.widget.active = true
         this.$store.dispatch("updateGroupSelection", {
           show: true,
-          widget: this.widget,
+          widget: this.widget
         })
       }, 200)
     },

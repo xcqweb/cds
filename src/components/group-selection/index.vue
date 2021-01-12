@@ -25,7 +25,7 @@
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import { cloneDeep } from "lodash"
-import { isGroup, findWidgetChildren, pointIsInWidget } from "@u/deal"
+import {findWidgetChildren, pointIsInWidget } from "@u/deal"
 import helpDrag from "@/mixins/help-drag"
 export default {
   name: "GroupSelection",
@@ -116,7 +116,7 @@ export default {
           targetWidget = this.widgetChildren[i]
           this.$store.commit("updateWidget", {
             active: true,
-            cid: targetWidget.cid,
+            cid: targetWidget.cid
           })
           this.$store.commit("setCurrentWidgetId", targetWidget.cid)
           break
@@ -129,7 +129,7 @@ export default {
         })
         this.$store.commit("updateWidget", {
           active: false,
-          cid: this.widget.cid,
+          cid: this.widget.cid
         })
       }
     }

@@ -2,13 +2,13 @@ const grid = {
   color: "#e0e0e0",
   size: 10
 }
-const defaultPageColor = '#fff'
+const defaultPageColor = "#fff"
 export default {
   grid: {
     // 网格
     minSize: 4,
     steps: 4,
-    ...grid,
+    ...grid
   },
   scale: 1, // 页面默认缩放比例
   NS_SVG: "http://www.w3.org/2000/svg",
@@ -31,9 +31,9 @@ export default {
   widgetInitZIndex: 5,
   groupName: "GtGroup",
   defaultPageColor,
-  defaultPage:{
+  defaultPage: {
     grid: {
-      ...grid,
+      ...grid
     },
     widgets: [],
     width: 1024,
@@ -44,7 +44,7 @@ export default {
       h: [],
       v: []
     },
-    sort:0,
+    sort: 0,
     backgroundColor: defaultPageColor
-  },
+  }
 }

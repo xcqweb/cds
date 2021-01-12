@@ -17,14 +17,10 @@
             <a-icon type="pie-chart" />
             <span>{{ item.name }}-111</span>
           </div>
-          <div>
-            <slot></slot>
-          </div>
+          <div></div>
         </div>
       </a-menu-item>
-      <sub-menu v-else :key="item.name" :menu-info="item">
-        <slot></slot>
-      </sub-menu>
+      <sub-menu v-else :key="item.name" :menu-info="item"> </sub-menu>
     </template>
   </a-sub-menu>
 </template>

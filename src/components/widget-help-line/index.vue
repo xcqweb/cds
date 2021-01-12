@@ -20,7 +20,7 @@ export default {
       const currentWidget = this.$store.getters.currentWidget
       let top = 0
       if (currentWidget) {
-        const {top:widgetTop} = currentWidget.attrs
+        const { top: widgetTop } = currentWidget.attrs
         top = widgetTop
       }
       return {
@@ -28,7 +28,7 @@ export default {
         width: `${lineWidth}px`,
         height: `0`,
         left: `${lineLeft}px`,
-        top: `${top}px`,
+        top: `${top}px`
       }
     },
     line2() {
@@ -36,12 +36,12 @@ export default {
       let left = 0
       const tempObj = this.line4
       if (currentWidget) {
-        const {width} = currentWidget.attrs
+        const { width } = currentWidget.attrs
         left = parseInt(tempObj.left) + width
       }
       return {
         ...tempObj,
-        left: `${left}px`,
+        left: `${left}px`
       }
     },
     line3() {
@@ -49,19 +49,19 @@ export default {
       let top = 0
       const tempObj = this.line1
       if (currentWidget) {
-        const {height} = currentWidget.attrs
+        const { height } = currentWidget.attrs
         top = parseInt(tempObj.top) + height
       }
       return {
         ...tempObj,
-        top: `${top}px`,
+        top: `${top}px`
       }
     },
     line4() {
       const currentWidget = this.$store.getters.currentWidget
       let left = 0
       if (currentWidget) {
-        const {left:widgetLeft} = currentWidget.attrs
+        const { left: widgetLeft } = currentWidget.attrs
         left = widgetLeft
       }
       return {
@@ -69,7 +69,7 @@ export default {
         width: `0`,
         height: `${lineWidth}px`,
         left: `${left}px`,
-        top: `${lineLeft}px`,
+        top: `${lineLeft}px`
       }
     }
   },

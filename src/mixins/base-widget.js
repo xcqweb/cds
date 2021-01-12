@@ -12,9 +12,9 @@ export default {
   computed: {
     styleObj: {
       get() {
-        const {path} = this.$route
+        const { path } = this.$route
         let preview = false
-        if(path.includes('preview-app')) {
+        if (path.includes("preview-app")) {
           preview = true
         }
         return {
