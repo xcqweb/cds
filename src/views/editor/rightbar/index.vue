@@ -12,13 +12,13 @@
   </div>
 </template>
 <script>
-import Page from "./page.vue"
+// import Page from "./page.vue"
 import Style from "./style"
 import Mutual from "./mutual"
 
 export default {
   components: {
-    Page,
+    // Page,
     Mutual,
     Style
   },

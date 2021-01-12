@@ -163,18 +163,30 @@ export default {
             picUrl: "",
             scale: "1",
             studioName: this.form.studioName,
+            id: this.form.id,
             tenantId: "",
             theme: "",
             width: "1024"
           }
-          api.add(params).then(res => {
-            if (res.code === 0) {
-              this.$message.success("新建应用成功")
-              this.resetForm()
-              this.visible = false
-              this.queryApply()
-            }
-          })
+          if (this.form.id) {
+            api.edit(params).then(res => {
+              if (res.code === 0) {
+                this.$message.success("修改应用成功")
+                this.resetForm()
+                this.visible = false
+                this.queryApply()
+              }
+            })
+          } else {
+            api.add(params).then(res => {
+              if (res.code === 0) {
+                this.$message.success("新建应用成功")
+                this.resetForm()
+                this.visible = false
+                this.queryApply()
+              }
+            })
+          }
         } else {
           console.log("error submit!!")
           return false
