@@ -28,10 +28,10 @@ export default {
     lines: {
       get() {
         const currentPage = this.$store.getters.currentPage
-        if(currentPage) {
+        if (currentPage) {
           return currentPage.lines
         }
-        return {h:[],v:[]}
+        return { h: [], v: [] }
       },
       set(val) {
         this.$store.commit("setRuler", { lines: val })
@@ -66,11 +66,11 @@ export default {
     },
     isApplyInit() {
       return this.$store.state.isApplyInit
-    },
+    }
   },
   watch: {
     isApplyInit(val) {
-      if(val) {
+      if (val) {
         this.init()
       }
     }
@@ -81,9 +81,7 @@ export default {
       lang: "zh-CN" // 中英文,
     }
   },
-  created() {
-    
-  },
+  created() {},
   beforeDestroy() {
     this.$bus.$off()
   },

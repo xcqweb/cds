@@ -116,7 +116,7 @@ export default {
           targetWidget = this.widgetChildren[i]
           this.$store.commit("updateWidget", {
             active: true,
-            cid: targetWidget.cid,
+            cid: targetWidget.cid
           })
           this.$store.commit("setCurrentWidgetId", targetWidget.cid)
           break
@@ -129,7 +129,7 @@ export default {
         })
         this.$store.commit("updateWidget", {
           active: false,
-          cid: this.widget.cid,
+          cid: this.widget.cid
         })
       }
     }

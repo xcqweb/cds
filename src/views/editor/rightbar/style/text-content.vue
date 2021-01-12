@@ -8,12 +8,6 @@
         @change="setCurrentContent"
         placeholder="Basic usage"
       />
-      <a-input
-        class="ge-lg40"
-        :value="content"
-        @change="setCurrentContent"
-        placeholder="Basic usage"
-      />
     </div>
   </div>
 </template>

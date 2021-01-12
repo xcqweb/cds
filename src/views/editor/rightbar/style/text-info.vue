@@ -5,7 +5,7 @@
       <a-select
         style="width: 60px"
         :disabled="getlistLoading"
-        v-model="fontSize"
+        :value="fontSize"
         :show-search="true"
         :not-found-content="null"
         :show-arrow="false"
@@ -168,9 +168,11 @@
 
 <script>
 import ColorPicker from "@c/color-picker/index"
+import helpComputed from "@/mixins/help-computed"
 
 export default {
   name: "text-color",
+  mixins: [helpComputed],
   components: {
     ColorPicker
   },
@@ -188,9 +190,18 @@ export default {
       }
     }
   },
+  computed: {
+    fontSize() {
+      return this.currentWidget === null ||
+        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        ? 12
+        : this.$store.state.apply.pages[this.currentPageIndex].widgets[
+            this.currentWidgetIndex
+          ].fontSize
+    }
+  },
   data() {
     return {
-      fontSize: 12,
       getlistLoading: false, //获取到下拉列表的数据前默认改选择器不可用
       backgroundValue: "#000",
       visiablecolor: false,
@@ -209,14 +220,21 @@ export default {
     },
     handleChange(value) {
       this.textStyle.fontSize.sort()
-      this.fontSize = value != null && value != "" ? value : []
       if (this.textStyle.fontSize.indexOf(value) == -1) {
         this.textStyle.fontSize.unshift(value)
         this.textStyle.fontSize.sort()
       }
     },
-    handleBlur(value) {
-      this.fontSize = value
+    handleBlur(ev) {
+      console.log(ev)
+      let value = parseInt(ev.target.value)
+      if (typeof value !== "number" || isNaN(value)) {
+        value = this.$store.state.apply.pages[this.currentPageIndex].widgets[
+          this.currentWidgetIndex
+        ].attrs.fontSize
+        ev.target.value = value
+      }
+      this.$store.commit("updateWidgetAttrsPatch", { fontSize: value })
     },
     colorChange(color) {
       this.$store.commit("setGridColor", color)

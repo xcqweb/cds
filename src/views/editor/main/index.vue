@@ -1,6 +1,11 @@
 <template>
   <div class="view-con-wrap">
-    <div class="view-con" ref="viewCon" @scroll="handleScroll" v-if="isApplyInit">
+    <div
+      class="view-con"
+      ref="viewCon"
+      @scroll="handleScroll"
+      v-if="isApplyInit"
+    >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-pos">
@@ -11,7 +16,7 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <!-- 组合选择框 -->
-            <group-selection style="z-index:99999;"/>
+            <group-selection style="z-index:99999;" />
           </div>
           <div class="canvas-pos" :style="widgetConStyle">
             <div class="goup-list" @dragover.prevent @drop="drop">
@@ -39,7 +44,7 @@ import Hint from "@c/hint/"
 import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
-import arrayToTree from 'array-to-tree'
+import arrayToTree from "array-to-tree"
 import DragWidget from "./components/drag-widget"
 import GroupSelection from "@c/group-selection/"
 import components from "@/views/widgets/index"
@@ -60,7 +65,7 @@ export default {
     },
     widgets() {
       let widgets = this.currentPage.widgets
-      widgets = arrayToTree(widgets,{parentProperty:'pid',customID:'cid'})
+      widgets = arrayToTree(widgets, { parentProperty: "pid", customID: "cid" })
       return widgets
     },
     portConStyle() {
@@ -104,7 +109,7 @@ export default {
       }
     },
     isApplyInit(val) {
-      if(val) {
+      if (val) {
         this.init()
       }
     }

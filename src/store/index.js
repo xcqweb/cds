@@ -5,27 +5,27 @@ import config from "@/config"
 import { uuid } from "@u/uuid"
 import appApi from "@a/apply"
 import pageApi from "@a/page"
-import widgetApi from '@a/widget'
+import widgetApi from "@a/widget"
 import { cloneDeep } from "lodash"
 Vue.use(Vuex)
 function dealPageData(data) {
   return {
-    grid:data.grid,
-    pageId:data.pageId,
-    widgets:[],
-    width:data.width,
-    height:data.height,
-    widgetsInfo:data.widgetsInfo,
-    lines:data.lines,
-    sort:data.sort,
-    backgroundColor:data.backgroundColor || config.defaultPageColor,
+    grid: data.grid,
+    pageId: data.pageId,
+    widgets: [],
+    width: data.width,
+    height: data.height,
+    widgetsInfo: data.widgetsInfo,
+    lines: data.lines,
+    sort: data.sort,
+    backgroundColor: data.backgroundColor || config.defaultPageColor
   }
 }
 export default new Vuex.Store({
   state: {
-    isApplyInit:false,// 应用是否初始化成功
+    isApplyInit: false, // 应用是否初始化成功
     apply: {
-      pages: [],
+      pages: []
     },
     currentPageId: "", // 当前页面id
     currentWidgetId: "", // 当前激活的控件
@@ -56,10 +56,11 @@ export default new Vuex.Store({
       const tempRuler = { ...state.ruler, ...data }
       state.ruler = tempRuler
     },
-    addPage(state,data) {
+    addPage(state, data) {
       state.apply.pages.push(data)
     },
-    setCurrentPageWidgets(state, data) {// 设置当前页面信息
+    setCurrentPageWidgets(state, data) {
+      // 设置当前页面信息
       const currentPage = this.getters.currentPage
       currentPage.widgets = data
     },
@@ -84,11 +85,11 @@ export default new Vuex.Store({
     setHint(state, data) {
       state.hint = data
     },
-    setIsApplyInit(state,data) {
+    setIsApplyInit(state, data) {
       state.isApplyInit = data
     },
-    setApply(state,data) {
-      state.apply = {...state.apply,...data}
+    setApply(state, data) {
+      state.apply = { ...state.apply, ...data }
     },
     widgetAdd(state, data) {
       let {
@@ -177,7 +178,7 @@ export default new Vuex.Store({
         currentPage.widgets.splice(currentWidgetIndex, 1, {
           ...currentWidget,
           ...data,
-          isEdit:true,
+          isEdit: true
         })
       }
     },
@@ -186,14 +187,18 @@ export default new Vuex.Store({
       const currentPage = this.getters.currentPage
       selectWidgets.forEach(item => {
         let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
-        currentPage.widgets.splice(resIndex, 1, { ...item, ...data, isEdit:true})
+        currentPage.widgets.splice(resIndex, 1, {
+          ...item,
+          ...data,
+          isEdit: true
+        })
       })
     },
     updatePageAllWidgets(state, data) {
       // 更新画布上所有控件的信息
       const currentPage = this.getters.currentPage
       currentPage.widgets.forEach((item, index) => {
-        currentPage.widgets.splice(index, 1, { ...item, ...data, isEdit:true })
+        currentPage.widgets.splice(index, 1, { ...item, ...data, isEdit: true })
       })
     },
     widgetDel(state, widgets) {
@@ -213,129 +218,129 @@ export default new Vuex.Store({
     },
     setIsShowSelection(state, data) {
       state.isShowSelection = data
-    },
+    }
   },
   actions: {
     updateGroupSelection(store, data) {
-      store.commit('updateWidget',{active:true,cid:data.widget.cid})
+      store.commit("updateWidget", { active: true, cid: data.widget.cid })
       store.commit("setGroupSelection", data)
     },
-    initApply(store,applyId) {
-      store.dispatch('queryApply',applyId)
-      store.dispatch('queryAllPage',{applyId})
+    initApply(store, applyId) {
+      store.dispatch("queryApply", applyId)
+      store.dispatch("queryAllPage", { applyId })
     },
-    queryApply(store,id) {
-      appApi.query(id).then(res=>{
-        if(res.code === 0) {
-          const {data} = res
-          store.commit('setApply',{
+    queryApply(store, id) {
+      appApi.query(id).then(res => {
+        if (res.code === 0) {
+          const { data } = res
+          store.commit("setApply", {
             scale: +data.scale || config.scale,
             width: +data.width,
-            height: +data.height,
+            height: +data.height
           })
         }
       })
     },
-    queryAllPage(store,data) {
-      pageApi.queryAll(data).then(res=>{
-        if(res.code === 0) {
-          if(res.data.length) {
+    queryAllPage(store, data) {
+      pageApi.queryAll(data).then(res => {
+        if (res.code === 0) {
+          if (res.data.length) {
             const pageId = res.data[0].pageId
-            store.commit('setCurrentPageId',pageId)
-            store.dispatch('queryPage',pageId)
+            store.commit("setCurrentPageId", pageId)
+            store.dispatch("queryPage", pageId)
           } else {
-            store.dispatch('addPage',{appId:data.applyId,isInit:true})
+            store.dispatch("addPage", { appId: data.applyId, isInit: true })
           }
         }
       })
     },
-    addPage(store,{appId,isInit}) {
+    addPage(store, { appId, isInit }) {
       const params = {
         appId,
         ...config.defaultPage
       }
-      pageApi.add(params).then(res=>{
-        if(res.code === 0) {
-          store.commit('addPage',dealPageData(res.data))
-          if(isInit) {
-            store.commit('setIsApplyInit',true)
+      pageApi.add(params).then(res => {
+        if (res.code === 0) {
+          store.commit("addPage", dealPageData(res.data))
+          if (isInit) {
+            store.commit("setIsApplyInit", true)
           }
         }
       })
     },
-    queryPage(store,pageId) {
-      pageApi.query(pageId).then(res=>{
-        if(res.code === 0) {
-          store.commit('addPage',dealPageData(res.data))
-          store.dispatch('queryWidgets',pageId)
-          store.commit('setIsApplyInit',true)
+    queryPage(store, pageId) {
+      pageApi.query(pageId).then(res => {
+        if (res.code === 0) {
+          store.commit("addPage", dealPageData(res.data))
+          store.dispatch("queryWidgets", pageId)
+          store.commit("setIsApplyInit", true)
         }
       })
     },
-    queryWidgets(store,pageId) {
-      widgetApi.queryAll({pageId}).then(res=>{
-        if(res.code === 0) {
-          const {data} = res
+    queryWidgets(store, pageId) {
+      widgetApi.queryAll({ pageId }).then(res => {
+        if (res.code === 0) {
+          const { data } = res
           let widgets = []
-          if(data.length) {
-            data.forEach(item=>{
+          if (data.length) {
+            data.forEach(item => {
               widgets.push({
-                cid:item.widgetId,
-                name:item.widgetName,
-                cname:item.cname,
-                isEdit:item.isEdit,
-                copyNum:item.copyNum,
-                pid:item.pid,
-                active:false,
-                attrs:{
-                  width:item.width,
-                  height:item.height,
-                  left:item.left,
-                  top:item.top,
-                  rotate:item.rotate,
-                  zIndex:item.zIndex,
-                },
+                cid: item.widgetId,
+                name: item.widgetName,
+                cname: item.cname,
+                isEdit: item.isEdit,
+                copyNum: item.copyNum,
+                pid: item.pid,
+                active: false,
+                attrs: {
+                  width: item.width,
+                  height: item.height,
+                  left: item.left,
+                  top: item.top,
+                  rotate: item.rotate,
+                  zIndex: item.zIndex
+                }
               })
             })
           }
-          store.commit('setCurrentPageWidgets',widgets)
+          store.commit("setCurrentPageWidgets", widgets)
         }
       })
     },
     patchModifyWidgets(store) {
       const widgets = store.getters.currentPage.widgets
       let params = cloneDeep(widgets)
-      params = params.filter(item=>item.isEdit)
-      params = params.map(item=>{
+      params = params.filter(item => item.isEdit)
+      params = params.map(item => {
         return {
-          "cname":item.cname,
-          "copyNum": item.copyNum,
-          "isEdit": false,
-          "pageId": store.state.currentPageId,
-          "pid": item.pid,
-          "widgetId": item.cid,
-          "widgetName": item.name,
-          ...item.attrs,
+          cname: item.cname,
+          copyNum: item.copyNum,
+          isEdit: false,
+          pageId: store.state.currentPageId,
+          pid: item.pid,
+          widgetId: item.cid,
+          widgetName: item.name,
+          ...item.attrs
         }
       })
       const delWidgets = store.state.delWidgets
-      const delIds = delWidgets.map(item=>item.cid)
-      if(delIds.length) {
-        store.dispatch('patchDelWidgets',delIds)
+      const delIds = delWidgets.map(item => item.cid)
+      if (delIds.length) {
+        store.dispatch("patchDelWidgets", delIds)
       }
-      if(params.length) {
-        widgetApi.modifyPatch(params).then(res=>{
-          if(res.code === 0) {
-            console.log('保存成功')
+      if (params.length) {
+        widgetApi.modifyPatch(params).then(res => {
+          if (res.code === 0) {
+            console.log("保存成功")
           }
         })
       }
     },
-    patchDelWidgets(store,data) {
-      widgetApi.delPatch(data.join(',')).then(res=>{
-        if(res.code === 0) {
-          console.log('删除成功')
-          store.commit('setDelWidgets',[])
+    patchDelWidgets(store, data) {
+      widgetApi.delPatch(data.join(",")).then(res => {
+        if (res.code === 0) {
+          console.log("删除成功")
+          store.commit("setDelWidgets", [])
         }
       })
     }
@@ -345,20 +350,20 @@ export default new Vuex.Store({
     currentPageIndex: state => {
       let { apply, currentPageId } = state
       let resIndex = apply.pages.findIndex(item => item.id == currentPageId)
-      if(resIndex == -1) {
+      if (resIndex == -1) {
         resIndex = 0
       }
       return resIndex
     },
     currentPage: ({ apply }, getters) => {
-      if(getters.currentPageIndex != -1) {
+      if (getters.currentPageIndex != -1) {
         return apply.pages[getters.currentPageIndex]
       }
-      return 
+      return
     },
     currentWidget: (state, getters) => {
       const currentPage = getters.currentPage
-      if(currentPage) {
+      if (currentPage) {
         return currentPage.widgets.find(
           item => item.cid === state.currentWidgetId
         )
@@ -368,7 +373,7 @@ export default new Vuex.Store({
     currentWidgetIndex: (state, getters) => {
       const currentPage = getters.currentPage
       let res = -1
-      if(currentPage) {
+      if (currentPage) {
         res = currentPage.widgets.findIndex(
           item => item.cid === state.currentWidgetId
         )
@@ -376,7 +381,7 @@ export default new Vuex.Store({
       return res
     },
     selectWidgets: (state, getters) => {
-      if(getters.currentPage) {
+      if (getters.currentPage) {
         return getters.currentPage.widgets.filter(item => item.active)
       }
       return []

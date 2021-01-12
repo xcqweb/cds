@@ -142,8 +142,8 @@ export default {
       this.$store.commit("widgetDel")
     },
     saveApply() {
-      this.$store.dispatch('patchModifyWidgets')
-    },
+      this.$store.dispatch("patchModifyWidgets")
+    }
   }
 }
 </script>
