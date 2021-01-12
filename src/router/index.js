@@ -17,6 +17,12 @@ const routes = [
     name: "Editor",
     component: () =>
       import(/* webpackChunkName: "Editor" */ "@v/editor/index.vue")
+  },
+  {
+    path: "/preview-app",
+    name: "Preview",
+    component: () =>
+      import(/* webpackChunkName: "Preview" */ "@v/preview/index.vue")
   }
 ]
 

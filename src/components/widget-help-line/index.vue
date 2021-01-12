@@ -8,6 +8,8 @@
 </template>
 <script>
 const borderStyle = "dashed 1px #298df8"
+const lineWidth = 3000
+const lineLeft = -1000
 export default {
   name: "WidgetHelpLine",
   computed: {
@@ -17,98 +19,57 @@ export default {
     line1() {
       const currentWidget = this.$store.getters.currentWidget
       let top = 0
-      let left = 0
       if (currentWidget) {
-        const { left: widgetLeft, top: widgetTop } = currentWidget.attrs
-        left = widgetLeft
+        const {top:widgetTop} = currentWidget.attrs
         top = widgetTop
       }
       return {
-        border: borderStyle,
-        width: `${left}px`,
-        height: `${top}px`,
-        left: 0,
-        top: 0,
-        borderTop: "none",
-        borderLeft: "none"
+        borderTop: borderStyle,
+        width: `${lineWidth}px`,
+        height: `0`,
+        left: `${lineLeft}px`,
+        top: `${top}px`,
       }
     },
     line2() {
       const currentWidget = this.$store.getters.currentWidget
-      let top = 0
       let left = 0
-      let width = 0
+      const tempObj = this.line4
       if (currentWidget) {
-        const {
-          left: widgetLeft,
-          top: widgetTop,
-          width: widgetWidth
-        } = currentWidget.attrs
-        left = widgetLeft
-        top = widgetTop
-        width = widgetWidth
+        const {width} = currentWidget.attrs
+        left = parseInt(tempObj.left) + width
       }
       return {
-        border: borderStyle,
-        left: `${left + width}px`,
-        top: 0,
-        width: `calc(100% - ${left}px - ${width}px`,
-        height: `${top}px`,
-        borderTop: "none",
-        borderRight: "none"
+        ...tempObj,
+        left: `${left}px`,
       }
     },
     line3() {
       const currentWidget = this.$store.getters.currentWidget
       let top = 0
-      let left = 0
-      let height = 0
+      const tempObj = this.line1
       if (currentWidget) {
-        const {
-          left: widgetLeft,
-          top: widgetTop,
-          height: widgetHeight
-        } = currentWidget.attrs
-        left = widgetLeft
-        top = widgetTop
-        height = widgetHeight
+        const {height} = currentWidget.attrs
+        top = parseInt(tempObj.top) + height
       }
       return {
-        border: borderStyle,
-        left: 0,
-        top: `${top + height}px`,
-        width: `${left}px`,
-        height: `calc(100% - ${top}px - ${height}px)`,
-        borderBottom: "none",
-        borderLeft: "none"
+        ...tempObj,
+        top: `${top}px`,
       }
     },
     line4() {
       const currentWidget = this.$store.getters.currentWidget
-      let top = 0
       let left = 0
-      let width = 0
-      let height = 0
       if (currentWidget) {
-        const {
-          left: widgetLeft,
-          top: widgetTop,
-          width: widgetWidth,
-          height: widgetHeight
-        } = currentWidget.attrs
+        const {left:widgetLeft} = currentWidget.attrs
         left = widgetLeft
-        top = widgetTop
-        width = widgetWidth
-        height = widgetHeight
       }
       return {
-        border: borderStyle,
-        left: ` ${left + width}px`,
-        top: `${top + height}px`,
-        width: `calc(100% - ${left}px - ${width}px`,
-        height: `calc(100% - ${top}px - ${height}px)`,
-        borderRight: "none",
-        borderBottom: "none"
+        borderLeft: borderStyle,
+        width: `0`,
+        height: `${lineWidth}px`,
+        left: `${left}px`,
+        top: `${lineLeft}px`,
       }
     }
   },

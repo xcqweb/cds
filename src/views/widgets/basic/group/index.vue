@@ -9,13 +9,13 @@
   </div>
 </template>
 <script>
-import baseComponent from "@/mixins/base-editor"
+import baseWidget from "@/mixins/base-widget"
 import { findWidgetById } from "@u/deal"
 import config from "@/config"
 const cname = config.groupName
 export default {
   name: cname,
-  mixins: [baseComponent],
+  mixins: [baseWidget],
   computed: {
     styleGropObj() {
       return {

@@ -14,7 +14,6 @@
       :cornerActive="cornerActive"
       @handleLine="handleLine"
       @onCornerClick="handleCornerClick"
-      @hook:mounted="rulerMounted"
     />
   </div>
 </template>
@@ -97,12 +96,6 @@ export default {
     handleCornerClick() {
       this.$bus.$emit("handleCornerClick")
     },
-    rulerMounted() {
-      const el = document.querySelector(".corner")
-      if (el) {
-        el.setAttribute("title", "点我回到原点")
-      }
-    }
   }
 }
 </script>

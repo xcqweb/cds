@@ -8,7 +8,6 @@
     :y="widget.attrs.top"
     :r="widget.attrs.rotate"
     :z="widget.attrs.zIndex"
-    :parent="true"
     :active.sync="widget.active"
     @rotating="onRotate"
     @dragstart="onDragStart"
@@ -33,11 +32,12 @@
   </component>
 </template>
 <script>
-import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
+import VueDraggableResizable from "./vue-draggable-resizable"
 import { cloneDeep } from "lodash"
 import components from "@/views/widgets/index"
 import helpComputed from "@/mixins/help-computed"
 import helpDrag from "@/mixins/help-drag"
+import { isGroup } from "@u/deal"
 export default {
   name: "DragWidget",
   props: {
@@ -78,6 +78,9 @@ export default {
         const disLeft = left - this.startDragLeft
         const disTop = top - this.startDargTop
         this.selectWidgetsCopy.forEach(item => {
+          if(isGroup(item)) {
+            this.$store.commit("setGroupSelection", {show:false,widget:item})
+          }
           this.$store.commit("updateWidgetAttrs", {
             left: item.attrs.left + disLeft,
             top: item.attrs.top + disTop,

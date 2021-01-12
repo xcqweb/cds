@@ -77,6 +77,9 @@ export default new Vuex.Store({
     },
     setGroupSelection(state, data) {
       state.groupSelection = data
+      if(!state.currentWidgetId) {
+        state.currentWidgetId = data.widget.cid
+      }
     },
     setShowHelpLine(state, data) {
       state.showHelpLine = data

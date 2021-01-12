@@ -3,7 +3,16 @@
     <div class="view-con" ref="viewCon" @scroll="handleScroll" v-if="isApplyInit">
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
-          <div class="canvas-pos">
+          <div class="canvas-main" :style="widgetConStyle">
+            <div class="goup-list" @dragover.prevent @drop="drop">
+              <drag-widget
+                v-for="widget in widgets"
+                :key="widget.cid"
+                :widget="widget"
+              />
+            </div>
+          </div>
+          <div class="canvas-sub">
             <!-- 提示框 -->
             <hint />
             <!-- 框选组件 -->
@@ -12,15 +21,6 @@
             <widget-help-line />
             <!-- 组合选择框 -->
             <group-selection style="z-index:99999;"/>
-          </div>
-          <div class="canvas-pos" :style="widgetConStyle">
-            <div class="goup-list" @dragover.prevent @drop="drop">
-              <drag-widget
-                v-for="widget in widgets"
-                :key="widget.cid"
-                :widget="widget"
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@ import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import arrayToTree from 'array-to-tree'
-import DragWidget from "./components/drag-widget"
+import DragWidget from "@c/drag-resize/drag-widget"
 import GroupSelection from "@c/group-selection/"
 import components from "@/views/widgets/index"
 export default {
@@ -247,12 +247,16 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    .canvas-pos {
+    .canvas-main {
       position: absolute;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
+    }
+    .canvas-sub{
+      .canvas-main;
+      pointer-events: none;
     }
   }
   .goup-list {
@@ -262,6 +266,7 @@ export default {
   }
   .group-item {
     position: absolute;
+    cursor: move;
     &:hover::before {
       content: "";
       position: absolute;

@@ -7,13 +7,13 @@
   </div>
 </template>
 <script>
-import baseComponent from "@/mixins/base-editor"
+import baseWidget from "@/mixins/base-widget"
 import { validateImage } from "@u/image-helpers"
 let imgUrl = require("./logo.png")
 const cname = "GtImage"
 export default {
   name: cname,
-  mixins: [baseComponent],
+  mixins: [baseWidget],
   data() {
     return {
       src: imgUrl

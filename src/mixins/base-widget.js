@@ -12,13 +12,18 @@ export default {
   computed: {
     styleObj: {
       get() {
+        const {path} = this.$route
+        let preview = false
+        if(path.includes('preview-app')) {
+          preview = true
+        }
         return {
           position: "absolute",
           width: `${this.width}px`,
           height: `${this.height}px`,
-          left: `0`,
-          top: `0`,
-          transform: `rotate(0deg)`,
+          left: preview ? `${this.left}px` : `0`,
+          top: preview ? `${this.top}px` : `0`,
+          transform: preview ? `rotate(${this.rotate}deg)` : `rotate(0deg)`,
           zIndex: `${this.zIndex}`
         }
       },

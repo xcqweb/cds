@@ -8,7 +8,6 @@
     :y="widget.attrs.top"
     :r="widget.attrs.rotate"
     :z="widget.attrs.zIndex"
-    :parent="true"
     :active.sync="widget.active"
     @rotating="onRotate"
     @dragging="onDrag"
@@ -20,6 +19,7 @@
     @activated="onActivated"
     @deactivated="onDeactivated"
     @dblclick.native="dblclick"
+    style="pointer-events:auto;"
   />
 </template>
 <script>

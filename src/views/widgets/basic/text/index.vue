@@ -4,11 +4,11 @@
   </div>
 </template>
 <script>
-import baseComponent from "@/mixins/base-editor"
+import baseWidget from "@/mixins/base-widget"
 const cname = "GtText"
 export default {
   name: cname,
-  mixins: [baseComponent],
+  mixins: [baseWidget],
   data() {
     return {}
   },

@@ -16,6 +16,7 @@
     <button @click="group">group</button>
     <button @click="ungroup">ungroup</button>
     <button @click="saveApply">saveApply</button>
+    <button @click="preview">preview</button>
     <!--调整控件位置-->
     <adjuist-position></adjuist-position>
   </div>
@@ -143,6 +144,12 @@ export default {
     },
     saveApply() {
       this.$store.dispatch('patchModifyWidgets')
+    },
+    preview() {
+      const url = this.$router.resolve({
+        path: "/preview-app",
+      })
+      window.open(url.href,'_blank')
     },
   }
 }
