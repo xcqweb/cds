@@ -20,7 +20,8 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <!-- 组合选择框 -->
-            <group-selection style="z-index:99999;" />
+            <group-selection style="z-index:1000;" />
+            <contextmenu />
           </div>
         </div>
       </div>
@@ -40,6 +41,7 @@ import arrayToTree from "array-to-tree"
 import DragWidget from "@c/drag-resize/drag-widget"
 import GroupSelection from "@c/group-selection/"
 import components from "@/views/widgets/index"
+import Contextmenu from './components/contextmenu'
 export default {
   name: "EditorMain",
   mixins: [helpComputed],
@@ -49,6 +51,7 @@ export default {
     Hint,
     DragWidget,
     GroupSelection,
+    Contextmenu,
     ...components
   },
   computed: {
