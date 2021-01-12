@@ -4,7 +4,7 @@
     <div class="main-con">
       <leftbar />
       <editor-main v-if="isInit" />
-      <div v-else>loading...</div>
+      <Loading v-else/>
       <sub-content />
       <rightbar />
     </div>
@@ -17,6 +17,7 @@ import Toolbar from "./header"
 import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
+import Loading from '@c/loading'
 export default {
   name: "EditorIndex",
   components: {
@@ -24,7 +25,8 @@ export default {
     Toolbar,
     Leftbar,
     Rightbar,
-    SubContent
+    SubContent,
+    Loading
   },
   data() {
     return {
