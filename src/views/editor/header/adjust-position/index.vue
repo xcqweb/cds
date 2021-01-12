@@ -1,18 +1,25 @@
 <template>
-  <div>
-    <!--基本操作-->
-    <div>调整位置</div>
-    <div>
+  <!--基本操作-->
+  <a-menu slot="overlay">
+    <a-menu-item>
       <button @click="changePosition('left')">left</button>
+    </a-menu-item>
+    <a-menu-item>
       <button @click="changePosition('center')">center</button>
+    </a-menu-item>
+    <a-menu-item>
       <button @click="changePosition('right')">right</button>
-    </div>
-    <div>
+    </a-menu-item>
+    <a-menu-item>
       <button @click="changePosition('top')">top</button>
+    </a-menu-item>
+    <a-menu-item>
       <button @click="changePosition('middle')">middle</button>
+    </a-menu-item>
+    <a-menu-item>
       <button @click="changePosition('bottom')">bottom</button>
-    </div>
-  </div>
+    </a-menu-item>
+  </a-menu>
 </template>
 
 <script>

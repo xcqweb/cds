@@ -82,6 +82,9 @@ export default {
   background: rgb(255, 255, 255);
   border-right: 1px solid rgb(219, 219, 219);
   z-index: 4;
+  .ant-tabs .ant-tabs-left-content {
+    padding-left: 0px;
+  }
   .widget-con {
     flex: 1 1 0%;
     width: 100%;

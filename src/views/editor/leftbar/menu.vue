@@ -3,13 +3,17 @@
     <div style="">
       <div class="ge-menu ge-fx">
         <span class="left">页面</span>
-        <a @click="add"> + </a>
+        <a class="pa10" @click="add"> + </a>
       </div>
-      <div class="ge-menu" v-for="item in menuList">
+      <div class="ge-menu pa10" v-for="item in menuList" :key="item.name">
         <div class="ge-re">
           <div>{{ item.name }}</div>
           <div v-if="item.children">
-            <div v-for="child in item.children" class="ge-menu">
+            <div
+              v-for="child in item.children"
+              class="ge-menu"
+              :key="child.name"
+            >
               <div class="ge-re">
                 <span>{{ child.name }}</span>
                 <div class="ge-ab">
@@ -63,18 +67,22 @@ export default {
               iconType: "italic"
             }
           ]
-        },
-        {
-          name: "关于",
-          url: "http://192.168.1.100:9999/about",
-          iconType: "info"
         }
       ]
     }
   },
   methods: {
-    open(item) {},
-    add() {}
+    open(item) {
+      console.log(item)
+    },
+    add() {
+      let obj = {
+        name: "关于",
+        url: "http://192.168.1.100:9999",
+        iconType: "laptop"
+      }
+      this.menuList.push(obj)
+    }
   }
 }
 </script>
@@ -91,17 +99,31 @@ export default {
   padding: 6px;
   background: rgb(232, 236, 236);
   vertical-align: middle;
-  margin-bottom: 6px;
 }
 li {
   list-style-type: none;
 }
 .ge-re {
   position: relative;
+  background: #f2f2f2;
+  padding: 4px;
+  cursor: pointer;
+}
+.ge-re:active,
+.ge-re:hover,
+.ge-re:focus {
+  color: #1890ff;
 }
 .ge-ab {
   position: absolute;
   right: 10px;
   top: -4px;
+  cursor: pointer;
+}
+.pa10 {
+  padding: 0 10px;
+}
+.active {
+  color: #1890ff;
 }
 </style>
