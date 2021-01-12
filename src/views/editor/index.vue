@@ -1,7 +1,6 @@
 <template>
   <div class="app-con">
     <toolbar />
-    <tools />
     <div class="main-con">
       <leftbar />
       <editor-main v-if="isInit" />
@@ -19,7 +18,7 @@ import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
 import Loading from '@c/loading' 
-import tools from "./header/tools"export default {
+export default {
   name: "EditorIndex",
   components: {
     EditorMain,
@@ -27,7 +26,6 @@ import tools from "./header/tools"export default {
     Leftbar,
     Rightbar,
     SubContent,
-    tools,
     Loading
   },
   data() {

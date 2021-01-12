@@ -40,8 +40,8 @@ export default {
   position: relative;
   width: 230px;
   display: flex;
-  box-shadow: rgba(39, 54, 78, 0.11) 0px -2px 10px 0px;
   z-index: 4;
+  box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
 }
 .ge-mt {
   padding: 10px;

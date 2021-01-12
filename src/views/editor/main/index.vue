@@ -225,7 +225,7 @@ export default {
     position: absolute;
     top: 21px;
     right: 230px;
-    left: calc(210px + 21px);
+    left: calc(250px + 21px);
     bottom: 0;
     overflow: auto;
   }

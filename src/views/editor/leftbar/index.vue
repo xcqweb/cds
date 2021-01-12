@@ -1,5 +1,5 @@
 <template>
-  <div class="left-con" style="width: 280px">
+  <div class="left-con">
     <div>
       <a-tabs tab-position="left">
         <a-tab-pane key="1">
@@ -74,7 +74,7 @@ export default {
 
 <style lang="less">
 .left-con {
-  width: 209px;
+  width: 249px;
   box-sizing: content-box;
   position: relative;
   display: flex;
