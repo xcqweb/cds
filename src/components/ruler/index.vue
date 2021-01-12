@@ -62,16 +62,6 @@ export default {
         height: height + "px",
         transform: `scale(${this.scale})`
       }
-    },
-    isApplyInit() {
-      return this.$store.state.isApplyInit
-    }
-  },
-  watch: {
-    isApplyInit(val) {
-      if (val) {
-        this.init()
-      }
     }
   },
   data() {
@@ -85,9 +75,6 @@ export default {
     this.$bus.$off()
   },
   methods: {
-    init() {
-      this.$bus.$emit("handleCornerClick")
-    },
     handleLine(lines) {
       this.lines = lines
     },

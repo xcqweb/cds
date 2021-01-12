@@ -25,7 +25,7 @@
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import { cloneDeep } from "lodash"
-import {findWidgetChildren, pointIsInWidget } from "@u/deal"
+import { findWidgetChildren, pointIsInWidget } from "@u/deal"
 import helpDrag from "@/mixins/help-drag"
 export default {
   name: "GroupSelection",

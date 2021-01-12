@@ -1,11 +1,6 @@
 <template>
   <div class="view-con-wrap">
-    <div
-      class="view-con"
-      ref="viewCon"
-      @scroll="handleScroll"
-      v-if="isApplyInit"
-    >
+    <div class="view-con" ref="viewCon" @scroll="handleScroll">
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-main" :style="widgetConStyle">
@@ -29,9 +24,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div v-else>
-      loading...
     </div>
   </div>
 </template>
@@ -60,9 +52,6 @@ export default {
     ...components
   },
   computed: {
-    isApplyInit() {
-      return this.$store.state.isApplyInit
-    },
     widgets() {
       let widgets = this.currentPage.widgets
       widgets = arrayToTree(widgets, { parentProperty: "pid", customID: "cid" })
@@ -107,11 +96,6 @@ export default {
       if (val > 1) {
         this.$store.commit("setShowHelpLine", false)
       }
-    },
-    isApplyInit(val) {
-      if (val) {
-        this.init()
-      }
     }
   },
   data() {
@@ -119,12 +103,13 @@ export default {
   },
   created() {
     this.$bus.$on("handleCornerClick", () => {
-      this.centerView('aa')
+      this.centerView()
     })
     window.addEventListener("resize", this.resizeFun)
   },
   mounted() {
     this.$nextTick(() => {
+      this.init()
       undoManager.saveApplyChange()
     })
   },
@@ -153,10 +138,9 @@ export default {
       this.dealRulerSize()
       this.handleScroll()
     }, 100),
-    centerView(str) {
+    centerView() {
       // 居中视图
       this.$nextTick(() => {
-        console.log(ele,str)
         const ele = this.$refs.viewCon
         const { centerX, centerY } = this.viewProps()
         ele.scrollLeft = centerX

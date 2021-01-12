@@ -80,3 +80,40 @@ export const pointIsInWidget = (point, widget, pWidget) => {
 export const findWidgetById = (widgets, id) => {
   return widgets.find(item => item.cid === id)
 }
+export function dealPageData(data) {
+  const { grid, lines, backgroundColor, widgetsInfo } = config.defaultPage
+  return {
+    grid: data.grid || grid,
+    pageId: data.pageId,
+    widgets: [],
+    width: data.width,
+    height: data.height,
+    widgetsInfo: data.widgetsInfo || widgetsInfo,
+    lines: data.lines || lines,
+    sort: data.sort,
+    backgroundColor: data.backgroundColor || backgroundColor
+  }
+}
+export function dealWidgetData(data) {
+  let result = []
+  data.forEach(item => {
+    result.push({
+      cid: item.widgetId,
+      name: item.widgetName,
+      cname: item.cname,
+      isEdit: item.isEdit,
+      copyNum: item.copyNum,
+      pid: item.pid,
+      active: false,
+      attrs: {
+        width: item.width,
+        height: item.height,
+        left: item.left,
+        top: item.top,
+        rotate: item.rotate,
+        zIndex: item.zIndex
+      }
+    })
+  })
+  return result
+}

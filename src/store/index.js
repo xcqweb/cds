@@ -7,23 +7,10 @@ import appApi from "@a/apply"
 import pageApi from "@a/page"
 import widgetApi from "@a/widget"
 import { cloneDeep } from "lodash"
+import { dealPageData, dealWidgetData } from "@u/deal"
 Vue.use(Vuex)
-function dealPageData(data) {
-  return {
-    grid: data.grid,
-    pageId: data.pageId,
-    widgets: [],
-    width: data.width,
-    height: data.height,
-    widgetsInfo: data.widgetsInfo,
-    lines: data.lines,
-    sort: data.sort,
-    backgroundColor: data.backgroundColor || config.defaultPageColor
-  }
-}
 export default new Vuex.Store({
   state: {
-    isApplyInit: false, // 应用是否初始化成功
     apply: {
       pages: []
     },
@@ -87,9 +74,6 @@ export default new Vuex.Store({
     },
     setHint(state, data) {
       state.hint = data
-    },
-    setIsApplyInit(state, data) {
-      state.isApplyInit = data
     },
     setApply(state, data) {
       state.apply = { ...state.apply, ...data }
@@ -228,9 +212,23 @@ export default new Vuex.Store({
       store.commit("updateWidget", { active: true, cid: data.widget.cid })
       store.commit("setGroupSelection", data)
     },
-    initApply(store, applyId) {
+    async initApply(store, applyId) {
       store.dispatch("queryApply", applyId)
-      store.dispatch("queryAllPage", { applyId })
+      const allPage = await pageApi.queryAll({ applyId })
+      const homePage = allPage.data[0]
+      const { pageId } = homePage
+      return new Promise(resolve => {
+        const p1 = pageApi.query(pageId)
+        const p2 = widgetApi.queryAll({ pageId })
+        Promise.all([p1, p2]).then(res => {
+          const pageData = res[0].data
+          const widgetData = res[1].data
+          store.commit("addPage", dealPageData(pageData))
+          store.commit("setCurrentPageId", pageId)
+          store.commit("setCurrentPageWidgets", dealWidgetData(widgetData))
+          resolve()
+        })
+      })
     },
     queryApply(store, id) {
       appApi.query(id).then(res => {
@@ -241,70 +239,6 @@ export default new Vuex.Store({
             width: +data.width,
             height: +data.height
           })
-        }
-      })
-    },
-    queryAllPage(store, data) {
-      pageApi.queryAll(data).then(res => {
-        if (res.code === 0) {
-          if (res.data.length) {
-            const pageId = res.data[0].pageId
-            store.commit("setCurrentPageId", pageId)
-            store.dispatch("queryPage", pageId)
-          } else {
-            store.dispatch("addPage",data.applyId)
-          }
-        }
-      })
-    },
-    addPage(store, appId) {
-      const params = {
-        appId,
-        ...config.defaultPage
-      }
-      pageApi.add(params).then(res => {
-        if (res.code === 0) {
-          store.commit("addPage", dealPageData(res.data))
-          store.dispatch('queryPage',res.data.pageId)
-        }
-      })
-    },
-    queryPage(store, pageId) {
-      pageApi.query(pageId).then(res => {
-        if (res.code === 0) {
-          store.commit("addPage", dealPageData(res.data))
-          store.dispatch("queryWidgets", pageId)
-          store.commit("setIsApplyInit", true)
-        }
-      })
-    },
-    queryWidgets(store, pageId) {
-      widgetApi.queryAll({ pageId }).then(res => {
-        if (res.code === 0) {
-          const { data } = res
-          let widgets = []
-          if (data.length) {
-            data.forEach(item => {
-              widgets.push({
-                cid: item.widgetId,
-                name: item.widgetName,
-                cname: item.cname,
-                isEdit: item.isEdit,
-                copyNum: item.copyNum,
-                pid: item.pid,
-                active: false,
-                attrs: {
-                  width: item.width,
-                  height: item.height,
-                  left: item.left,
-                  top: item.top,
-                  rotate: item.rotate,
-                  zIndex: item.zIndex
-                }
-              })
-            })
-          }
-          store.commit("setCurrentPageWidgets", widgets)
         }
       })
     },

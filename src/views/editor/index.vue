@@ -3,7 +3,8 @@
     <toolbar />
     <div class="main-con">
       <leftbar />
-      <editor-main />
+      <editor-main v-if="isInit" />
+      <div v-else>loading...</div>
       <sub-content />
       <rightbar />
     </div>
@@ -16,7 +17,6 @@ import Toolbar from "./header"
 import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
-import api from '@a/apply'
 export default {
   name: "EditorIndex",
   components: {
@@ -27,14 +27,17 @@ export default {
     SubContent
   },
   data() {
-    return {}
+    return {
+      isInit: false
+    }
   },
   created() {
     const applyId = this.$route.query.appId
-    this.$store.dispatch("initApply",applyId)
+    this.$store.dispatch("initApply", applyId).then(() => {
+      this.isInit = true
+    })
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 <style lang="less">

@@ -8,15 +8,10 @@
           :is="item.cname"
           v-bind="item.attrs"
         />
-        <component
-          v-else
-          :key="item.widgetId"
-          :is="item.cname"
-          v-bind="item.attrs"
-        >
+        <component v-else :key="item.cid" :is="item.cname" v-bind="item.attrs">
           <component
             v-for="d in item.children"
-            :key="d.widgetId"
+            :key="d.cid"
             :is="d.cname"
             v-bind="d.attrs"
           />
@@ -30,6 +25,7 @@ import components from "@/views/widgets/index"
 import pageApi from "@a/page"
 import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
+import { dealWidgetData } from "@u/deal"
 export default {
   name: "Preview",
   components: {
@@ -60,25 +56,13 @@ export default {
     queryWidgets(pageId) {
       widgetApi.queryAll({ pageId }).then(res => {
         if (res.code === 0) {
-          const tempArr = res.data.map(item => {
-            return {
-              widgetId: item.widgetId,
-              name: item.widgetName,
-              cname: item.cname,
-              pid: item.pid,
-              attrs: {
-                width: item.width,
-                height: item.height,
-                left: item.left,
-                top: item.top,
-                rotate: item.rotate,
-                zIndex: item.zIndex
-              }
-            }
-          })
+          let tempArr = []
+          if (res.data.length) {
+            tempArr = dealWidgetData(res.data)
+          }
           this.widgets = arrayToTree(tempArr, {
             parentProperty: "pid",
-            customID: "widgetId"
+            customID: "cid"
           })
         }
       })

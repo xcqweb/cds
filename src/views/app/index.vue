@@ -152,7 +152,7 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields()
     },
-    handleOk(e) {
+    handleOk() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           const params = {

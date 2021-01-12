@@ -230,9 +230,9 @@ export default {
     this.elBase.removeEventListener("mouseup", this.handleUp, true)
 
     // touch events bindings removed
-    this.elBase.addEventListener("touchmove", this.handleMove, true)
-    this.elBase.addEventListener("touchend touchcancel", this.deselect, true)
-    this.elBase.addEventListener("touchstart", this.handleUp, true)
+    this.elBase.removeEventListener("touchmove", this.handleMove, true)
+    this.elBase.removeEventListener("touchend touchcancel", this.deselect, true)
+    this.elBase.removeEventListener("touchstart", this.handleUp, true)
   },
 
   data() {
@@ -310,34 +310,7 @@ export default {
       }
     },
     deselect(e) {
-      const { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
-      this.lastMouseX = mouseX
-      this.lastMouseY = mouseY
-      const target = e.target || e.srcElement
-      const classList = target.classList
-      /*  if (
-        this.enabled &&
-        (classList.contains('view-con-wrap') ||
-          classList.contains('viewport-con'))
-      ) {
-        this.enabled = false
-        this.$emit('deactivated')
-        this.$emit('update:active', false)
-      }*/
-
-      if (
-        this.enabled &&
-        (classList.contains("viewport-con") ||
-          classList.contains("view-con") ||
-          classList.contains("goup-list"))
-      ) {
-        console.log(2222)
-        this.enabled = false
-        this.$emit("deactivated")
-        this.$emit("update:active", false)
-      }
-
-      /* let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
+      let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
 
       this.startDownX = mouseX
       this.startDownY = mouseY
@@ -367,7 +340,7 @@ export default {
           this.$emit("deactivated")
           this.$emit("update:active", false)
         }
-      }*/
+      }
     },
     handleResizeDown(handle) {
       let fixed = {
