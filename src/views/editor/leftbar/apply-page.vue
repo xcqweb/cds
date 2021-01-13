@@ -16,7 +16,7 @@
                 <svg-icon icon-class="page-icon" class-name="icon" />
               </div>
               <div class="name" :class="{'is-eidt':page.isEdit}">
-                <input v-if="page.isEdit" v-model="page.pageName" v-click-out-side="()=>hideEdit(page.pageName)"/>
+                <input v-if="page.isEdit" v-model="page.pageName" v-focus @blur="hideEdit(page)"/>
                 <template v-else>{{page.pageName}}</template>
               </div>
               <div class="actions" v-if="!page.isEdit">
@@ -71,23 +71,34 @@ export default {
     changePage({pageId}) {
       this.$store.commit('setCurrentPageId',pageId)
     },
-    hideEdit(pageName) {
-      this.$store.commit('setPageInfo',{isEdit:false,pageName})
-      this.savePage()
+    hideEdit({pageName,pageId}) {
+      console.log('click--out')
+      this.$store.commit('setPageInfo',{pageName})
+      this.savePage(pageId)
     },
-    savePage() {
+    blur() {
+      console.log('wey-----')
+    },
+    savePage(pageId) {
       let method
-      let params = {...this.currentPage,appId:this.applyId}
+      let params
       let msg = ''
       if(this.isAdd) {
         method = 'add'
         msg = `新建页面成功`
+        params = {...this.currentPage,appId:this.applyId,pageId:''}
       } else {
         method = 'modify'
-         msg = `页面名称修改成功`
+        msg = `页面名称修改成功`
+        params = {...this.currentPage,appId:this.applyId}
       }
       pageApi[method](params).then(res=>{
         if(res.code === 0) {
+          let resObj = {pageId,isEdit:false}
+          if(this.isAdd) {
+            resObj = {...resObj,newPageId:res.data.pageId}
+          }
+          this.$store.commit('setPageInfo',resObj)
           this.$message.success(msg)
         }
       })
@@ -97,7 +108,7 @@ export default {
       const len = this.pages.length + 1
       this.$store.commit('setCurrentPageId','')
       this.$store.commit('addPage',{
-        pageId:'',
+        pageId:`page-${len}`,
         width,
         height,
         sort:len,

@@ -58,6 +58,10 @@ export default new Vuex.Store({
         page = state.apply.pages.find(item=>item.pageId === data.pageId)
       }
       const pageIndex = state.apply.pages.findIndex(item=>item.pageId === page.pageId)
+      if(data.newPageId) {// 更新pageId
+        data.pageId = data.newPageId
+        delete data.newPageId
+      }
       state.apply.pages.splice(pageIndex,1,{...page,...data})
     },
     setCurrentPageWidgets(state, data) {
