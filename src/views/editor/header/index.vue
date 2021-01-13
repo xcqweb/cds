@@ -1,6 +1,8 @@
 <template>
-  <div class="toolbar-con">
-    toolbar
+  <div>
+    <div class="toolbar-con ge-colorg">
+      toolbar
+    </div>
   </div>
 </template>
 
@@ -8,6 +10,12 @@
 export default {}
 </script>
 <style lang="less">
+.ge-colorw {
+  background: #ffffff;
+}
+.ge-colorg {
+  background: #f3f0f0;
+}
 .toolbar-con {
   position: relative;
   height: 50px;

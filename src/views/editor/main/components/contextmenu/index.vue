@@ -1,62 +1,68 @@
 <template>
   <div class="contextmenu-con" :style="styleObj" v-if="showMenu">
     <ul v-click-out-side="hideMenu">
-      <template v-for="item in list"> 
+      <template v-for="item in list">
         <li :key="item.name" @click="dealClick(item.type)" v-if="item.show">
           <a>
-            <span>{{item.name}}</span>
+            <span>{{ item.name }}</span>
             <div class="shortfont" v-if="item.kbd">
               <kbd v-for="d in item.kbd.split(',')">
-                {{d}}
+                {{ d }}
               </kbd>
             </div>
           </a>
         </li>
-        <div class="divider" v-if="item.divide&&item.show"></div>
+        <div class="divider" v-if="item.divide && item.show"></div>
       </template>
     </ul>
   </div>
 </template>
 <script>
 import helpComputed from "@/mixins/help-computed"
-import key from 'keymaster'
+import key from "keymaster"
 export default {
-  name:'Contextmenu',
+  name: "Contextmenu",
   mixins: [helpComputed],
-  computed:{
+  computed: {
     selectWidgetsCount() {
       return this.selectWidgets.length
     }
   },
   data() {
     return {
-      list:[
-        {name:'复制',kbd:'Ctrl,+,C',type:'copy',show:false},
-        {name:'剪切',kbd:'Ctrl,+,X',type:'cut',show:false},
-        {name:'粘贴',kbd:'Ctrl,+,V',type:'paste',show:false,divide:'true'},
-        {name:'置顶',kbd:'',type:'top',show:false},
-        {name:'置底',kbd:'',type:'bottom',show:false,divide:'true'},
-        {name:'组合',kbd:'',type:'group',show:false},
-        {name:'打散',kbd:'',type:'ungroup',show:false,divide:'true'},
-        {name:'删除',kbd:'',type:'ungroup',show:false},
+      list: [
+        { name: "复制", kbd: "Ctrl,+,C", type: "copy", show: false },
+        { name: "剪切", kbd: "Ctrl,+,X", type: "cut", show: false },
+        {
+          name: "粘贴",
+          kbd: "Ctrl,+,V",
+          type: "paste",
+          show: false,
+          divide: "true"
+        },
+        { name: "置顶", kbd: "", type: "top", show: false },
+        { name: "置底", kbd: "", type: "bottom", show: false, divide: "true" },
+        { name: "组合", kbd: "", type: "group", show: false },
+        { name: "打散", kbd: "", type: "ungroup", show: false, divide: "true" },
+        { name: "删除", kbd: "", type: "ungroup", show: false }
       ],
-      styleObj:{},
-      showMenu:false,
+      styleObj: {},
+      showMenu: false
     }
   },
   mounted() {
-    this.ele = document.querySelector('.view-con')
-    this.ele.addEventListener('contextmenu',this.onContextmenu)
-    this.list.forEach(item=>{
-      if(item.kbd) {
-        key(this.dealKbd(item.kbd),this.copy)
+    this.ele = document.querySelector(".view-con")
+    this.ele.addEventListener("contextmenu", this.onContextmenu)
+    this.list.forEach(item => {
+      if (item.kbd) {
+        key(this.dealKbd(item.kbd), this.copy)
       }
     })
   },
-   beforeDestroy() {
+  beforeDestroy() {
     this.ele.removeEventListener("contextmenu", this.onContextmenu)
-    this.list.forEach(item=>{
-      if(item.kbd) {
+    this.list.forEach(item => {
+      if (item.kbd) {
         key.unbind(this.dealKbd(item.kbd))
       }
     })
@@ -64,67 +70,67 @@ export default {
   methods: {
     onContextmenu(evt) {
       evt.preventDefault()
-      const {clientX,clientY} = evt
+      const { clientX, clientY } = evt
       this.styleObj = {
         left: `${clientX}px`,
-        top: `${clientY}px`,
+        top: `${clientY}px`
       }
-      if(!this.selectWidgetsCount) {
-        this.dealMenuInclude(['paste'])
-      }else {
+      if (!this.selectWidgetsCount) {
+        this.dealMenuInclude(["paste"])
+      } else {
         this.dealMenuIncludeAll()
       }
       this.showMenu = true
     },
     dealMenuInclude(types) {
-      this.list.forEach(item=>{
-        this.$set(item,'show',types.includes(item.type))
+      this.list.forEach(item => {
+        this.$set(item, "show", types.includes(item.type))
       })
     },
     dealMenuExclude(types) {
-      this.list.forEach(item=>{
-        this.$set(item,'show',!types.includes(item.type))
+      this.list.forEach(item => {
+        this.$set(item, "show", !types.includes(item.type))
       })
     },
     dealMenuIncludeAll() {
-       this.list.forEach(item=>{
-        this.$set(item,'show',true)
+      this.list.forEach(item => {
+        this.$set(item, "show", true)
       })
     },
     dealKbd(kbd) {
-      const arr = kbd.split(',')
+      const arr = kbd.split(",")
       let res = []
-      arr.forEach(d=>{
-        if(d != "+") {
+      arr.forEach(d => {
+        if (d != "+") {
           d = d.charAt(0).toLowerCase() + d.slice(1)
         }
         res.push(d)
       })
-      return res.join('')
+      return res.join("")
     },
     hideMenu() {
       this.showMenu = false
     },
     dealClick(type) {
-      switch(type) {
-        case 'copy':
+      switch (type) {
+        case "copy":
           this.copy()
-        break
+          break
       }
       this.hideMenu()
     },
     copy() {
-      console.log('--copy--')
-    },
-  },
+      console.log("--copy--")
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
-.contextmenu-con{
-  z-index:2000;
-  position:fixed;
+.contextmenu-con {
+  z-index: 2000;
+  position: fixed;
   pointer-events: auto;
-  ul{
+  ul {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -140,31 +146,31 @@ export default {
     list-style: none;
   }
   li {
-    a{
+    a {
       height: 28px;
       padding-left: 16px;
       padding-right: 14px;
       display: flex;
       align-items: center;
       color: rgb(65, 80, 88);
-      .shortfont{
+      .shortfont {
         margin-left: auto;
       }
-      kbd{
+      kbd {
         display: inline-block;
         text-align: center;
         min-width: 12px;
         color: rgb(141, 158, 167);
       }
-      &:hover{
+      &:hover {
         color: rgb(41, 141, 248);
       }
     }
-    &:hover{
+    &:hover {
       background: rgba(0, 0, 0, 0.04);
     }
   }
-  .divider{
+  .divider {
     margin: 4px 0px;
     border-top: 1px solid rgb(237, 237, 237);
   }

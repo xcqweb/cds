@@ -1,18 +1,20 @@
 <template>
-  <div class="add-image-widget" :style="styleObj">
-    <input ref="input" type="file" style="display:none" @change="selectImg" />
-    <div @click="selectImgHandler" v-if="src" :style="styleObj">
+  <div>
+    <upload-image @addImage="addImage" :styleObj="styleObj">
       <img :src="src" alt="" />
-    </div>
+    </upload-image>
   </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
-import { validateImage } from "@u/image-helpers"
-let imgUrl = require("./logo.png")
+import uploadImage from "@c/upload"
 const cname = "GtImage"
+let imgUrl = require("./logo.png")
 export default {
   name: cname,
+  components: {
+    uploadImage
+  },
   mixins: [baseWidget],
   data() {
     return {
@@ -22,27 +24,11 @@ export default {
   computed: {},
   created() {},
   methods: {
-    selectImgHandler() {
-      this.$refs.input.click()
-    },
-    async selectImg({ currentTarget: inputNode }) {
-      try {
-        const file = inputNode.files
-        const imgFile = file && file[0]
-        await validateImage(imgFile)
-        const src = ""
-        this.addImage({ src })
-      } catch (e) {
-        console.error(e)
-      } finally {
-        inputNode.value = ""
-      }
-    },
-    addImage({ src }) {
+    addImage(imgFile) {
       //base的图片路径
-      console.log(src)
-      this.src = src
-      // this.addItem(new ImageWidget({ wState: { src }}))
+      console.log(imgFile)
+      this.src = imgFile
+      this.addItem({ wState: { imgFile } })
     }
   }
 }

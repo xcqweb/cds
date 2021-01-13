@@ -2,28 +2,22 @@
   <!--基本操作-->
   <a-menu slot="overlay">
     <a-menu-item>
-      <svg-icon icon-class="left" />
-      <span  @click="changePosition('left')">左对齐</span>
+      <button @click="changePosition('left')">left</button>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="right" />
-      <span  @click="changePosition('right')">右对齐</span>
+      <button @click="changePosition('center')">center</button>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="tc" />
-      <span  @click="changePosition('top')">上对齐</span>
+      <button @click="changePosition('right')">right</button>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="bc" />
-      <span  @click="changePosition('bottom')">下对齐</span>
+      <button @click="changePosition('top')">top</button>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="center" />
-      <span  @click="changePosition('center')">水平居中对齐</span>
+      <button @click="changePosition('middle')">middle</button>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="middle" />
-      <span  @click="changePosition('middle')">垂直居中对齐</span>
+      <button @click="changePosition('bottom')">bottom</button>
     </a-menu-item>
   </a-menu>
 </template>
@@ -118,24 +112,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.ant-menu-vertical > .ant-menu-item {
-  height: 28px;
-  line-height: 28px;
-  width: 112px;
-  padding: 0 6px;
-}
-.ant-menu-vertical > .ant-menu-item:active, .ant-menu-vertical > .ant-menu-item:hover{
-  background: #F0F1F3;
-}
-.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background-color: #F0F1F3;
-}
-.ant-menu-vertical .ant-menu-item:not(:last-child){
-  margin-bottom: 0px;
-}
-.ant-menu-item{
-  white-space: unset;
-}
-
-</style>
+<style scoped></style>
