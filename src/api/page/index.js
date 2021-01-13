@@ -5,10 +5,16 @@ const queryAll = params =>
 
 const add = params => instance.post(`/api/ruban-cds/studio/pageInfo/`, params)
 
+const modify = params => instance.put(`/api/ruban-cds/studio/pageInfo/`, params)
+
 const query = id => instance.get(`/api/ruban-cds/studio/pageInfo/${id}`)
+
+const del = id => instance.delete(`/api/ruban-cds/studio/pageInfo/${id}`)
 
 export default {
   queryAll,
   add,
-  query
+  query,
+  modify,
+  del
 }

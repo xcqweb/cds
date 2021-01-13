@@ -19,7 +19,14 @@ Vue.directive('visible', {
 Vue.directive('focus', {
   inserted: function(el) {
     el.focus()
-    el.select()
+    if(el.select) {
+      el.select()
+    } else {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      document.getSelection().removeAllRanges()
+      document.getSelection().addRange(range)
+    }
   }
 })
 Vue.directive('clickOutSide', {

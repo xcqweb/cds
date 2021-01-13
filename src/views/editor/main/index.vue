@@ -212,7 +212,7 @@ export default {
 <style lang="less">
 .view-con-wrap {
   position: fixed;
-  top: 52px;
+  top: 50px;
   left: 0px;
   right: 0px;
   bottom: 0px;

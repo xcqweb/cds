@@ -21,10 +21,11 @@ export default {
 </script>
 <style lang="less">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: PingFangSC-Regular, PingFang SC, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   font-size: 12px;
+  color: #040C2C;
 }
 </style>

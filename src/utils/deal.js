@@ -91,7 +91,12 @@ export function dealPageData(data) {
     widgetsInfo: data.widgetsInfo || widgetsInfo,
     lines: data.lines || lines,
     sort: data.sort,
-    backgroundColor: data.backgroundColor || backgroundColor
+    pid: data.pid,
+    backgroundColor: data.backgroundColor || backgroundColor,
+    sort:data.sort,
+    pageName:data.pageName,
+    isEdit:data.isEdit || false,
+    expand:data.expand || false,
   }
 }
 export function dealWidgetData(data) {

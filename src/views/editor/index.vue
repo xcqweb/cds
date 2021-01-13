@@ -35,6 +35,7 @@ export default {
   },
   created() {
     const applyId = this.$route.query.appId
+    sessionStorage.setItem("applyId", applyId)
     this.$store.dispatch("initApply", applyId).then(() => {
       this.isInit = true
     })

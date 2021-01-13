@@ -10,7 +10,7 @@ export default {}
 <style lang="less">
 .toolbar-con {
   position: relative;
-  height: 52px;
+  height: 50px;
   border-bottom: 1px solid #E5E6E9;
   background:#fff;
   display: flex;
