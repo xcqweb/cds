@@ -41,7 +41,7 @@ import arrayToTree from "array-to-tree"
 import DragWidget from "@c/drag-resize/drag-widget"
 import GroupSelection from "@c/group-selection/"
 import components from "@/views/widgets/index"
-import Contextmenu from "./components/contextmenu"
+import Contextmenu from './components/contextmenu'
 export default {
   name: "EditorMain",
   mixins: [helpComputed],
