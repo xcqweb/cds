@@ -19,8 +19,8 @@ export default {}
 .toolbar-con {
   position: relative;
   height: 50px;
-  border-bottom: 1px solid #E5E6E9;
-  background:#fff;
+  border-bottom: 1px solid #e5e6e9;
+  background: #fff;
   display: flex;
   -webkit-box-pack: justify;
   justify-content: space-between;

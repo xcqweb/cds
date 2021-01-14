@@ -19,7 +19,7 @@ Vue.directive("visible", {
 Vue.directive("focus", {
   inserted: function(el) {
     el.focus()
-    if(el.select) {
+    if (el.select) {
       el.select()
     } else {
       const range = document.createRange()

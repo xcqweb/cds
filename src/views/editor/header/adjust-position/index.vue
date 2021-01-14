@@ -2,28 +2,28 @@
   <!--基本操作-->
   <a-menu slot="overlay">
     <a-menu-item>
-      <svg-icon icon-class="left" />
-      <span  @click="changePosition('left')">左对齐</span>
+      <svg-icon icon-class="left" class-name="side-nav-icon" />
+      <span @click="changePosition('left')">左对齐</span>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="right" />
-      <span  @click="changePosition('right')">右对齐</span>
+      <svg-icon icon-class="right" class-name="side-nav-icon" />
+      <span @click="changePosition('right')">右对齐</span>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="tc" />
-      <span  @click="changePosition('top')">上对齐</span>
+      <svg-icon icon-class="tc" class-name="side-nav-icon" />
+      <span @click="changePosition('top')">上对齐</span>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="bc" />
-      <span  @click="changePosition('bottom')">下对齐</span>
+      <svg-icon icon-class="bc" class-name="side-nav-icon" />
+      <span @click="changePosition('bottom')">下对齐</span>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="center" />
-      <span  @click="changePosition('center')">水平居中对齐</span>
+      <svg-icon icon-class="center" class-name="side-nav-icon" />
+      <span @click="changePosition('center')">水平居中对齐</span>
     </a-menu-item>
     <a-menu-item>
-      <svg-icon icon-class="middle" />
-      <span  @click="changePosition('middle')">垂直居中对齐</span>
+      <svg-icon icon-class="middle" class-name="side-nav-icon" />
+      <span @click="changePosition('middle')">垂直居中对齐</span>
     </a-menu-item>
   </a-menu>
 </template>
@@ -125,17 +125,21 @@ export default {
   width: 112px;
   padding: 0 6px;
 }
-.ant-menu-vertical > .ant-menu-item:active, .ant-menu-vertical > .ant-menu-item:hover{
-  background: #F0F1F3;
+.ant-menu-vertical > .ant-menu-item:active,
+.ant-menu-vertical > .ant-menu-item:hover {
+  background: #f0f1f3;
 }
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background-color: #F0F1F3;
+  background-color: #f0f1f3;
 }
-.ant-menu-vertical .ant-menu-item:not(:last-child){
+.ant-menu-vertical .ant-menu-item:not(:last-child) {
   margin-bottom: 0px;
 }
-.ant-menu-item{
+.ant-menu-item {
   white-space: unset;
 }
-
+.side-nav-icon {
+  width: 1em;
+  height: 1em;
+}
 </style>

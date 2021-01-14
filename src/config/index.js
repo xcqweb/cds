@@ -1,6 +1,7 @@
 const grid = {
   color: "#e0e0e0",
-  size: 10
+  size: 10,
+  showGrid: true
 }
 const defaultPageColor = "#fff"
 export default {

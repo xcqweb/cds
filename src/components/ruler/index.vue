@@ -1,6 +1,7 @@
 <template>
   <div class="ruler-con">
     <SketchRule
+      v-show="showRuler"
       :lang="lang"
       :thick="thick"
       :scale="scale"
@@ -62,6 +63,9 @@ export default {
         height: height + "px",
         transform: `scale(${this.scale})`
       }
+    },
+    showRuler() {
+      return this.$store.state.ruler.showRuler
     }
   },
   data() {

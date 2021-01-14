@@ -93,10 +93,10 @@ export function dealPageData(data) {
     sort: data.sort,
     pid: data.pid,
     backgroundColor: data.backgroundColor || backgroundColor,
-    sort:data.sort,
-    pageName:data.pageName,
-    isEdit:data.isEdit || false,
-    expand:data.expand || false,
+    sort: data.sort,
+    pageName: data.pageName,
+    isEdit: data.isEdit || false,
+    expand: data.expand || false
   }
 }
 export function dealWidgetData(data) {

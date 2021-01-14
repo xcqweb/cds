@@ -19,6 +19,7 @@ export default new Vuex.Store({
     delWidgets: [], // 当前页面删除的控件
     ruler: {
       // 刻度尺
+      showRuler: true, // 标尺
       cornerActive: false,
       startPos: { x: 0, y: 0 },
       shadow: { x: 0, y: 0, width: 0, height: 0 },
@@ -29,7 +30,7 @@ export default new Vuex.Store({
     isShowSelection: false, // 是否显示框选,
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
-    hint: { show: false, text: "" }, // 提示信息
+    hint: { show: false, text: "" } // 提示信息
   },
   mutations: {
     setGrid(state, data) {
@@ -46,23 +47,26 @@ export default new Vuex.Store({
     addPage(state, data) {
       state.apply.pages.push(dealPageData(data))
     },
-    initPages(state,data) {
-      data = data.map(item=>{
+    initPages(state, data) {
+      data = data.map(item => {
         return dealPageData(item)
       })
       state.apply.pages = data
     },
-    setPageInfo(state,data) {
+    setPageInfo(state, data) {
       let page = this.getters.currentPage
-      if(data.pageId) {
-        page = state.apply.pages.find(item=>item.pageId === data.pageId)
+      if (data.pageId) {
+        page = state.apply.pages.find(item => item.pageId === data.pageId)
       }
-      const pageIndex = state.apply.pages.findIndex(item=>item.pageId === page.pageId)
-      if(data.newPageId) {// 更新pageId
+      const pageIndex = state.apply.pages.findIndex(
+        item => item.pageId === page.pageId
+      )
+      if (data.newPageId) {
+        // 更新pageId
         data.pageId = data.newPageId
         delete data.newPageId
       }
-      state.apply.pages.splice(pageIndex,1,{...page,...data})
+      state.apply.pages.splice(pageIndex, 1, { ...page, ...data })
     },
     setCurrentPageWidgets(state, data) {
       // 设置当前页面信息
@@ -240,7 +244,7 @@ export default new Vuex.Store({
         Promise.all([p1, p2]).then(res => {
           const pageData = res[0].data
           const widgetData = res[1].data
-          store.commit("initPages",allPage.data)
+          store.commit("initPages", allPage.data)
           store.commit("setCurrentPageId", pageId)
           store.commit("setCurrentPageWidgets", dealWidgetData(widgetData))
           resolve()
