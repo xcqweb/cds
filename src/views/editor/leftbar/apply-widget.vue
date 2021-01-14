@@ -5,11 +5,11 @@
 </template>
 <script>
 export default {
-  name:'ApplyWidget',
+  name: "ApplyWidget"
 }
 </script>
 <style lang="less">
-.widget-con{
+.widget-con {
   height: calc(100vh - 50px);
 }
 </style>

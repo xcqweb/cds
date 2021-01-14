@@ -2,12 +2,12 @@
   <div class="left-con">
     <a-tabs v-model="tabKey" tabPosition="left" size="small">
       <a-tab-pane :key="item.key" v-for="item in tabs">
-        <div slot="tab" class="slot-tab-con">
-          <svg-icon :icon-class="item.iconCls" slot="tab" class-name="side-nav-icon"/>
-        </div>
-        <component
-          :is="item.cname"
+        <div
+          slot="tab"
+          class="slot-tab-con"
+          :class="[item.cls, { select: item.key == tabKey }]"
         />
+        <component :is="item.cname" />
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -15,25 +15,23 @@
 
 <script>
 import ApplyPage from "./apply-page"
-import ApplyWidget from './apply-widget'
+import ApplyWidget from "./apply-widget"
 export default {
-  components:{
+  components: {
     ApplyPage,
-    ApplyWidget,
+    ApplyWidget
   },
   data() {
     return {
-      tabs:[
-        {key:'page',iconCls:'side-page',cname:'ApplyPage'},
-        {key:'widget',iconCls:'side-page',cname:'ApplyWidget'},
+      tabs: [
+        { key: "page", cls: "page-nav", cname: "ApplyPage" },
+        { key: "widget", cls: "widget-nav", cname: "ApplyWidget" }
       ],
-      tabKey:'page',
+      tabKey: "page"
     }
   },
   created() {},
-  methods: {
-    
-  }
+  methods: {}
 }
 </script>
 
@@ -46,31 +44,49 @@ export default {
   background: #fff;
   border-right: 1px solid#E5E6E9;
   z-index: 4;
-  .ant-tabs{
-    width:100%;
+  .ant-tabs {
+    width: 100%;
     .ant-tabs-tab {
       padding: 8px 6px;
     }
     .ant-tabs .ant-tabs-left-bar {
       border-right: 1px solid#E5E6E9;
     }
-    .ant-tabs-left-content{
-      padding-left:0;
-      height:100%;
+    .ant-tabs-left-content {
+      padding-left: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
     }
   }
-  .slot-tab-con{
-    width:38px;
-    height:38px;
+  .slot-tab-con {
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
+    &.page-nav {
+      background: url("~@/assets/images/page-nav.png") no-repeat center center;
+      background-size: contain;
+      &.select {
+        background: url("~@/assets/images/page-nav-select.png") no-repeat center
+          center;
+        background-size: contain;
+      }
+    }
+    &.widget-nav {
+      background: url("~@/assets/images/widget-nav.png") no-repeat center center;
+      background-size: contain;
+      &.select {
+        background: url("~@/assets/images/widget-nav-select.png") no-repeat
+          center center;
+        background-size: contain;
+      }
+    }
   }
-  .side-nav-icon{
-    width:1.6em;
-    height:1.6em;
+  .side-nav-icon {
+    width: 1.6em;
+    height: 1.6em;
   }
 }
 </style>

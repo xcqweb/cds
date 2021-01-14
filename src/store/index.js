@@ -29,7 +29,7 @@ export default new Vuex.Store({
     isShowSelection: false, // 是否显示框选,
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
-    hint: { show: false, text: "" }, // 提示信息
+    hint: { show: false, text: "" } // 提示信息
   },
   mutations: {
     setGrid(state, data) {
@@ -44,25 +44,52 @@ export default new Vuex.Store({
       state.ruler = tempRuler
     },
     addPage(state, data) {
+      if (data.pid) {
+        const resIndex = state.apply.pages.findIndex(
+          item => item.pageId == data.pid
+        )
+        if (resIndex != -1) {
+          const tempPage = state.apply.pages[resIndex]
+          state.apply.pages.splice(resIndex, 1, { ...tempPage, expand: true })
+        }
+      }
       state.apply.pages.push(dealPageData(data))
     },
-    initPages(state,data) {
-      data = data.map(item=>{
+    delPage(state, data) {
+      const resIndex = state.apply.pages.findIndex(item => item.pageId == data)
+      if (resIndex != -1) {
+        state.apply.pages.splice(resIndex, 1)
+      }
+    },
+    setHomePage(state, data) {
+      const resIndex = state.apply.pages.findIndex(item => item.pageId == data)
+      if (resIndex != -1) {
+        const tempPage = state.apply.pages[resIndex]
+        state.apply.pages.splice(resIndex, 1)
+        state.apply.pages.unshift(tempPage)
+      }
+    },
+    initPages(state, data) {
+      data = data.map(item => {
         return dealPageData(item)
       })
       state.apply.pages = data
     },
-    setPageInfo(state,data) {
+    setPageInfo(state, data) {
       let page = this.getters.currentPage
-      if(data.pageId) {
-        page = state.apply.pages.find(item=>item.pageId === data.pageId)
+      if (data.pageId) {
+        page = state.apply.pages.find(item => item.pageId === data.pageId)
       }
-      const pageIndex = state.apply.pages.findIndex(item=>item.pageId === page.pageId)
-      if(data.newPageId) {// 更新pageId
+      const pageIndex = state.apply.pages.findIndex(
+        item => item.pageId === page.pageId
+      )
+      if (data.newPageId) {
+        // 更新pageId
+        state.currentPageId = data.newPageId
         data.pageId = data.newPageId
         delete data.newPageId
       }
-      state.apply.pages.splice(pageIndex,1,{...page,...data})
+      state.apply.pages.splice(pageIndex, 1, { ...page, ...data })
     },
     setCurrentPageWidgets(state, data) {
       // 设置当前页面信息
@@ -238,9 +265,8 @@ export default new Vuex.Store({
         const p1 = pageApi.query(pageId)
         const p2 = widgetApi.queryAll({ pageId })
         Promise.all([p1, p2]).then(res => {
-          const pageData = res[0].data
           const widgetData = res[1].data
-          store.commit("initPages",allPage.data)
+          store.commit("initPages", allPage.data)
           store.commit("setCurrentPageId", pageId)
           store.commit("setCurrentPageWidgets", dealWidgetData(widgetData))
           resolve()

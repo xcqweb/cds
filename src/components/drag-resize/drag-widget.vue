@@ -1,6 +1,5 @@
 <template>
   <vue-draggable-resizable
-    v-if="!widget.children || !widget.children.length"
     class="group-item"
     :w="widget.attrs.width"
     :h="widget.attrs.height"
@@ -21,15 +20,16 @@
     @deactivated="onDeactivated"
     @dblclick.native="dblclick"
   >
-    <component :is="widget.cname" :cid="widget.cid" v-bind="widget.attrs" />
+    <component :is="widget.cname" :cid="widget.cid" v-bind="widget.attrs">
+      <template v-if="widget.children">
+        <drag-widget
+          v-for="item in widget.children"
+          :key="item.cid"
+          :widget="item"
+        />
+      </template>
+    </component>
   </vue-draggable-resizable>
-  <component v-else :is="widget.cname" v-bind="widget.attrs" :cid="widget.cid">
-    <drag-widget
-      v-for="item in widget.children"
-      :key="item.cid"
-      :widget="item"
-    />
-  </component>
 </template>
 <script>
 import VueDraggableResizable from "./vue-draggable-resizable"

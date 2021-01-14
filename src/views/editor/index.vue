@@ -17,7 +17,7 @@ import Toolbar from "./header"
 import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
-import Loading from '@c/loading' 
+import Loading from "@c/loading"
 export default {
   name: "EditorIndex",
   components: {

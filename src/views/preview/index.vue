@@ -2,19 +2,15 @@
   <div class="preview-con-wrap">
     <div class="preview-con" :style="styleObj">
       <template v-for="item in widgets">
-        <component
-          v-if="!item.children || !item.children.length"
-          :key="item.widgetId"
-          :is="item.cname"
-          v-bind="item.attrs"
-        />
-        <component v-else :key="item.cid" :is="item.cname" v-bind="item.attrs">
-          <component
-            v-for="d in item.children"
-            :key="d.cid"
-            :is="d.cname"
-            v-bind="d.attrs"
-          />
+        <component :key="item.cid" :is="item.cname" v-bind="item.attrs">
+          <template v-if="item.children">
+            <component
+              v-for="d in item.children"
+              :key="d.cid"
+              :is="d.cname"
+              v-bind="d.attrs"
+            />
+          </template>
         </component>
       </template>
     </div>

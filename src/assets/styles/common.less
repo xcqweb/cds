@@ -15,26 +15,18 @@ html, body {
   height: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-body ::-webkit-scrollbar {
-	width: 14px;
-	height: 14px;
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-body ::-webkit-scrollbar-track {
-	background-clip: padding-box;
-	border: solid transparent;
-	border-width: 1px;
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
-body ::-webkit-scrollbar-corner {
-	background-color: transparent;
+::-webkit-scrollbar-thumb {
+  background-color: rgb(222, 222, 228);
+  border-radius: 4px;
 }
-
-body ::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, .1);
-	background-clip: padding-box;
-	border: solid transparent;
-	border-radius: 10px;
-}
-body ::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(0, 0, 0, .4);
+::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 [contenteditable]:focus{outline: none;}
