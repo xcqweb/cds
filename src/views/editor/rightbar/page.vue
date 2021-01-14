@@ -1,162 +1,263 @@
 <template>
-  <div>
-    <a-input-number
-      v-model="gridSize"
-      :min="1"
-      :max="100"
-      @change="sizeChange"
-    />
-    {{ gridSize }}
-    <button @click="undo">undo</button>
-    <button @click="redo">redo</button>
-    <button @click="copy">copy</button>
-    <button @click="cut">cut</button>
-    <button @click="del">delete</button>
-    <button @click="paste">paste</button>
-    <button @click="group">group</button>
-    <button @click="ungroup">ungroup</button>
-    <button @click="saveApply">saveApply</button>
-    <button @click="preview">preview</button>
-    <!--调整控件位置-->
-    <adjuist-position></adjuist-position>
+  <div class="ge-mt6 page">
+    <!--字号，颜色-->
+    <div class="fs ge-h50 ge-border">
+      <label>页面尺寸</label>
+      <div class="pdr10">
+        <a-select
+          :value="pageSize"
+          :not-found-content="null"
+          :show-arrow="true"
+          @change="handleChange"
+        >
+          <a-select-option v-for="item in list" :key="item">
+            {{ item }}</a-select-option
+          >
+        </a-select>
+      </div>
+    </div>
+
+    <div class="fs ge-h50 ge-border">
+      <!--边框颜色-->
+      <label>背景颜色</label>
+      <div class="ge-pr pdr10">
+        <div
+          @click="toggle1"
+          class="ge-block "
+          :style="{ background: backgroundValue }"
+        ></div>
+        <color-picker
+          v-if="visiablecolor1"
+          class="ge-pos1 ge-zindex"
+          @colorChange="colorChange1"
+        />
+      </div>
+    </div>
+
+    <div class="ge-border">
+      <div class="fs ge-h50" style="height:112px">
+        <!--背景图片-->
+        <label>背景图片</label>
+        <div
+          class="ge-w60 ge-pr"
+          style="width:138px;height:89px;background:#F7F7F8;margin-right:10px"
+        >
+          <upload-image @addImage="addImage" :styleObj="styleObj">
+            <div>
+              <div class="fc">
+                <div style="width:36px;height:36px;border:1px dashed">
+                  <svg-icon icon-class="default" class-name="side-nav-icon" />
+                </div>
+              </div>
+              <div style="margin-top:5px">
+                <span>选择背景图片</span>
+              </div>
+            </div>
+          </upload-image>
+        </div>
+      </div>
+    </div>
+
+    <div class="ge-border">
+      <div>
+        <div class="fs ge-h50">
+          <label>导航布局</label>
+        </div>
+        <div
+          class="fs ge-w60 ge-pr pal10 pdr10"
+          style=" width:100%;height:65px;"
+        >
+          <div>
+            <div class="fc">
+              <img
+                style="width:63px;height:42px;display:block"
+                :src="src"
+                alt=""
+              />
+            </div>
+            <div class="textc">
+              <span>无</span>
+            </div>
+          </div>
+          <div>
+            <div class="fc">
+              <img
+                style="width:63px;height:42px;display:block"
+                :src="src"
+                alt=""
+              />
+            </div>
+            <div class="textc">
+              <span>左侧导航</span>
+            </div>
+          </div>
+          <div>
+            <div class="fc">
+              <img
+                style="width:63px;height:42px;display:block"
+                :src="src"
+                alt=""
+              />
+            </div>
+            <div class="textc">
+              <span>顶部导航</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fs ge-h50 ge-border">
+        <!--边框颜色-->
+        <label>导航风格</label>
+        <div class="ge-pr pdr10">
+          <div
+            @click="toggle1"
+            class="ge-block "
+            :style="{ background: backgroundValue }"
+          ></div>
+          <color-picker
+            v-if="visiablecolor1"
+            class="ge-pos1 ge-zindex"
+            @colorChange="colorChange1"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import adjuistPosition from "../header/adjust-position"
-import undoManager from "@u/undo-manager"
-import { uuid } from "@u/uuid"
+import ColorPicker from "@c/color-picker/index"
+import uploadImage from "@c/upload"
+
 import helpMethods from "@/mixins/help-methods"
 import config from "@/config"
-import { isGroup, findWidgetChildren, findWidgetById } from "@u/deal"
+let imgUrl = require("./logo.png")
 export default {
   components: {
-    adjuistPosition
+    ColorPicker,
+    uploadImage
   },
   mixins: [helpMethods],
   data() {
     return {
-      gridSize: 10
+      list: ["1366 * 768", "1280 * 768", "1920 * 1080"],
+      pageSize: "1366 * 768",
+      backgroundValue: "#000",
+      backgroundValue1: "#000",
+      visiablecolor1: false,
+      isiablecolor: false,
+      src: imgUrl,
+      styleObj: {
+        width: "100%",
+        height: "100%",
+        position: "relative"
+      }
     }
   },
   created() {},
   methods: {
+    addImage(imgFile) {
+      //base的图片路径
+      console.log(imgFile)
+      this.src = imgFile
+    },
+    onChange(checked) {
+      console.log(`a-switch to ${checked}`)
+    },
+    handleChange(value) {
+      this.textStyle.fontSize.sort()
+      if (this.textStyle.fontSize.indexOf(value) == -1) {
+        this.textStyle.fontSize.unshift(value)
+        this.textStyle.fontSize.sort()
+      }
+    },
+    colorChange(color) {
+      this.$store.commit("setGridColor", color)
+      this.backgroundValue = color
+    },
+    colorChange1(color) {
+      this.$store.commit("setGridColor", color)
+      this.backgroundValue = color
+    },
+    toggle1() {},
+
     sizeChange(size) {
       this.$store.commit("setGrid", { size })
       undoManager.saveApplyChange()
-    },
-
-    undo() {
-      undoManager.applyUndo()
-    },
-    redo() {
-      undoManager.applyRedo()
-    },
-    copy() {
-      this.dealCopyData()
-      this.isCopy = true
-    },
-    dealCopyData() {
-      const currentWidget = this.$store.getters.currentWidget
-      if (currentWidget) {
-        let widgetCopyNum = currentWidget.copyNum
-        widgetCopyNum++
-        this.copyData = { ...currentWidget.attrs, ...currentWidget }
-        this.copyData.dname = `${this.copyData.cname} Copy ${
-          widgetCopyNum === 1 ? "" : widgetCopyNum
-        }`
-      }
-    },
-    cut() {
-      this.dealCopyData()
-      this.$store.commit("widgetDel")
-      this.isCut = true
-    },
-    paste() {
-      if (this.isCopy || this.isCut) {
-        if (this.isCut) {
-          this.isCut = false
-          this.isCopy = true
-        } else {
-          const currentWidget = this.$store.getters.currentWidget
-          this.copyData.left = currentWidget.attrs.left + 20
-          this.copyData.top = currentWidget.attrs.top + 20
-        }
-        this.$store.commit("widgetAdd", this.copyData)
-      }
-    },
-    group() {
-      let widgets = this.$store.getters.selectWidgets
-      const cid = `${uuid(16, 16)}`
-      const cname = config.groupName
-      const name = `组合`
-      const attrs = this.calculateSelectWidgets(widgets)
-      widgets.forEach(item => {
-        if (isGroup(item)) {
-          this.ungroup(null, item)
-        }
-      })
-      widgets = this.$store.getters.selectWidgets
-      widgets.forEach(item => {
-        let left = item.attrs.left - attrs.left
-        let top = item.attrs.top - attrs.top
-        this.$store.commit("updateWidgetAttrs", { left, top, cid: item.cid })
-        this.$store.commit("updateWidget", {
-          pid: cid,
-          active: false,
-          cid: item.cid
-        })
-      })
-      this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
-      const tempWidget = findWidgetById(
-        this.$store.getters.currentPage.widgets,
-        cid
-      )
-      this.$store.commit("setGroupSelection", {
-        show: true,
-        widget: tempWidget
-      })
-    },
-    ungroup(evt, widget) {
-      if (!widget) {
-        widget = this.$store.getters.currentWidget
-      }
-      if (isGroup(widget)) {
-        const childWidgets = findWidgetChildren(
-          this.$store.getters.currentPage.widgets,
-          widget
-        )
-        childWidgets.forEach(item => {
-          let { left, top } = widget.attrs
-          this.$store.commit("updateWidget", {
-            pid: "",
-            cid: item.cid,
-            active: true
-          })
-          left = item.attrs.left + left
-          top = item.attrs.top + top
-          this.$store.commit("updateWidgetAttrs", { left, top, cid: item.cid })
-        })
-        this.$store.commit("widgetDel", [widget])
-      }
-    },
-    del() {
-      this.$store.commit("widgetDel")
-    },
-    saveApply() {
-      this.$store.dispatch("patchModifyWidgets")
-    },
-    preview() {
-      const url = this.$router.resolve({
-        path: "/preview-app"
-      })
-      window.open(url.href, "_blank")
     }
   }
 }
 </script>
-<style>
-button {
-  width: 60px;
-  margin: 6px;
+<style lang="less" scoped>
+.page {
+  font-size: 12px;
+  .fs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .fc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .ge-h50 {
+    height: 50px;
+  }
+  label {
+    box-sizing: border-box;
+    width: 48px;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 20px;
+  }
+  .pdr10 {
+    padding-right: 10px;
+  }
+  .pal10 {
+    padding-left: 10px;
+  }
+  .ant-select {
+    width: 142px;
+  }
+  .ge-border {
+    border-bottom: 1px solid #e5e6e9;
+  }
+  .ge-w60 {
+    width: 60px;
+  }
+  .ge-color1 {
+    background-color: #fcfcfc;
+  }
+  .ge-pr {
+    position: relative;
+  }
+  .ge-pos {
+    position: absolute;
+    top: 0;
+    right: 240px;
+  }
+  .textc {
+    text-align: center;
+  }
+  .ge-pos1 {
+    position: absolute;
+    top: 0;
+    right: 90px;
+  }
+  .active {
+    background-color: #277ae0;
+  }
+  .ge-block {
+    height: 30px;
+    width: 73px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid #d4d4d4;
+  }
+  .side-nav-icon {
+    width: 2.8em;
+    height: 3em;
+    color: #c3cbce;
+  }
 }
 </style>

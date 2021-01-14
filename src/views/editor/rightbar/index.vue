@@ -1,9 +1,9 @@
 <template>
-  <div class="right-con ge-mt">
-    <a-tabs @change="callback">
+  <div class="right-con">
+    <a-tabs @change="callback" style="width:100%">
       <a-tab-pane key="1" tab="交互">
-        <!-- <Page />        -->
-        <Mutual v-if="activeId == 1" />
+        <Page />
+        <!-- <Mutual v-if="activeId == 1" /> -->
       </a-tab-pane>
       <a-tab-pane key="2" tab="样式" force-render>
         <Style v-if="activeId == 2" />
@@ -12,14 +12,14 @@
   </div>
 </template>
 <script>
-// import Page from "./page.vue"
+import Page from "./page.vue"
 import Style from "./style"
-import Mutual from "./mutual"
+// import Mutual from "./mutual"
 
 export default {
   components: {
-    // Page,
-    Mutual,
+    Page,
+    // Mutual,
     Style
   },
   data() {
@@ -42,6 +42,7 @@ export default {
   display: flex;
   z-index: 4;
   box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
+  background-color: #ffffff;
 }
 .ge-mt {
   padding: 10px;
