@@ -115,6 +115,7 @@ import helpMethods from "@/mixins/help-methods"
 import config from "@/config"
 let imgUrl = require("./logo.png")
 export default {
+  name:'PageStyle',
   components: {
     ColorPicker,
     uploadImage

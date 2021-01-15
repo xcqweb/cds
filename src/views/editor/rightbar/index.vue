@@ -1,38 +1,38 @@
 <template>
   <div class="right-con">
-    <a-tabs @change="callback" style="width:100%;overflow: auto;">
-      <a-tab-pane key="1" tab="交互">
-        <!--        <Page />-->
-        <Style v-if="activeId == 1" />
-        <!-- <Mutual v-if="activeId == 1" /> -->
+    <page-style v-if="isPage"/>
+    <a-tabs v-else size="small">
+      <a-tab-pane key="style" tab="样式">
+        <widget-style  />
       </a-tab-pane>
-      <a-tab-pane key="2" tab="样式" force-render>
-        <Style v-if="activeId == 2" />
+      <a-tab-pane key="mutual" tab="交互">
+        <mutual />
       </a-tab-pane>
     </a-tabs>
   </div>
 </template>
 <script>
-import Page from "./page.vue"
-import Style from "./style"
-// import Mutual from "./mutual"
+import PageStyle from "./page.vue"
+import WidgetStyle from "./style"
+import Mutual from "./mutual"
 
 export default {
   components: {
-    Page,
-    // Mutual,
-    Style
+    PageStyle,
+    WidgetStyle,
+    Mutual,
+  },
+  computed:{
+    isPage() {
+      return this.$store.getters.selectWidgets.length == 0
+    }
   },
   data() {
     return {
-      activeId: 1
     }
   },
   methods: {
-    callback(key) {
-      console.log(key)
-      this.activeId = key
-    }
+     
   }
 }
 </script>
