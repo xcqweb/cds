@@ -1,9 +1,28 @@
 <template>
-  <div class="ge-border ge-mt6">
+  <div class="text-info ge-border ge-mt6">
     <!--字号，颜色-->
-    <div class="fs ge-h40">
+    <label>文字样式</label>
+    <!--字体-->
+    <div class="fs ge-h40 pdr10 pdl10">
       <a-select
-        style="width: 60px"
+        mode="default"
+        v-model="fontFamily"
+        style="width: 100%"
+        placeholder="Please select"
+        @change="setFontFamily"
+      >
+        <a-select-option
+          v-for="item in textStyle.fontFamilyList"
+          :key="item.value"
+        >
+          {{ item.label }}
+        </a-select-option>
+      </a-select>
+    </div>
+
+    <div class="fs ge-h40 pdr10 pdl10">
+      <a-select
+        style="width: 85px"
         :disabled="getlistLoading"
         :value="fontSize"
         :show-search="true"
@@ -20,7 +39,7 @@
         >
       </a-select>
       <div
-        class="ge-block ge-color1 fcm"
+        class="ge-fontw fc"
         :class="{ active: activeFlag }"
         @click="setBold"
       >
@@ -29,7 +48,7 @@
       <div class="ge-pr">
         <div
           @click="toggle"
-          class="ge-block"
+          class="ge-rect-color"
           :style="{ background: backgroundValue }"
         ></div>
         <color-picker
@@ -40,8 +59,8 @@
       </div>
     </div>
     <!--对齐方式-->
-    <div class="fs ge-h40">
-      <div class="jXcSfj h-alignment" style="border: 1px solid #C1C2C5">
+    <div class="fs ge-h40 pdr10 pdl10 ">
+      <div class="jXcSfj">
         <div
           class="radio-option"
           :class="{ active: posType == 'left' }"
@@ -93,11 +112,67 @@
         </div>
       </div>
 
-      <div class="jXcSfj h-alignment" style="border: 1px solid #C1C2C5">
+<!--      <div class="jXcSfj h-alignment" style="border: 1px solid #C1C2C5">-->
+<!--        <div-->
+<!--          class="radio-option"-->
+<!--          :class="{ active: posType == 'top' }"-->
+<!--          @click="setPosition('top')"-->
+<!--        >-->
+<!--          <div class="radio-content">-->
+<!--            <svg-->
+<!--              xmlns="http://www.w3.org/2000/svg"-->
+<!--              class="svg-icon icon"-->
+<!--              viewBox="0 0 12 9"-->
+<!--              aria-hidden="true"-->
+<!--            >-->
+<!--              <path d="M0 9h5V8H0v1zm0-8h12V0H0v1zm0 4h8V4H0v1z"></path>-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        -->
+<!--        -->
+<!--        <div-->
+<!--          class="radio-option"-->
+<!--          :class="{ active: posType == 'middle' }"-->
+<!--          @click="setPosition('middle')"-->
+<!--        >-->
+<!--          <div class="radio-content">-->
+<!--            <svg-->
+<!--              xmlns="http://www.w3.org/2000/svg"-->
+<!--              class="svg-icon icon"-->
+<!--              viewBox="0 0 12 9"-->
+<!--              aria-hidden="true"-->
+<!--            >-->
+<!--              <path d="M3 0h6v1H3V0zm0 8h6v1H3V8zM0 4h12v1H0V4z"></path>-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div-->
+<!--          class="radio-option"-->
+<!--          :class="{ active: posType == 'bottom' }"-->
+<!--          @click="setPosition('bottom')"-->
+<!--        >-->
+<!--          <div class="radio-content">-->
+<!--            <svg-->
+<!--              xmlns="http://www.w3.org/2000/svg"-->
+<!--              class="svg-icon icon"-->
+<!--              :fill="fill"-->
+<!--              viewBox="0 0 12 9"-->
+<!--              aria-hidden="true"-->
+<!--            >-->
+<!--              <path d="M7 9h5V8H7v1zM0 1h12V0H0v1zm4 4h8V4H4v1z"></path>-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+    </div>
+
+    <div class="fs ge-h40 pdr10 pdl10 pdb5">
+      <div class="jXcSfj">
         <div
           class="radio-option"
-          :class="{ active: posType == 'top' }"
-          @click="setPosition('top')"
+          :class="{ active: posType == 'left' }"
+          @click="setPosition('left')"
         >
           <div class="radio-content">
             <svg
@@ -112,8 +187,8 @@
         </div>
         <div
           class="radio-option"
-          :class="{ active: posType == 'middle' }"
-          @click="setPosition('middle')"
+          :class="{ active: posType == 'center' }"
+          @click="setPosition('center')"
         >
           <div class="radio-content">
             <svg
@@ -128,8 +203,8 @@
         </div>
         <div
           class="radio-option"
-          :class="{ active: posType == 'bottom' }"
-          @click="setPosition('bottom')"
+          :class="{ active: posType == 'right' }"
+          @click="setPosition('right')"
         >
           <div class="radio-content">
             <svg
@@ -144,23 +219,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <!--字体-->
-    <div class="fs ge-h40">
-      <a-select
-        mode="default"
-        v-model="fontFamily"
-        style="width: 100%"
-        placeholder="Please select"
-        @change="setFontFamily"
-      >
-        <a-select-option
-          v-for="item in textStyle.fontFamilyList"
-          :key="item.value"
-        >
-          {{ item.label }}
-        </a-select-option>
-      </a-select>
     </div>
     <div>{{ pos.x }}</div>
   </div>
@@ -260,22 +318,25 @@ export default {
   }
 }
 </script>
-
+<style>
+@import '../index.less'
+</style>
 <style lang="less" scoped>
-.fs {
-  display: flex;
-  justify-content: space-between;
+.text-info{
+  font-size: 12px;
 }
 .ge-h40 {
   height: 40px;
   line-height: 40px;
 }
 label {
-  width: 80px;
-  text-align: center;
-}
-.ge-border {
-  border-bottom: 1px solid #323a3e;
+  width: 48px;
+  height: 35px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #040C2C;
+  line-height: 35px;
+  margin-left: 10px;
 }
 .ge-mt6 {
   margin-top: 6px;
@@ -287,11 +348,22 @@ label {
   cursor: pointer;
   border: 1px solid #d4d4d4;
 }
+.ge-fontw{
+  width: 30px;
+  height: 30px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  border: 1px solid #F0F1F3;
+}
+.ge-rect-color{
+  width: 75px;
+  height: 24px;
+  background: #1740DC;
+  border-radius: 2px;
+  border: 1px solid #F0F1F3;
+}
 .ge-color1 {
   background-color: #fcfcfc;
-}
-.ge-pr {
-  position: relative;
 }
 .ge-pos {
   position: absolute;
@@ -303,28 +375,20 @@ label {
 }
 .jXcSfj {
   display: flex;
-  justify-content: center;
-  height: 36px;
+  justify-content: space-between;
   align-items: center;
   color: rgb(91, 107, 115);
-  text-align: center;
-  background: rgb(255, 255, 255);
-  border-radius: 2px;
-  overflow: hidden;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(237, 237, 237);
-  border-image: initial;
 }
 .radio-option {
   display: flex;
-  width: 100%;
-  height: 100%;
   justify-content: center;
   align-items: center;
   position: relative;
   cursor: pointer;
   flex: 1 1 0%;
+  width: 70px;
+  height: 30px;
+  border: 1px solid #F0F1F3;
   .radio-content {
     display: flex;
     justify-content: center;

@@ -1,90 +1,89 @@
 <template>
-  <div class="ge-border ge-mt6">
-    <!--字号，颜色-->
-    <div>
-      <label>填充</label>
-      <div class="fs ge-h40">
-        <div class="ge-pr ge-w100">
-          <div
-            @click="toggle"
-            class="ge-block"
-            :style="{ background: backgroundValue }"
-          ></div>
-          <color-picker
-            v-if="visiablecolor"
-            class="ge-pos ge-zindex"
-            @colorChange="colorChange"
-          />
-        </div>
-      </div>
-    </div>
-    <div>
-      <label>边框</label>
-      <div class="fs ge-h40">
-        <!--边框颜色-->
-        <div class="ge-w60 ge-pr ">
-          <div
-            @click="toggle1"
-            class="ge-block "
-            :style="{ background: backgroundValue1 }"
-          ></div>
-          <color-picker
-            v-if="visiablecolor1"
-            class="ge-pos1 ge-zindex"
-            @colorChange="colorChange1"
-          />
-        </div>
-        <!--边框style-->
-        <div class="stylePage">
-          <div
-            class="item-container fontSet"
-            style="justify-content:space-between;position:relative;flex:1;"
-            @click="showBorderLineChart = true"
-          >
-            <div :class="borderLineClsChart" />
-            <img src="../../../../assets/images/icon/down_ic.png" />
-            <ul
-              v-if="showBorderLineChart"
-              class="font-dialog"
-              @mouseleave="showBorderLineChart = false"
-              @keyup.enter="showBorderLineChart = false"
-              @blur="showBorderLine = false"
-            >
-              <li
-                v-for="(d, index) in borderLineListChart"
-                :key="index"
-                @click="changeChartBorderLine(d, $event)"
-              >
-                <div
-                  style="width:100%;height:4px;display:inline-block;vertical-align:middle;"
-                >
-                  <div :class="d" />
-                </div>
-              </li>
-            </ul>
+  <div class="text-color">
+      <!--字号，颜色-->
+      <div class="ge-border">
+        <div class="fs pdr10">
+          <label>填充颜色</label>
+          <div class="ge-pr">
+            <div
+              @click="toggle"
+              class="ge-rect-color"
+              :style="{ background: backgroundValue }"
+            ></div>
+            <color-picker
+              v-if="visiablecolor"
+              class="ge-pos ge-zindex"
+              @colorChange="colorChange"
+            />
           </div>
         </div>
-        <!--边框大小-->
-        <a-select
-          class="ge-w60"
-          :disabled="getlistLoading"
-          v-model="value"
-          :show-search="true"
-          :not-found-content="null"
-          :show-arrow="true"
-          :filter-option="false"
-          :autoClearSearchValue="false"
-          @search="handleSearch"
-          @blur="handleBlur"
-          @change="handleChange"
-        >
-          <a-select-option v-for="item in textColor.borderWidth" :key="item">
-            {{ item }}</a-select-option
+      </div>
+      <div>
+        <label>边框样式</label>
+        <div class="fs ge-h40 pdr10 pdl10">
+          <!--边框颜色-->
+          <div class="ge-pr">
+            <div
+              @click="toggle"
+              class="ge-rect-color"
+              :style="{ background: backgroundValue }"
+            ></div>
+            <color-picker
+              v-if="visiablecolor"
+              class="ge-pos ge-zindex"
+              @colorChange="colorChange"
+            />
+          </div>
+          <!--边框style-->
+          <div class="stylePage">
+            <div
+              class="item-container fontSet"
+              @click="showBorderLineChart = true"
+            >
+              <div :class="borderLineClsChart" />
+              <img src="../../../../assets/images/icon/down_ic.png" />
+              <ul
+                v-if="showBorderLineChart"
+                class="font-dialog"
+                @mouseleave="showBorderLineChart = false"
+                @keyup.enter="showBorderLineChart = false"
+                @blur="showBorderLine = false"
+              >
+                <li
+                  v-for="(d, index) in borderLineListChart"
+                  :key="index"
+                  @click="changeChartBorderLine(d, $event)"
+                >
+                  <div
+                    style="width:100%;height:4px;display:inline-block;vertical-align:middle;"
+                  >
+                    <div :class="d" />
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--边框大小-->
+          <a-select
+            class="ge-w56 ge-select"
+            :disabled="getlistLoading"
+            v-model="value"
+            :show-search="true"
+            :not-found-content="null"
+            :show-arrow="true"
+            :filter-option="false"
+            :autoClearSearchValue="false"
+            @search="handleSearch"
+            @blur="handleBlur"
+            @change="handleChange"
           >
-        </a-select>
+            <a-select-option v-for="item in textColor.borderWidth" :key="item">
+              {{ item }}</a-select-option
+            >
+          </a-select>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -172,25 +171,35 @@ export default {
   }
 }
 </script>
+<style>
+@import '../index.less'
+</style>
+<style lang="less">
+.text-color{
+  font-size: 12px;
 
-<style lang="less" scoped>
-.fs {
-  display: flex;
-  justify-content: space-between;
 }
 .ge-h40 {
   height: 40px;
   line-height: 40px;
 }
-.ge-w60 {
-  width: 60px;
+.ge-w56 {
+  width: 56px;
+  height: 30px;
+}
+.ge-select{
+  .ant-select-selection--single{
+    height: 30px;
+  }
 }
 label {
-  width: 80px;
-  text-align: center;
-}
-.ge-border {
-  border-bottom: 1px solid #323a3e;
+  width: 48px;
+  height: 35px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #040C2C;
+  line-height: 35px;
+  margin-left: 10px;
 }
 .ge-mt6 {
   margin-top: 6px;
@@ -203,6 +212,13 @@ label {
   border-radius: 6px;
   cursor: pointer;
   border: 1px solid #d4d4d4;
+}
+.ge-rect-color{
+  width: 75px;
+  height: 24px;
+  background: #1740DC;
+  border-radius: 2px;
+  border: 1px solid #F0F1F3;
 }
 .ge-color1 {
   background-color: #fcfcfc;
@@ -238,7 +254,7 @@ label {
 }
 .stylePage {
   .item-container {
-    width: 100%;
+    width: 58px;
     height: 24px;
     display: flex;
     align-items: center;
@@ -285,8 +301,10 @@ label {
   li {
     padding: 0px 6px;
   }
+
 }
 .ge-zindex {
   z-index: 1;
 }
+
 </style>
