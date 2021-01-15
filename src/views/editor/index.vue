@@ -18,6 +18,7 @@ import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
 import Loading from "@c/loading"
+import undoManager from "@u/undo-manager"
 export default {
   name: "EditorIndex",
   components: {
@@ -38,6 +39,7 @@ export default {
     sessionStorage.setItem("applyId", applyId)
     this.$store.dispatch("initApply", applyId).then(() => {
       this.isInit = true
+      undoManager.saveApplyChange()
     })
   },
   methods: {}

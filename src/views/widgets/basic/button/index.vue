@@ -1,11 +1,11 @@
 <template>
-  <div class="gt-text" :style="styleObj" @dblclick.capture="dblclick">
-    {{ text || "输入文本" }}
+  <div class="gt-button" :style="styleObj" @dblclick.capture="dblclick">
+    {{ text || "按钮" }}
   </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
-const cname = "GtText"
+const cname = "GtButton"
 export default {
   name: cname,
   mixins: [baseWidget],
@@ -21,11 +21,14 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.gt-text {
+.gt-button {
+  border-color: rgb(187, 187, 187);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  overflow: hidden;
+  justify-content: center;
   background: #fff;
 }
 </style>

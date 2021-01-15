@@ -1,11 +1,11 @@
 <template>
-  <div class="gt-text" :style="styleObj" @dblclick.capture="dblclick">
-    {{ text || "输入文本" }}
+  <div class="gt-link" :style="styleObj" @dblclick.capture="dblclick">
+    <a>Link</a>
   </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
-const cname = "GtText"
+const cname = "GtLink"
 export default {
   name: cname,
   mixins: [baseWidget],
@@ -21,11 +21,15 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.gt-text {
+.gt-link {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  padding: 0px;
   background: #fff;
+  a {
+    color: #3d91f7;
+    text-decoration: underline;
+  }
 }
 </style>

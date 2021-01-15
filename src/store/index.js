@@ -285,7 +285,7 @@ export default new Vuex.Store({
         }
       })
     },
-    patchModifyWidgets(store) {
+    patchModifyWidgets(store, isNoTip) {
       const widgets = store.getters.currentPage.widgets
       let params = cloneDeep(widgets)
       params = params.filter(item => item.isEdit)
@@ -309,7 +309,9 @@ export default new Vuex.Store({
       if (params.length) {
         widgetApi.modifyPatch(params).then(res => {
           if (res.code === 0) {
-            console.log("保存成功")
+            if (!isNoTip) {
+              console.log("保存成功")
+            }
           }
         })
       }

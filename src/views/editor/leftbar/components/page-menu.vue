@@ -56,6 +56,8 @@
 </template>
 <script>
 import pageApi from "@a/page"
+import widgetApi from "@a/widget"
+import { dealWidgetData } from "@u/deal"
 export default {
   name: "PageMenu",
   props: {
@@ -92,6 +94,12 @@ export default {
       this.$store.commit("setPageInfo", { pageId, isEdit: true })
     },
     changePage({ pageId }) {
+      this.$store.dispatch("patchModifyWidgets", true)
+      widgetApi.queryAll({ pageId }).then(res => {
+        if (res.code === 0) {
+          this.$store.commit("setCurrentPageWidgets", dealWidgetData(res.data))
+        }
+      })
       this.$store.commit("setCurrentPageId", pageId)
     },
     hideEdit({ pageName, pageId }) {

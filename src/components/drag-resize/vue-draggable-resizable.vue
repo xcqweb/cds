@@ -14,6 +14,7 @@
     @mousedown.stop="elmDown"
     @touchstart.prevent.stop="elmDown"
   >
+    <slot></slot>
     <template v-if="resizable">
       <div
         v-for="(handle, index) in handles"
@@ -28,7 +29,6 @@
         @touchstart.stop.prevent="handleDown(handle, $event)"
       ></div>
     </template>
-    <slot></slot>
   </div>
 </template>
 
@@ -710,6 +710,7 @@ export default {
   border-radius: 5px;
   background: #eee;
   border: 1px solid #1baee1;
+  z-index: 999999;
 }
 .handle-tl {
   top: -5px;

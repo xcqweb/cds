@@ -58,6 +58,9 @@ export default {
       display: flex;
       flex-direction: column;
     }
+    .ant-tabs-ink-bar {
+      display: none !important;
+    }
   }
   .slot-tab-con {
     width: 38px;
