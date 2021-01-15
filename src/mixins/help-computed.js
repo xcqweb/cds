@@ -4,11 +4,6 @@ export default {
       return this.$store.getters["currentPageIndex"]
     },
     currentWidget() {
-      console.log(this.$store.getters["currentWidget"])
-      return null
-      if(this.$store.getters["currentWidget"] ==undefined || Object.keys(this.$store.getters["currentWidget"]).length === 0) {
-        return null
-      }
       return this.$store.getters["currentWidget"]
     },
     currentWidgetIndex() {

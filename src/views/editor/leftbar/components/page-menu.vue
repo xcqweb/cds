@@ -77,7 +77,7 @@ export default {
     }
   },
   created() {
-    this.applyId = sessionStorage.getItem("applyId")
+    this.applyId = this.$store.state.apply.id
     this.$bus.$on("updateHoverPageId", this.updateHoverPageId)
   },
   beforeDestroy() {

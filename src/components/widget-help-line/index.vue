@@ -71,6 +71,16 @@ export default {
         left: `${left}px`,
         top: `${lineLeft}px`
       }
+    },
+    selectWidgetsCount() {
+      return this.selectWidgets.length
+    }
+  },
+  watch: {
+    selectWidgetsCount(val) {
+      if (val > 1) {
+        this.$store.commit("setShowHelpLine", false)
+      }
     }
   },
   data() {

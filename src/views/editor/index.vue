@@ -13,7 +13,7 @@
 
 <script>
 import EditorMain from "./main/index.vue"
-import Toolbar from "./header/tools"
+import Toolbar from "./toolbar"
 import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"
@@ -36,11 +36,17 @@ export default {
   },
   created() {
     const applyId = this.$route.query.appId
-    sessionStorage.setItem("applyId", applyId)
     this.$store.dispatch("initApply", applyId).then(() => {
       this.isInit = true
       undoManager.saveApplyChange()
     })
+    this.saveTimer = setTimeout(() => {
+      this.$store.dispatch("patchModifyWidgets")
+    },1000*60*2)// 2min
+  },
+  beforeDestroy() {
+    clearTimeout(this.saveTimer)
+    this.saveTimer = null
   },
   methods: {}
 }

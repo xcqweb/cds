@@ -1,6 +1,6 @@
 <template>
   <div class="sub-con">
-    <ruler />
+    <ruler v-if="ruleEnable" />
   </div>
 </template>
 
@@ -9,6 +9,11 @@ import Ruler from "@c/ruler"
 export default {
   name: "SubContent",
   components: { Ruler },
+  computed: {
+    ruleEnable() {
+      return this.$store.state.apply.ruleEnable
+    }
+  },
   data() {
     return {}
   },

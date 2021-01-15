@@ -1,6 +1,11 @@
 <template>
   <div class="view-con-wrap">
-    <div class="view-con" ref="viewCon" @scroll="handleScroll">
+    <div
+      class="view-con"
+      ref="viewCon"
+      @scroll="handleScroll"
+      :style="viewConStyle"
+    >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-main" :style="widgetConStyle">
@@ -75,14 +80,17 @@ export default {
     },
     portStyle() {
       const { size, color } = this.currentPage.grid
-      const { scale } = this.$store.state.apply
+      const { scale, gridEnable } = this.$store.state.apply
       const { width, height, backgroundColor } = this.currentPage
-      return {
+      const res = {
         width: width + "px",
         height: height + "px",
-        backgroundImage: createGridBg(size, color, scale),
         backgroundColor
       }
+      if (gridEnable) {
+        res.backgroundImage = createGridBg(size, color, scale)
+      }
+      return res
     },
     widgetConStyle() {
       const { scale } = this.$store.state.apply
@@ -90,14 +98,19 @@ export default {
         transform: `scale(${scale})`
       }
     },
-    selectWidgetsCount() {
-      return this.selectWidgets.length
-    }
-  },
-  watch: {
-    selectWidgetsCount(val) {
-      if (val > 1) {
-        this.$store.commit("setShowHelpLine", false)
+    ruleEnable() {
+      return this.$store.state.apply.ruleEnable
+    },
+    viewConStyle() {
+      let left = 21 + 250
+      let top = 21
+      if (!this.ruleEnable) {
+        left = 250
+        top = 0
+      }
+      return {
+        left: left + "px",
+        top: top + "px"
       }
     }
   },

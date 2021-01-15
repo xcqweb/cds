@@ -193,7 +193,8 @@ export default {
   computed: {
     fontSize() {
       return this.currentWidget === null ||
-        (Object.keys(this.currentWidget).length === 0 && this.currentWidgetIndex === -1)
+        (Object.keys(this.currentWidget).length === 0 &&
+          this.currentWidgetIndex === -1)
         ? 12
         : this.$store.state.apply.pages[this.currentPageIndex].widgets[
             this.currentWidgetIndex

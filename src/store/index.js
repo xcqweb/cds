@@ -29,7 +29,8 @@ export default new Vuex.Store({
     isShowSelection: false, // 是否显示框选,
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
-    hint: { show: false, text: "" } // 提示信息
+    hint: { show: false, text: "" }, // 提示信息
+    saveTime:new Date(),
   },
   mutations: {
     setGrid(state, data) {
@@ -42,6 +43,9 @@ export default new Vuex.Store({
       // 设置标尺
       const tempRuler = { ...state.ruler, ...data }
       state.ruler = tempRuler
+    },
+    setSaveTime(state,data) {
+      state.saveTime = data
     },
     addPage(state, data) {
       if (data.pid) {
@@ -280,7 +284,11 @@ export default new Vuex.Store({
           store.commit("setApply", {
             scale: +data.scale || config.scale,
             width: +data.width,
-            height: +data.height
+            height: +data.height,
+            studioName: data.studioName,
+            gridEnable: data.gridEnable || 1,
+            ruleEnable: data.ruleEnable || 1,
+            id: data.id
           })
         }
       })
@@ -309,6 +317,7 @@ export default new Vuex.Store({
       if (params.length) {
         widgetApi.modifyPatch(params).then(res => {
           if (res.code === 0) {
+            store.commit('setSaveTime',new Date())
             if (!isNoTip) {
               console.log("保存成功")
             }
@@ -321,6 +330,15 @@ export default new Vuex.Store({
         if (res.code === 0) {
           console.log("删除成功")
           store.commit("setDelWidgets", [])
+        }
+      })
+    },
+    updateApply(store, data) {
+      const params = { id: store.state.apply.id, ...data }
+      store.commit("setApply", data)
+      appApi.edit(params).then(res => {
+        if (res.code === 0) {
+          console.log("保存成功")
         }
       })
     }
