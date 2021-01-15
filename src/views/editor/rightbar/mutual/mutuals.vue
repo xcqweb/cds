@@ -13,6 +13,20 @@
           </div>
           <div class="link-header fs">
             <span class="link-title">事件</span>
+            <a-select
+              mode="default"
+              v-model="eventValue"
+              style="width: 100%"
+              placeholder="Please select"
+              @change="setFontFamily"
+            >
+              <a-select-option
+                v-for="item in eventPC"
+                :key="item.value"
+              >
+                {{ item.label }}
+              </a-select-option>
+            </a-select>
           </div>
 
         </div>
@@ -52,6 +66,67 @@ export default {
           key: "4"
         }
       ],
+      eventValue:'点击'
+      eventPC:[
+        {
+          value: "1",
+          label: "点击"
+        },
+        {
+          value: "2",
+          label: "双击"
+        }],
+      eventPh:[
+        {
+          value: "1",
+          label: "点击"
+        },
+        {
+          value: "2",
+          label: "双击"
+        },
+        {
+          value: "3",
+          label: "左滑"
+        },
+        {
+          value: "4",
+          label: "右滑"
+        },
+        {
+          value: "5",
+          label: "上滑"
+        },
+        {
+          value: "6",
+          label: "下滑"
+        }],
+      actions:[
+        {
+          value: "1",
+          label: "跳转页面"
+        },
+        {
+          value: "2",
+          label: "显隐组件"
+        }
+        {
+          value: "3",
+          label: "打开链接"
+        }],
+      actions:[
+        {
+          value: "1",
+          label: "跳转页面"
+        },
+        {
+          value: "2",
+          label: "显隐组件"
+        }
+        {
+          value: "3",
+          label: "打开链接"
+        }],
       activeKey: [],
       text: `A dog is a type of domesticated animal.Known for its loyalty and faithfulness,it can be found as a welcome guest in many households across the world.`,
       customStyle:
