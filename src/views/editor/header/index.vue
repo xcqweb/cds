@@ -1,13 +1,14 @@
 <template>
-  <div>
-    <div class="toolbar-con ge-colorg">
-      toolbar
-    </div>
-  </div>
+    <Toolbar></Toolbar>
 </template>
 
 <script>
-export default {}
+import Toolbar from "./tools"
+export default {
+  components:{
+    Toolbar,
+  }
+}
 </script>
 <style lang="less">
 .ge-colorw {

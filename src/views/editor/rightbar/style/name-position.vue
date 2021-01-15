@@ -26,8 +26,10 @@
 
       <div class="fs pdt6 pdr10">
         <label>不透明度</label>
-        <a-progress :percent="50" status="active" />
-        <a-input class="ge-input22 pdr10" :value="height" @change="setHeight" />
+        <div class="fc">
+          <a-slider v-model="inputValue1" :min="1" :max="100" />
+          <a-input-number v-model="inputValue1" :min="1" :max="100" style="marginLeft: 16px" />
+        </div>
       </div>
     </div>
 
@@ -42,7 +44,8 @@ export default {
   mixins: [helpComputed],
   data() {
     return {
-      checked:false
+      checked:false,
+      inputValue1:1,
     }
   },
   computed: {
@@ -165,20 +168,24 @@ export default {
     padding: 2px 3px;
   }
 }
-.ge-input22{
-  .ant-input{
+.pdt6{
+  .ge-input22{
     width: 42px;
-    height: 22px;
-    background: #F7F7F8;
-    border-radius: 2px;
-    border: 1px solid #F0F1F3;
-    box-sizing: border-box;
-    padding: 0px 0px;
+    .ant-input{
+      width: 42px;
+      height: 22px;
+      background: #F7F7F8;
+      border-radius: 2px;
+      border: 1px solid #F0F1F3;
+      box-sizing: border-box;
+      padding: 0px 0px;
 
+    }
   }
 }
+
 .ant-tabs .ant-tabs-top-content{
-  width: 230px;
+  width: 219px;
 }
 .ge-input30:not(:nth-of-type(3)){
   margin-right: 10px;
@@ -200,12 +207,6 @@ label {
 .ant-input{
   width: 142px;
 }
-.ge-border {
-  border-bottom: 1px solid #323a3e;
-}
-.ge-border {
-  border-bottom: 1px solid #e5e6e9;
-}
 .ant-switch{
   width: 30px;
   height: 16px;
@@ -214,5 +215,38 @@ label {
 .ant-switch-loading-icon, .ant-switch::after{
   width: 13px;
   height: 13px;
+}
+.ant-input-affix-wrapper .ant-input-prefix, .ant-input-affix-wrapper .ant-input-suffix {
+  color: #040C2C;
+}
+.ant-slider{
+  width: 76px;
+}
+.ant-input-number{
+  width: 42px;
+  height: 22px;
+}
+.ant-input-number-handler-wrap{
+  display: none;
+  width: 10px
+}
+.ant-input-number-input{
+  height: 22px;
+  padding: 0 6px;
+}
+.ant-slider-track {
+  background: #1740DC;
+  border-radius: 2px;
+}
+.ant-slider-handle {
+  position: absolute;
+  margin-top: -1.8px;
+  cursor: pointer;
+  width: 6px;
+  height: 6px;
+  background: #1740DC;
+  box-shadow: 0px 0px 5px 0px rgba(21, 60, 209, 0.19);
+  border: 1px solid #FFFFFF;
+  transition: border-color 0.3s, box-shadow 0.6s, transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 </style>

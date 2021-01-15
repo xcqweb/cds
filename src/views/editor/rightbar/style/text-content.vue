@@ -1,6 +1,6 @@
 <template>
   <div class="ge-border">
-    <div class="fs ge-h40">
+    <div class="fs pdt5 pdr10 pdb5">
       <label>内容</label>
       <a-input
         class="ge-lg40"
@@ -46,22 +46,20 @@ export default {
 </script>
 
 <style scoped>
-.fs {
-  display: flex;
-  justify-content: space-between;
-}
-.ge-h40 {
-  height: 40px;
-  line-height: 40px;
+.ge-h50 {
+  height: 50px;
+  line-height: 50px;
 }
 .ge-lg40 {
   line-height: 40px;
 }
 label {
-  width: 80px;
-  text-align: center;
-}
-.ge-border {
-  border-bottom: 1px solid #323a3e;
+  width: 48px;
+  height: 35px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #040C2C;
+  line-height: 35px;
+  margin-left: 10px;
 }
 </style>

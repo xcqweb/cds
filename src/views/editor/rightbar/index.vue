@@ -3,8 +3,8 @@
     <a-tabs @change="callback" style="width:100%;overflow: auto;">
       <a-tab-pane key="1" tab="交互">
 <!--        <Page />-->
-        <Style v-if="activeId == 1" />
-        <!-- <Mutual v-if="activeId == 1" /> -->
+<!--        <Style v-if="activeId == 1" />-->
+         <Mutual v-if="activeId == 1" />
       </a-tab-pane>
       <a-tab-pane key="2" tab="样式" force-render>
         <Style v-if="activeId == 2" />
@@ -15,12 +15,12 @@
 <script>
 import Page from "./page.vue"
 import Style from "./style"
-// import Mutual from "./mutual"
+import Mutual from "./mutual"
 
 export default {
   components: {
     Page,
-    // Mutual,
+    Mutual,
     Style
   },
   data() {
