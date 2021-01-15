@@ -13,7 +13,7 @@
 
 <script>
 import EditorMain from "./main/index.vue"
-import Toolbar from "./header"
+import Toolbar from "./header/tools"
 import Leftbar from "./leftbar"
 import Rightbar from "./rightbar"
 import SubContent from "./sub"

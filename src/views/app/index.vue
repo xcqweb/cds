@@ -1,6 +1,5 @@
 <template>
   <div class="apply-con">
-    <toolbar />
     <a-button class="btn-con" type="link" @click.prevent="e => add(e, true)">
       + 新增
     </a-button>
@@ -78,11 +77,7 @@ const columns = [
     scopedSlots: { customRender: "action" }
   }
 ]
-import Toolbar from "../editor/header"
 export default {
-  components: {
-    Toolbar
-  },
   data() {
     return {
       data: [],

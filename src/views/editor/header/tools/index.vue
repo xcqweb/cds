@@ -266,15 +266,15 @@ export default {
     flex: 1 1 0%;
     display: flex;
     justify-content: space-between;
-    height: 54px;
+    height: 50px;
     font-size: 12px;
     .left {
       font-size: 14px;
       cursor: pointer;
       width: 280px;
       padding-left: 20px;
-      height: 54px;
-      line-height: 54px;
+      height: 50px;
+      line-height: 50px;
     }
     .sub {
       flex: 1 1 0%;
@@ -340,7 +340,6 @@ export default {
     .side-nav-icon {
       width: 1.4em;
       height: 1.4em;
-      color: rgb(141, 158, 167);
     }
   }
   .ant-select {
