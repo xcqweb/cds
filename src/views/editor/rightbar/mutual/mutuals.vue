@@ -5,9 +5,9 @@
         <span>添加事件</span>
       </a>
       <ol v-if="data.length" class="link-list" >
-        <div class="link-content" v-for="item in data">
+        <div class="link-content" v-for="(obj,index) in data" :key="index">
           <div class="link-header fs">
-            <span class="link-title">交互</span>
+            <span class="link-title">交互{{index}}</span>
             <a class="action">
               <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon design/trash" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3.5h8v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-7zm2.5 2A.5.5 0 0 0 4 6v3a.5.5 0 0 0 1 0V6a.5.5 0 0 0-.5-.5zm3 0A.5.5 0 0 0 7 6v3a.5.5 0 0 0 1 0V6a.5.5 0 0 0-.5-.5zM5 1a.5.5 0 0 1 .5-.5h1A.5.5 0 0 1 7 1a.5.5 0 0 0 .5.5h3a.5.5 0 1 1 0 1h-9a.5.5 0 0 1 0-1h3A.5.5 0 0 0 5 1z"></path></svg></a>
           </div>
@@ -15,7 +15,7 @@
             <span class="link-title">事件</span>
             <a-select
               mode="default"
-              v-model="eventValue"
+              v-model="obj.eventValue"
               placeholder="Please select"
               @change="(e) => setMutuals(e,'event')"
             >
@@ -32,7 +32,7 @@
             <span class="link-title">动作</span>
             <a-select
               mode="default"
-              v-model="actionValue"
+              v-model="obj.actionValue"
               placeholder="Please select"
               @change="(e) => setMutuals(e,'action')"
             >
@@ -49,7 +49,7 @@
             <span class="link-title">方式</span>
             <a-select
               mode="default"
-              v-model="wayValue"
+              v-model="obj.wayValue"
               placeholder="Please select"
               @change="(e) => setMutuals(e,'way')"
             >
@@ -69,7 +69,7 @@
               <a-textarea
                 class="link"
                 @blur="(e) => setMutuals(e,'input')"
-                v-model="hrefValue"
+                v-model="obj.hrefValue"
                 placeholder="Controlled autosize"
                 :auto-size="{ minRows: 3, maxRows: 5 }"
               />
@@ -113,10 +113,12 @@ export default {
           key: "4"
         }
       ],
-      hrefValue:'',
-      eventValue:'1',
-      actionValue:'1',
-      wayValue:'1',
+      form:{
+        hrefValue:'',
+        eventValue:'1',
+        actionValue:'1',
+        wayValue:'1',
+      },
       eventPC:[
         {
           value: "1",

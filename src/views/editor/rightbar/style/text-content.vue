@@ -63,6 +63,9 @@ export default {
     line-height: 35px;
     margin-left: 10px;
   }
+  .ant-input{
+    width: 142px;
+  }
 }
 
 </style>
