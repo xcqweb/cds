@@ -38,7 +38,9 @@
       <div class="fs ge-h50" style="height:112px">
         <!--背景图片-->
         <label>背景图片</label>
-        <div class="ge-w60 ge-pr bg">
+        <div
+          class="ge-w60 ge-pr bg"
+        >
           <upload-image @addImage="addImage" :styleObj="styleObj">
             <div>
               <div class="fc">
@@ -71,15 +73,15 @@
             </div>
           </div>
           <div class="chose-nav">
-            <div class="nav ge-pr">
-              <div class="nav-bar-left"></div>
-            </div>
+              <div class="nav ge-pr" >
+                <div class="nav-bar-left"></div>
+              </div>
             <div class="textc mt5">
               <label>左侧导航</label>
             </div>
           </div>
           <div class="chose-nav">
-            <div class="nav ge-pr">
+            <div class="nav ge-pr" >
               <div class="nav-bar-top"></div>
             </div>
             <div class="textc mt5">
@@ -115,7 +117,6 @@ import helpMethods from "@/mixins/help-methods"
 import config from "@/config"
 let imgUrl = require("./logo.png")
 export default {
-  name:'PageStyle',
   components: {
     ColorPicker,
     uploadImage
@@ -179,6 +180,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .page {
+  width: 100%;
   font-size: 12px;
   .fs {
     display: flex;
@@ -198,7 +200,7 @@ export default {
     height: 18px;
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
-    color: #040c2c;
+    color: #040C2C;
     line-height: 18px;
     margin-left: 10px;
   }
@@ -251,52 +253,52 @@ export default {
     height: 3em;
     color: #c3cbce;
   }
-  .nav {
+  .nav{
     width: 63px;
     height: 42px;
-    background: #ffffff;
+    background: #FFFFFF;
     border-radius: 2px;
-    border: 1px solid #cdced5;
+    border: 1px solid #CDCED5;
   }
-  .mt5 {
+  .mt5{
     margin-top: 5px;
   }
-  .chose-nav {
+  .chose-nav{
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
   }
   .chose-nav:active,
   .chose-nav:hover,
-  .chose-nav:focus {
+  .chose-nav:focus{
     cursor: pointer;
-    .nav {
-      border: 1px solid #1740dc;
+    .nav{
+      border: 1px solid #1740DC;
     }
-    label {
-      color: #1740dc;
+    label{
+      color: #1740DC;
     }
   }
-  .bg {
+  .bg{
     width: 138px;
     height: 89px;
-    background: #f7f7f8;
+    background: #F7F7F8;
     border-radius: 2px;
     margin-right: 10px;
   }
-  .nav-bar-top {
+  .nav-bar-top{
     width: 61px;
     height: 9px;
-    background: #1740dc;
+    background: #1740DC;
     border-radius: 1px 1px 0px 0px;
     opacity: 0.6;
   }
-  .nav-bar-left {
+  .nav-bar-left{
     position: absolute;
-    top: 0;
-    left: 0px;
+    top:0;
+    left:0px;
     width: 10px;
     height: 40px;
-    background: #1740dc;
+    background: #1740DC;
     border-radius: 1px 0px 0px 1px;
     opacity: 0.6;
   }

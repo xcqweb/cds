@@ -1,5 +1,5 @@
 <template>
-  <div class="ge-border">
+  <div class="text-content ge-border">
     <div class="fs pdt5 pdr10 pdb5">
       <label>内容</label>
       <a-input
@@ -24,8 +24,7 @@ export default {
   computed: {
     content() {
       return this.currentWidget === null ||
-        (Object.keys(this.currentWidget).length === 0 &&
-          this.currentWidgetIndex === -1)
+        (Object.keys(this.currentWidget).length === 0 && this.currentWidgetIndex === -1)
         ? ""
         : this.$store.state.apply.pages[this.currentPageIndex].widgets[
             this.currentWidgetIndex
@@ -46,21 +45,24 @@ export default {
 }
 </script>
 
-<style scoped>
-.ge-h50 {
-  height: 50px;
-  line-height: 50px;
+<style lang="less" scoped>
+.text-content{
+  .ge-h50 {
+    height: 50px;
+    line-height: 50px;
+  }
+  .ge-lg40 {
+    line-height: 40px;
+  }
+  label {
+    width: 48px;
+    height: 35px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #040C2C;
+    line-height: 35px;
+    margin-left: 10px;
+  }
 }
-.ge-lg40 {
-  line-height: 40px;
-}
-label {
-  width: 48px;
-  height: 35px;
-  font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: 500;
-  color: #040C2C;
-  line-height: 35px;
-  margin-left: 10px;
-}
+
 </style>

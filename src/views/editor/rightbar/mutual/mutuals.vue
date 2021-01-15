@@ -1,24 +1,23 @@
 <template>
   <div class="mutuals">
     <div class="m-content">
-      <a class="jZTldN" @click="add">
+      <a class="jZTldN" @click="add('add')">
         <span>添加事件</span>
       </a>
-      <ol v-if="data.length" class="link-list">
-        <div class="link-content">
+      <ol v-if="data.length" class="link-list" >
+        <div class="link-content" v-for="item in data">
           <div class="link-header fs">
             <span class="link-title">交互</span>
             <a class="action">
               <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon design/trash" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3.5h8v7a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-7zm2.5 2A.5.5 0 0 0 4 6v3a.5.5 0 0 0 1 0V6a.5.5 0 0 0-.5-.5zm3 0A.5.5 0 0 0 7 6v3a.5.5 0 0 0 1 0V6a.5.5 0 0 0-.5-.5zM5 1a.5.5 0 0 1 .5-.5h1A.5.5 0 0 1 7 1a.5.5 0 0 0 .5.5h3a.5.5 0 1 1 0 1h-9a.5.5 0 0 1 0-1h3A.5.5 0 0 0 5 1z"></path></svg></a>
           </div>
-          <div class="link-header fs">
+          <div class="link-header mgb10 fs">
             <span class="link-title">事件</span>
             <a-select
               mode="default"
               v-model="eventValue"
-              style="width: 100%"
               placeholder="Please select"
-              @change="setFontFamily"
+              @change="(e) => setMutuals(e,'event')"
             >
               <a-select-option
                 v-for="item in eventPC"
@@ -29,6 +28,53 @@
             </a-select>
           </div>
 
+          <div class="link-header mgb10 fs">
+            <span class="link-title">动作</span>
+            <a-select
+              mode="default"
+              v-model="actionValue"
+              placeholder="Please select"
+              @change="(e) => setMutuals(e,'action')"
+            >
+              <a-select-option
+                v-for="item in actions"
+                :key="item.value"
+              >
+                {{ item.label }}
+              </a-select-option>
+            </a-select>
+          </div>
+
+          <div class="link-header mgb10 fs">
+            <span class="link-title">方式</span>
+            <a-select
+              mode="default"
+              v-model="wayValue"
+              placeholder="Please select"
+              @change="(e) => setMutuals(e,'way')"
+            >
+              <a-select-option
+                v-for="item in ways"
+                :key="item.value"
+              >
+                {{ item.label }}
+              </a-select-option>
+            </a-select>
+          </div>
+          <div v-if="actionValue == 3">
+            <div class="link-header">
+              <span class="link-title">方式</span>
+            </div>
+            <div class="way-texta">
+              <a-textarea
+                class="link"
+                @blur="(e) => setMutuals(e,'input')"
+                v-model="hrefValue"
+                placeholder="Controlled autosize"
+                :auto-size="{ minRows: 3, maxRows: 5 }"
+              />
+            </div>
+          </div>
         </div>
 
       </ol>
@@ -41,6 +87,7 @@
 </template>
 
 <script>
+import api from "@/api/mutuals"
 const no_links_light = require('@/assets/images/no_links_light.png')
 export default {
   name: "mutuals",
@@ -66,7 +113,10 @@ export default {
           key: "4"
         }
       ],
-      eventValue:'点击'
+      hrefValue:'',
+      eventValue:'1',
+      actionValue:'1',
+      wayValue:'1',
       eventPC:[
         {
           value: "1",
@@ -109,12 +159,12 @@ export default {
         {
           value: "2",
           label: "显隐组件"
-        }
+        },
         {
           value: "3",
           label: "打开链接"
         }],
-      actions:[
+      ways:[
         {
           value: "1",
           label: "跳转页面"
@@ -122,7 +172,7 @@ export default {
         {
           value: "2",
           label: "显隐组件"
-        }
+        },
         {
           value: "3",
           label: "打开链接"
@@ -133,18 +183,101 @@ export default {
         "background: #fff;border-radius: 4px;margin-bottom: 14px;border: 0;overflow: hidden;position:relative"
     }
   },
+  computed:{
+    currentWidget() {
+      return this.$store.getters["currentWidget"]
+    },
+  },
   watch: {},
   methods: {
-    add() {
-      let len = this.data.length + 1
-      let obj = {
-        title: "Ant Design Title 1",
-        key: len.toString()
+    handleOk() {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          const params = {
+            appType: 0,
+            classifyId: "",
+            descript: "test",
+            height: "768",
+            picUrl: "",
+            scale: "1",
+            studioName: this.form.studioName,
+            id: this.form.id,
+            tenantId: "",
+            theme: "",
+            width: "1024"
+          }
+          if (this.form.id) {
+            api.edit(params).then(res => {
+              if (res.code === 0) {
+                this.$message.success("修改应用成功")
+                this.resetForm()
+                this.visible = false
+                this.queryApply()
+              }
+            })
+          } else {
+            api.add(params).then(res => {
+              if (res.code === 0) {
+                this.$message.success("新建应用成功")
+                this.resetForm()
+                this.visible = false
+                this.queryApply()
+              }
+            })
+          }
+        } else {
+          console.log("error submit!!")
+          return false
+        }
+      })
+    },
+    getList() {
+      let params ={
+        widgetId:this.currentWidget.cid
       }
-      this.data.push(obj)
+      api.list(params).then(res => {
+        if (res.code === 0) {
+          this.data = res.data
+        }
+      })
+    },
+    del() {
+      let params ={
+        actionIds:this.currentWidget.cid
+      }
+      api.del(params).then(res => {
+        if (res.code === 0) {
+          this.data = res.data
+        }
+      })
+    },
+    add(type) {
+      let params = {}
+      if(type == 'add') {
+        let params = {
+          "actionId": "",
+          "actionType": "",
+          "content": {
+            "wayValue": "",
+            "actionValue": "",
+            "hrefValue": "",
+            "eventValue": ""
+          },
+          "widgetId": this.currentWidget.cid
+        }
+      }
+      api.add(params).then(res => {
+        if (res.code === 0) {
+          this.$message.success("新增成功")
+        }
+      })
     },
     change(key) {
       console.log(key)
+    },
+    setMutuals(type){
+      console.log(type)
+
     },
     del(item) {
       if (this.data.indexOf(item) > -1) {
@@ -164,6 +297,7 @@ export default {
    flex-direction: column;
    flex: 1 1 0%;
    overflow: hidden;
+   font-size: 12px;
    .m-content {
      height: calc(100% - 36px);
      padding: 0px 9px;
@@ -200,7 +334,7 @@ export default {
     margin: 33px 25px;
   }
   }
- }
+
  .link-list {
    height: 100%;
    overflow-x: hidden;
@@ -211,14 +345,33 @@ export default {
    border-radius: 2px;
    transition: all 0.2s ease-in-out 0s;
    .link-content {
-     padding: 15px 5px 10px;
+     padding: 10px 5px 10px;
      .link-header{
        height: 31px;
-       padding: 0px 7px 13px 10px;
+       padding: 0px 7px 10px 10px;
      }
      .link-title{
+       height: 18px;
+       line-height: 18px;
        color: rgb(91, 107, 115);
      }
+   }
+   .ant-select-selection{
+     width: 142px;
+     height: 30px;
+     background: #FFFFFF;
+     border-radius: 2px;
+     border: 1px solid #F0F1F3;
+   }
+   .link{
+     width: 190px;
+     height: 69px;
+     background: #FFFFFF;
+     border-radius: 2px;
+     border: 1px solid #F0F1F3;
+   }
+   .way-texta{
+     padding: 0px 7px 0px 10px;
    }
  }
  a {
@@ -232,5 +385,6 @@ export default {
  .svg-icon {
    fill: currentColor;
    width: 1em;
+ }
  }
 </style>

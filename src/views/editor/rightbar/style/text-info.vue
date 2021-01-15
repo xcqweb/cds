@@ -321,10 +321,9 @@ export default {
 <style>
 @import '../index.less'
 </style>
-<style lang="less" scoped>
+<style lang="less">
 .text-info{
   font-size: 12px;
-}
 .ge-h40 {
   height: 40px;
   line-height: 40px;
@@ -415,5 +414,6 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
+}
 }
 </style>

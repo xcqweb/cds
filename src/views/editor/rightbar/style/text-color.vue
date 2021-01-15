@@ -178,7 +178,7 @@ export default {
 .text-color{
   font-size: 12px;
 
-}
+
 .ge-h40 {
   height: 40px;
   line-height: 40px;
@@ -305,6 +305,7 @@ label {
 }
 .ge-zindex {
   z-index: 1;
+}
 }
 
 </style>
