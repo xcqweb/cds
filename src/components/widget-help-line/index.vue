@@ -73,7 +73,7 @@ export default {
       }
     },
     selectWidgetsCount() {
-      return this.selectWidgets.length
+      return this.$store.getters.selectWidgets.length
     }
   },
   watch: {
