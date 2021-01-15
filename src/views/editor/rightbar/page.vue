@@ -22,12 +22,12 @@
       <label>背景颜色</label>
       <div class="ge-pr pdr10">
         <div
-          @click="toggle1"
+          @click="toggle2"
           class="ge-block "
           :style="{ background: backgroundValue }"
         ></div>
         <color-picker
-          v-if="visiablecolor1"
+          v-if="visiablecolor2"
           class="ge-pos1 ge-zindex"
           @colorChange="colorChange1"
         />
@@ -39,8 +39,7 @@
         <!--背景图片-->
         <label>背景图片</label>
         <div
-          class="ge-w60 ge-pr"
-          style="width:138px;height:89px;background:#F7F7F8;margin-right:10px"
+          class="ge-w60 ge-pr bg"
         >
           <upload-image @addImage="addImage" :styleObj="styleObj">
             <div>
@@ -67,40 +66,26 @@
           class="fs ge-w60 ge-pr pal10 pdr10"
           style=" width:100%;height:65px;"
         >
-          <div>
-            <div class="fc">
-              <img
-                style="width:63px;height:42px;display:block"
-                :src="src"
-                alt=""
-              />
-            </div>
-            <div class="textc">
-              <span>无</span>
+          <div class="chose-nav">
+            <div class="nav"></div>
+            <div class="textc mt5">
+              <label>无</label>
             </div>
           </div>
-          <div>
-            <div class="fc">
-              <img
-                style="width:63px;height:42px;display:block"
-                :src="src"
-                alt=""
-              />
-            </div>
-            <div class="textc">
-              <span>左侧导航</span>
+          <div class="chose-nav">
+              <div class="nav ge-pr" >
+                <div class="nav-bar-left"></div>
+              </div>
+            <div class="textc mt5">
+              <label>左侧导航</label>
             </div>
           </div>
-          <div>
-            <div class="fc">
-              <img
-                style="width:63px;height:42px;display:block"
-                :src="src"
-                alt=""
-              />
+          <div class="chose-nav">
+            <div class="nav ge-pr" >
+              <div class="nav-bar-top"></div>
             </div>
-            <div class="textc">
-              <span>顶部导航</span>
+            <div class="textc mt5">
+              <label>顶部导航</label>
             </div>
           </div>
         </div>
@@ -144,6 +129,7 @@ export default {
       backgroundValue: "#000",
       backgroundValue1: "#000",
       visiablecolor1: false,
+      visiablecolor2: false,
       isiablecolor: false,
       src: imgUrl,
       styleObj: {
@@ -178,7 +164,12 @@ export default {
       this.$store.commit("setGridColor", color)
       this.backgroundValue = color
     },
-    toggle1() {},
+    toggle1() {
+      this.visiablecolor1 = true
+    },
+    toggle2() {
+      this.visiablecolor2 = true
+    },
 
     sizeChange(size) {
       this.$store.commit("setGrid", { size })
@@ -204,11 +195,13 @@ export default {
     height: 50px;
   }
   label {
-    box-sizing: border-box;
     width: 48px;
-    text-align: center;
+    height: 18px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #040C2C;
+    line-height: 18px;
     margin-left: 10px;
-    margin-right: 20px;
   }
   .pdr10 {
     padding-right: 10px;
@@ -258,6 +251,58 @@ export default {
     width: 2.8em;
     height: 3em;
     color: #c3cbce;
+  }
+  .nav{
+    width: 63px;
+    height: 42px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    border: 1px solid #CDCED5;
+  }
+  .mt5{
+    margin-top: 5px;
+  }
+  .chose-nav{
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+  }
+  .chose-nav:active,
+  .chose-nav:hover,
+  .chose-nav:focus{
+    cursor: pointer;
+    .nav{
+      border: 1px solid #1740DC;
+    }
+    label{
+      color: #1740DC;
+    }
+  }
+  .bg{
+    width: 138px;
+    height: 89px;
+    background: #F7F7F8;
+    border-radius: 2px;
+    margin-right: 10px;
+  }
+  .nav-bar-top{
+    width: 61px;
+    height: 9px;
+    background: #1740DC;
+    border-radius: 1px 1px 0px 0px;
+    opacity: 0.6;
+  }
+  .nav-bar-left{
+    position: absolute;
+    top:0;
+    left:0px;
+    width: 10px;
+    height: 40px;
+    background: #1740DC;
+    border-radius: 1px 0px 0px 1px;
+    opacity: 0.6;
+  }
+  .ge-zindex {
+    z-index: 1;
   }
 }
 </style>

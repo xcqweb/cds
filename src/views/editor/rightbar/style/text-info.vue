@@ -193,7 +193,7 @@ export default {
   computed: {
     fontSize() {
       return this.currentWidget === null ||
-        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        (Object.keys(this.currentWidget).length === 0 && this.currentWidgetIndex === -1)
         ? 12
         : this.$store.state.apply.pages[this.currentPageIndex].widgets[
             this.currentWidgetIndex
@@ -337,6 +337,11 @@ label {
 .svg-icon {
   fill: #000;
   width: 1em;
+}
+.ge-pos1 {
+  position: absolute;
+  top: 0;
+  right: 90px;
 }
 .ge-zindex {
   z-index: 1;

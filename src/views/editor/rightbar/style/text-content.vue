@@ -24,7 +24,7 @@ export default {
   computed: {
     content() {
       return this.currentWidget === null ||
-        (this.currentWidget === undefined && this.currentWidgetIndex === -1)
+        (Object.keys(this.currentWidget).length === 0 && this.currentWidgetIndex === -1)
         ? ""
         : this.$store.state.apply.pages[this.currentPageIndex].widgets[
             this.currentWidgetIndex
