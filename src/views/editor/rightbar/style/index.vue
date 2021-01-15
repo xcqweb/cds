@@ -13,7 +13,7 @@ import textColor from "./text-color"
 import textInfo from "./text-info"
 import textContent from "./text-content"
 export default {
-  name: "index",
+  name: "WidgetStyle",
   components: {
     namePosition,
     textColor,

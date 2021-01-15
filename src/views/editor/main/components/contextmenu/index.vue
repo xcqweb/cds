@@ -43,7 +43,7 @@ export default {
         { name: "置顶", kbd: "", type: "top", show: false },
         { name: "置底", kbd: "", type: "bottom", show: false, divide: "true" },
         { name: "组合", kbd: "", type: "group", show: false },
-        { name: "打散", kbd: "", type: "ungroup", show: false, divide: "true" },
+        { name: "解散", kbd: "", type: "ungroup", show: false, divide: "true" },
         { name: "删除", kbd: "", type: "ungroup", show: false }
       ],
       styleObj: {},

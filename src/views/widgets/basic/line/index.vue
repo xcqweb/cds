@@ -25,7 +25,7 @@ const cname = "GtLine"
 export default {
   name: cname,
   mixins: [baseWidget],
-  computed:{
+  computed: {
     d() {
       let sx = 0
       let sy = 0.5
@@ -41,12 +41,10 @@ export default {
     },
     strokeDasharray() {
       return []
-    },
+    }
   },
   data() {
-    return {
-       
-    }
+    return {}
   },
   created() {},
   methods: {}
