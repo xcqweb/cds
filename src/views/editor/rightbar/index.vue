@@ -1,7 +1,7 @@
 <template>
   <div class="right-con">
     <page-style v-if="isPage" />
-    <a-tabs v-else size="small">
+    <a-tabs v-else size="small" :animated="false">
       <a-tab-pane key="style" tab="样式">
         <widget-style />
       </a-tab-pane>
@@ -73,6 +73,8 @@ export default {
     }
     .ant-tabs-tab {
       color: #040c2c;
+      padding:8px 24px;
+      margin-right:0;
       &:hover,
       &-active {
         color: #1740dc;
