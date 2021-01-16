@@ -118,5 +118,22 @@ export default {
     opacity: 1,
     visible: false,
     borderRadius: 0
-  }
+  },
+  eventList: [
+    { label: "点击", value: "click" },
+    { label: "双击", value: "dbclick" },
+    { label: "左滑", value: "touchLeft" },
+    { label: "右滑", value: "touchRight" },
+    { label: "上滑", value: "touchTop" },
+    { label: "下滑", value: "touchBottom" }
+  ],
+  actionList: [
+    { label: "跳转页面", value: "link-page" },
+    { label: "显隐组件", value: "show-hide-widget" },
+    { label: "打开链接", value: "open-link" }
+  ],
+  openListWayList: [
+    { label: "当前页打开", value: "_self" },
+    { label: "新窗口打开", value: "_blank" }
+  ]
 }

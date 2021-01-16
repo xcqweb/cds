@@ -8,6 +8,9 @@
       <a-tab-pane key="mutual" tab="交互">
         <mutual />
       </a-tab-pane>
+      <a-tab-pane key="data" tab="数据">
+        <datasource />
+      </a-tab-pane>
     </a-tabs>
   </div>
 </template>
@@ -15,12 +18,13 @@
 import PageStyle from "./page.vue"
 import WidgetStyle from "./style"
 import Mutual from "./mutual"
-
+import Datasource from './data'
 export default {
   components: {
     PageStyle,
     WidgetStyle,
-    Mutual
+    Mutual,
+    Datasource,
   },
   computed: {
     isPage() {

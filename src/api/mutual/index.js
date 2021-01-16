@@ -5,9 +5,9 @@ const add = params =>
 const edit = params =>
   instance.put(`//api/ruban-cds/studio/widget/action`, params)
 const list = params =>
-  instance.get(`/api/ruban-cds/studio/widget/action/list`, params)
-const del = actionIds =>
-  instance.delete(`/api/ruban-cds/studio/widget/action/${actionIds}`)
+  instance.get(`/api/ruban-cds/studio/widget/action/list`, { params })
+const del = actionId =>
+  instance.delete(`/api/ruban-cds/studio/widget/action/${actionId}`)
 const query = actionId =>
   instance.get(`/api/ruban-cds/studio/widget/action/${actionId}`)
 

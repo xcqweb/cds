@@ -69,7 +69,7 @@
         class="upload-con"
       >
         <div class="default-con">
-          <svg-icon icon-class="default" class-name="icon" />
+          <svg-icon icon-class="default-pic" class-name="icon" />
           <span>选择背景图片</span>
         </div>
       </a-upload-dragger>

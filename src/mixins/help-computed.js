@@ -1,4 +1,3 @@
-import config from "@/config"
 export default {
   computed: {
     currentPageIndex() {
@@ -29,7 +28,7 @@ export default {
     attrs: {
       get() {
         let attrs = {}
-        if(this.selectWidgets.length == 1) {
+        if (this.selectWidgets.length == 1) {
           attrs = this.selectWidgets[0].attrs
         }
         return attrs
