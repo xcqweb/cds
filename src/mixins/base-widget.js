@@ -4,8 +4,8 @@ export default {
     top: { default: 0, type: String | Number },
     width: { default: 0, type: String | Number },
     height: { default: 0, type: String | Number },
-    rotate: { default: 0, type: Number },
-    zIndex: { default: 5, type: Number },
+    rotate: { default: 0, type: String | Number },
+    zIndex: { default: 5, type: String | Number },
     text: { default: "", type: String },
     cid: { default: "", type: String },
     backgroundColor: { default: "", type: String }

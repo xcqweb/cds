@@ -1,5 +1,10 @@
 <template>
-  <div v-if="visible" :style="objStyle" class="color-picker-con">
+  <div
+    v-if="visible"
+    :style="objStyle"
+    class="color-picker-con"
+    v-click-out-side="hide"
+  >
     <sketch-picker v-model="color" @input="updateValue"></sketch-picker>
   </div>
 </template>
@@ -25,6 +30,9 @@ export default {
   methods: {
     updateValue(val) {
       this.$emit("colorChange", val.hex)
+      this.hide()
+    },
+    hide() {
       this.$emit("update:visible", false)
     }
   }

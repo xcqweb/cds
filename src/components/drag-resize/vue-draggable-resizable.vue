@@ -57,23 +57,11 @@ export default {
     },
     w: {
       type: [Number, String],
-      default: 200,
-      validator: function(val) {
-        if (typeof val === "string") {
-          return val === "auto"
-        }
-        return val >= 0
-      }
+      default: 200
     },
     h: {
       type: [Number, String],
-      default: 200,
-      validator: function(val) {
-        if (typeof val === "string") {
-          return val === "auto"
-        }
-        return val >= 0
-      }
+      default: 200
     },
     minw: {
       type: Number,
@@ -90,25 +78,16 @@ export default {
       }
     },
     r: {
-      type: Number,
-      default: 0,
-      validator: function(val) {
-        return typeof val === "number"
-      }
+      type: [Number, String],
+      default: 0
     },
     x: {
-      type: Number,
-      default: 0,
-      validator: function(val) {
-        return typeof val === "number"
-      }
+      type: [Number, String],
+      default: 0
     },
     y: {
-      type: Number,
-      default: 0,
-      validator: function(val) {
-        return typeof val === "number"
-      }
+      type: [Number, String],
+      default: 0
     },
     z: {
       type: [String, Number],

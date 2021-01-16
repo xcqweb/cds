@@ -41,5 +41,57 @@ export default {
   z-index: 4;
   box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
   background-color: #ffffff;
+  .item-con {
+    padding: 9px 10px;
+    border-bottom: solid 1px #e5e6e9;
+  }
+  .fs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .fc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .fv {
+    // 垂直
+    display: flex;
+    align-items: center;
+  }
+  .ant-tabs {
+    width: 100%;
+    overflow: unset;
+    font-size: 12px;
+    .ant-tabs-bar {
+      margin-bottom: 0;
+    }
+    .ant-tabs-tab {
+      color: #040c2c;
+      &:hover,
+      &-active {
+        color: #1740dc;
+      }
+    }
+    .ant-tabs-ink-bar {
+      background-color: #1740dc;
+    }
+  }
+  .ant-input-affix-wrapper .ant-input-suffix {
+    right: 6px;
+  }
+  .ant-input-affix-wrapper .ant-input:not(:last-child) {
+    padding-right: 15px;
+  }
+  .ant-input {
+    border-radius: 2px;
+    border: 1px solid #f0f1f3;
+    &:focus,
+    &:hover {
+      box-shadow: unset;
+      border-color: #40a9ff;
+    }
+  }
 }
 </style>

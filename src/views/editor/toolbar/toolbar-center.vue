@@ -104,6 +104,9 @@
 import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
 import undoManager from "@u/undo-manager"
+import config from "@/config"
+import { uuid } from "@u/uuid"
+import { isGroup, findWidgetById, findWidgetChildren } from "@u/deal"
 export default {
   name: "ToolbarCenter",
   mixins: [helpMethods, helpComputed],

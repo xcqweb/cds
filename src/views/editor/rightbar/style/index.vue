@@ -1,52 +1,87 @@
 <template>
-  <div>
-    <name-position></name-position>
-    <text-content></text-content>
-    <text-info :textStyle="textStyle"></text-info>
-    <text-color :textColor="textColor"></text-color>
+  <div class="widget-style-con">
+    <widget-position />
+    <widget-name />
+    <text-style @showColorPicker="showColorPicker" />
+    <widget-outter @showColorPicker="showColorPicker" />
+    <widget-border @showColorPicker="showColorPicker" />
+    <picture-style />
+    <line-style />
+    <link-style />
+    <color-picker
+      :visible.sync="visibleColor"
+      :objStyle="objStyle"
+      @colorChange="colorChange"
+    />
   </div>
 </template>
 
 <script>
-import namePosition from "./name-position"
-import textColor from "./text-color"
-import textInfo from "./text-info"
-import textContent from "./text-content"
+import WidgetPosition from "./widget-position"
+import WidgetName from "./widget-name"
+import TextStyle from "./text-style"
+import WidgetOutter from "./widget-outter"
+import WidgetBorder from "./widget-border"
+import PictureStyle from "./picture-style"
+import LineStyle from "./line-style"
+import LinkStyle from "./link-style"
+import ColorPicker from "@c/color-picker/index"
+import helpComputed from "@/mixins/help-computed"
 export default {
   name: "WidgetStyle",
+  mixins: [helpComputed],
   components: {
-    namePosition,
-    textColor,
-    textInfo,
-    textContent
+    WidgetPosition,
+    WidgetName,
+    TextStyle,
+    WidgetOutter,
+    ColorPicker,
+    WidgetBorder,
+    PictureStyle,
+    LineStyle,
+    LinkStyle
   },
   data() {
     return {
-      textStyle: {
-        fontSize: [12, 14, 16, 18, 20, 22, 24, 28],
-        color: "#000",
-        bold: "bold",
-        top: "top",
-        bottom: "bottom",
-        middle: "middle",
-        left: "left",
-        right: "right",
-        center: "center",
-        fontFamilyList: [
-          { label: "黑体", value: "SimHei" },
-          { label: "宋体 ", value: "SimSun" },
-          { label: "微软雅黑", value: "Microsoft YaHei" },
-          { label: "楷体", value: "KaiTi" },
-          { label: "仿宋", value: "FangSong" }
-        ]
-      },
-      textColor: {
-        svgArr: ["1", "2", "3"],
-        borderWidth: [1, 2, 3, 4, 5, 6, 7, 8]
+      visibleColor: false,
+      objStyle: {}
+    }
+  },
+  methods: {
+    colorChange(val) {
+      let res = {}
+      switch (this.colorType) {
+        case "fontColor":
+          res = { color: val }
+          break
+        case "fillColor":
+          res = { backgroundColor: val }
+          break
+        case "borderColor":
+          res = { borderColor: val }
+          break
       }
+      this.selectWidgets.forEach(item => {
+        this.$store.commit("updateWidgetAttrs", { ...res, cid: item.cid })
+      })
+    },
+    showColorPicker(type, evt) {
+      this.colorType = type
+      const { srcElement } = evt
+      const { top } = srcElement.getBoundingClientRect()
+      this.objStyle = {
+        left: "calc(-100% + 9px)",
+        top: `${top - 80}px`
+      }
+      this.visibleColor = true
     }
   }
 }
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.widget-style-con {
+  position: relative;
+  width: 100%;
+}
+</style>

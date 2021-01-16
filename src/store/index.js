@@ -148,6 +148,7 @@ export default new Vuex.Store({
         copyNum: 0,
         active: true, // 激活当前控件
         attrs: {
+          ...config.defaultWidget,
           width,
           height,
           left,

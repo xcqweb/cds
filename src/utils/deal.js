@@ -101,6 +101,7 @@ export function dealPageData(data) {
 }
 export function dealWidgetData(data) {
   let result = []
+  const dw = config.defaultWidget
   data.forEach(item => {
     result.push({
       cid: item.widgetId,
@@ -115,8 +116,24 @@ export function dealWidgetData(data) {
         height: item.height,
         left: item.left,
         top: item.top,
-        rotate: item.rotate,
-        zIndex: item.zIndex
+        zIndex: item.zIndex,
+        rotate: item.rotate || dw.rotate,
+        arrow: item.arrow || dw.arrow,
+        linkUrl: item.linkUrl || dw.linkUrl,
+        imgSrc: item.imgSrc || dw.imgSrc,
+        borderColor: item.borderColor || dw.borderColor,
+        borderStyle: item.borderStyle || dw.borderStyle,
+        borderWidth: item.borderWidth || dw.borderWidth,
+        backgroundColor: item.backgroundColor || dw.backgroundColor,
+        backgroundImage: item.backgroundImage || dw.backgroundImage,
+        justifyContent: item.justifyContent || dw.justifyContent,
+        alignItems: item.alignItems || dw.alignItems,
+        fontWeight: item.fontWeight || dw.fontWeight,
+        fontSize: item.fontSize || dw.fontSize,
+        fontFamily: item.fontFamily || dw.fontFamily,
+        opacity: item.opacity || dw.opacity,
+        visible: item.visible || dw.visible,
+        borderRadius: item.borderRadius || dw.borderRadius
       }
     })
   })

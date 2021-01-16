@@ -16,7 +16,7 @@
           {{ item }}
         </a-select-option>
       </a-select>
-      <div v-if="showPageCustom" class="page-custom">
+      <div v-if="showPageCustom" class="page-custom fs">
         <a-input
           size="small"
           v-model="pw"
@@ -77,11 +77,23 @@
     <div class="item-con">
       <label style="display:block;margin-bottom:10px;">导航布局</label>
       <div class="fs">
-        <div class="layout-item" @click="changNavPosition(0)" :class="{'select':navPosition==0}"/>
-        <div class="layout-item" @click="changNavPosition(1)" :class="{'select':navPosition==1}">
+        <div
+          class="layout-item"
+          @click="changNavPosition(0)"
+          :class="{ select: navPosition == 0 }"
+        />
+        <div
+          class="layout-item"
+          @click="changNavPosition(1)"
+          :class="{ select: navPosition == 1 }"
+        >
           <div class="left" />
         </div>
-        <div class="layout-item" @click="changNavPosition(2)" :class="{'select':navPosition==2}">
+        <div
+          class="layout-item"
+          @click="changNavPosition(2)"
+          :class="{ select: navPosition == 2 }"
+        >
           <div class="top" />
         </div>
       </div>
@@ -94,13 +106,23 @@
         style="width:100%;"
         placeholder="默认"
       >
-        <a-select-option v-for="item in navList" :key="item.value" :value="item.value">
+        <a-select-option
+          v-for="item in navList"
+          :key="item.value"
+          :value="item.value"
+        >
           {{ item.label }}
         </a-select-option>
       </a-select>
       <div class="fs" v-if="navModel" style="margin-top:10px;">
-        <div v-for="(d,index) in navColorList" class="nav-color" @click="changeNavColor(index)" :class="{'select':index+1==navColorModel}">
-          <div :style="{backgroundColor:d.label}" class="item"/>
+        <div
+          v-for="(d, index) in navColorList"
+          :key="index"
+          class="nav-color fc"
+          @click="changeNavColor(index)"
+          :class="{ select: index + 1 == navColorModel }"
+        >
+          <div :style="{ backgroundColor: d.label }" class="item" />
         </div>
       </div>
     </div>
@@ -113,7 +135,6 @@
 </template>
 <script>
 import ColorPicker from "@c/color-picker/index"
-import uploadImage from "@c/upload"
 import helpComputed from "@/mixins/help-computed"
 import config from "@/config"
 const pageSizeList = ["1366 * 768", "1280 * 768", "1920 * 1080", "自定义"]
@@ -128,8 +149,7 @@ export default {
   name: "PageStyle",
   mixins: [helpComputed],
   components: {
-    ColorPicker,
-    uploadImage
+    ColorPicker
   },
   computed: {
     pageSize: {
@@ -183,7 +203,7 @@ export default {
       get() {
         let color = config.grid.color
         if (this.currentPage) {
-          let grid = this.currentPage.grid || cofig.grid
+          let grid = this.currentPage.grid || config.grid
           color = grid.color
         }
         return { backgroundColor: color }
@@ -213,13 +233,13 @@ export default {
       visibleColor: false,
       objStyle: {},
       navList: [
-        { label: "亮色", value: "light"},
-        { label: "暗色", value: "dark"}
+        { label: "亮色", value: "light" },
+        { label: "暗色", value: "dark" }
       ],
-      navPosition:0,
-      navModel:undefined,
-      navColorModel:1,
-      navColorList,
+      navPosition: 0,
+      navModel: undefined,
+      navColorModel: 1,
+      navColorList
     }
   },
   created() {},
@@ -261,7 +281,7 @@ export default {
     },
     changeNavColor(index) {
       this.navColorModel = index + 1
-    },
+    }
   }
 }
 </script>
@@ -271,23 +291,9 @@ export default {
   color: #040c2c;
   width: 100%;
   position: relative;
-  .item-con {
-    padding: 9px 10px;
-    border-bottom: solid 1px #e5e6e9;
-  }
   .title {
     font-size: 14px;
     font-weight: 500;
-  }
-  .fs {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .fc {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
   label {
     font-weight: 500;
@@ -297,7 +303,6 @@ export default {
   .page-custom {
     margin-top: 10px;
     display: flex;
-    .fs;
   }
   .page-bg {
     width: 60%;
@@ -353,14 +358,13 @@ export default {
       opacity: 0.6;
     }
   }
-  .nav-color{
-    width:30px;
-    height:30px;
+  .nav-color {
+    width: 30px;
+    height: 30px;
     border: 1px solid #cdced5;
-    .fc;
-    .item{
-      width:18px;
-      height:18px;
+    .item {
+      width: 18px;
+      height: 18px;
     }
     &:hover,
     &.select {

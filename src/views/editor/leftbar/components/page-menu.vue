@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="page-menu-con">
     <li
       v-for="page in pages"
       :key="page.pageId"
@@ -7,7 +7,7 @@
       @click="changePage(page)"
     >
       <div
-        class="item"
+        class="menu-item"
         :class="{ active: isCurrentPage(page) }"
         :style="{ paddingLeft: `${page.level * 14}px` }"
       >
@@ -161,123 +161,125 @@ export default {
   }
 }
 </script>
-<style lang="less">
-.item {
-  position: relative;
-  height: 32px;
-  padding-left: 14px;
-  display: flex;
-  align-items: center;
-  border: 1px solid transparent;
-  color: #040c2c;
-  font-size: 12px;
-  cursor: pointer;
-  .expander {
-    display: flex;
-    width: 12px;
-    margin-left: -12px;
-    color: rgb(200, 205, 208);
-    &.is-expand {
-      transform: rotate(90deg);
-    }
-  }
-  .name-con {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding-right: 5px;
-    .name-icon {
-      display: flex;
-      flex-shrink: 0;
-      justify-content: center;
-      align-items: center;
-      width: 14px;
-      height: 14px;
-      margin-right: 8px;
-      .icon {
-        width: 9px;
-        height: 12px;
-        color: rgb(141, 158, 167);
-      }
-    }
-    .name {
-      width: 100%;
-      height: 24px;
-      line-height: 22px;
-      border-top: 1px solid transparent;
-      border-bottom: 1px solid transparent;
-      margin-right: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      &.is-eidt {
-        border-bottom: 1px solid rgb(245, 93, 84);
-      }
-      input {
-        border: none;
-        outline: none;
-        width: 100%;
-        height: 100%;
-        background: transparent;
-        color: rgb(82, 94, 113);
-        white-space: nowrap;
-        overflow: hidden;
-      }
-    }
-  }
-  .actions {
-    display: none;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    height: 100%;
-    padding: 0 10px;
-    background: inherit;
-    align-items: center;
-    color: rgb(141, 158, 167);
-    .icon {
-      font-size: 14px;
-      pointer-events: none;
-    }
-    &:hover,
-    &.hover {
-      display: flex;
-      color: rgb(41, 141, 248);
-    }
-  }
-  .active-circle {
-    position: absolute;
-    right: 10px;
-    width: 6px;
-    height: 6px;
-    color: rgb(41, 141, 248);
-  }
-  &:hover {
-    background: rgb(247, 247, 247);
-    color: unset;
-    .actions {
-      display: flex;
-    }
-    .active-circle {
-      display: none;
-    }
-  }
-  &.active {
-    color: rgb(41, 141, 248);
-    background: rgb(242, 248, 255);
-    .expander {
-      color: rgb(41, 141, 248);
-    }
-    .name-icon {
-      .icon {
-        color: rgb(41, 141, 248);
-      }
-    }
-  }
-}
+<style lang="less" scoped>
 ul,
 li {
   list-style: none;
   position: relative;
+}
+.page-menu-con {
+  .menu-item {
+    position: relative;
+    height: 32px;
+    padding-left: 14px;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+    color: #040c2c;
+    font-size: 12px;
+    cursor: pointer;
+    .expander {
+      display: flex;
+      width: 12px;
+      margin-left: -12px;
+      color: rgb(200, 205, 208);
+      &.is-expand {
+        transform: rotate(90deg);
+      }
+    }
+    .name-con {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding-right: 5px;
+      .name-icon {
+        display: flex;
+        flex-shrink: 0;
+        justify-content: center;
+        align-items: center;
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+        .icon {
+          width: 9px;
+          height: 12px;
+          color: rgb(141, 158, 167);
+        }
+      }
+      .name {
+        width: 100%;
+        height: 24px;
+        line-height: 22px;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        margin-right: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &.is-eidt {
+          border-bottom: 1px solid rgb(245, 93, 84);
+        }
+        input {
+          border: none;
+          outline: none;
+          width: 100%;
+          height: 100%;
+          background: transparent;
+          color: rgb(82, 94, 113);
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+    .actions {
+      display: none;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      height: 100%;
+      padding: 0 10px;
+      background: inherit;
+      align-items: center;
+      color: rgb(141, 158, 167);
+      .icon {
+        font-size: 14px;
+        pointer-events: none;
+        color: currentColor;
+      }
+      &:hover,
+      &.hover {
+        color: rgb(41, 141, 248);
+      }
+    }
+    .active-circle {
+      position: absolute;
+      right: 10px;
+      width: 6px;
+      height: 6px;
+      color: rgb(41, 141, 248);
+    }
+    &:hover {
+      background: rgb(247, 247, 247);
+      color: unset;
+      .actions {
+        display: flex;
+      }
+      .active-circle {
+        display: none;
+      }
+    }
+    &.active {
+      color: rgb(41, 141, 248);
+      background: rgb(242, 248, 255);
+      .expander {
+        color: rgb(41, 141, 248);
+      }
+      .name-icon {
+        .icon {
+          color: rgb(41, 141, 248);
+        }
+      }
+    }
+  }
 }
 </style>

@@ -99,5 +99,24 @@ export default {
     },
     sort: 0,
     backgroundColor: defaultPageColor
+  },
+  defaultWidget: {
+    rotate: 0,
+    arrow: "empty",
+    linkUrl: "",
+    imgSrc: "",
+    borderColor: "#bbb",
+    borderStyle: "solid",
+    borderWidth: 1,
+    backgroundColor: "#fff",
+    backgroundImage: "",
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: false,
+    fontSize: 12,
+    fontFamily: "PingFangSC-Regular",
+    opacity: 1,
+    visible: false,
+    borderRadius: 0
   }
 }

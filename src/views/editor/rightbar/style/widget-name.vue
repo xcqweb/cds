@@ -1,0 +1,62 @@
+<template>
+  <div class="widget-name-con">
+    <div class="item-con">
+      <div class="fs item-name" v-if="selectWidgets.length == 1">
+        <label>组件名称</label>
+        <a-input size="small" v-model.trim="displayName" style="width: 60%" />
+      </div>
+      <div class="fs item-name">
+        <label>是否隐藏</label>
+        <a-switch v-model="attrs.visible" size="small" />
+      </div>
+      <div class="fs">
+        <label>不透明度</label>
+        <a-slider
+          v-model="attrs.opacity"
+          :min="0"
+          :max="100"
+          style="width:30%"
+        />
+        <a-input
+          size="small"
+          v-model.number="attrs.opacity"
+          type="number"
+          style="width:30%"
+          suffix="%"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import helpComputed from "@/mixins/help-computed"
+export default {
+  name: "WidgetName",
+  mixins: [helpComputed],
+  computed: {
+    displayName: {
+      get() {
+        let res = ""
+        if (this.selectWidgets.length == 1) {
+          res = this.selectWidgets[0].name
+        }
+        return res
+      },
+      set(val) {
+        this.$store.commit("updateWidgetAttrs", { name: val })
+      }
+    }
+  },
+  data() {
+    return {}
+  },
+  methods: {}
+}
+</script>
+<style lang="less" scoped>
+.widget-name-con {
+  .item-name {
+    margin-bottom: 10px;
+  }
+}
+</style>

@@ -1,3 +1,4 @@
+import config from "@/config"
 export default {
   computed: {
     currentPageIndex() {
@@ -17,6 +18,22 @@ export default {
     },
     showHelpLine() {
       return this.$store.getters["showHelpLine"]
+    },
+    cname() {
+      let res = ""
+      if (this.selectWidgets.length) {
+        res = this.selectWidgets[0].cname
+      }
+      return res
+    },
+    attrs: {
+      get() {
+        let attrs = {}
+        if(this.selectWidgets.length == 1) {
+          attrs = this.selectWidgets[0].attrs
+        }
+        return attrs
+      }
     }
   }
 }
