@@ -23,7 +23,7 @@ export default {
     goBack() {
       this.$router.go(-1)
     }
-  },
+  }
 }
 </script>
 <style lang="less">

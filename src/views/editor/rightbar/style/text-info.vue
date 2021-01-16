@@ -38,11 +38,7 @@
           {{ item }}</a-select-option
         >
       </a-select>
-      <div
-        class="ge-fontw fc"
-        :class="{ active: activeFlag }"
-        @click="setBold"
-      >
+      <div class="ge-fontw fc" :class="{ active: activeFlag }" @click="setBold">
         B
       </div>
       <div class="ge-pr">
@@ -112,59 +108,59 @@
         </div>
       </div>
 
-<!--      <div class="jXcSfj h-alignment" style="border: 1px solid #C1C2C5">-->
-<!--        <div-->
-<!--          class="radio-option"-->
-<!--          :class="{ active: posType == 'top' }"-->
-<!--          @click="setPosition('top')"-->
-<!--        >-->
-<!--          <div class="radio-content">-->
-<!--            <svg-->
-<!--              xmlns="http://www.w3.org/2000/svg"-->
-<!--              class="svg-icon icon"-->
-<!--              viewBox="0 0 12 9"-->
-<!--              aria-hidden="true"-->
-<!--            >-->
-<!--              <path d="M0 9h5V8H0v1zm0-8h12V0H0v1zm0 4h8V4H0v1z"></path>-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        -->
-<!--        -->
-<!--        <div-->
-<!--          class="radio-option"-->
-<!--          :class="{ active: posType == 'middle' }"-->
-<!--          @click="setPosition('middle')"-->
-<!--        >-->
-<!--          <div class="radio-content">-->
-<!--            <svg-->
-<!--              xmlns="http://www.w3.org/2000/svg"-->
-<!--              class="svg-icon icon"-->
-<!--              viewBox="0 0 12 9"-->
-<!--              aria-hidden="true"-->
-<!--            >-->
-<!--              <path d="M3 0h6v1H3V0zm0 8h6v1H3V8zM0 4h12v1H0V4z"></path>-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div-->
-<!--          class="radio-option"-->
-<!--          :class="{ active: posType == 'bottom' }"-->
-<!--          @click="setPosition('bottom')"-->
-<!--        >-->
-<!--          <div class="radio-content">-->
-<!--            <svg-->
-<!--              xmlns="http://www.w3.org/2000/svg"-->
-<!--              class="svg-icon icon"-->
-<!--              :fill="fill"-->
-<!--              viewBox="0 0 12 9"-->
-<!--              aria-hidden="true"-->
-<!--            >-->
-<!--              <path d="M7 9h5V8H7v1zM0 1h12V0H0v1zm4 4h8V4H4v1z"></path>-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="jXcSfj h-alignment" style="border: 1px solid #C1C2C5">-->
+      <!--        <div-->
+      <!--          class="radio-option"-->
+      <!--          :class="{ active: posType == 'top' }"-->
+      <!--          @click="setPosition('top')"-->
+      <!--        >-->
+      <!--          <div class="radio-content">-->
+      <!--            <svg-->
+      <!--              xmlns="http://www.w3.org/2000/svg"-->
+      <!--              class="svg-icon icon"-->
+      <!--              viewBox="0 0 12 9"-->
+      <!--              aria-hidden="true"-->
+      <!--            >-->
+      <!--              <path d="M0 9h5V8H0v1zm0-8h12V0H0v1zm0 4h8V4H0v1z"></path>-->
+      <!--            </svg>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        -->
+      <!--        -->
+      <!--        <div-->
+      <!--          class="radio-option"-->
+      <!--          :class="{ active: posType == 'middle' }"-->
+      <!--          @click="setPosition('middle')"-->
+      <!--        >-->
+      <!--          <div class="radio-content">-->
+      <!--            <svg-->
+      <!--              xmlns="http://www.w3.org/2000/svg"-->
+      <!--              class="svg-icon icon"-->
+      <!--              viewBox="0 0 12 9"-->
+      <!--              aria-hidden="true"-->
+      <!--            >-->
+      <!--              <path d="M3 0h6v1H3V0zm0 8h6v1H3V8zM0 4h12v1H0V4z"></path>-->
+      <!--            </svg>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div-->
+      <!--          class="radio-option"-->
+      <!--          :class="{ active: posType == 'bottom' }"-->
+      <!--          @click="setPosition('bottom')"-->
+      <!--        >-->
+      <!--          <div class="radio-content">-->
+      <!--            <svg-->
+      <!--              xmlns="http://www.w3.org/2000/svg"-->
+      <!--              class="svg-icon icon"-->
+      <!--              :fill="fill"-->
+      <!--              viewBox="0 0 12 9"-->
+      <!--              aria-hidden="true"-->
+      <!--            >-->
+      <!--              <path d="M7 9h5V8H7v1zM0 1h12V0H0v1zm4 4h8V4H4v1z"></path>-->
+      <!--            </svg>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
 
     <div class="fs ge-h40 pdr10 pdl10 pdb5">
@@ -318,11 +314,9 @@ export default {
   }
 }
 </script>
-<style>
-@import '../index.less'
-</style>
+<style></style>
 <style lang="less" scoped>
-.text-info{
+.text-info {
   font-size: 12px;
 }
 .ge-h40 {
@@ -334,7 +328,7 @@ label {
   height: 35px;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
-  color: #040C2C;
+  color: #040c2c;
   line-height: 35px;
   margin-left: 10px;
 }
@@ -348,19 +342,19 @@ label {
   cursor: pointer;
   border: 1px solid #d4d4d4;
 }
-.ge-fontw{
+.ge-fontw {
   width: 30px;
   height: 30px;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 2px;
-  border: 1px solid #F0F1F3;
+  border: 1px solid #f0f1f3;
 }
-.ge-rect-color{
+.ge-rect-color {
   width: 75px;
   height: 24px;
-  background: #1740DC;
+  background: #1740dc;
   border-radius: 2px;
-  border: 1px solid #F0F1F3;
+  border: 1px solid #f0f1f3;
 }
 .ge-color1 {
   background-color: #fcfcfc;
@@ -388,7 +382,7 @@ label {
   flex: 1 1 0%;
   width: 70px;
   height: 30px;
-  border: 1px solid #F0F1F3;
+  border: 1px solid #f0f1f3;
   .radio-content {
     display: flex;
     justify-content: center;

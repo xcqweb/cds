@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="visible" :style="objStyle" class="color-picker-con">
     <sketch-picker v-model="color" @input="updateValue"></sketch-picker>
   </div>
 </template>
@@ -7,6 +7,13 @@
 import { Sketch } from "vue-color"
 export default {
   name: "ColorPicker",
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    objStyle: Object
+  },
   components: {
     "sketch-picker": Sketch
   },
@@ -18,7 +25,13 @@ export default {
   methods: {
     updateValue(val) {
       this.$emit("colorChange", val.hex)
+      this.$emit("update:visible", false)
     }
   }
 }
 </script>
+<style lang="less" scoped>
+.color-picker-con {
+  position: absolute;
+}
+</style>

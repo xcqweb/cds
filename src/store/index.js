@@ -30,21 +30,15 @@ export default new Vuex.Store({
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
-    saveTime:new Date(),
+    saveTime: new Date()
   },
   mutations: {
-    setGrid(state, data) {
-      // 设置grid
-      let currentPage = this.getters.currentPage
-      const tempGrid = { ...currentPage.grid, ...data }
-      currentPage.grid = tempGrid
-    },
     setRuler(state, data) {
       // 设置标尺
       const tempRuler = { ...state.ruler, ...data }
       state.ruler = tempRuler
     },
-    setSaveTime(state,data) {
+    setSaveTime(state, data) {
       state.saveTime = data
     },
     addPage(state, data) {
@@ -317,9 +311,9 @@ export default new Vuex.Store({
       if (params.length) {
         widgetApi.modifyPatch(params).then(res => {
           if (res.code === 0) {
-            store.commit('setSaveTime',new Date())
+            store.commit("setSaveTime", new Date())
             if (!isNoTip) {
-              console.log("保存成功")
+              console.log("保存页面的控件成功")
             }
           }
         })
@@ -328,7 +322,7 @@ export default new Vuex.Store({
     patchDelWidgets(store, data) {
       widgetApi.delPatch(data.join(",")).then(res => {
         if (res.code === 0) {
-          console.log("删除成功")
+          console.log("删除控件成功")
           store.commit("setDelWidgets", [])
         }
       })
@@ -338,7 +332,16 @@ export default new Vuex.Store({
       store.commit("setApply", data)
       appApi.edit(params).then(res => {
         if (res.code === 0) {
-          console.log("保存成功")
+          console.log("保存应用成功")
+        }
+      })
+    },
+    updatePageInfo(store, data) {
+      const params = { pageId: store.state.currentPageId, ...data }
+      store.commit("setPageInfo", data)
+      pageApi.modify(params).then(res => {
+        if (res.code === 0) {
+          console.log("修改页面成功")
         }
       })
     }

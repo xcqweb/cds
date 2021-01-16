@@ -59,7 +59,7 @@ label {
   height: 35px;
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
-  color: #040C2C;
+  color: #040c2c;
   line-height: 35px;
   margin-left: 10px;
 }

@@ -91,11 +91,17 @@ export default {
     },
     del() {
       const { pageId } = this.page
-      pageApi.del(pageId).then(res => {
-        if (res.code === 0) {
-          this.$store.commit("delPage", this.page.pageId)
-          this.$message.success("删除页面成功")
-          this.hidePagePopMenu()
+      this.$confirm({
+        title: "提示",
+        content: `确定要删除该页面吗？`,
+        onOk: () => {
+          pageApi.del(pageId).then(res => {
+            if (res.code === 0) {
+              this.$store.commit("delPage", this.page.pageId)
+              this.$message.success("删除页面成功")
+              this.hidePagePopMenu()
+            }
+          })
         }
       })
     }

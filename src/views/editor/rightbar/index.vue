@@ -1,9 +1,9 @@
 <template>
   <div class="right-con">
-    <page-style v-if="isPage"/>
+    <page-style v-if="isPage" />
     <a-tabs v-else size="small">
       <a-tab-pane key="style" tab="样式">
-        <widget-style  />
+        <widget-style />
       </a-tab-pane>
       <a-tab-pane key="mutual" tab="交互">
         <mutual />
@@ -20,20 +20,17 @@ export default {
   components: {
     PageStyle,
     WidgetStyle,
-    Mutual,
+    Mutual
   },
-  computed:{
+  computed: {
     isPage() {
       return this.$store.getters.selectWidgets.length == 0
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
-  methods: {
-     
-  }
+  methods: {}
 }
 </script>
 <style lang="less">
@@ -44,8 +41,5 @@ export default {
   z-index: 4;
   box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
   background-color: #ffffff;
-}
-.ge-mt {
-  padding: 10px;
 }
 </style>

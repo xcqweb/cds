@@ -1,10 +1,11 @@
 const grid = {
   color: "#e0e0e0",
-  size: 10,
-  showGrid: true
+  size: 10
 }
 const defaultPageColor = "#fff"
 export default {
+  navPosition: 0,
+  navStyle: 0,
   grid: {
     // 网格
     minSize: 4,
@@ -88,7 +89,7 @@ export default {
       ...grid
     },
     widgets: [],
-    width: 1024,
+    width: 1366,
     height: 768,
     widgetsInfo: {}, // 控件信息
     lines: {

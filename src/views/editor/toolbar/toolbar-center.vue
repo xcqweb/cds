@@ -9,7 +9,7 @@
         <svg-icon icon-class="redo" class-name="icon" />
         <span>重做</span>
       </a>
-       <a class="center-item" @click.prevent>
+      <a class="center-item" @click.prevent>
         <a-dropdown>
           <div>
             <div style="display:flex;margin-bottom:3px;">
@@ -51,7 +51,7 @@
         </a-dropdown>
       </a>
     </div>
-     
+
     <div>
       <a class="center-item" @click.prevent>
         <a-dropdown>
@@ -96,9 +96,7 @@
       </a>
     </div>
     <div>
-      <div class="center-item" style="width:auto;">
-        自动保存 {{saveTime}}
-      </div>
+      <div class="center-item" style="width:auto;">自动保存 {{ saveTime }}</div>
     </div>
   </div>
 </template>
@@ -139,8 +137,8 @@ export default {
     },
     saveTime() {
       const date = this.$store.state.saveTime
-      return date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
-    },
+      return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+    }
   },
   data() {
     return {
@@ -296,12 +294,8 @@ export default {
     redo() {
       undoManager.applyRedo()
     },
-    toTop() {
-      
-    },
-    toBottom() {
-
-    },
+    toTop() {},
+    toBottom() {}
   }
 }
 </script>

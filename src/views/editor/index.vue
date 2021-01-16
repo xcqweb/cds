@@ -42,7 +42,7 @@ export default {
     })
     this.saveTimer = setTimeout(() => {
       this.$store.dispatch("patchModifyWidgets")
-    },1000*60*2)// 2min
+    }, 1000 * 60 * 2) // 2min
   },
   beforeDestroy() {
     clearTimeout(this.saveTimer)
@@ -74,4 +74,3 @@ export default {
   }
 }
 </style>
-

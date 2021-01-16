@@ -163,10 +163,8 @@ export default {
   }
 }
 </script>
-<style>
-@import "../index.less";
-</style>
-<style lang="less">
+<style></style>
+<style lang="less" scoped>
 .name-posititon {
   font-size: 12px;
 }
