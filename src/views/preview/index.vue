@@ -59,7 +59,6 @@ export default {
       pageApi.queryAll({ applyId }).then(res => {
         if (res.code === 0) {
           this.pages = arrayToTree(res.data, { parentProperty: "pid", customID: "pageId" })
-          console.log(this.pages,"a-----------")
           this.currentPage = this.pages[0]
           this.queryAllActions()
           this.initPageAttrs()
@@ -100,6 +99,7 @@ export default {
     titleClick({domEvent}) {
       domEvent.stopPropagation()
       console.log("titleClick")
+      return false
     },
   }
 }
@@ -129,7 +129,6 @@ export default {
         display:flex;
         height:100%;
         pointer-events:auto;
-        padding-left:24px;
       }
     }
   }

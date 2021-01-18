@@ -8,7 +8,7 @@
     >
       <div
         class="menu-item"
-        :class="{ active: isCurrentPage(page) }"
+        :class="{ 'active': isCurrentPage(page) }"
         :style="{ paddingLeft: `${page.level * 14}px` }"
       >
         <a

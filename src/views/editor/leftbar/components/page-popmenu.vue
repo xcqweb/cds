@@ -57,10 +57,7 @@ export default {
     },
     addChildPage() {
       const { width, height } = this.$store.state.apply
-      let len = 0
-      if (this.page.children) {
-        len = this.page.children.length
-      }
+      let len = this.$store.state.apply.pages.length
       const newPageId = `new-page-${len}`
       this.$store.commit("addPage", {
         pageId: newPageId,
