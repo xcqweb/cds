@@ -1,7 +1,7 @@
 <template>
   <div
     class="gt-group"
-    :style="styleObj"
+    :style="groupStyleObj"
     @click="groupClick"
     @dblclick="dblclick"
   >
@@ -10,16 +10,15 @@
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
-import { findWidgetById } from "@u/deal"
 import config from "@/config"
 const cname = config.groupName
 export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
-    widget() {
-      return findWidgetById(this.$store.getters.currentPage.widgets, this.cid)
-    }
+    groupStyleObj () {
+      return {...this.styleObj,backgroundColor:'transparent'}
+    },
   },
   data() {
     return {}
