@@ -195,7 +195,7 @@ export default {
       }
       api.edit(params).then(res => {
         if (res.code === 0) {
-          this.$message.success("保存交互成功")
+          console.log("保存交互成功")
         }
       })
     }

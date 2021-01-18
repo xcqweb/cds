@@ -66,8 +66,8 @@ export default {
       }
     },
     queryAllActions() {
-      mutualApi.queryPageWidgetsActions(this.currentPage.pageId).then(res=>{
-        
+      mutualApi.queryPageWidgetsActions({pageId:this.currentPage.pageId}).then(res=>{
+
       })
     }
   }

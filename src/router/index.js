@@ -29,8 +29,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.VUE_APP_BASE_URL,
+  base: 'ruban_cds',
   routes
 })
-console.log('router------------------------',process.env.VUE_APP_BASE_URL)
 export default router
