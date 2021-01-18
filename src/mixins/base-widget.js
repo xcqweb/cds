@@ -23,7 +23,8 @@ export default {
     fontFamily: { default: "", type: String },
     opacity: { default: "", type: String | Number },
     visible: { default: "", type: String | Boolean },
-    borderRadius: { default: "", type: String | Number }
+    borderRadius: { default: "", type: String | Number },
+    isPreview: {default: false, type: Boolean},
   },
   computed: {
     styleObj: {

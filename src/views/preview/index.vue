@@ -1,11 +1,15 @@
 <template>
   <div class="preview-con-wrap">
-    <div class="preview-con" :style="styleObj">
+    <div class="preview-con" :style="viewStyleObj">
       <preview-item
         v-for="widget in widgets"
         :key="widget.cid"
         :widget="widget"
+        :action-list="actionMap.get(widget.cid)"
       />
+    </div>
+    <div class="menu-con">
+      
     </div>
   </div>
 </template>
@@ -25,8 +29,9 @@ export default {
     return {
       widgets: [],
       pages: [],
-      styleObj: {},
-      currentPage: null
+      viewStyleObj: {},
+      currentPage: null,
+      actionMap: new Map(),
     }
   },
   created() {
@@ -60,16 +65,20 @@ export default {
     },
     initPageAttrs() {
       const { width, height } = this.currentPage
-      this.styleObj = {
+      this.viewStyleObj = {
         width: `${width}px`,
         height: `${height}px`
       }
     },
     queryAllActions() {
       mutualApi.queryPageWidgetsActions({pageId:this.currentPage.pageId}).then(res=>{
-
+        if(res.code === 0) {
+          res.data.forEach(item=>{
+            this.actionMap.set(item.widgetId,item.widgetActionEntityList)
+          })
+        }
       })
-    }
+    },
   }
 }
 </script>
@@ -77,11 +86,18 @@ export default {
 .preview-con-wrap {
   height: 100%;
   width: 100%;
-  overflow: hidden;
-}
-.preview-con {
+  overflow: auto;
+  background: rgb(245, 245, 245);
   position: relative;
-  left: 0;
-  top: 0;
+  .preview-con {
+    position: relative;
+    left: 0;
+    top: 0;
+    overflow:hidden;
+    margin:0 auto;
+  }
+  .menu-con{
+    position:relative;
+  }
 }
 </style>

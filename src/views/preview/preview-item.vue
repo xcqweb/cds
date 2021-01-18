@@ -1,6 +1,6 @@
 <template>
-  <div class="group-item" :style="styleObj">
-    <component :is="widget.cname" v-bind="widget.attrs" :text="widget.text">
+  <div class="group-item" :style="styleObj" @click="click" @dblclick="dblclick">
+    <component :is="widget.cname" v-bind="widget.attrs" :text="widget.text" :is-preview="true">
       <template v-if="widget.children">
         <preview-item
           v-for="item in widget.children"
@@ -21,7 +21,8 @@ export default {
     ...components
   },
   props: {
-    widget: Object
+    widget: Object,
+    actionList:Array
   },
   data() {
     return {
@@ -38,7 +39,50 @@ export default {
       transform: `rotate(${rotate}deg)`,
       zIndex
     }
-  }
+    console.log(this.actionList)
+  },
+  methods: {
+    click() {
+      clearTimeout(this.timer)// 同一元素 同时绑定单机和双击事件
+      this.timer = setTimeout(()=>{
+        const eventList = this.filterEventTypeList('click')
+        this.dealEvent(eventList)
+      },200)
+    },
+    dblclick() {
+      clearTimeout(this.timer)
+      const eventList = this.filterEventTypeList('dbclick')
+      this.dealEvent(eventList)
+    },
+    filterEventTypeList(type) {
+      let res = []
+      if(this.actionList) {
+        res = this.actionList.filter(item=>item.eventType === type)
+      }
+      return res
+    },
+    dealEvent(eventList) {
+      eventList.forEach(item=>{
+        switch(item.actionType) {
+          case 'link-page':
+          console.log('---changepage--')
+          break
+          case 'show-hide-widget':
+          this.changeWidgetVisible(item.content)
+          break
+          case 'open-link':
+          this.openLink(item.content)
+          break
+        }
+      })
+    },
+    changeWidgetVisible(content) {
+
+    },
+    openLink(content) {
+
+    },
+  },
 }
 </script>
 <style lang="less" scoped>
