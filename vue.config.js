@@ -3,8 +3,9 @@ const webpack = require('webpack')
 const resolve = function(dir) {
   return path.join(__dirname, dir)
 }
+const isDev = process.env.NODE_ENV === 'development'
 module.exports = {
-  publicPath: '',
+  publicPath: isDev ? '/' : process.env.BASE_URL,
   outputDir: "dist",
   assetsDir: "static",
   // 是否开启eslint保存检测
