@@ -1,7 +1,7 @@
 <template>
   <div class="text-style-con" v-if="show">
     <div class="item-con">
-      <label style="display:block;" class="style-con">文字样式</label>
+      <label class="label-block">文字样式</label>
       <a-select
         v-model="attrs.fontFamily"
         size="small"

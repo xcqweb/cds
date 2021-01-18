@@ -22,7 +22,8 @@ export default {
     },
     run() {
       const url = this.$router.resolve({
-        path: "/preview-app"
+        path: "/preview-app",
+        query: { applyId: this.$store.state.apply.id }
       })
       window.open(url.href, "_blank")
     }

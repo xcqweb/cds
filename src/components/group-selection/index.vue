@@ -19,12 +19,11 @@
     @activated="onActivated"
     @deactivated="onDeactivated"
     @dblclick.native="dblclick"
-    style="pointer-events:auto;"
   />
 </template>
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
-import { cloneDeep } from "lodash"
+// import { cloneDeep } from "lodash"
 import { findWidgetChildren, pointIsInWidget } from "@u/deal"
 import helpDrag from "@/mixins/help-drag"
 export default {
@@ -69,7 +68,6 @@ export default {
     onResizeStart(left, top, width, height) {
       this.startResizeWidth = width
       this.startResizeHeight = height
-      this.groupWidgetChildrenCopy = cloneDeep(this.widgetChildren)
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidgetAttrs", {
@@ -78,26 +76,6 @@ export default {
         width,
         height,
         cid: this.widget.cid
-      })
-      this.groupWidgetChildrenCopy.forEach(item => {
-        let rateW = item.attrs.width / this.startResizeWidth
-        let rateH = item.attrs.height / this.startResizeHeight
-        const disW = width - this.startResizeWidth
-        const disH = height - this.startResizeHeight
-        let obj = {
-          width: width * rateW,
-          height: height * rateH
-        }
-        if (item.attrs.left != 0) {
-          obj.left = disW - obj.width + item.attrs.left + item.attrs.width
-        }
-        if (item.attrs.top != 0) {
-          obj.top = disH - obj.height + item.attrs.top + item.attrs.height
-        }
-        this.$store.commit("updateWidgetAttrs", {
-          ...obj,
-          cid: item.cid
-        })
       })
       this.updateHint(true, `${width}x${height}`)
       this.$store.commit("setRuler", {

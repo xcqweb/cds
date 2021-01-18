@@ -5,7 +5,7 @@
     </div>
 
     <div class="item-con">
-      <label style="display:block;margin-bottom:10px;">页面尺寸</label>
+      <label class="label-block">页面尺寸</label>
       <a-select
         v-model="pageSizeModel"
         @change="pageSizeChange"
@@ -75,7 +75,7 @@
       </a-upload-dragger>
     </div>
     <div class="item-con">
-      <label style="display:block;margin-bottom:10px;">导航布局</label>
+      <label class="label-block">导航布局</label>
       <div class="fs">
         <div
           class="layout-item"
@@ -99,7 +99,7 @@
       </div>
     </div>
     <div class="item-con">
-      <label style="display:block;margin-bottom:10px;">导航风格</label>
+      <label class="label-block">导航风格</label>
       <a-select
         v-model="navModel"
         size="small"
@@ -339,6 +339,7 @@ export default {
     background: #ffffff;
     border-radius: 2px;
     border: 1px solid #cdced5;
+    cursor: pointer;
     &:hover,
     &.select {
       border-color: #1740dc;

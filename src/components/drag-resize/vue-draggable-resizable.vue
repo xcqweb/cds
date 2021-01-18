@@ -187,6 +187,8 @@ export default {
   },
   mounted() {
     this.elBase = document.querySelector(".view-con")
+    this.leftEl = document.querySelector(".left-con")
+
     this.elBase.addEventListener("mousemove", this.handleMove, true)
     this.elBase.addEventListener("mousedown", this.deselect, true)
     this.elBase.addEventListener("mouseup", this.handleUp, true)
@@ -201,6 +203,8 @@ export default {
     this.elmW = this.$el.offsetWidth || this.$el.clientWidth
     this.elmH = this.$el.offsetHeight || this.$el.clientHeight
 
+    this.leftEl.addEventListener("mousedown", this.deselect, true)
+
     // this.reviewDimensions() // 先注释掉
   },
   beforeDestroy() {
@@ -212,6 +216,8 @@ export default {
     this.elBase.removeEventListener("touchmove", this.handleMove, true)
     this.elBase.removeEventListener("touchend touchcancel", this.deselect, true)
     this.elBase.removeEventListener("touchstart", this.handleUp, true)
+
+    this.leftEl.removeEventListener("mousedown", this.deselect, true)
   },
 
   data() {
@@ -290,7 +296,6 @@ export default {
     },
     deselect(e) {
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
-
       this.startDownX = mouseX
       this.startDownY = mouseY
 

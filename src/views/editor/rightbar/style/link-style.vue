@@ -1,7 +1,7 @@
 <template>
   <div class="link-style-con" v-if="cname == 'GtLink'">
     <div class="item-con">
-      <label style="display:block;margin-bottom:10px;">连接地址</label>
+      <label class="label-block">连接地址</label>
       <a-textarea
         placeholder="请输入连接地址"
         :rows="3"

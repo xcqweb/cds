@@ -157,15 +157,7 @@ export default new Vuex.Store({
           zIndex
         }
       }
-      const currentWidgetIndex = this.getters.currentWidgetIndex
-      if (currentWidgetIndex !== -1) {
-        // 连续拖拽时候 取消之前激活的控件
-        let currentWidget = this.getters.currentWidget
-        currentWidget.active = false
-        currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
-      }
       currentPage.widgets.push(widget)
-      state.currentWidgetId = cid
       state.ruler.shadow = { x: left, y: top, width, height }
     },
     updateWidgetAttrs(state, attrs) {
@@ -370,7 +362,7 @@ export default new Vuex.Store({
           item => item.cid === state.currentWidgetId
         )
       }
-      return {}
+      return null
     },
     currentWidgetIndex: (state, getters) => {
       const currentPage = getters.currentPage

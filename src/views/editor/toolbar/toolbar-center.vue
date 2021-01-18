@@ -103,13 +103,11 @@
 <script>
 import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
+import baseOperate from "@/mixins/base-operate"
 import undoManager from "@u/undo-manager"
-import config from "@/config"
-import { uuid } from "@u/uuid"
-import { isGroup, findWidgetById, findWidgetChildren } from "@u/deal"
 export default {
   name: "ToolbarCenter",
-  mixins: [helpMethods, helpComputed],
+  mixins: [helpMethods, helpComputed, baseOperate],
   computed: {
     ruleModel: {
       get() {
@@ -236,69 +234,13 @@ export default {
       }
       this.alignModel = item.value
     },
-    group() {
-      let widgets = this.$store.getters.selectWidgets
-      const cid = `${uuid(16, 16)}`
-      const cname = config.groupName
-      const name = `组合`
-      const attrs = this.calculateSelectWidgets(widgets)
-      widgets.forEach(item => {
-        if (isGroup(item)) {
-          this.ungroup(item)
-        }
-      })
-      widgets = this.$store.getters.selectWidgets
-      widgets.forEach(item => {
-        let left = item.attrs.left - attrs.left
-        let top = item.attrs.top - attrs.top
-        this.$store.commit("updateWidgetAttrs", { left, top, cid: item.cid })
-        this.$store.commit("updateWidget", {
-          pid: cid,
-          active: false,
-          cid: item.cid
-        })
-      })
-      this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
-      const tempWidget = findWidgetById(
-        this.$store.getters.currentPage.widgets,
-        cid
-      )
-      this.$store.commit("setGroupSelection", {
-        show: true,
-        widget: tempWidget
-      })
-    },
-    ungroup(widget) {
-      if (!widget) {
-        widget = this.$store.getters.currentWidget
-      }
-      if (isGroup(widget)) {
-        const childWidgets = findWidgetChildren(
-          this.$store.getters.currentPage.widgets,
-          widget
-        )
-        childWidgets.forEach(item => {
-          let { left, top } = widget.attrs
-          this.$store.commit("updateWidget", {
-            pid: "",
-            cid: item.cid,
-            active: true
-          })
-          left = item.attrs.left + left
-          top = item.attrs.top + top
-          this.$store.commit("updateWidgetAttrs", { left, top, cid: item.cid })
-        })
-        this.$store.commit("widgetDel", [widget])
-      }
-    },
+
     undo() {
       undoManager.applyUndo()
     },
     redo() {
       undoManager.applyRedo()
-    },
-    toTop() {},
-    toBottom() {}
+    }
   }
 }
 </script>

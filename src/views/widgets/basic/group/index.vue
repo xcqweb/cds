@@ -1,7 +1,7 @@
 <template>
   <div
-    class="group-item"
-    :style="styleGropObj"
+    class="gt-group"
+    :style="styleObj"
     @click="groupClick"
     @dblclick="dblclick"
   >
@@ -17,19 +17,8 @@ export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
-    styleGropObj() {
-      return {
-        ...this.styleObj,
-        left: `${this.left}px`,
-        top: `${this.top}px`,
-        transform: `rotate(${this.rotate}deg)`
-      }
-    },
     widget() {
       return findWidgetById(this.$store.getters.currentPage.widgets, this.cid)
-    },
-    groupSelection() {
-      return this.$store.state.groupSelection
     }
   },
   data() {
@@ -41,31 +30,23 @@ export default {
       if (this.timer) {
         this.clearTimer()
       }
-      this.timer = setTimeout(() => {
-        this.widget.active = true
-        this.$store.dispatch("updateGroupSelection", {
-          show: true,
-          widget: this.widget
-        })
-      }, 200)
+      this.timer = setTimeout(() => {}, 200)
     },
     clearTimer() {
       clearTimeout(this.timer)
       this.timer = null
     },
     dblclick() {
+      console.log("---group--dblclick---")
       if (this.timer) {
         this.clearTimer()
-      }
-      console.log(`dblClick`)
-      if (!this.groupSelection.show) {
-        this.$store.commit("setGroupSelection", {
-          show: true,
-          widget: this.widget
-        })
       }
     }
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.gt-group {
+  background: transparent;
+}
+</style>

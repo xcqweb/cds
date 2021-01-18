@@ -1,31 +1,24 @@
 <template>
   <div class="preview-con-wrap">
     <div class="preview-con" :style="styleObj">
-      <template v-for="item in widgets">
-        <component :key="item.cid" :is="item.cname" v-bind="item.attrs">
-          <template v-if="item.children">
-            <component
-              v-for="d in item.children"
-              :key="d.cid"
-              :is="d.cname"
-              v-bind="d.attrs"
-            />
-          </template>
-        </component>
-      </template>
+      <preview-item
+        v-for="widget in widgets"
+        :key="widget.cid"
+        :widget="widget"
+      />
     </div>
   </div>
 </template>
 <script>
-import components from "@/views/widgets/index"
 import pageApi from "@a/page"
 import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
 import { dealWidgetData } from "@u/deal"
+import PreviewItem from "./preview-item"
 export default {
   name: "Preview",
   components: {
-    ...components
+    PreviewItem
   },
   data() {
     return {
@@ -36,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.queryAllPage("d82692156aab552c3ac1ce0fe51ae38c")
+    this.queryAllPage(this.$route.query.applyId)
   },
   methods: {
     queryAllPage(applyId) {

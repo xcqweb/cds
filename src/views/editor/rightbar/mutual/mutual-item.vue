@@ -3,9 +3,10 @@
     <div class="item-action fs">
       <a-input
         size="small"
-        v-model="action.actioinName"
+        v-model="action.actionName"
         type="text"
         style="width:70%;"
+        @blur.native="saveAction"
       />
       <svg-icon
         icon-class="delete"
@@ -20,6 +21,7 @@
         v-model="action.eventType"
         style="width:80%;"
         class="style-con"
+        @blur.native="saveAction"
       >
         <a-select-option
           v-for="item in eventList"
@@ -37,6 +39,7 @@
         style="width:80%;"
         class="style-con"
         v-model="action.actionType"
+        @blur.native="saveAction"
       >
         <a-select-option
           v-for="item in actionList"
@@ -47,7 +50,7 @@
         </a-select-option>
       </a-select>
     </div>
-    <div class="item-action fs" v-if="action.actionTye == 'link-page'">
+    <div class="item-action fs" v-if="action.actionType == 'link-page'">
       <label>页面</label>
       <a-cascader
         :options="pages"
@@ -59,53 +62,71 @@
         }"
         style="width:80%;"
         size="small"
+        @blur.native="saveAction"
+        v-model="action.content.pageId"
       />
     </div>
-    <div class="item-action fs" v-if="action.actionTye == 'show-hide-widget'">
+    <div class="item-action fs" v-if="action.actionType == 'show-hide-widget'">
       <label>显示</label>
-      <a-select v-model="widgetIdShow" size="small" style="width:80%;">
+      <a-select
+        v-model="action.content.showWidgetId"
+        size="small"
+        style="width:80%;"
+      >
         <a-select-option
           v-for="item in widgets"
           :key="item.cid"
           :value="item.cid"
           placeholder="请选择"
+          @blur.native="saveAction"
         >
           {{ item.name }}
         </a-select-option>
       </a-select>
     </div>
-    <div class="item-action fs" v-if="action.actionTye == 'show-hide-widget'">
+    <div class="item-action fs" v-if="action.actionType == 'show-hide-widget'">
       <label>隐藏</label>
-      <a-select v-model="widgetIdHide" size="small" style="width:80%;">
+      <a-select
+        v-model="action.content.hideWidgetId"
+        size="small"
+        style="width:80%;"
+      >
         <a-select-option
           v-for="item in widgets"
           :key="item.cid"
           :value="item.cid"
           placeholder="请选择"
+          @blur.native="saveAction"
         >
           {{ item.name }}
         </a-select-option>
       </a-select>
     </div>
-    <div class="item-action fs" v-if="action.actionTye == 'open-link'">
+    <div class="item-action fs" v-if="action.actionType == 'open-link'">
       <label>方式</label>
-      <a-select v-model="openLinkWay" size="small" style="width:80%;">
+      <a-select
+        v-model="action.content.openWay"
+        size="small"
+        style="width:80%;"
+      >
         <a-select-option
           v-for="item in openListWayList"
           :key="item.value"
           :value="item.value"
+          @blur.native="saveAction"
         >
           {{ item.label }}
         </a-select-option>
       </a-select>
     </div>
-    <div class="item-action" v-if="action.actionTye == 'open-link'">
+    <div class="item-action" v-if="action.actionType == 'open-link'">
       <label style="display:block;margin-bottom:6px;">输入连接</label>
       <a-textarea
         placeholder="请输入连接地址"
         :rows="3"
         style="resize:none;"
-        v-model="action.linkUrl"
+        v-model="action.content.linkUrl"
+        @blur.native="saveAction"
       />
     </div>
   </div>
@@ -115,6 +136,7 @@ import api from "@a/mutual"
 import config from "@/config"
 import arrayToTree from "array-to-tree"
 import helpComputed from "@/mixins/help-computed"
+import { cloneDeep } from "lodash"
 export default {
   name: "MutualItem",
   mixins: [helpComputed],
@@ -139,11 +161,11 @@ export default {
     return {
       eventList: config.eventList,
       actionList: config.actionList,
-      widgetIdShow: undefined,
-      widgetIdHide: undefined,
-      openLinkWay: "_self",
       openListWayList: config.openListWayList
     }
+  },
+  created() {
+    this.action.content.pageId = [this.action.content.pageId]
   },
   methods: {
     delAction() {
@@ -157,6 +179,23 @@ export default {
               this.$emit("queryMutualList")
             }
           })
+        }
+      })
+    },
+    saveAction() {
+      const params = cloneDeep(this.action)
+      const arr = params.content.pageId
+      if (arr) {
+        const len = arr.length
+        if (len == 1) {
+          params.content.pageId = arr[0]
+        } else {
+          params.content.pageId = arr[1]
+        }
+      }
+      api.edit(params).then(res => {
+        if (res.code === 0) {
+          this.$message.success("保存交互成功")
         }
       })
     }

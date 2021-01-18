@@ -1,7 +1,7 @@
 <template>
   <div class="widget-border-con" v-if="show">
     <div class="item-con">
-      <label style="display:block;margin-bottom:10px;">边框样式</label>
+      <label class="label-block">边框样式</label>
       <div class="fs">
         <div
           class="border-bg"

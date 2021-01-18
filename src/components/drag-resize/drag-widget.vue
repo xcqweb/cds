@@ -20,7 +20,12 @@
     @deactivated="onDeactivated"
     @dblclick.native="dblclick"
   >
-    <component :is="widget.cname" :cid="widget.cid" v-bind="widget.attrs">
+    <component
+      :is="widget.cname"
+      v-bind="widget.attrs"
+      :text="widget.text"
+      ref="widgetRef"
+    >
       <template v-if="widget.children">
         <drag-widget
           v-for="item in widget.children"
@@ -78,12 +83,6 @@ export default {
         const disLeft = left - this.startDragLeft
         const disTop = top - this.startDargTop
         this.selectWidgetsCopy.forEach(item => {
-          if (isGroup(item)) {
-            this.$store.commit("setGroupSelection", {
-              show: false,
-              widget: item
-            })
-          }
           this.$store.commit("updateWidgetAttrs", {
             left: item.attrs.left + disLeft,
             top: item.attrs.top + disTop,
@@ -95,6 +94,7 @@ export default {
     onResizeStart(left, top, width, height) {
       this.startResizeWidth = width
       this.startResizeHeight = height
+      this.groupWidgetChildrenCopy = cloneDeep(this.widget.children)
     },
     onResize(left, top, width, height) {
       this.$store.commit("updateWidgetAttrs", {
@@ -104,13 +104,38 @@ export default {
         height,
         cid: this.widget.cid
       })
+      if (isGroup(this.widget)) {
+        this.groupWidgetChildrenCopy.forEach(item => {
+          let rateW = item.attrs.width / this.startResizeWidth
+          let rateH = item.attrs.height / this.startResizeHeight
+          const disW = width - this.startResizeWidth
+          const disH = height - this.startResizeHeight
+          let obj = {
+            width: width * rateW,
+            height: height * rateH
+          }
+          if (item.attrs.left != 0) {
+            obj.left = disW - obj.width + item.attrs.left + item.attrs.width
+          }
+          if (item.attrs.top != 0) {
+            obj.top = disH - obj.height + item.attrs.top + item.attrs.height
+          }
+          this.$store.commit("updateWidgetAttrs", {
+            ...obj,
+            cid: item.cid
+          })
+        })
+      }
       this.updateHint(true, `${width}x${height}`)
       this.$store.commit("setRuler", {
         shadow: { x: left, y: top, width, height }
       })
     },
-    dblclick(evt) {
-      console.log(evt, "c--------")
+    dblclick() {
+      const widgetComponent = this.$refs.widgetRef
+      if (widgetComponent.dblclick) {
+        widgetComponent.dblclick()
+      }
     }
   }
 }

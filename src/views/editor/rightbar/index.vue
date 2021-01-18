@@ -18,13 +18,13 @@
 import PageStyle from "./page.vue"
 import WidgetStyle from "./style"
 import Mutual from "./mutual"
-import Datasource from './data'
+import Datasource from "./data"
 export default {
   components: {
     PageStyle,
     WidgetStyle,
     Mutual,
-    Datasource,
+    Datasource
   },
   computed: {
     isPage() {
@@ -48,6 +48,13 @@ export default {
   .item-con {
     padding: 9px 10px;
     border-bottom: solid 1px #e5e6e9;
+    &.no-border {
+      border: none;
+    }
+    .label-block {
+      display: block;
+      margin-bottom: 10px;
+    }
   }
   .fs {
     display: flex;
@@ -73,8 +80,8 @@ export default {
     }
     .ant-tabs-tab {
       color: #040c2c;
-      padding:8px 24px;
-      margin-right:0;
+      padding: 8px 24px;
+      margin-right: 0;
       &:hover,
       &-active {
         color: #1740dc;

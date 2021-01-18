@@ -2,7 +2,6 @@
   <div class="selection-con" :style="objStyle" v-show="isShowSelection" />
 </template>
 <script>
-import { isGroup } from "@u/deal"
 export default {
   name: "SelectionWidget",
   data() {
@@ -74,9 +73,6 @@ export default {
         res =
           left > x && left + w < x + width && top > y && top + h < y + height
         this.$set(item, "active", res)
-        if (isGroup(item)) {
-          this.$store.commit("setGroupSelection", { show: res, widget: item })
-        }
       })
     },
     hideSelection() {

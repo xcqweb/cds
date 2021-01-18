@@ -8,7 +8,22 @@ export default {
     zIndex: { default: 5, type: String | Number },
     text: { default: "", type: String },
     cid: { default: "", type: String },
-    backgroundColor: { default: "", type: String }
+    backgroundColor: { default: "", type: String },
+    arrow: { default: "", type: String },
+    linkUrl: { default: "", type: String },
+    imgSrc: { default: "", type: String },
+    borderColor: { default: "", type: String },
+    borderStyle: { default: "", type: String },
+    borderWidth: { default: "", type: String | Number },
+    backgroundImage: { default: "", type: String },
+    justifyContent: { default: "", type: String },
+    alignItems: { default: "", type: String },
+    fontWeight: { default: "", type: String | Boolean },
+    fontSize: { default: "", type: String | Number },
+    fontFamily: { default: "", type: String },
+    opacity: { default: "", type: String | Number },
+    visible: { default: "", type: String | Boolean },
+    borderRadius: { default: "", type: String | Number }
   },
   computed: {
     styleObj: {
@@ -25,6 +40,7 @@ export default {
         }
       },
       set(val) {
+        console.log("set--style-base---------", val)
         this.styleObj = val
       }
     }

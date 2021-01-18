@@ -50,8 +50,8 @@ export default {
         {
           cname: "GtLink",
           name: "链接",
-          width: 60,
-          height: 30,
+          width: 430,
+          height: 170,
           icon: "widget-link"
         },
         {

@@ -1,6 +1,6 @@
 <template>
   <div class="mutual-con">
-    <div class="item-con" @click="addAction">
+    <div class="item-con" @click="addAction" style="cursor:pointer;">
       <svg-icon icon-class="add" class-name="mutual-icon" />
       <span style="margin-left:10px;">添加交互事件</span>
     </div>
@@ -37,7 +37,6 @@ export default {
   mounted() {},
   methods: {
     queryMutualList() {
-      console.log("a--b--")
       if (this.selectWidgets.length) {
         mutualApi.list({ widgetId: this.selectWidgets[0].cid }).then(res => {
           if (res.code == 0) {
@@ -54,7 +53,7 @@ export default {
         actionName: `交互 ${len}`,
         widgetId: this.selectWidgets[0].cid,
         eventType: "click",
-        actionTye: "link-page",
+        actionType: "link-page",
         content: {
           pageId: ""
         }

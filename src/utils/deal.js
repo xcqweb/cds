@@ -111,6 +111,7 @@ export function dealWidgetData(data) {
       copyNum: item.copyNum,
       pid: item.pid,
       active: false,
+      text: item.text,
       attrs: {
         width: item.width,
         height: item.height,

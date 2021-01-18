@@ -42,6 +42,7 @@
           style="width: 40%"
         />
         <a-input
+          v-if="cname == 'GtRect'"
           size="small"
           v-model.number="attrs.borderRadius"
           type="number"

@@ -1,4 +1,4 @@
-# cuit
+# cds
 
 ## Project setup
 ```

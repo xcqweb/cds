@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-image" :style="styleObj" @dblclick.capture="dblclick">
+  <div class="gt-image" :style="imageStyleObj">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="svg-icon icon"
@@ -21,15 +21,16 @@ const cname = "GtImage"
 export default {
   name: cname,
   mixins: [baseWidget],
+  computed: {
+    imageStyleObj() {
+      return { ...this.styleObj, backgroundColor: "#e8e8e8" }
+    }
+  },
   data() {
     return {}
   },
   created() {},
-  methods: {
-    dblclick() {
-      console.log("a--------")
-    }
-  }
+  methods: {}
 }
 </script>
 <style lang="less" scoped>
@@ -38,6 +39,5 @@ export default {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: #e8e8e8;
 }
 </style>

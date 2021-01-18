@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-text" :style="styleObj" @dblclick.capture="dblclick">
+  <div class="gt-text" :style="styleObj">
     {{ text || "输入文本" }}
   </div>
 </template>

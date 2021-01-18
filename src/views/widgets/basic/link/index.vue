@@ -1,6 +1,9 @@
 <template>
-  <div class="gt-link" :style="styleObj" @dblclick.capture="dblclick">
-    <a>Link</a>
+  <div class="gt-link" :style="styleLink">
+    <span v-if="!linkUrl" class="eg-text">
+      Web Page
+    </span>
+    <iframe v-else :src="linkUrl" class="iframe-cls" frameborder="0" />
   </div>
 </template>
 <script>
@@ -12,12 +15,13 @@ export default {
   data() {
     return {}
   },
-  created() {},
-  methods: {
-    dblclick() {
-      console.log("a--------")
+  computed: {
+    styleLink() {
+      return { ...this.styleObj, backgroundColor: "#ebebeb" }
     }
-  }
+  },
+  created() {},
+  methods: {}
 }
 </script>
 <style lang="less" scoped>
@@ -26,10 +30,15 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 0px;
-  background: #fff;
-  a {
-    color: #3d91f7;
-    text-decoration: underline;
+  .eg-text {
+    font-size: 16px;
+    color: #8d9ea7;
+  }
+  .iframe-cls {
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
