@@ -15,6 +15,7 @@ import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
 import { dealWidgetData } from "@u/deal"
 import PreviewItem from "./preview-item"
+import mutualApi from '@a/mutual'
 export default {
   name: "Preview",
   components: {
@@ -37,6 +38,7 @@ export default {
         if (res.code === 0) {
           this.pages = res.data
           this.currentPage = this.pages[0]
+          this.queryAllActions()
           this.initPageAttrs()
           this.queryWidgets(this.currentPage.pageId)
         }
@@ -62,6 +64,11 @@ export default {
         width: `${width}px`,
         height: `${height}px`
       }
+    },
+    queryAllActions() {
+      mutualApi.queryPageWidgetsActions(this.currentPage.pageId).then(res=>{
+        
+      })
     }
   }
 }

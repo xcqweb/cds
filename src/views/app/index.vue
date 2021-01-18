@@ -48,9 +48,9 @@
           >{{ text }}</a
         >
         <span slot="action" slot-scope="text, record">
-          <a @click="() => del(record)">Delete</a>
+          <a @click="() => del(record)">删除</a>
           <a-divider type="vertical" />
-          <a @click="() => edit(record)">Edit</a>
+          <a @click="() => edit(record)">编辑</a>
         </span>
       </a-table>
     </div>
