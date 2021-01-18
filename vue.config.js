@@ -5,7 +5,7 @@ const resolve = function(dir) {
 }
 const isDev = process.env.NODE_ENV === 'development'
 module.exports = {
-  publicPath: isDev ? '/' : '/ruban_cds',
+  publicPath: isDev ? '/' : 'ruban_cds',
   outputDir: "dist",
   // 是否开启eslint保存检测
   lintOnSave: true,

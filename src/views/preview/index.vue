@@ -9,7 +9,24 @@
       />
     </div>
     <div class="menu-con">
-      
+      <a-menu mode="inline">
+        <template v-for="item in pages">
+          <a-menu-item
+            :key="item.pageId"
+            v-if="!item.children"
+          >
+            {{item.pageName}}
+          </a-menu-item>
+          <a-sub-menu :key="item.pageId" v-else @titleClick="titleClick">
+            <span slot="title">
+              {{item.pageName}}
+            </span>
+            <a-menu-item  v-for="subItem in item.children" :key="subItem.pageId">
+              {{subItem.pageName}}
+            </a-menu-item>
+          </a-sub-menu>
+        </template>
+      </a-menu>
     </div>
   </div>
 </template>
@@ -23,7 +40,7 @@ import mutualApi from '@a/mutual'
 export default {
   name: "Preview",
   components: {
-    PreviewItem
+    PreviewItem,
   },
   data() {
     return {
@@ -41,7 +58,8 @@ export default {
     queryAllPage(applyId) {
       pageApi.queryAll({ applyId }).then(res => {
         if (res.code === 0) {
-          this.pages = res.data
+          this.pages = arrayToTree(res.data, { parentProperty: "pid", customID: "pageId" })
+          console.log(this.pages,"a-----------")
           this.currentPage = this.pages[0]
           this.queryAllActions()
           this.initPageAttrs()
@@ -79,6 +97,10 @@ export default {
         }
       })
     },
+    titleClick({domEvent}) {
+      domEvent.stopPropagation()
+      console.log("titleClick")
+    },
   }
 }
 </script>
@@ -97,7 +119,19 @@ export default {
     margin:0 auto;
   }
   .menu-con{
-    position:relative;
+    position:absolute;
+    left:0;
+    top:0;
+    .ant-menu-submenu-title{
+      pointer-events:none;
+      padding:0;
+      >span{
+        display:flex;
+        height:100%;
+        pointer-events:auto;
+        padding-left:24px;
+      }
+    }
   }
 }
 </style>

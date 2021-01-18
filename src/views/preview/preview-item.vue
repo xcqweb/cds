@@ -39,6 +39,9 @@ export default {
       transform: `rotate(${rotate}deg)`,
       zIndex
     }
+    if(this.actionList) {
+      this.styleObj.cursor="pointer"
+    }
     console.log(this.actionList)
   },
   methods: {
