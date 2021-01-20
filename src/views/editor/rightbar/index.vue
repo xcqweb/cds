@@ -30,9 +30,10 @@ export default {
     isPage() {
       return this.$store.getters.selectWidgets.length == 0
     },
-    textEditorShow() {// 编辑控件文本
+    textEditorShow() {
+      // 编辑控件文本
       return this.$store.state.textEditorShow.show
-    },
+    }
   },
   data() {
     return {}
@@ -103,6 +104,8 @@ export default {
   .ant-input {
     border-radius: 2px;
     border: 1px solid #f0f1f3;
+    font-size:12px;
+    color:#040c2c;
     &:focus,
     &:hover {
       box-shadow: unset;

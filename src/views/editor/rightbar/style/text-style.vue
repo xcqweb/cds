@@ -25,14 +25,14 @@
         />
         <div
           class="bold fc"
-          :class="{ 'select': fontWeightModel }"
+          :class="{ select: fontWeightModel }"
           @click="changeFontBold(fontWeightModel)"
         >
           B
         </div>
         <div
           class="font-color"
-          :style="{ 'backgroundColor': colorModel }"
+          :style="{ backgroundColor: colorModel }"
           @click="showColorPicker('fontColor', $event)"
         />
       </div>
@@ -41,21 +41,21 @@
           <div
             class="font-align-wrap fc"
             :class="{ select: attrs.justifyContent === 'flex-start' }"
-            @click="changeAlign(1,'flex-start')"
+            @click="changeAlign(1, 'flex-start')"
           >
             <svg-icon icon-class="text-left" class-name="icon-font-align" />
           </div>
           <div
             class="font-align-wrap fc"
             :class="{ select: attrs.justifyContent === 'center' }"
-            @click="changeAlign(1,'center')"
+            @click="changeAlign(1, 'center')"
           >
             <svg-icon icon-class="text-center" class-name="icon-font-align" />
           </div>
           <div
             class="font-align-wrap fc"
             :class="{ select: attrs.justifyContent === 'flex-end' }"
-            @click="changeAlign(1,'flex-end')"
+            @click="changeAlign(1, 'flex-end')"
           >
             <svg-icon icon-class="text-right" class-name="icon-font-align" />
           </div>
@@ -64,21 +64,21 @@
           <div
             class="font-align-wrap fc"
             :class="{ select: attrs.alignItems === 'flex-start' }"
-            @click="changeAlign(2,'flex-start')"
+            @click="changeAlign(2, 'flex-start')"
           >
             <svg-icon icon-class="text-top" class-name="icon-font-align" />
           </div>
           <div
             class="font-align-wrap fc"
             :class="{ select: attrs.alignItems === 'center' }"
-            @click="changeAlign(2,'center')"
+            @click="changeAlign(2, 'center')"
           >
             <svg-icon icon-class="text-middle" class-name="icon-font-align" />
           </div>
           <div
             class="font-align-wrap fc"
             :class="{ select: attrs.alignItems === 'flex-end' }"
-            @click="changeAlign(2,'flex-end')"
+            @click="changeAlign(2, 'flex-end')"
           >
             <svg-icon icon-class="text-bottom" class-name="icon-font-align" />
           </div>
@@ -88,7 +88,6 @@
   </div>
 </template>
 <script>
-import {findWidgetById} from '@u/deal'
 const fontFamilyList = [
   { label: "苹方字体", value: "PingFangSC-Regular" },
   { label: "微软雅黑", value: "Microsoft YaHei" },
@@ -106,63 +105,65 @@ export default {
       const widgetNames = ["GtImage", "GtLine", "GtLink"]
       return !widgetNames.includes(this.cname)
     },
-    operateWidget() {
-      if(this.selectWidgets.length) {
-        return this.selectWidgets[0]
-      }
-      const textEditor = this.$store.state.textEditorShow
-      if(textEditor.cid) {
-        return findWidgetById(this.currentPage.widgets,textEditor.cid)
-      }
-      return null
-    },
-    fontFamilyModel:{
+    fontFamilyModel: {
       get() {
-        return this.operateWidget.attrs.fontFamily
+        return this.attrs.fontFamily
       },
       set(fontFamily) {
-        this.$store.commit("updateWidgetAttrs", { fontFamily })
-      },
+        this.$store.commit("updateWidgetAttrs", {
+          fontFamily,
+          cid: this.textEditorShow.cid
+        })
+      }
     },
-    fontSizeModel:{
+    fontSizeModel: {
       get() {
-        return this.operateWidget.attrs.fontSize
+        return this.attrs.fontSize
       },
       set(fontSize) {
-        this.$store.commit("updateWidgetAttrs", { fontFamily })
-      },
+        this.$store.commit("updateWidgetAttrs", {
+          fontSize,
+          cid: this.textEditorShow.cid
+        })
+      }
     },
-    fontWeightModel () {
-      return this.operateWidget.attrs.fontWeight
+    fontWeightModel() {
+      return this.attrs.fontWeight
     },
-    colorModel(){
-      return this.operateWidget.attrs.color
+    colorModel() {
+      return this.attrs.color
     },
-    justifyContentModel(){
-      return this.operateWidget.attrs.justifyContent
+    justifyContentModel() {
+      return this.attrs.justifyContent
     },
     alignItemsModel() {
-      return this.operateWidget.attrs.alignItems
-    },
+      return this.attrs.alignItems
+    }
   },
   data() {
     return {
-      fontFamilyList,
+      fontFamilyList
     }
   },
   methods: {
     changeFontBold(val) {
-      this.$store.commit("updateWidgetAttrs", { fontWeight:!val })
+      this.$store.commit("updateWidgetAttrs", {
+        fontWeight: !val,
+        cid: this.textEditorShow.cid
+      })
     },
     showColorPicker(type, evt) {
       this.$emit("showColorPicker", type, evt)
     },
-    changeAlign(type,align) {
-      const arr = ['justifyContent','alignItems']
+    changeAlign(type, align) {
+      const arr = ["justifyContent", "alignItems"]
       let res = {}
       res[arr[type - 1]] = align
-      this.$store.commit("updateWidgetAttrs", {...res})
-    },
+      this.$store.commit("updateWidgetAttrs", {
+        ...res,
+        cid: this.textEditorShow.cid
+      })
+    }
   }
 }
 </script>

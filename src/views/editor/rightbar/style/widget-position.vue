@@ -56,7 +56,7 @@
 <script>
 import helpComputed from "@/mixins/help-computed"
 import key from "keymaster"
-const keyList = ['up','right','down','left']
+const keyList = ["up", "right", "down", "left"]
 export default {
   name: "WidgetPosition",
   mixins: [helpComputed],
@@ -64,40 +64,44 @@ export default {
     return {}
   },
   mounted() {
-    keyList.forEach(kbd=>{
-      key(kbd,(evt)=>this.dealKbd(kbd,evt))
+    keyList.forEach(kbd => {
+      key(kbd, evt => this.dealKbd(kbd, evt))
     })
   },
   beforeDestroy() {
-    keyList.forEach(kbd=>{
+    keyList.forEach(kbd => {
       key.unbind(kbd)
     })
   },
   methods: {
-    dealKbd(kbd,evt) {
+    dealKbd(kbd, evt) {
       evt.preventDefault()
-      if(this.selectWidgets.length) {
+      if (this.selectWidgets.length) {
         let disLeft = 0
         let disTop = 0
-        switch(kbd) {
-          case 'up':
+        switch (kbd) {
+          case "up":
             disTop = -1
             break
-          case 'right':
+          case "right":
             disLeft = 1
             break
-          case 'down':
+          case "down":
             disTop = 1
             break
-          case 'left':
+          case "left":
             disLeft = -1
             break
         }
-        this.selectWidgets.forEach(item=>{
-          this.$store.commit('updateWidgetAttrs',{left:item.attrs.left + disLeft,top:item.attrs.top + disTop,cid:item.cid})
+        this.selectWidgets.forEach(item => {
+          this.$store.commit("updateWidgetAttrs", {
+            left: item.attrs.left + disLeft,
+            top: item.attrs.top + disTop,
+            cid: item.cid
+          })
         })
       }
-    },
+    }
   }
 }
 </script>

@@ -19,11 +19,11 @@
 import pageApi from "@a/page"
 export default {
   name: "PagePopmenu",
-  computed:{
+  computed: {
     showDel() {
       let res = true
       const len = this.$store.state.apply.pages.length
-      if(len == 1) {
+      if (len == 1) {
         res = false
       }
       return res
@@ -33,7 +33,7 @@ export default {
     return {
       show: false,
       styleObj: {},
-      page: {},
+      page: {}
     }
   },
   created() {
@@ -61,7 +61,7 @@ export default {
     },
     hidePagePopMenu() {
       this.show = false
-      this.$bus.$emit('updateHoverPageId','')
+      this.$bus.$emit("updateHoverPageId", "")
     },
     setHome() {
       this.$store.commit("setHomePage", this.page.pageId)

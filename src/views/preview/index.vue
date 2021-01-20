@@ -8,7 +8,7 @@
         :action-list="actionMap.get(widget.cid)"
       />
     </div>
-    <preview-menu :pages="pages" :apply="apply" v-if="apply.navPosition"/>
+    <preview-menu :pages="pages" :apply="apply" v-if="apply.navPosition" />
   </div>
 </template>
 <script>
@@ -33,12 +33,11 @@ export default {
       viewStyleObj: {},
       currentPage: null,
       actionMap: new Map(),
-      apply:{},
+      apply: {}
     }
   },
   created() {
     this.init()
-    
   },
   methods: {
     init() {
@@ -47,8 +46,8 @@ export default {
       this.queryAllPage(applyId)
     },
     queryApply(applyId) {
-      applyApi.query(applyId).then(res=>{
-        if(res.code === 0) {
+      applyApi.query(applyId).then(res => {
+        if (res.code === 0) {
           this.apply = res.data
         }
       })

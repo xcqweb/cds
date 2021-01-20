@@ -8,7 +8,10 @@
     >
       <div
         class="menu-item"
-        :class="{'active':isCurrentPage(page),'hover':page.pageId == hoverPageId }"
+        :class="{
+          active: isCurrentPage(page),
+          hover: page.pageId == hoverPageId
+        }"
         :style="{ paddingLeft: `${page.level * 14}px` }"
       >
         <a
@@ -39,7 +42,7 @@
           v-if="!page.isEdit"
           @mouseenter="showPagePopMenu($event, page)"
           @moumove="showPagePopMenu($event, page)"
-          :class="{'hover': page.pageId == hoverPageId }"
+          :class="{ hover: page.pageId == hoverPageId }"
           @mouseout="mouseoutDeal($event)"
         >
           <svg-icon icon-class="page-action" class-name="icon" />
@@ -149,7 +152,7 @@ export default {
       }
       if (res) {
         this.$bus.$emit("hidePagePopMenu")
-        this.hoverPageId = ''
+        this.hoverPageId = ""
       }
     },
     updateHoverPageId(val) {
@@ -259,7 +262,8 @@ li {
       height: 6px;
       color: rgb(41, 141, 248);
     }
-    &.hover,&:hover {
+    &.hover,
+    &:hover {
       background: rgb(247, 247, 247);
       color: unset;
       .actions {

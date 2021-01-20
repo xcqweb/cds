@@ -214,8 +214,7 @@ export default {
               this.$store.commit("updateWidgetAttrs", { left, cid: item.cid })
             })
           } else {
-            left =
-              (this.currentPage.width - this.currentWidget.attrs.width) / 2
+            left = (this.currentPage.width - this.currentWidget.attrs.width) / 2
             this.$store.commit("updateWidgetAttrs", { left })
           }
           break

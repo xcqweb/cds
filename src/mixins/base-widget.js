@@ -12,6 +12,7 @@ export default {
     arrow: { default: "", type: String },
     linkUrl: { default: "", type: String },
     imgSrc: { default: "", type: String },
+    color: { default: "", type: String },
     borderColor: { default: "", type: String },
     borderStyle: { default: "", type: String },
     borderWidth: { default: "", type: String | Number },
@@ -37,7 +38,7 @@ export default {
           top: `0`,
           transform: `rotate(0deg)`,
           zIndex: `${this.zIndex}`,
-          opacity:this.opacity,
+          opacity: this.opacity
         }
       },
       set(val) {

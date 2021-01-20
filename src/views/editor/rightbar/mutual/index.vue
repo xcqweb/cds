@@ -37,8 +37,8 @@ export default {
   mounted() {},
   methods: {
     queryMutualList() {
-      if (this.selectWidgets.length) {
-        mutualApi.list({ widgetId: this.selectWidgets[0].cid }).then(res => {
+      if (this.currentWidget) {
+        mutualApi.list({ widgetId: this.currentWidget.cid }).then(res => {
           if (res.code == 0) {
             if (res.data.length) {
               this.mutualList = res.data
@@ -51,7 +51,7 @@ export default {
       const len = this.mutualList.length + 1
       const params = {
         actionName: `交互 ${len}`,
-        widgetId: this.selectWidgets[0].cid,
+        widgetId: this.currentWidget.cid,
         eventType: "click",
         actionType: "link-page",
         content: {

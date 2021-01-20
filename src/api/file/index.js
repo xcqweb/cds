@@ -1,6 +1,6 @@
 const uploadFile = `/api/poros-oss/file/upload`
-const bucketName = 'ruban'
+const bucketName = "ruban"
 export default {
   uploadFile,
-  bucketName,
+  bucketName
 }

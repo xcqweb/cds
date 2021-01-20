@@ -101,7 +101,7 @@ export default {
         if (this.selectWidgetsCount > 1) {
           this.enabledMenuItem(["group"], true)
         } else {
-          const { cname } = this.selectWidgets[0]
+          const { cname } = this.currentWidget
           if (cname === "GtGroup") {
             this.enabledMenuItem(["ungroup"], true)
           }
@@ -183,14 +183,14 @@ export default {
       if (this.copyData && this.copyData.length) {
         let len = 0
         this.copyData.forEach(item => {
-          this.$store.commit('updateWidget',{cid:item.cid,active:false})
+          this.$store.commit("updateWidget", { cid: item.cid, active: false })
           item.copyNum = item.copyNum + 1
           item = { ...item.attrs, ...item }
           len = item.copyNum === 1 ? "" : item.copyNum
           item.left = item.left + 20
           item.top = item.top + 20
           item.dname = `${this.copyData.cname} Copy${len}`
-          this.$store.commit("widgetAdd", {...item,cid:'',active:true})
+          this.$store.commit("widgetAdd", { ...item, cid: "", active: true })
         })
       }
     },
