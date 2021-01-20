@@ -20,14 +20,14 @@
           <span>选择模型</span>
         </div>
       </div>
-      <div class="item-con no-border">
-        <label class="label-block" @click="chooseDevice">设备</label>
-        <div class="data-item-wrap fv">
+      <div class="item-con no-border" v-if="choosedData.deviceModelMark">
+        <label class="label-block">设备</label>
+        <div class="data-item-wrap fv"  @click="chooseDevice">
           <svg-icon icon-class="add" class-name="icon" />
           <span>选择设备</span>
         </div>
       </div>
-      <div class="item-con no-border">
+      <div class="item-con no-border" v-if="choosedData.deviceName">
         <label class="label-block">数据项</label>
         <a-radio-group v-model="dataItem" @change="dataItemChange">
           <a-radio
@@ -48,13 +48,21 @@
       :visible.sync="visible"
       :all-text="allText"
       :recent-local-key="recentKey"
-      :list="list"
+      :url="url"
+      :dimUrl="dimUrl"
+      :code="code"
+      :dim-code="dimCode"
+      :label-key="labelKey"
+      :keywordKey="keywordKey"
+      :choosedData="choosedData"
+      @itemClick="itemClick"
     />
   </div>
 </template>
 <script>
-import DatasourcePanel from "@c/datasource-panel"
+import DatasourcePanel from "./components/datasource-panel"
 import api from "@a/data"
+import {findUrl} from '@u/deal'
 export default {
   name: "Datasource",
   components: {
@@ -78,7 +86,15 @@ export default {
       visible: false,
       allText: "全部模型",
       recentKey: "model",
-      list: []
+      list: [],
+      dataConfigList:[],
+      url:'',
+      dimUrl:'',
+      code:'',
+      dimCode:'',// 模糊查询的code
+      labelKey:'',
+      keywordKey:'',//搜索的关键字字段
+      choosedData:{},
     }
   },
   created() {
@@ -100,15 +116,50 @@ export default {
     },
     getDatasourceConfig() {
       api.dataUrlList({}).then(res=>{
-
+        if(res.code === 0) {
+          this.dataConfigList = res.data
+        }
       })
     },
     chooseModel() {
       this.visible = true
       this.recentKey = 'gt-cds-model-recent'
+      this.code = 'E001'
+      this.dimCode = 'E002'
+      this.labelKey = 'modelName'
+      this.keywordKey = 'deviceModelName'
+      this.url = findUrl(this.dataConfigList,this.code)
     },
-    chooseDevice() {},
-    chooseDataItem() {}
+     
+    chooseDevice() {
+      this.visible = true
+      this.recentKey = 'gt-cds-device-recent'
+      this.code = 'E003'
+      this.dimCode = 'E004'
+      this.labelKey = 'deviceName'
+      this.keywordKey = 'deviceName'
+      this.valueKey = 'deviceMark'
+      this.url = findUrl(this.dataConfigList,this.code)
+    },
+    chooseDataItem() {
+
+    },
+    itemClick(item) {
+      switch(this.keywordKey) {
+        case 'deviceModelName':
+          this.choosedData.deviceModelMark = item.mark
+          this.choosedData.deviceModelName = item.modelName
+          break
+        case 'deviceName':
+          this.choosedData[this.valueKey] = item[this.valueKey]
+          this.choosedData[this.labelKey] = item[this.labelKey]
+          break
+        case 'deviceName':
+          this.choosedData[this.valueKey] = item[this.valueKey]
+          this.choosedData[this.labelKey] = item[this.labelKey]
+          break
+      }
+    },
   }
 }
 </script>

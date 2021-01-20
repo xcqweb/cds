@@ -141,3 +141,21 @@ export function dealWidgetData(data) {
   })
   return result
 }
+
+export function findUrl(arr,code,special) { // 数据源接口查询
+  let res
+  const tempObj = arr.find(item=>item.functionCode == code)
+  if(tempObj) {
+    if(special) {
+      res = tempObj.dsParamValueUrl
+    } else {
+      res = tempObj.apiPathUrl
+    }
+    const isDev = process.env.NODE_ENV === 'development'
+    if(isDev) {
+      const apiIndex = res.indexOf('/api')
+      res = res.substr(apiIndex)
+    }
+  }
+  return res
+}

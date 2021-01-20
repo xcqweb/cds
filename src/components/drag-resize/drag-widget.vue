@@ -162,6 +162,7 @@ export default {
     },
     dblclick() {
       const widgetComponent = this.$refs.widgetRef
+      console.log(widgetComponent,"a-----")
       if (widgetComponent.dblclick) {
         widgetComponent.dblclick()
       }
