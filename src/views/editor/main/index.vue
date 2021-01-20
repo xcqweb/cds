@@ -289,16 +289,19 @@ export default {
   .group-item {
     position: absolute;
     cursor: move;
-    &:hover::before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      right: -1px;
-      bottom: -1px;
-      left: -1px;
-      border: 2px solid rgb(30, 152, 234);
-      z-index: 999999999;
+    &.pointer-events-none{
+      pointer-events:none;
     }
+    // &:hover::before {
+    //   content: "";
+    //   position: absolute;
+    //   top: -1px;
+    //   right: -1px;
+    //   bottom: -1px;
+    //   left: -1px;
+    //   border: 2px solid rgb(30, 152, 234);
+    //   z-index: 999999999;
+    // }
     &.active:before {
       border: 1px dashed #298df8;
     }

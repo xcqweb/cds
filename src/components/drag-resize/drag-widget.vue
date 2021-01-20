@@ -1,6 +1,7 @@
 <template>
   <vue-draggable-resizable
     class="group-item"
+    :class="{'pointer-events-none':widget.cname=='GtLine'}"
     :w="widget.attrs.width"
     :h="widget.attrs.height"
     :x="widget.attrs.left"
@@ -19,6 +20,8 @@
     @activated="onActivated"
     @deactivated="onDeactivated"
     @dblclick.native="dblclick"
+    :handles="handles"
+    :cursors="cursors"
   >
     <component
       :is="widget.cname"
@@ -44,6 +47,17 @@ import components from "@/views/widgets/index"
 import helpComputed from "@/mixins/help-computed"
 import helpDrag from "@/mixins/help-drag"
 import { isGroup } from "@u/deal"
+const handles = ["tl", "tm", "tr", "mr", "br", "bm", "bl", "ml", "rot"]
+const cursors = [
+    "nwse-resize",
+    "ns-resize",
+    "nesw-resize",
+    "ew-resize",
+    "nwse-resize",
+    "ns-resize",
+    "nesw-resize",
+    "ew-resize"
+  ]
 export default {
   name: "DragWidget",
   props: {
@@ -57,6 +71,22 @@ export default {
   computed: {
     selectWidgetsCount() {
       return this.selectWidgets.length
+    }
+  },
+  watch:{
+    cname(val) {
+      if(val === 'GtLine') {
+        this.handles = ["mr","ml"]
+        this.cursors = ["ew-resize","ew-resize"]
+      } else {
+        this.handles = handles
+      }
+    }
+  },
+  data() {
+    return {
+      handles,
+      cursors,
     }
   },
   methods: {
