@@ -54,6 +54,7 @@
 </template>
 <script>
 import DatasourcePanel from "@c/datasource-panel"
+import api from "@a/data"
 export default {
   name: "Datasource",
   components: {
@@ -80,6 +81,9 @@ export default {
       list: []
     }
   },
+  created() {
+    this.getDatasourceConfig()
+  },
   methods: {
     dataItemChange(evt) {
       switch (evt.target.value) {
@@ -94,8 +98,14 @@ export default {
           break
       }
     },
+    getDatasourceConfig() {
+      api.dataUrlList({}).then(res=>{
+
+      })
+    },
     chooseModel() {
       this.visible = true
+      this.recentKey = 'gt-cds-model-recent'
     },
     chooseDevice() {},
     chooseDataItem() {}

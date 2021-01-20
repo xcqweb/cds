@@ -53,7 +53,7 @@ export default {
   methods: {
     blur() {
       const cid = this.textEditorShow.cid
-      const text = this.$refs.textRef.innerHTML
+      const text = this.$refs.textRef.innerText
       this.$store.commit("setTextEditorShow", { show: false, cid: "" })
       this.$store.commit("updateWidget", { active: true, cid,text })
     },

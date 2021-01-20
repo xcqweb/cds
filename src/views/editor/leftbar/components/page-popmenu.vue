@@ -75,11 +75,10 @@ export default {
         pageId: newPageId,
         width,
         height,
-        sort: len,
         pid: this.page.pageId,
         pageName: `页面 ${++len}`,
         isEdit: true,
-        level: 1 + this.page.level
+        level: 1 + parseInt(this.page.level)
       })
       this.$store.commit("setCurrentPageId", newPageId)
       this.hidePagePopMenu()
@@ -91,7 +90,6 @@ export default {
       this.$store.commit("addPage", {
         ...this.page,
         pageId: newPageId,
-        sort: len,
         pageName: newPageName,
         isEdit: true
       })

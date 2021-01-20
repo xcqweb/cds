@@ -297,6 +297,7 @@ export default {
       bottom: -1px;
       left: -1px;
       border: 2px solid rgb(30, 152, 234);
+      // pointer-events:none;
       z-index: 999999999;
     }
     &.active:before {

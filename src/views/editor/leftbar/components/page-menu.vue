@@ -72,7 +72,10 @@ export default {
   computed: {
     currentPage() {
       return this.$store.getters.currentPage
-    }
+    },
+    applyId() {
+      return this.$store.state.apply.id
+    },
   },
   data() {
     return {
@@ -80,7 +83,6 @@ export default {
     }
   },
   created() {
-    this.applyId = this.$store.state.apply.id
     this.$bus.$on("updateHoverPageId", this.updateHoverPageId)
   },
   beforeDestroy() {

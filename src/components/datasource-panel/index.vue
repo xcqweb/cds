@@ -58,14 +58,26 @@ export default {
     }
   },
   mounted() {
-    this.recentList = JSON.stringify(localStorage.getItem[this.recentLocalKey])
+    let arr = localStorage.getItem[this.recentLocalKey]
+    if(arr) {
+      this.recentList = JSON.parse(arr)
+    } else {
+      this.recentList = []
+    }
   },
   methods: {
     hide() {
       this.$emit("update:visible", false)
     },
     itemClick(item) {
-      localStorage.setItem(this.recentLocalKey, JSON.stringify(item))
+      let arr = localStorage.getItem[this.recentLocalKey]
+      if(arr) {
+        arr = JSON.parse(arr)
+      } else {
+        arr = []
+      }
+      arr.push(item)
+      localStorage.setItem(this.recentLocalKey, JSON.stringify(arr))
       this.$emit("itemClick", item)
     }
   }
