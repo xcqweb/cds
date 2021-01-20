@@ -41,9 +41,9 @@ export default new Vuex.Store({
     setSaveTime(state, data) {
       state.saveTime = data
     },
-    setTextEditorShow(state,data) {
+    setTextEditorShow(state, data) {
       const tempObj = state.textEditorShow
-      state.textEditorShow = {...tempObj,...data}
+      state.textEditorShow = { ...tempObj, ...data }
     },
     addPage(state, data) {
       if (data.pid) {
@@ -390,8 +390,8 @@ export default new Vuex.Store({
       }
       return null
     },
-    currentWidgetId: (state,getters) => {
-      if(getters.currentWidget) {
+    currentWidgetId: (state, getters) => {
+      if (getters.currentWidget) {
         return getters.currentWidget.cid
       }
       return null

@@ -4,7 +4,7 @@
     <div class="main-con">
       <leftbar />
       <editor-main v-if="isInit" />
-      <Loading v-else />
+      <loading v-else />
       <sub-content />
       <rightbar />
     </div>

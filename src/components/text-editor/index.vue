@@ -49,7 +49,6 @@ export default {
     this.text = this.currentWidget.text
     this.$store.commit("updateWidget", { active: false })
     this.selectText(this.$refs.textRef)
-    
   },
   methods: {
     blur() {
