@@ -96,7 +96,6 @@ export default {
             active: true,
             cid: targetWidget.cid
           })
-          this.$store.commit("setCurrentWidgetId", targetWidget.cid)
           break
         }
       }

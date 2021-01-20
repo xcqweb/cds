@@ -15,7 +15,6 @@ export default new Vuex.Store({
       pages: []
     },
     currentPageId: "", // 当前页面id
-    currentWidgetId: "", // 当前激活的控件
     delWidgets: [], // 当前页面删除的控件
     ruler: {
       // 刻度尺
@@ -103,19 +102,12 @@ export default new Vuex.Store({
       // 设置当前页
       state.currentPageId = data
     },
-    setCurrentWidgetId(state, data) {
-      // 设置当前控件id
-      state.currentWidgetId = data
-    },
     setDelWidgets(state, data) {
       // 设置删除的控件
       state.delWidgets = data
     },
     setGroupSelection(state, data) {
       state.groupSelection = data
-      if (!state.currentWidgetId) {
-        state.currentWidgetId = data.widget.cid
-      }
     },
     setShowHelpLine(state, data) {
       state.showHelpLine = data
@@ -167,9 +159,6 @@ export default new Vuex.Store({
     },
     updateWidgetAttrs(state, attrs) {
       let currentWidget = this.getters.currentWidget
-      if(!currentWidget) {
-        currentWidget = this.getters.selectWidgets[0]
-      }
       const currentPage = this.getters.currentPage
       if (attrs.cid) {
         currentWidget = currentPage.widgets.find(item => item.cid == attrs.cid)
@@ -198,9 +187,6 @@ export default new Vuex.Store({
     },
     updateWidget(state, data) {
       let currentWidget = this.getters.currentWidget
-      if(!currentWidget) {
-        currentWidget = this.getters.selectWidgets[0]
-      }
       const currentPage = this.getters.currentPage
       if (data.cid) {
         currentWidget = currentPage.widgets.find(item => item.cid == data.cid)
@@ -366,12 +352,22 @@ export default new Vuex.Store({
       }
       return null
     },
+    selectWidgets: (state, getters) => {
+      if (getters.currentPage) {
+        return getters.currentPage.widgets.filter(item => item.active)
+      }
+      return []
+    },
     currentWidget: (state, getters) => {
-      const currentPage = getters.currentPage
-      if (currentPage) {
-        return currentPage.widgets.find(
-          item => item.cid === state.currentWidgetId
-        )
+      const selectWidgets = getters.selectWidgets
+      if (selectWidgets.length) {
+        return selectWidgets[0]
+      }
+      return null
+    },
+    currentWidgetId: (state,getters) => {
+      if(getters.currentWidget) {
+        return getters.currentWidget.cid
       }
       return null
     },
@@ -380,16 +376,10 @@ export default new Vuex.Store({
       let res = -1
       if (currentPage) {
         res = currentPage.widgets.findIndex(
-          item => item.cid === state.currentWidgetId
+          item => item.cid === getters.currentWidgetId
         )
       }
       return res
-    },
-    selectWidgets: (state, getters) => {
-      if (getters.currentPage) {
-        return getters.currentPage.widgets.filter(item => item.active)
-      }
-      return []
     },
     ...moduleGetters
   }

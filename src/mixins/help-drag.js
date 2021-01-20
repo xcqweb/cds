@@ -22,12 +22,10 @@ export default {
       this.$store.commit("setShowHelpLine", false)
     },
     onActivated() {
-      this.$store.commit("setCurrentWidgetId", this.widget.cid)
       this.$store.commit("updateWidget", { active: true, cid: this.widget.cid })
       undoManager.saveApplyChange()
     },
     onDeactivated() {
-      this.$store.commit("setCurrentWidgetId", "")
       this.$store.commit("updateWidget", {
         active: false,
         cid: this.widget.cid
