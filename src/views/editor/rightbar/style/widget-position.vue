@@ -33,7 +33,7 @@
           style="width: 40%"
         />
       </div>
-      <div class="input-con fs">
+      <div class="input-con fs" v-if="cname != 'GtLine'">
         <a-input
           size="small"
           v-model.number="attrs.rotate"
