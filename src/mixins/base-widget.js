@@ -12,6 +12,7 @@ export default {
     arrow: { default: "", type: String },
     linkUrl: { default: "", type: String },
     imgSrc: { default: "", type: String },
+    color: { default: "", type: String },
     borderColor: { default: "", type: String },
     borderStyle: { default: "", type: String },
     borderWidth: { default: "", type: String | Number },
@@ -27,22 +28,16 @@ export default {
     isPreview: { default: false, type: Boolean }
   },
   computed: {
-    styleObj: {
-      get() {
-        return {
-          position: "absolute",
-          width: `${this.width}px`,
-          height: `${this.height}px`,
-          left: `0`,
-          top: `0`,
-          transform: `rotate(0deg)`,
-          zIndex: `${this.zIndex}`,
-          opacity:this.opacity,
-        }
-      },
-      set(val) {
-        console.log("set--style-base---------", val)
-        this.styleObj = val
+    styleObj(){
+      return {
+        position: "absolute",
+        width: `${this.width}px`,
+        height: `${this.height}px`,
+        left: `0`,
+        top: `0`,
+        transform: `rotate(0deg)`,
+        zIndex: `${this.zIndex}`,
+        opacity: this.opacity
       }
     }
   },

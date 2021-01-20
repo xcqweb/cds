@@ -27,7 +27,7 @@
         }"
         @mousedown.stop.prevent="handleDown(handle, $event)"
         @touchstart.stop.prevent="handleDown(handle, $event)"
-      ></div>
+      />
     </template>
   </div>
 </template>
@@ -595,16 +595,7 @@ export default {
       }
     },
     cursorStyle() {
-      const cursorStyleArray = [
-        "nwse-resize",
-        "ns-resize",
-        "nesw-resize",
-        "ew-resize",
-        "nwse-resize",
-        "ns-resize",
-        "nesw-resize",
-        "ew-resize"
-      ]
+      const cursorStyleArray = this.cursors
 
       const ARR_LENGTH = 8
       const STEP = 45
@@ -627,7 +618,7 @@ export default {
       }
 
       return cursorStyleArray
-    }
+    },
   },
 
   watch: {

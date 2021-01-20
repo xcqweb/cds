@@ -52,5 +52,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .gt-line {
+  pinter-events:none;
 }
 </style>

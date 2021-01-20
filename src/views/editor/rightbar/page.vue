@@ -77,7 +77,7 @@
           <span>选择背景图片</span>
         </div>
         <div class="pic-con" v-else>
-          <img :src="backgroundImage" class="pic-cls"/>
+          <img :src="backgroundImage" class="pic-cls" />
           <svg-icon
             icon-class="delete"
             class="icon-del"
@@ -94,7 +94,7 @@
           @click="changNavPosition(0)"
           :class="{ select: navPosition == 0 }"
         >
-        无
+          无
         </div>
         <div
           class="layout-item"
@@ -153,7 +153,7 @@ import ColorPicker from "@c/color-picker/index"
 import helpComputed from "@/mixins/help-computed"
 import config from "@/config"
 import { getToken } from "@/utils/cookie"
-import fileApi from '@a/file'
+import fileApi from "@a/file"
 const pageSizeList = ["1366 * 768", "1280 * 720", "1920 * 1080", "自定义"]
 export default {
   name: "PageStyle",
@@ -195,9 +195,9 @@ export default {
         this.$store.dispatch("updatePageInfo", { backgroundColor })
       }
     },
-    backgroundImage:{
+    backgroundImage: {
       get() {
-        let res = ''
+        let res = ""
         if (this.currentPage) {
           res = this.$imgUrl(this.currentPage.backgroundImage)
         }
@@ -251,13 +251,13 @@ export default {
       navModel: undefined,
       navColorModel: 1,
       navColorList: config.navColorList,
-      headerInfo:{'Authorization': getToken()},
-      uploadUrl:fileApi.uploadFile,
-      fileData:{bucketName:fileApi.bucketName},
+      headerInfo: { Authorization: getToken() },
+      uploadUrl: fileApi.uploadFile,
+      fileData: { bucketName: fileApi.bucketName }
     }
   },
   created() {
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.dealPageSizeModel(this.pageSize)
     })
   },
@@ -292,8 +292,8 @@ export default {
       }
     },
     handlePicChange(info) {
-      const {response,status} = info.file
-      if (status === 'done' && response.code == 0) {
+      const { response, status } = info.file
+      if (status === "done" && response.code == 0) {
         this.backgroundImage = response.data
       }
     },
@@ -307,7 +307,7 @@ export default {
     },
     changNavPosition(pos) {
       this.navPosition = pos
-      this.$store.dispatch('updateApply',{navPosition:this.navPosition})
+      this.$store.dispatch("updateApply", { navPosition: this.navPosition })
     },
     changeNavColor(index) {
       this.navColorModel = index + 1
@@ -317,12 +317,15 @@ export default {
       this.saveApplyNav()
     },
     saveApplyNav() {
-      const navStyle = JSON.stringify({theme:this.navModel,color:this.navColorModel})
-      this.$store.dispatch('updateApply',{navStyle})
+      const navStyle = JSON.stringify({
+        theme: this.navModel,
+        color: this.navColorModel
+      })
+      this.$store.dispatch("updateApply", { navStyle })
     },
     delPagePic() {
-      this.backgroundImage = ''
-    },
+      this.backgroundImage = ""
+    }
   }
 }
 </script>
@@ -374,20 +377,20 @@ export default {
       }
     }
     /deep/.ant-upload {
-      padding:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .pic-con{
-      .pic-cls{
-        max-width:130px;
-        max-height:81px;
+    .pic-con {
+      .pic-cls {
+        max-width: 130px;
+        max-height: 81px;
       }
-      .icon-del{
-        color:#333;
-        cursor:pointer;
-        position:relative;
+      .icon-del {
+        color: #333;
+        cursor: pointer;
+        position: relative;
         top: -32px;
         right: -6px;
       }
@@ -423,7 +426,7 @@ export default {
     width: 30px;
     height: 30px;
     border: 1px solid #cdced5;
-    cursor:pointer;
+    cursor: pointer;
     .item {
       width: 18px;
       height: 18px;

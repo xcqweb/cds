@@ -38,7 +38,9 @@ export default {
     const applyId = this.$route.query.appId
     this.$store.dispatch("initApply", applyId).then(() => {
       this.isInit = true
-      undoManager.saveApplyChange()
+      this.$nextTick(()=>{
+        undoManager.clearHistory()
+      })
     })
     this.saveTimer = setTimeout(() => {
       this.$store.dispatch("patchModifyWidgets")

@@ -13,7 +13,7 @@ export default {
       const attrs = this.calculateSelectWidgets(widgets)
       widgets.forEach(item => {
         if (isGroup(item)) {
-          this.ungroup(item)
+          this.ungroup(null,item)
         }
       })
       widgets = this.selectWidgets
@@ -30,7 +30,7 @@ export default {
       })
       this.$store.commit("widgetAdd", { cid, cname, name, ...attrs })
     },
-    ungroup(widget) {
+    ungroup(evt,widget) {
       if (!widget) {
         widget = this.currentWidget
       }
@@ -53,7 +53,17 @@ export default {
         this.$store.commit("widgetDel", [widget])
       }
     },
-    toTop() {},
-    toBottom() {}
+    toTop() {
+      this.$store.commit('zIndexOperate','toTop')
+    },
+    toBottom() {
+      this.$store.commit('zIndexOperate','toBottom')
+    },
+    nextZIndex() {
+      this.$store.commit('zIndexOperate','nextZIndex')
+    },
+    lastZIndex() {
+      this.$store.commit('zIndexOperate','lastZIndex')
+    },
   }
 }

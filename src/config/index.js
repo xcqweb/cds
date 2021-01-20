@@ -50,8 +50,8 @@ export default {
         {
           cname: "GtLink",
           name: "链接",
-          width: 430,
-          height: 170,
+          width: 250,
+          height: 128,
           icon: "widget-link"
         },
         {
@@ -99,7 +99,7 @@ export default {
     },
     sort: 0,
     backgroundColor: defaultPageColor,
-    backgroundImage:null,
+    backgroundImage: null
   },
   defaultWidget: {
     rotate: 0,
@@ -137,18 +137,16 @@ export default {
     { label: "当前页打开", value: "_self" },
     { label: "新窗口打开", value: "_blank" }
   ],
-  navColorList:[
+  navColorList: [
     { label: "#1740DC", value: 1 },
     { label: "#F5222D", value: 2 },
     { label: "#F9531C", value: 3 },
     { label: "#EB2F96", value: 4 },
     { label: "#13C2C2", value: 5 }
   ],
-  navList:[
+  navList: [
     { label: "亮色", value: "light" },
     { label: "暗色", value: "dark" }
   ],
-  dataItemStateList:[
-
-  ],
+  dataItemStateList: []
 }

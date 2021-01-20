@@ -1,6 +1,6 @@
 <template>
   <div class="gt-button" :style="styleObj" @dblclick.capture="dblclick">
-    <text-con v-bind="$options.propsData"/>
+    <text-con v-bind="$props" />
   </div>
 </template>
 <script>
@@ -9,21 +9,23 @@ import TextCon from "../../components/text-con"
 const cname = "GtButton"
 export default {
   name: cname,
-  components:{
-    TextCon,
+  components: {
+    TextCon
   },
   mixins: [baseWidget],
   data() {
     return {}
   },
-  mounted() {
-    if(!this.text) {
-      this.$store.commit('updateWidget',{text:'按钮',cid:this.cid})
+  created() {
+    if (!this.text && !this.isPreview) {
+      this.$store.commit("updateWidget", { text: "按钮", cid: this.cid })
     }
   },
   methods: {
     dblclick() {
-      this.$store.commit('setTextEditorShow',{show:true,cid:this.cid})
+      if(!this.isPreview) {
+        this.$store.commit("setTextEditorShow", { show: true, cid: this.cid })
+      }
     }
   }
 }

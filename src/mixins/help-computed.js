@@ -1,4 +1,4 @@
-import {findWidgetById} from '@u/deal'
+import { findWidgetById } from "@u/deal"
 export default {
   computed: {
     currentPageIndex() {
@@ -19,23 +19,30 @@ export default {
     showHelpLine() {
       return this.$store.getters["showHelpLine"]
     },
+    textEditorShow() {
+      return this.$store.state.textEditorShow
+    },
+    operateWidget() {
+      if (this.currentWidget) {
+        return this.currentWidget
+      }
+      if (this.textEditorShow.cid) {
+        return findWidgetById(this.currentPage.widgets, this.textEditorShow.cid)
+      }
+      return null
+    },
     cname() {
       let res = ""
-      if (this.selectWidgets.length) {
-        res = this.selectWidgets[0].cname
+      if (this.operateWidget) {
+        res = this.operateWidget.cname
       }
       return res
     },
     attrs: {
       get() {
         let attrs = {}
-        if (this.selectWidgets.length == 1) {
-          attrs = this.selectWidgets[0].attrs
-        } else {
-          const textEditor = this.$store.state.textEditorShow
-          if(textEditor.show) {
-            attrs = findWidgetById(this.$store.getters.currentPage.widgets,textEditor.cid).attrs
-          }
+        if (this.operateWidget) {
+          attrs = this.operateWidget.attrs
         }
         return attrs
       }

@@ -50,8 +50,8 @@ export default {
           type: "paste",
           divide: "true"
         },
-        { name: "置顶", kbd: "", type: "top" },
-        { name: "置底", kbd: "", type: "bottom", divide: "true" },
+        { name: "置顶", kbd: "", type: "toTop" },
+        { name: "置底", kbd: "", type: "toBottom", divide: "true" },
         { name: "组合", kbd: "", type: "group", disabled: true },
         {
           name: "解散",
@@ -99,21 +99,21 @@ export default {
       } else {
         this.dealMenuIncludeAll()
         if (this.selectWidgetsCount > 1) {
-          this.enabledMenuItem(["group"], true)
+          this.enabledMenuItem(["group"], false)
         } else {
-          const { cname } = this.selectWidgets[0]
+          const { cname } = this.currentWidget
           if (cname === "GtGroup") {
-            this.enabledMenuItem(["ungroup"], true)
+            this.enabledMenuItem(["ungroup"], false)
           }
         }
       }
       this.showMenu = true
     },
-    enabledMenuItem(types, isEnabled) {
+    enabledMenuItem(types, anabled) {
       types.forEach(type => {
-        const item = this.list.find(item.type == type)
+        let item = this.list.find(d=>d.type == type)
         if (item) {
-          this.$set(item, "disabled", isEnabled)
+          this.$set(item, "disabled", anabled)
         }
       })
     },
@@ -161,11 +161,11 @@ export default {
         case "paste":
           this.paste()
           break
-        case "top":
-          this.top()
+        case "toTop":
+          this.toTop()
           break
-        case "bottom":
-          this.bottom()
+        case "toBottom":
+          this.toBottom()
           break
         case "group":
           this.group()
@@ -183,26 +183,29 @@ export default {
       if (this.copyData && this.copyData.length) {
         let len = 0
         this.copyData.forEach(item => {
-          this.$store.commit('updateWidget',{cid:item.cid,active:false})
+          if(!this.isCut) {
+            this.$store.commit("updateWidget", { cid: item.cid, active: false })
+          }
           item.copyNum = item.copyNum + 1
           item = { ...item.attrs, ...item }
           len = item.copyNum === 1 ? "" : item.copyNum
           item.left = item.left + 20
           item.top = item.top + 20
           item.dname = `${this.copyData.cname} Copy${len}`
-          this.$store.commit("widgetAdd", {...item,cid:'',active:true})
+          this.$store.commit("widgetAdd", { ...item, cid: "", active: true })
         })
       }
     },
     copy() {
-      this.dealCopyData()
+      this.dealCopyData(false)
     },
     cut() {
-      this.dealCopyData()
+      this.dealCopyData(true)
       this.$store.commit("widgetDel")
     },
-    dealCopyData() {
+    dealCopyData(isCut) {
       if (this.selectWidgets.length) {
+        this.isCut = isCut
         this.copyData = cloneDeep(this.selectWidgets)
       }
     }

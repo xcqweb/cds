@@ -37,8 +37,8 @@ export default {
     displayName: {
       get() {
         let res = ""
-        if (this.selectWidgets.length == 1) {
-          res = this.selectWidgets[0].name
+        if (this.currentWidget) {
+          res = this.currentWidget.name
         }
         return res
       },

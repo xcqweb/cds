@@ -35,14 +35,14 @@ export default {
     }
   },
   created() {
-    const { width, height, left, top, rotate, zIndex } = this.widget.attrs
+    const { width, height, left, top, rotate } = this.widget.attrs
     this.styleObj = {
       width: `${width}px`,
       height: `${height}px`,
       left: `${left}px`,
       top: `${top}px`,
       transform: `rotate(${rotate}deg)`,
-      zIndex
+      zIndex: 'auto',
     }
     if (this.actionList) {
       this.styleObj.cursor = "pointer"

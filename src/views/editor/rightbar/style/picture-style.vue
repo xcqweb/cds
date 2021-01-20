@@ -16,7 +16,7 @@
           <svg-icon icon-class="default-pic" class-name="icon" />
           <span>选择图片</span>
         </div>
-        <img v-else :src="imgSrc" class="pic-cls"/>
+        <img v-else :src="imgSrc" class="pic-cls" />
       </a-upload-dragger>
     </div>
   </div>
@@ -24,33 +24,33 @@
 <script>
 import helpComputed from "@/mixins/help-computed"
 import { getToken } from "@/utils/cookie"
-import fileApi from '@a/file'
+import fileApi from "@a/file"
 export default {
   name: "PictureStyle",
   mixins: [helpComputed],
-  computed:{
-    imgSrc:{
+  computed: {
+    imgSrc: {
       get() {
-        let res = ''
-        res = this.$imgUrl(this.attrs.imgSrc) 
+        let res = ""
+        res = this.$imgUrl(this.attrs.imgSrc)
         return res
       },
       set(imgSrc) {
         this.$store.commit("updateWidgetAttrs", { imgSrc })
       }
-    },
+    }
   },
   data() {
     return {
-      uploadUrl:fileApi.uploadFile,
-      fileData:{bucketName:fileApi.bucketName},
-      headerInfo:{'Authorization': getToken()},
+      uploadUrl: fileApi.uploadFile,
+      fileData: { bucketName: fileApi.bucketName },
+      headerInfo: { Authorization: getToken() }
     }
   },
   methods: {
     handlePicChange(info) {
-      const {response,status} = info.file
-      if (status === 'done' && response.code == 0) {
+      const { response, status } = info.file
+      if (status === "done" && response.code == 0) {
         this.imgSrc = response.data
       }
     }
@@ -79,18 +79,18 @@ export default {
       }
     }
     /deep/.ant-upload {
-      padding:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      .ant-upload-drag-container{
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .ant-upload-drag-container {
         width: 100%;
         height: 100%;
       }
     }
-    .pic-cls{
-     width: 100%;
-     height: 100%;
+    .pic-cls {
+      width: 100%;
+      height: 100%;
     }
   }
 }

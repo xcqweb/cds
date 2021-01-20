@@ -29,13 +29,12 @@ export default {
     },
     imgSrcDeal() {
       return this.$imgUrl(this.imgSrc)
-    },
+    }
   },
   data() {
     return {}
   },
-  created() {
-  },
+  created() {},
   methods: {}
 }
 </script>
@@ -45,9 +44,9 @@ export default {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  img{
-    width:100%;
-    height:100%;
+  img {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

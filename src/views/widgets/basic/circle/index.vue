@@ -1,6 +1,6 @@
 <template>
   <div class="gt-circle" :style="styleObj" @dblclick.capture="dblclick">
-    <text-con v-bind="$options.propsData"/>
+    <text-con v-bind="$props" />
   </div>
 </template>
 <script>
@@ -9,8 +9,8 @@ import TextCon from "../../components/text-con"
 const cname = "GtCircle"
 export default {
   name: cname,
-  components:{
-    TextCon,
+  components: {
+    TextCon
   },
   mixins: [baseWidget],
   data() {
@@ -19,7 +19,9 @@ export default {
   created() {},
   methods: {
     dblclick() {
-      this.$store.commit('setTextEditorShow',{show:true,cid:this.cid})
+      if(!this.isPreview) {
+        this.$store.commit("setTextEditorShow", { show: true, cid: this.cid })
+      }
     }
   }
 }

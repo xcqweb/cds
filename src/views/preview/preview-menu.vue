@@ -43,18 +43,18 @@
 </template>
 
 <script>
-import 'iview/dist/styles/iview.css'
+import "iview/dist/styles/iview.css"
 import Menu from "@c/preview-menu/menu"
 import Submenu from "@c/preview-menu/submenu"
 import MenuItem from "@c/preview-menu/menu-item"
 const modes = ["vertical", "horizontal"]
 export default {
   name: "PreviewMenu",
-  props:{
-    pages:Array,
-    apply:Object,
+  props: {
+    pages: Array,
+    apply: Object
   },
-  computed:{
+  computed: {
     mode() {
       return modes[this.apply.navPosition - 1]
     },
@@ -63,7 +63,7 @@ export default {
     },
     theme() {
       return this.navStyle.theme
-    },
+    }
   },
   components: {
     Menu,
@@ -72,13 +72,11 @@ export default {
   },
   data() {
     return {
-      isCollapsed: false,
+      isCollapsed: false
     }
   },
   watch: {
-    mode(val) {
-    
-    }
+    mode(val) {}
   },
   created() {},
   methods: {
@@ -94,15 +92,15 @@ export default {
   width: 200px;
   height: 100%;
   opacity: 0.98;
-  &.menu-horizontal{
-    height:60px;
-    width:100%;
+  &.menu-horizontal {
+    height: 60px;
+    width: 100%;
   }
-  .ivu-menu-vertical{
-    height:100%;
+  .ivu-menu-vertical {
+    height: 100%;
   }
-  .ivu-menu-horizontal{
-    width:100%;
+  .ivu-menu-horizontal {
+    width: 100%;
   }
 }
 </style>

@@ -29,8 +29,8 @@ export default new Vuex.Store({
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
-    saveTime: new Date(),
-    textEditorShow:{show:false,cid:''},//显示文本编辑器
+    saveTime: new Date().getTime(),
+    textEditorShow: { show: false, cid: "" } //显示文本编辑器
   },
   mutations: {
     setRuler(state, data) {
@@ -70,6 +70,31 @@ export default new Vuex.Store({
         state.apply.pages.splice(resIndex, 1)
         state.apply.pages.unshift(tempPage)
       }
+    },
+    zIndexOperate(state,data) {
+      let page = this.getters.currentPage
+      this.getters.selectWidgets.forEach(item=>{
+        const resIndex = page.widgets.findIndex(w=>w.cid==item.cid)
+        if(resIndex!=-1) {
+          const tempWdiget = {...item}
+          switch(data) {
+            case 'toTop':
+              page.widgets.splice(resIndex,1)
+              page.widgets.push(tempWdiget)
+              break
+            case 'toBottom':
+              page.widgets.splice(resIndex,1)
+              page.widgets.unshift(tempWdiget)
+              break
+            case 'nextZIndex':
+              page.widgts.splice(resIndex+1,0,tempWdiget)
+              break
+            case 'lastZIndex':
+              page.widgts.splice(resIndex-1,0,tempWdiget)
+              break
+          }
+        }
+      })
     },
     initPages(state, data) {
       data = data.map(item => {
@@ -301,7 +326,7 @@ export default new Vuex.Store({
       if (params.length) {
         widgetApi.modifyPatch(params).then(res => {
           if (res.code === 0) {
-            store.commit("setSaveTime", new Date())
+            store.commit("setSaveTime", new Date().getTime())
             if (!isNoTip) {
               console.log("保存页面的控件成功")
             }

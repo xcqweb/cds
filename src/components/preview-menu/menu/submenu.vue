@@ -25,12 +25,7 @@
       </ul>
     </collapse-transition>
     <transition v-else name="slide-up">
-      <Drop
-        v-show="opened"
-        ref="drop"
-        placement="bottom"
-        :style="dropStyle"
-      >
+      <Drop v-show="opened" ref="drop" placement="bottom" :style="dropStyle">
         <ul :class="[prefixCls + '-drop-list']">
           <slot />
         </ul>
