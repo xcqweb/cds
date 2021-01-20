@@ -36,7 +36,7 @@
       </div>
     </div>
 
-    <div class="item-con fs">
+    <div class="item-con fs" v-if="!backgroundImage">
       <label>背景颜色</label>
       <div
         class="page-bg"
@@ -45,7 +45,7 @@
       />
     </div>
 
-    <div class="item-con fs">
+    <div class="item-con fs" v-if="!backgroundImage">
       <label>网格</label>
       <div
         class="page-bg grid"
@@ -64,13 +64,25 @@
       <label>背景图片</label>
       <a-upload-dragger
         name="file"
-        action=""
+        :data="fileData"
+        :headers="headerInfo"
+        :action="uploadUrl"
+        :showUploadList="false"
+        accept="image/jpg,image/jpeg,image/png"
         @change="handlePicChange"
-        class="upload-con"
+        class="upload-con fc"
       >
-        <div class="default-con">
+        <div class="default-con" v-if="!backgroundImage">
           <svg-icon icon-class="default-pic" class-name="icon" />
           <span>选择背景图片</span>
+        </div>
+        <div class="pic-con" v-else>
+          <img :src="backgroundImage" class="pic-cls"/>
+          <svg-icon
+            icon-class="delete"
+            class="icon-del"
+            @click.stop.native="delPagePic"
+          />
         </div>
       </a-upload-dragger>
     </div>
@@ -78,10 +90,12 @@
       <label class="label-block">导航布局</label>
       <div class="fs">
         <div
-          class="layout-item"
+          class="layout-item fc"
           @click="changNavPosition(0)"
           :class="{ select: navPosition == 0 }"
-        />
+        >
+        无
+        </div>
         <div
           class="layout-item"
           @click="changNavPosition(1)"
@@ -110,6 +124,7 @@
           v-for="item in navList"
           :key="item.value"
           :value="item.value"
+          @change="navThemeChange"
         >
           {{ item.label }}
         </a-select-option>
@@ -137,14 +152,9 @@
 import ColorPicker from "@c/color-picker/index"
 import helpComputed from "@/mixins/help-computed"
 import config from "@/config"
-const pageSizeList = ["1366 * 768", "1280 * 768", "1920 * 1080", "自定义"]
-const navColorList = [
-  { label: "#1740DC", value: 1 },
-  { label: "#F5222D", value: 2 },
-  { label: "#F9531C", value: 3 },
-  { label: "#EB2F96", value: 4 },
-  { label: "#13C2C2", value: 5 }
-]
+import { getToken } from "@/utils/cookie"
+import fileApi from '@a/file'
+const pageSizeList = ["1366 * 768", "1280 * 720", "1920 * 1080", "自定义"]
 export default {
   name: "PageStyle",
   mixins: [helpComputed],
@@ -158,7 +168,7 @@ export default {
         if (this.currentPage) {
           let { width, height } = this.currentPage
           width = width || config.defaultPage.width
-          height = width || config.defaultPage.height
+          height = height || config.defaultPage.height
           res = `${width}*${height}`
         }
         return res
@@ -183,6 +193,18 @@ export default {
       },
       set(backgroundColor) {
         this.$store.dispatch("updatePageInfo", { backgroundColor })
+      }
+    },
+    backgroundImage:{
+      get() {
+        let res = ''
+        if (this.currentPage) {
+          res = this.$imgUrl(this.currentPage.backgroundImage)
+        }
+        return res
+      },
+      set(backgroundImage) {
+        this.$store.dispatch("updatePageInfo", { backgroundImage })
       }
     },
     gridSize: {
@@ -215,14 +237,6 @@ export default {
       }
     }
   },
-  watch: {
-    pageSize(val) {
-      this.pageSizeModel = val
-      const arr = val.split("*")
-      this.pw = parseInt(arr[0])
-      this.ph = parseInt(arr[1])
-    }
-  },
   data() {
     return {
       pageSizeList,
@@ -232,18 +246,28 @@ export default {
       ph: "",
       visibleColor: false,
       objStyle: {},
-      navList: [
-        { label: "亮色", value: "light" },
-        { label: "暗色", value: "dark" }
-      ],
+      navList: config.navList,
       navPosition: 0,
       navModel: undefined,
       navColorModel: 1,
-      navColorList
+      navColorList: config.navColorList,
+      headerInfo:{'Authorization': getToken()},
+      uploadUrl:fileApi.uploadFile,
+      fileData:{bucketName:fileApi.bucketName},
     }
   },
-  created() {},
+  created() {
+    this.$nextTick(()=>{
+      this.dealPageSizeModel(this.pageSize)
+    })
+  },
   methods: {
+    dealPageSizeModel(val) {
+      this.pageSizeModel = val
+      const arr = val.split("*")
+      this.pw = parseInt(arr[0])
+      this.ph = parseInt(arr[1])
+    },
     pageInputChange() {
       this.pageSize = `${this.pw}*${this.ph}`
     },
@@ -267,7 +291,12 @@ export default {
           break
       }
     },
-    handlePicChange() {},
+    handlePicChange(info) {
+      const {response,status} = info.file
+      if (status === 'done' && response.code == 0) {
+        this.backgroundImage = response.data
+      }
+    },
     onNavStyleChange() {},
     pageSizeChange(val) {
       if (val == "自定义") {
@@ -278,10 +307,22 @@ export default {
     },
     changNavPosition(pos) {
       this.navPosition = pos
+      this.$store.dispatch('updateApply',{navPosition:this.navPosition})
     },
     changeNavColor(index) {
       this.navColorModel = index + 1
-    }
+      this.saveApplyNav()
+    },
+    navThemeChange() {
+      this.saveApplyNav()
+    },
+    saveApplyNav() {
+      const navStyle = JSON.stringify({theme:this.navModel,color:this.navColorModel})
+      this.$store.dispatch('updateApply',{navStyle})
+    },
+    delPagePic() {
+      this.backgroundImage = ''
+    },
   }
 }
 </script>
@@ -332,6 +373,25 @@ export default {
         color: #c3cbce;
       }
     }
+    /deep/.ant-upload {
+      padding:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .pic-con{
+      .pic-cls{
+        max-width:130px;
+        max-height:81px;
+      }
+      .icon-del{
+        color:#333;
+        cursor:pointer;
+        position:relative;
+        top: -32px;
+        right: -6px;
+      }
+    }
   }
   .layout-item {
     width: 63px;
@@ -363,6 +423,7 @@ export default {
     width: 30px;
     height: 30px;
     border: 1px solid #cdced5;
+    cursor:pointer;
     .item {
       width: 18px;
       height: 18px;

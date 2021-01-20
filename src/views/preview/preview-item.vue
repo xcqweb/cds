@@ -1,6 +1,11 @@
 <template>
   <div class="group-item" :style="styleObj" @click="click" @dblclick="dblclick">
-    <component :is="widget.cname" v-bind="widget.attrs" :text="widget.text" :is-preview="true">
+    <component
+      :is="widget.cname"
+      v-bind="widget.attrs"
+      :text="widget.text"
+      :is-preview="true"
+    >
       <template v-if="widget.children">
         <preview-item
           v-for="item in widget.children"
@@ -22,7 +27,7 @@ export default {
   },
   props: {
     widget: Object,
-    actionList:Array
+    actionList: Array
   },
   data() {
     return {
@@ -39,53 +44,49 @@ export default {
       transform: `rotate(${rotate}deg)`,
       zIndex
     }
-    if(this.actionList) {
-      this.styleObj.cursor="pointer"
+    if (this.actionList) {
+      this.styleObj.cursor = "pointer"
     }
     console.log(this.actionList)
   },
   methods: {
     click() {
-      clearTimeout(this.timer)// 同一元素 同时绑定单机和双击事件
-      this.timer = setTimeout(()=>{
-        const eventList = this.filterEventTypeList('click')
+      clearTimeout(this.timer) // 同一元素 同时绑定单机和双击事件
+      this.timer = setTimeout(() => {
+        const eventList = this.filterEventTypeList("click")
         this.dealEvent(eventList)
-      },200)
+      }, 200)
     },
     dblclick() {
       clearTimeout(this.timer)
-      const eventList = this.filterEventTypeList('dbclick')
+      const eventList = this.filterEventTypeList("dbclick")
       this.dealEvent(eventList)
     },
     filterEventTypeList(type) {
       let res = []
-      if(this.actionList) {
-        res = this.actionList.filter(item=>item.eventType === type)
+      if (this.actionList) {
+        res = this.actionList.filter(item => item.eventType === type)
       }
       return res
     },
     dealEvent(eventList) {
-      eventList.forEach(item=>{
-        switch(item.actionType) {
-          case 'link-page':
-          console.log('---changepage--')
-          break
-          case 'show-hide-widget':
-          this.changeWidgetVisible(item.content)
-          break
-          case 'open-link':
-          this.openLink(item.content)
-          break
+      eventList.forEach(item => {
+        switch (item.actionType) {
+          case "link-page":
+            console.log("---changepage--")
+            break
+          case "show-hide-widget":
+            this.changeWidgetVisible(item.content)
+            break
+          case "open-link":
+            this.openLink(item.content)
+            break
         }
       })
     },
-    changeWidgetVisible(content) {
-
-    },
-    openLink(content) {
-
-    },
-  },
+    changeWidgetVisible(content) {},
+    openLink(content) {}
+  }
 }
 </script>
 <style lang="less" scoped>

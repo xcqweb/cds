@@ -4,28 +4,56 @@
       <label>选择图片</label>
       <a-upload-dragger
         name="file"
-        action=""
+        :data="fileData"
+        :headers="headerInfo"
+        :action="uploadUrl"
+        accept="image/jpg,image/jpeg,image/png"
+        :showUploadList="false"
         @change="handlePicChange"
-        class="upload-con"
+        class="upload-con fc"
       >
-        <div class="default-con">
+        <div class="default-con" v-if="!imgSrc">
           <svg-icon icon-class="default-pic" class-name="icon" />
           <span>选择图片</span>
         </div>
+        <img v-else :src="imgSrc" class="pic-cls"/>
       </a-upload-dragger>
     </div>
   </div>
 </template>
 <script>
 import helpComputed from "@/mixins/help-computed"
+import { getToken } from "@/utils/cookie"
+import fileApi from '@a/file'
 export default {
   name: "PictureStyle",
   mixins: [helpComputed],
+  computed:{
+    imgSrc:{
+      get() {
+        let res = ''
+        res = this.$imgUrl(this.attrs.imgSrc) 
+        return res
+      },
+      set(imgSrc) {
+        this.$store.commit("updateWidgetAttrs", { imgSrc })
+      }
+    },
+  },
   data() {
-    return {}
+    return {
+      uploadUrl:fileApi.uploadFile,
+      fileData:{bucketName:fileApi.bucketName},
+      headerInfo:{'Authorization': getToken()},
+    }
   },
   methods: {
-    handlePicChange() {}
+    handlePicChange(info) {
+      const {response,status} = info.file
+      if (status === 'done' && response.code == 0) {
+        this.imgSrc = response.data
+      }
+    }
   }
 }
 </script>
@@ -49,6 +77,20 @@ export default {
         height: 3em;
         color: #c3cbce;
       }
+    }
+    /deep/.ant-upload {
+      padding:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      .ant-upload-drag-container{
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .pic-cls{
+     width: 100%;
+     height: 100%;
     }
   }
 }

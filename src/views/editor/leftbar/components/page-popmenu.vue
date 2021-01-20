@@ -5,23 +5,35 @@
     class="page-pop-menu"
     @mouseleave="hidePagePopMenu"
   >
-    <li class="page-pop-menu-item" @click="setHome">设为首页</li>
+    <li class="page-pop-menu-item" @click="setHome" v-if="!page.pid">
+      设为首页
+    </li>
     <li class="page-pop-menu-item" @click="addChildPage" v-if="!page.pid">
       添加子页面
     </li>
     <li class="page-pop-menu-item" @click="copy">复制页面</li>
-    <li class="page-pop-menu-item" @click="del">删除</li>
+    <li class="page-pop-menu-item" @click="del" v-if="showDel">删除</li>
   </ul>
 </template>
 <script>
 import pageApi from "@a/page"
 export default {
   name: "PagePopmenu",
+  computed:{
+    showDel() {
+      let res = true
+      const len = this.$store.state.apply.pages.length
+      if(len == 1) {
+        res = false
+      }
+      return res
+    }
+  },
   data() {
     return {
       show: false,
       styleObj: {},
-      page: {}
+      page: {},
     }
   },
   created() {
@@ -49,7 +61,7 @@ export default {
     },
     hidePagePopMenu() {
       this.show = false
-      this.$bus.$emit("updateHoverPageId", "")
+      this.$bus.$emit('updateHoverPageId','')
     },
     setHome() {
       this.$store.commit("setHomePage", this.page.pageId)
@@ -67,7 +79,7 @@ export default {
         pid: this.page.pageId,
         pageName: `页面 ${++len}`,
         isEdit: true,
-        level: this.page.level + 1
+        level: 1 + this.page.level
       })
       this.$store.commit("setCurrentPageId", newPageId)
       this.hidePagePopMenu()

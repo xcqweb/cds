@@ -31,10 +31,21 @@ Vue.directive("focus", {
 })
 Vue.directive("clickOutSide", {
   bind: function(el, { value }) {
-    let clickOutside = value
+    let clickOutSide
+    if(value.cb) {
+      clickOutSide = value.cb
+    } else {
+      clickOutSide = value
+    }
     el.handler = function(e) {
+      let elExclude
+      if(value.elExclude) {
+        elExclude = document.querySelector(`.${value.elExclude}`)
+      }
       if (el && !el.contains(e.target)) {
-        clickOutside(e)
+        if(!elExclude || !elExclude.contains(e.target)) { 
+          clickOutSide(e)
+        }
       }
     }
     document.addEventListener("click", el.handler, true)

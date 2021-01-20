@@ -7,6 +7,7 @@ import "ant-design-vue/dist/antd.css"
 import "./assets/styles/common.less"
 import "./directives/directive"
 import "./icons"
+import '@/utils/prototype'
 Vue.config.productionTip = false
 Vue.use(Antd)
 const bus = new Vue()

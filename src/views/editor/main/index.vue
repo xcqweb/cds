@@ -17,7 +17,7 @@
               />
             </div>
           </div>
-          <div class="canvas-sub">
+          <div class="canvas-sub" :style="widgetConStyle">
             <!-- 提示框 -->
             <hint />
             <!-- 框选组件 -->
@@ -26,6 +26,7 @@
             <widget-help-line />
             <!-- 组合选择框 -->
             <group-selection style="z-index:1000;" />
+            <text-editor v-if="textEditorShow"/>
             <contextmenu />
           </div>
         </div>
@@ -47,6 +48,7 @@ import DragWidget from "@c/drag-resize/drag-widget"
 import GroupSelection from "@c/group-selection/"
 import components from "@/views/widgets/index"
 import Contextmenu from "./components/contextmenu"
+import TextEditor from '@c/text-editor'
 export default {
   name: "EditorMain",
   mixins: [helpComputed],
@@ -57,9 +59,13 @@ export default {
     DragWidget,
     GroupSelection,
     Contextmenu,
+    TextEditor,
     ...components
   },
   computed: {
+    textEditorShow() {
+      return this.$store.state.textEditorShow.show
+    },
     widgets() {
       let widgets = this.currentPage.widgets
       widgets = arrayToTree(widgets, { parentProperty: "pid", customID: "cid" })
@@ -81,14 +87,19 @@ export default {
     portStyle() {
       const { size, color } = this.currentPage.grid
       const { scale, gridEnable } = this.$store.state.apply
-      const { width, height, backgroundColor } = this.currentPage
+      const { width, height, backgroundColor,backgroundImage } = this.currentPage
       const res = {
         width: width + "px",
         height: height + "px",
         backgroundColor
       }
-      if (gridEnable) {
-        res.backgroundImage = createGridBg(size, color, scale)
+      if(backgroundImage) {
+        res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
+        res.backgroundSize = 'contain'
+      } else {
+        if (gridEnable) {
+          res.backgroundImage = createGridBg(size, color, scale)
+        }
       }
       return res
     },

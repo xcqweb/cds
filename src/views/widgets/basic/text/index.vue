@@ -1,21 +1,29 @@
 <template>
-  <div class="gt-text" :style="styleObj">
-    {{ text || "输入文本" }}
+  <div class="gt-text" :style="styleObj" @dblclick="dblclick">
+    <text-con v-bind="$options.propsData"/>
   </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
+import TextCon from "../../components/text-con"
 const cname = "GtText"
 export default {
   name: cname,
+  components:{
+    TextCon,
+  },
   mixins: [baseWidget],
   data() {
     return {}
   },
-  created() {},
+  mounted() {
+    if(!this.text) {
+      this.$store.commit('updateWidget',{text:'输入文本',cid:this.cid})
+    }
+  },
   methods: {
     dblclick() {
-      console.log("a--------")
+      this.$store.commit('setTextEditorShow',{show:true,cid:this.cid})
     }
   }
 }

@@ -24,7 +24,7 @@ export default {
     opacity: { default: "", type: String | Number },
     visible: { default: "", type: String | Boolean },
     borderRadius: { default: "", type: String | Number },
-    isPreview: {default: false, type: Boolean},
+    isPreview: { default: false, type: Boolean }
   },
   computed: {
     styleObj: {
@@ -37,7 +37,7 @@ export default {
           top: `0`,
           transform: `rotate(0deg)`,
           zIndex: `${this.zIndex}`,
-          backgroundColor: this.backgroundColor
+          opacity:this.opacity,
         }
       },
       set(val) {

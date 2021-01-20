@@ -42,8 +42,8 @@ export default {
         }
         return res
       },
-      set(val) {
-        this.$store.commit("updateWidgetAttrs", { name: val })
+      set(name) {
+        this.$store.commit("updateWidgetAttrs", { name })
       }
     }
   },

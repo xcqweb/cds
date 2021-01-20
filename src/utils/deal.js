@@ -93,6 +93,7 @@ export function dealPageData(data) {
     sort: data.sort,
     pid: data.pid,
     backgroundColor: data.backgroundColor || backgroundColor,
+    backgroundImage: data.backgroundImage,
     pageName: data.pageName,
     isEdit: data.isEdit || false,
     expand: data.expand || false,

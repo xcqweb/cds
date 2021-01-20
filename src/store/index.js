@@ -30,7 +30,8 @@ export default new Vuex.Store({
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
-    saveTime: new Date()
+    saveTime: new Date(),
+    textEditorShow:{show:false,cid:''},//显示文本编辑器
   },
   mutations: {
     setRuler(state, data) {
@@ -40,6 +41,10 @@ export default new Vuex.Store({
     },
     setSaveTime(state, data) {
       state.saveTime = data
+    },
+    setTextEditorShow(state,data) {
+      const tempObj = state.textEditorShow
+      state.textEditorShow = {...tempObj,...data}
     },
     addPage(state, data) {
       if (data.pid) {
@@ -162,6 +167,9 @@ export default new Vuex.Store({
     },
     updateWidgetAttrs(state, attrs) {
       let currentWidget = this.getters.currentWidget
+      if(!currentWidget) {
+        currentWidget = this.getters.selectWidgets[0]
+      }
       const currentPage = this.getters.currentPage
       if (attrs.cid) {
         currentWidget = currentPage.widgets.find(item => item.cid == attrs.cid)
@@ -190,6 +198,9 @@ export default new Vuex.Store({
     },
     updateWidget(state, data) {
       let currentWidget = this.getters.currentWidget
+      if(!currentWidget) {
+        currentWidget = this.getters.selectWidgets[0]
+      }
       const currentPage = this.getters.currentPage
       if (data.cid) {
         currentWidget = currentPage.widgets.find(item => item.cid == data.cid)

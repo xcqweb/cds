@@ -215,7 +215,7 @@ export default {
             })
           } else {
             left =
-              (this.currentPage.height - this.currentWidget.attrs.height) / 2
+              (this.currentPage.width - this.currentWidget.attrs.width) / 2
             this.$store.commit("updateWidgetAttrs", { left })
           }
           break

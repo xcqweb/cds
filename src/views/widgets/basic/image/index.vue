@@ -1,6 +1,7 @@
 <template>
   <div class="gt-image" :style="imageStyleObj">
     <svg
+      v-if="!imgSrc"
       xmlns="http://www.w3.org/2000/svg"
       class="svg-icon icon"
       viewBox="0 0 24 22"
@@ -13,6 +14,7 @@
         fill-rule="evenodd"
       />
     </svg>
+    <img v-else :src="imgSrcDeal" />
   </div>
 </template>
 <script>
@@ -24,12 +26,16 @@ export default {
   computed: {
     imageStyleObj() {
       return { ...this.styleObj, backgroundColor: "#e8e8e8" }
-    }
+    },
+    imgSrcDeal() {
+      return this.$imgUrl(this.imgSrc)
+    },
   },
   data() {
     return {}
   },
-  created() {},
+  created() {
+  },
   methods: {}
 }
 </script>
@@ -39,5 +45,9 @@ export default {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  img{
+    width:100%;
+    height:100%;
+  }
 }
 </style>

@@ -71,7 +71,7 @@ export default {
       const { top } = srcElement.getBoundingClientRect()
       this.objStyle = {
         left: "calc(-100% + 9px)",
-        top: `${top - 80}px`
+        top: `${top - 250}px`
       }
       this.visibleColor = true
     }

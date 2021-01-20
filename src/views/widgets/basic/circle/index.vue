@@ -1,13 +1,17 @@
 <template>
   <div class="gt-circle" :style="styleObj" @dblclick.capture="dblclick">
-    {{ text }}
+    <text-con v-bind="$options.propsData"/>
   </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
+import TextCon from "../../components/text-con"
 const cname = "GtCircle"
 export default {
   name: cname,
+  components:{
+    TextCon,
+  },
   mixins: [baseWidget],
   data() {
     return {}
@@ -15,7 +19,7 @@ export default {
   created() {},
   methods: {
     dblclick() {
-      console.log("a--------")
+      this.$store.commit('setTextEditorShow',{show:true,cid:this.cid})
     }
   }
 }

@@ -55,13 +55,50 @@
 </template>
 <script>
 import helpComputed from "@/mixins/help-computed"
+import key from "keymaster"
+const keyList = ['up','right','down','left']
 export default {
   name: "WidgetPosition",
   mixins: [helpComputed],
   data() {
     return {}
   },
-  methods: {}
+  mounted() {
+    keyList.forEach(kbd=>{
+      key(kbd,(evt)=>this.dealKbd(kbd,evt))
+    })
+  },
+  beforeDestroy() {
+    keyList.forEach(kbd=>{
+      key.unbind(kbd)
+    })
+  },
+  methods: {
+    dealKbd(kbd,evt) {
+      evt.preventDefault()
+      if(this.selectWidgets.length) {
+        let disLeft = 0
+        let disTop = 0
+        switch(kbd) {
+          case 'up':
+            disTop = -1
+            break
+          case 'right':
+            disLeft = 1
+            break
+          case 'down':
+            disTop = 1
+            break
+          case 'left':
+            disLeft = -1
+            break
+        }
+        this.selectWidgets.forEach(item=>{
+          this.$store.commit('updateWidgetAttrs',{left:item.attrs.left + disLeft,top:item.attrs.top + disTop,cid:item.cid})
+        })
+      }
+    },
+  }
 }
 </script>
 <style lang="less" scoped>

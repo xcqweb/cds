@@ -16,9 +16,9 @@ export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
-    groupStyleObj () {
-      return {...this.styleObj,backgroundColor:'transparent'}
-    },
+    groupStyleObj() {
+      return { ...this.styleObj, backgroundColor: "transparent" }
+    }
   },
   data() {
     return {}

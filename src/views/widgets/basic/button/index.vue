@@ -1,21 +1,29 @@
 <template>
   <div class="gt-button" :style="styleObj" @dblclick.capture="dblclick">
-    {{ text || "按钮" }}
+    <text-con v-bind="$options.propsData"/>
   </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
+import TextCon from "../../components/text-con"
 const cname = "GtButton"
 export default {
   name: cname,
+  components:{
+    TextCon,
+  },
   mixins: [baseWidget],
   data() {
     return {}
   },
-  created() {},
+  mounted() {
+    if(!this.text) {
+      this.$store.commit('updateWidget',{text:'按钮',cid:this.cid})
+    }
+  },
   methods: {
     dblclick() {
-      console.log("a--------")
+      this.$store.commit('setTextEditorShow',{show:true,cid:this.cid})
     }
   }
 }

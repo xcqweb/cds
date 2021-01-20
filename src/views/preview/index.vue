@@ -8,39 +8,23 @@
         :action-list="actionMap.get(widget.cid)"
       />
     </div>
-    <div class="menu-con">
-      <a-menu mode="inline">
-        <template v-for="item in pages">
-          <a-menu-item
-            :key="item.pageId"
-            v-if="!item.children"
-          >
-            {{item.pageName}}
-          </a-menu-item>
-          <a-sub-menu :key="item.pageId" v-else @titleClick="titleClick">
-            <span slot="title">
-              {{item.pageName}}
-            </span>
-            <a-menu-item  v-for="subItem in item.children" :key="subItem.pageId">
-              {{subItem.pageName}}
-            </a-menu-item>
-          </a-sub-menu>
-        </template>
-      </a-menu>
-    </div>
+    <preview-menu :pages="pages" :apply="apply" v-if="apply.navPosition"/>
   </div>
 </template>
 <script>
 import pageApi from "@a/page"
+import applyApi from "@a/apply"
 import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
 import { dealWidgetData } from "@u/deal"
 import PreviewItem from "./preview-item"
-import mutualApi from '@a/mutual'
+import mutualApi from "@a/mutual"
+import PreviewMenu from "./preview-menu"
 export default {
   name: "Preview",
   components: {
     PreviewItem,
+    PreviewMenu
   },
   data() {
     return {
@@ -49,16 +33,33 @@ export default {
       viewStyleObj: {},
       currentPage: null,
       actionMap: new Map(),
+      apply:{},
     }
   },
   created() {
-    this.queryAllPage(this.$route.query.applyId)
+    this.init()
+    
   },
   methods: {
+    init() {
+      const applyId = this.$route.query.applyId
+      this.queryApply(applyId)
+      this.queryAllPage(applyId)
+    },
+    queryApply(applyId) {
+      applyApi.query(applyId).then(res=>{
+        if(res.code === 0) {
+          this.apply = res.data
+        }
+      })
+    },
     queryAllPage(applyId) {
       pageApi.queryAll({ applyId }).then(res => {
         if (res.code === 0) {
-          this.pages = arrayToTree(res.data, { parentProperty: "pid", customID: "pageId" })
+          this.pages = arrayToTree(res.data, {
+            parentProperty: "pid",
+            customID: "pageId"
+          })
           this.currentPage = this.pages[0]
           this.queryAllActions()
           this.initPageAttrs()
@@ -88,19 +89,21 @@ export default {
       }
     },
     queryAllActions() {
-      mutualApi.queryPageWidgetsActions({pageId:this.currentPage.pageId}).then(res=>{
-        if(res.code === 0) {
-          res.data.forEach(item=>{
-            this.actionMap.set(item.widgetId,item.widgetActionEntityList)
-          })
-        }
-      })
+      mutualApi
+        .queryPageWidgetsActions({ pageId: this.currentPage.pageId })
+        .then(res => {
+          if (res.code === 0) {
+            res.data.forEach(item => {
+              this.actionMap.set(item.widgetId, item.widgetActionEntityList)
+            })
+          }
+        })
     },
-    titleClick({domEvent}) {
+    titleClick({ domEvent }) {
       domEvent.stopPropagation()
       console.log("titleClick")
       return false
-    },
+    }
   }
 }
 </script>
@@ -115,20 +118,20 @@ export default {
     position: relative;
     left: 0;
     top: 0;
-    overflow:hidden;
-    margin:0 auto;
+    overflow: hidden;
+    margin: 0 auto;
   }
-  .menu-con{
-    position:absolute;
-    left:0;
-    top:0;
-    .ant-menu-submenu-title{
-      pointer-events:none;
-      padding:0;
-      >span{
-        display:flex;
-        height:100%;
-        pointer-events:auto;
+  .menu-con {
+    position: absolute;
+    left: 0;
+    top: 0;
+    .ant-menu-submenu-title {
+      pointer-events: none;
+      padding: 0;
+      > span {
+        display: flex;
+        height: 100%;
+        pointer-events: auto;
       }
     }
   }

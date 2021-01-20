@@ -1,6 +1,6 @@
 <template>
   <div class="right-con">
-    <page-style v-if="isPage" />
+    <page-style v-if="isPage && !textEditorShow" />
     <a-tabs v-else size="small" :animated="false">
       <a-tab-pane key="style" tab="样式">
         <widget-style />
@@ -29,7 +29,10 @@ export default {
   computed: {
     isPage() {
       return this.$store.getters.selectWidgets.length == 0
-    }
+    },
+    textEditorShow() {// 编辑控件文本
+      return this.$store.state.textEditorShow.show
+    },
   },
   data() {
     return {}

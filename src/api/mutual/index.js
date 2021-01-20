@@ -11,7 +11,10 @@ const del = actionId =>
 const query = actionId =>
   instance.get(`/api/ruban-cds/studio/widget/action/${actionId}`)
 
-const queryPageWidgetsActions = params => instance.get(`/api/ruban-cds/studio/widget/action/getListByPageId`,{params})
+const queryPageWidgetsActions = params =>
+  instance.get(`/api/ruban-cds/studio/widget/action/getListByPageId`, {
+    params
+  })
 
 export default {
   add,
@@ -19,5 +22,5 @@ export default {
   list,
   del,
   edit,
-  queryPageWidgetsActions,
+  queryPageWidgetsActions
 }

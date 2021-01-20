@@ -1,3 +1,4 @@
+import {findWidgetById} from '@u/deal'
 export default {
   computed: {
     currentPageIndex() {
@@ -30,6 +31,11 @@ export default {
         let attrs = {}
         if (this.selectWidgets.length == 1) {
           attrs = this.selectWidgets[0].attrs
+        } else {
+          const textEditor = this.$store.state.textEditorShow
+          if(textEditor.show) {
+            attrs = findWidgetById(this.$store.getters.currentPage.widgets,textEditor.cid).attrs
+          }
         }
         return attrs
       }

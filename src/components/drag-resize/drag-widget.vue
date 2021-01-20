@@ -24,6 +24,7 @@
       :is="widget.cname"
       v-bind="widget.attrs"
       :text="widget.text"
+      :cid="widget.cid"
       ref="widgetRef"
     >
       <template v-if="widget.children">
