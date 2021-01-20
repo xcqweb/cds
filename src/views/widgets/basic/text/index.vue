@@ -16,7 +16,7 @@ export default {
   data() {
     return {}
   },
-  mounted() {
+  created() {
     if (!this.text) {
       this.$store.commit("updateWidget", { text: "输入文本", cid: this.cid })
     }

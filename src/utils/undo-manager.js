@@ -19,5 +19,8 @@ export default {
     if (vuexHistory.canRedo) {
       vuexHistory.redo()
     }
-  }
+  },
+  clearHistory() {
+    vuexHistory.clearHistory()
+  },
 }

@@ -29,7 +29,7 @@ export default new Vuex.Store({
     groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
-    saveTime: new Date(),
+    saveTime: new Date().getTime(),
     textEditorShow: { show: false, cid: "" } //显示文本编辑器
   },
   mutations: {
@@ -301,7 +301,7 @@ export default new Vuex.Store({
       if (params.length) {
         widgetApi.modifyPatch(params).then(res => {
           if (res.code === 0) {
-            store.commit("setSaveTime", new Date())
+            store.commit("setSaveTime", new Date().getTime())
             if (!isNoTip) {
               console.log("保存页面的控件成功")
             }

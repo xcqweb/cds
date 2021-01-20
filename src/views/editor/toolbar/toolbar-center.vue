@@ -127,7 +127,11 @@ export default {
     },
     scaleText: {
       get() {
-        return this.$store.state.apply.scale * 100 + "%"
+        let res = 1
+        if(this.$store.state.apply.scale) {
+          res = this.$store.state.apply.scale
+        }
+        return  res* 100 + "%"
       },
       set(scale) {
         this.$store.dispatch("updateApply", { scale })
@@ -137,7 +141,8 @@ export default {
       return this.selectWidgets.length
     },
     saveTime() {
-      const date = this.$store.state.saveTime
+      let date = this.$store.state.saveTime
+      date = new Date(date)
       return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
     }
   },
