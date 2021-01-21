@@ -5,7 +5,7 @@
     class="page-pop-menu"
     @mouseleave="hidePagePopMenu"
   >
-    <li class="page-pop-menu-item" @click="setHome" v-if="!page.pid">
+    <li class="page-pop-menu-item" @click="setHome" v-if="!page.pid&&!page.isHome">
       设为首页
     </li>
     <li class="page-pop-menu-item" @click="addChildPage" v-if="!page.pid">
@@ -64,8 +64,18 @@ export default {
       this.$bus.$emit("updateHoverPageId", "")
     },
     setHome() {
-      this.$store.commit("setHomePage", this.page.pageId)
-      this.hidePagePopMenu()
+      const pageId = this.page.pageId
+      const oldPageId = this.$store.state.apply.pages[0].pageId
+      pageApi.setHome({oldPageId,pageId}).then(res=>{
+        if(res.code === 0) {
+          this.$bus.$emit('changePage',{pageId})
+          this.$store.commit("setHomePage", pageId)
+          this.$store.commit("setPageInfo",{pageId,isHome:true})
+          this.$store.commit("setPageInfo",{pageId:oldPageId,isHome:false})
+          this.hidePagePopMenu()
+          console.log('设置首页成功')
+        }
+      })
     },
     addChildPage() {
       const { width, height } = this.$store.state.apply

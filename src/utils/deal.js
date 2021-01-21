@@ -97,7 +97,8 @@ export function dealPageData(data) {
     pageName: data.pageName,
     isEdit: data.isEdit || false,
     expand: data.expand || false,
-    level: data.level || 1
+    level: data.level || 1,
+    isHome: data.isHome,
   }
 }
 export function dealWidgetData(data) {

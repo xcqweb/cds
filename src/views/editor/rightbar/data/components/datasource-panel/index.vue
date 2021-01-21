@@ -5,7 +5,7 @@
     class="ds-panel-con"
     v-click-out-side="hide"
   >
-    <a-tabs size="small" :animated="false" class="content-con">
+    <a-tabs size="small" :animated="false" class="content-con" @tabClick="initRecent">
       <a-tab-pane key="all" :tab="allText">
         <div class="panel-header fs">
           <a-input v-model="keyword" placeholder="请输入关键字" size="small">
@@ -27,7 +27,7 @@
           </li>
         </ul>
       </a-tab-pane>
-      <a-tab-pane key="recent" :tab="recentText" @tabClick="initRecent">
+      <a-tab-pane key="recent" :tab="recentText">
         <ul>
           <li v-for="item in recentList" :key="item[valueKey]" :value="item[valueKey]">
             {{ item[labelKey] }}
@@ -63,12 +63,10 @@ export default {
     code:String,
     dimCode:String,
     labelKey:String,
-    valueKey:{
-      type:String,
-      default:'mark'
-    },
+    valueKey:String,
     keywordKey:String,
     choosedData:Object,
+    paramType:Number,
   },
   watch:{
     visible() {
@@ -88,12 +86,14 @@ export default {
   mounted() {
   },
   methods: {
-    initRecent() {
-      let arr = localStorage.getItem([this.recentLocalKey])
-      if(arr) {
-        this.recentList = JSON.parse(arr)
-      } else {
-        this.recentList = []
+    initRecent(tab) {
+      if(tab == 'recent') {
+        let arr = localStorage.getItem([this.recentLocalKey])
+        if(arr) {
+          this.recentList = JSON.parse(arr)
+        } else {
+          this.recentList = []
+        }
       }
     },
     hide() {
@@ -104,10 +104,7 @@ export default {
         return
       }
       let params = {functionCode:this.code}
-      if(this.keywordKey == 'deviceName') {
-        params.deviceModelMark = this.choosedData.deviceModelMark
-      }
-      instance.post(this.url,params).then(res=>{
+      instance.post(this.url,{...params,...this.dealParams()}).then(res=>{
         if(res.code == 0) {
           this.list = res.data
         }
@@ -117,13 +114,21 @@ export default {
       this.currentItem = item
       this.selectId = item[this.valueKey]
     },
+    dealParams() {
+      let res = {}
+      if(this.keywordKey == 'deviceName') {
+        res.deviceModelMark = this.choosedData.deviceModelMark
+      }else if(this.keywordKey == 'paramName') {
+        res.deviceModelMark = this.choosedData.deviceModelMark
+        res.deviceMark = this.choosedData.deviceMark
+        res.paramType = this.paramType
+      }
+      return res
+    },
     search() {
       let params = {functionCode:this.dimCode}
       params[this.keywordKey] = this.keyword
-      if(this.keywordKey == 'deviceName') {
-        params.deviceModelMark = this.choosedData.deviceModelMark
-      }
-      instance.post(this.url,params).then(res=>{
+      instance.post(this.url,{...params,...this.dealParams()}).then(res=>{
         if(res.code == 0) {
           this.list = res.data
         }
@@ -136,7 +141,12 @@ export default {
       } else {
         arr = []
       }
-      arr.push(this.currentItem)
+      const resIndex = arr.findIndex(item=>item[this.valueKey] == this.currentItem[this.valueKey])
+      if(resIndex!=-1) {
+        arr.splice(resIndex,1,this.currentItem) // 替换
+      }else {
+        arr.push(this.currentItem)
+      }
       localStorage.setItem(this.recentLocalKey, JSON.stringify(arr))
       this.$emit("itemClick", this.currentItem)
       this.hide()
@@ -151,7 +161,7 @@ export default {
 .ds-panel-con {
   position: absolute;
   background-color: #fff;
-  left: calc(-100% + 19px);
+  left: calc(-100% + 16px);
   top: 120px;
   box-shadow: 0px 2px 6px 0px rgba(4, 12, 44, 0.25);
   border-radius: 2px;

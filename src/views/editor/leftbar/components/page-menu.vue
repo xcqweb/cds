@@ -3,8 +3,8 @@
     <li
       v-for="page in pages"
       :key="page.pageId"
-      @dblclick="dblclick(page)"
-      @click="changePage(page)"
+      @dblclick.stop="dblclick(page)"
+      @click.stop="changePage(page)"
     >
       <div
         class="menu-item"
@@ -84,9 +84,11 @@ export default {
   },
   created() {
     this.$bus.$on("updateHoverPageId", this.updateHoverPageId)
+    this.$bus.$on("changePage", this.changePage)
   },
   beforeDestroy() {
     this.$bus.$off("updateHoverPageId")
+    this.$bus.$off("changePage")
   },
   methods: {
     isCurrentPage(page) {

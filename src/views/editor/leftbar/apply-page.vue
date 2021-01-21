@@ -40,7 +40,6 @@ export default {
         pageId: newPageId,
         width,
         height,
-        sort: len,
         pid: "",
         pageName: `页面 ${len}`,
         isEdit: true

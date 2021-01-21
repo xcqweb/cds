@@ -29,7 +29,7 @@
       </div>
       <div class="item-con no-border" v-if="choosedData.deviceName">
         <label class="label-block">数据项</label>
-        <a-radio-group v-model="dataItem" @change="dataItemChange">
+        <a-radio-group v-model="dataItem">
           <a-radio
             :value="item.value"
             v-for="item in dataItemList"
@@ -54,7 +54,9 @@
       :dim-code="dimCode"
       :label-key="labelKey"
       :keywordKey="keywordKey"
+      :valueKey="valueKey"
       :choosedData="choosedData"
+      :paramType="paramType"
       @itemClick="itemClick"
     />
   </div>
@@ -67,6 +69,17 @@ export default {
   name: "Datasource",
   components: {
     DatasourcePanel
+  },
+  computed:{
+    widgetId() {
+      return this.$store.getters.currentWidget.cid
+    },
+    applyId() {
+      return this.$store.state.apply.id
+    },
+    currentPageId() {
+      return this.$store.getters.currentPageId
+    }
   },
   data() {
     return {
@@ -95,10 +108,13 @@ export default {
       labelKey:'',
       keywordKey:'',//搜索的关键字字段
       choosedData:{},
+      valueKey:'',
+      paramType:0,// 参数类型(0-属性1-参数2-状态)
     }
   },
   created() {
     this.getDatasourceConfig()
+    this.getDataInfo()
   },
   methods: {
     dataItemChange(evt) {
@@ -121,44 +137,82 @@ export default {
         }
       })
     },
+    getDataInfo() {
+      api.query(this.widgetId).then(res=>{
+        if(res.code == 0) {
+
+        }
+      })
+    },
     chooseModel() {
       this.visible = true
+      this.allText = '全部模型'
       this.recentKey = 'gt-cds-model-recent'
       this.code = 'E001'
       this.dimCode = 'E002'
       this.labelKey = 'modelName'
       this.keywordKey = 'deviceModelName'
       this.url = findUrl(this.dataConfigList,this.code)
+      this.valueKey = 'mark'
     },
      
     chooseDevice() {
       this.visible = true
+      this.allText = '全部设备'
       this.recentKey = 'gt-cds-device-recent'
       this.code = 'E003'
       this.dimCode = 'E004'
       this.labelKey = 'deviceName'
       this.keywordKey = 'deviceName'
-      this.valueKey = 'deviceMark'
       this.url = findUrl(this.dataConfigList,this.code)
+      this.valueKey = 'deviceMark'
     },
     chooseDataItem() {
-
-    },
-    itemClick(item) {
-      switch(this.keywordKey) {
-        case 'deviceModelName':
-          this.choosedData.deviceModelMark = item.mark
-          this.choosedData.deviceModelName = item.modelName
+      this.visible = true
+      this.code = 'E005'
+      this.dimCode = 'E006'
+      this.labelKey = 'paramName'
+      this.keywordKey = 'paramName'
+      this.valueKey = 'paramMark'
+      this.url = findUrl(this.dataConfigList,this.code)
+      switch(this.dataItem) {
+        case 'property':
+          this.allText = '全部属性'
+          this.recentKey = 'gt-cds-property-recent'
+          this.paramType = 0
           break
-        case 'deviceName':
-          this.choosedData[this.valueKey] = item[this.valueKey]
-          this.choosedData[this.labelKey] = item[this.labelKey]
+        case 'param':
+          this.allText = '全部参数'
+          this.recentKey = 'gt-cds-param-recent'
+          this.paramType = 1
           break
-        case 'deviceName':
-          this.choosedData[this.valueKey] = item[this.valueKey]
-          this.choosedData[this.labelKey] = item[this.labelKey]
+        case 'state':
+          this.paramType = 2
           break
       }
+    },
+    itemClick(item) {
+      const itemValue = item[this.valueKey]
+      const itemLabel = item[this.labelKey]
+      switch(this.keywordKey) {
+        case 'deviceModelName':
+          this.choosedData.deviceModelMark = itemValue
+          this.choosedData.deviceModelName = itemLabel
+          break
+        case 'deviceName':
+          this.choosedData[this.valueKey] = itemValue
+          this.choosedData[this.labelKey] = itemLabel
+          break
+        case 'paramName':
+          this.choosedData[this.valueKey] = itemValue
+          this.choosedData[this.labelKey] = itemLabel
+          this.choosedData.paramType = item.paramType
+          break
+      }
+      this.saveDataInfo()
+    },
+    saveDataInfo() {
+
     },
   }
 }

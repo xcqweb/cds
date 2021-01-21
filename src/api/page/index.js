@@ -10,10 +10,13 @@ const query = id => instance.get(`/api/ruban-cds/studio/pageInfo/${id}`)
 
 const del = id => instance.delete(`/api/ruban-cds/studio/pageInfo/${id}`)
 
+const setHome = params => instance.post(`/api/ruban-cds/studio/pageInfo/setIndex`, params)
+
 export default {
   queryAll,
   add,
   query,
   modify,
-  del
+  del,
+  setHome
 }

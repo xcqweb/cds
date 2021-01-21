@@ -274,13 +274,21 @@ export default new Vuex.Store({
       store.dispatch("queryApply", applyId)
       const allPage = await pageApi.queryAll({ applyId })
       return new Promise(resolve => {
-        const { pageId } = allPage.data[0] // 首页
+        if(allPage.data.length>1) {// 获取首页
+          const resIndex = allPage.data.findIndex(item=>item.isHome)
+          if(resIndex!=-1) {
+            const temp = allPage.data[resIndex]
+            allPage.data.splice(resIndex, 1)
+            allPage.data.unshift(temp)
+          }
+        } 
+        const { pageId } = allPage.data[0] 
+        store.commit('setCurrentPageId',pageId)
         const p1 = pageApi.query(pageId)
         const p2 = widgetApi.queryAll({ pageId })
         Promise.all([p1, p2]).then(res => {
           const widgetData = res[1].data
           store.commit("initPages", allPage.data)
-          store.commit("setCurrentPageId", pageId)
           store.commit("setCurrentPageWidgets", dealWidgetData(widgetData))
           resolve()
         })
@@ -315,6 +323,7 @@ export default new Vuex.Store({
           pid: item.pid,
           widgetId: item.cid,
           widgetName: item.name,
+          text:item.text,
           ...item.attrs
         }
       })
