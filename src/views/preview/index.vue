@@ -8,7 +8,7 @@
         :action-list="actionMap.get(widget.cid)"
       />
     </div>
-    <preview-menu :pages="pages" :apply="apply" v-if="apply.navPosition" />
+    <preview-menu :pages="pages" :apply="apply" v-if="apply && apply.navPosition" />
   </div>
 </template>
 <script>
@@ -33,7 +33,7 @@ export default {
       viewStyleObj: {},
       currentPage: null,
       actionMap: new Map(),
-      apply: {}
+      apply: null
     }
   },
   created() {
