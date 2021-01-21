@@ -26,7 +26,7 @@
           @titleClick="titleClick" 
           :key="item.pageId">
           <span slot="title">{{ item.pageName }}</span>
-          <a-menu-item :key="c.pageId" c in item.children>
+          <a-menu-item :key="c.pageId" v-for="c in item.children">
             {{ c.pageName }}
           </a-menu-item>
         </a-sub-menu> 
