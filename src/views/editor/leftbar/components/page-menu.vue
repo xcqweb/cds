@@ -75,7 +75,7 @@ export default {
     },
     applyId() {
       return this.$store.state.apply.id
-    },
+    }
   },
   data() {
     return {

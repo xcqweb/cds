@@ -96,7 +96,9 @@
       </a>
     </div>
     <div>
-      <div class="center-item" style="width:106px;">自动保存 {{ saveTime }}</div>
+      <div class="center-item" style="width:106px;">
+        自动保存 {{ saveTime }}
+      </div>
     </div>
   </div>
 </template>
@@ -128,7 +130,7 @@ export default {
     scaleText: {
       get() {
         const scale = this.$store.state.apply.scale || 1
-        return  scale* 100 + "%"
+        return scale * 100 + "%"
       },
       set(scale) {
         this.$store.dispatch("updateApply", { scale })
@@ -285,8 +287,8 @@ export default {
   font-size: 12px;
   height: auto;
 }
-.ant-dropdown-menu-item{
-  font-size:12px;
-  color:#040c2c;
+.ant-dropdown-menu-item {
+  font-size: 12px;
+  color: #040c2c;
 }
 </style>

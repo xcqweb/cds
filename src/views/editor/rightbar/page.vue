@@ -112,14 +112,9 @@
         </div>
       </div>
     </div>
-    <div class="item-con">
+    <div class="item-con" v-if="navPosition > 0">
       <label class="label-block">导航风格</label>
-      <a-select
-        v-model="navModel"
-        size="small"
-        style="width:100%;"
-        placeholder="默认"
-      >
+      <a-select v-model="navModel" size="small" style="width:100%;">
         <a-select-option
           v-for="item in navList"
           :key="item.value"
@@ -235,6 +230,28 @@ export default {
         size = size || config.grid.size
         this.$store.dispatch("updatePageInfo", { grid: { color: val, size } })
       }
+    },
+    navPosition: {
+      get() {
+        return this.$store.state.apply.navPosition || 0
+      },
+      set(navPosition) {
+        this.$store.dispatch("updateApply", { navPosition })
+      }
+    },
+    navStyle: {
+      get() {
+        return this.$store.state.apply.navStyle || {}
+      },
+      set(navStyle) {
+        this.$store.dispatch("updateApply", { navStyle })
+      }
+    }
+  },
+  watch: {
+    navStyle() {
+      this.navModel = this.navStyle.mode || "dark"
+      this.navColorModel = this.navStyle.theme || 1
     }
   },
   data() {
@@ -247,8 +264,7 @@ export default {
       visibleColor: false,
       objStyle: {},
       navList: config.navList,
-      navPosition: 0,
-      navModel: undefined,
+      navModel: 0,
       navColorModel: 1,
       navColorList: config.navColorList,
       headerInfo: { Authorization: getToken() },
@@ -307,7 +323,6 @@ export default {
     },
     changNavPosition(pos) {
       this.navPosition = pos
-      this.$store.dispatch("updateApply", { navPosition: this.navPosition })
     },
     changeNavColor(index) {
       this.navColorModel = index + 1
@@ -317,11 +332,10 @@ export default {
       this.saveApplyNav()
     },
     saveApplyNav() {
-      const navStyle = JSON.stringify({
-        theme: this.navModel,
-        color: this.navColorModel
+      this.navStyle = JSON.stringify({
+        mode: this.navModel,
+        theme: this.navColorModel
       })
-      this.$store.dispatch("updateApply", { navStyle })
     },
     delPagePic() {
       this.backgroundImage = ""

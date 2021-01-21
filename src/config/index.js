@@ -142,7 +142,8 @@ export default {
     { label: "#F5222D", value: 2 },
     { label: "#F9531C", value: 3 },
     { label: "#EB2F96", value: 4 },
-    { label: "#13C2C2", value: 5 }
+    { label: "#722ED1", value: 5 },
+    { label: "#13C2C2", value: 6 }
   ],
   navList: [
     { label: "亮色", value: "light" },

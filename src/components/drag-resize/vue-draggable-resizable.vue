@@ -618,7 +618,7 @@ export default {
       }
 
       return cursorStyleArray
-    },
+    }
   },
 
   watch: {

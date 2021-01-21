@@ -36,7 +36,7 @@ export default {
 </script>
 <style type="less" scoped>
 .text-con {
-  pointer-events:none;
+  pointer-events: none;
   white-space: pre-wrap;
   display: flex;
   position: absolute;

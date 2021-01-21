@@ -47,15 +47,15 @@ import helpDrag from "@/mixins/help-drag"
 import { isGroup } from "@u/deal"
 const handles = ["tl", "tm", "tr", "mr", "br", "bm", "bl", "ml", "rot"]
 const cursors = [
-    "nwse-resize",
-    "ns-resize",
-    "nesw-resize",
-    "ew-resize",
-    "nwse-resize",
-    "ns-resize",
-    "nesw-resize",
-    "ew-resize"
-  ]
+  "nwse-resize",
+  "ns-resize",
+  "nesw-resize",
+  "ew-resize",
+  "nwse-resize",
+  "ns-resize",
+  "nesw-resize",
+  "ew-resize"
+]
 export default {
   name: "DragWidget",
   props: {
@@ -71,11 +71,11 @@ export default {
       return this.selectWidgets.length
     }
   },
-  watch:{
+  watch: {
     cname(val) {
-      if(val === 'GtLine') {
-        this.handles = ["mr","ml"]
-        this.cursors = ["ew-resize","ew-resize"]
+      if (val === "GtLine") {
+        this.handles = ["mr", "ml"]
+        this.cursors = ["ew-resize", "ew-resize"]
       } else {
         this.handles = handles
       }
@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       handles,
-      cursors,
+      cursors
     }
   },
   methods: {
@@ -162,7 +162,7 @@ export default {
     },
     dblclick() {
       const widgetComponent = this.$refs.widgetRef
-      console.log(widgetComponent,"a-----")
+      console.log(widgetComponent, "a-----")
       if (widgetComponent.dblclick) {
         widgetComponent.dblclick()
       }

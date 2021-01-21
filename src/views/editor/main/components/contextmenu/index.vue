@@ -111,7 +111,7 @@ export default {
     },
     enabledMenuItem(types, anabled) {
       types.forEach(type => {
-        let item = this.list.find(d=>d.type == type)
+        let item = this.list.find(d => d.type == type)
         if (item) {
           this.$set(item, "disabled", anabled)
         }
@@ -183,7 +183,7 @@ export default {
       if (this.copyData && this.copyData.length) {
         let len = 0
         this.copyData.forEach(item => {
-          if(!this.isCut) {
+          if (!this.isCut) {
             this.$store.commit("updateWidget", { cid: item.cid, active: false })
           }
           item.copyNum = item.copyNum + 1

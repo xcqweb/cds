@@ -98,7 +98,7 @@ export function dealPageData(data) {
     isEdit: data.isEdit || false,
     expand: data.expand || false,
     level: data.level || 1,
-    isHome: data.isHome,
+    isHome: data.isHome
   }
 }
 export function dealWidgetData(data) {
@@ -143,18 +143,19 @@ export function dealWidgetData(data) {
   return result
 }
 
-export function findUrl(arr,code,special) { // 数据源接口查询
+export function findUrl(arr, code, special) {
+  // 数据源接口查询
   let res
-  const tempObj = arr.find(item=>item.functionCode == code)
-  if(tempObj) {
-    if(special) {
+  const tempObj = arr.find(item => item.functionCode == code)
+  if (tempObj) {
+    if (special) {
       res = tempObj.dsParamValueUrl
     } else {
       res = tempObj.apiPathUrl
     }
-    const isDev = process.env.NODE_ENV === 'development'
-    if(isDev) {
-      const apiIndex = res.indexOf('/api')
+    const isDev = process.env.NODE_ENV === "development"
+    if (isDev) {
+      const apiIndex = res.indexOf("/api")
       res = res.substr(apiIndex)
     }
   }

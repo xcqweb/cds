@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     dblclick() {
-      if(!this.isPreview) {
+      if (!this.isPreview) {
         this.$store.commit("setTextEditorShow", { show: true, cid: this.cid })
       }
     }

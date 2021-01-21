@@ -5,15 +5,24 @@
     class="ds-panel-con"
     v-click-out-side="hide"
   >
-    <a-tabs size="small" :animated="false" class="content-con" @tabClick="initRecent">
+    <a-tabs
+      size="small"
+      :animated="false"
+      class="content-con"
+      @tabClick="initRecent"
+    >
       <a-tab-pane key="all" :tab="allText">
         <div class="panel-header fs">
           <a-input v-model="keyword" placeholder="请输入关键字" size="small">
             <a-tooltip slot="suffix" title="搜索">
-              <a-icon type="search" style="cursor:pointer;" @click="search"/>
+              <a-icon type="search" style="cursor:pointer;" @click="search" />
             </a-tooltip>
           </a-input>
-          <svg-icon icon-class="reset" class="reset-icon" @click.native="reset"/>
+          <svg-icon
+            icon-class="reset"
+            class="reset-icon"
+            @click.native="reset"
+          />
         </div>
         <ul>
           <li
@@ -21,7 +30,7 @@
             :key="item[valueKey]"
             :value="item[valueKey]"
             @click="itemClick(item)"
-            :class="{'select':selectId==item[valueKey]}"
+            :class="{ select: selectId == item[valueKey] }"
           >
             {{ item[labelKey] }}
           </li>
@@ -29,7 +38,11 @@
       </a-tab-pane>
       <a-tab-pane key="recent" :tab="recentText">
         <ul>
-          <li v-for="item in recentList" :key="item[valueKey]" :value="item[valueKey]">
+          <li
+            v-for="item in recentList"
+            :key="item[valueKey]"
+            :value="item[valueKey]"
+          >
             {{ item[labelKey] }}
           </li>
         </ul>
@@ -37,7 +50,12 @@
     </a-tabs>
     <div class="footer">
       <a-button size="small" @click="hide">取消</a-button>
-      <a-button size="small" type="primary" style="margin-left:10px;" @click="confirm">
+      <a-button
+        size="small"
+        type="primary"
+        style="margin-left:10px;"
+        @click="confirm"
+      >
         确定
       </a-button>
     </div>
@@ -59,37 +77,36 @@ export default {
       default: "最近使用"
     },
     recentLocalKey: String,
-    url:String,
-    code:String,
-    dimCode:String,
-    labelKey:String,
-    valueKey:String,
-    keywordKey:String,
-    choosedData:Object,
-    paramType:Number,
+    url: String,
+    code: String,
+    dimCode: String,
+    labelKey: String,
+    valueKey: String,
+    keywordKey: String,
+    choosedData: Object,
+    paramType: Number
   },
-  watch:{
+  watch: {
     visible() {
       this.initList()
-    },
+    }
   },
   components: {},
   data() {
     return {
       recentList: [],
-      keyword:'',
-      list:[],
-      selectId:'',
-      currentItem:'',
+      keyword: "",
+      list: [],
+      selectId: "",
+      currentItem: ""
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     initRecent(tab) {
-      if(tab == 'recent') {
+      if (tab == "recent") {
         let arr = localStorage.getItem([this.recentLocalKey])
-        if(arr) {
+        if (arr) {
           this.recentList = JSON.parse(arr)
         } else {
           this.recentList = []
@@ -100,12 +117,12 @@ export default {
       this.$emit("update:visible", false)
     },
     initList() {
-      if(!this.url) {
+      if (!this.url) {
         return
       }
-      let params = {functionCode:this.code}
-      instance.post(this.url,{...params,...this.dealParams()}).then(res=>{
-        if(res.code == 0) {
+      let params = { functionCode: this.code }
+      instance.post(this.url, { ...params, ...this.dealParams() }).then(res => {
+        if (res.code == 0) {
           this.list = res.data
         }
       })
@@ -116,9 +133,9 @@ export default {
     },
     dealParams() {
       let res = {}
-      if(this.keywordKey == 'deviceName') {
+      if (this.keywordKey == "deviceName") {
         res.deviceModelMark = this.choosedData.deviceModelMark
-      }else if(this.keywordKey == 'paramName') {
+      } else if (this.keywordKey == "paramName") {
         res.deviceModelMark = this.choosedData.deviceModelMark
         res.deviceMark = this.choosedData.deviceMark
         res.paramType = this.paramType
@@ -126,38 +143,40 @@ export default {
       return res
     },
     search() {
-      let params = {functionCode:this.dimCode}
+      let params = { functionCode: this.dimCode }
       params[this.keywordKey] = this.keyword
-      instance.post(this.url,{...params,...this.dealParams()}).then(res=>{
-        if(res.code == 0) {
+      instance.post(this.url, { ...params, ...this.dealParams() }).then(res => {
+        if (res.code == 0) {
           this.list = res.data
         }
       })
     },
     confirm() {
       let arr = localStorage.getItem([this.recentLocalKey])
-      if(arr) {
+      if (arr) {
         arr = JSON.parse(arr)
       } else {
         arr = []
       }
-      const resIndex = arr.findIndex(item=>item[this.valueKey] == this.currentItem[this.valueKey])
-      if(resIndex!=-1) {
-        arr.splice(resIndex,1,this.currentItem) // 替换
-      }else {
+      const resIndex = arr.findIndex(
+        item => item[this.valueKey] == this.currentItem[this.valueKey]
+      )
+      if (resIndex != -1) {
+        arr.splice(resIndex, 1, this.currentItem) // 替换
+      } else {
         arr.push(this.currentItem)
       }
       localStorage.setItem(this.recentLocalKey, JSON.stringify(arr))
       let res = this.currentItem
-      if(this.paramType) {
-        res = {...res,paramType:this.paramType}
+      if (this.paramType) {
+        res = { ...res, paramType: this.paramType }
       }
       this.$emit("itemClick", res)
       this.hide()
     },
     reset() {
       this.initList()
-    },
+    }
   }
 }
 </script>
@@ -184,18 +203,19 @@ export default {
   .ant-btn-sm {
     font-size: 12px;
   }
-  .panel-header{
-    padding:10px;
-    .reset-icon{
-      font-size:16px;
-      margin-left:10px;
-      cursor:pointer;
+  .panel-header {
+    padding: 10px;
+    .reset-icon {
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
     }
   }
-  li{
-    padding:5px 12px;
-    cursor:pointer;
-    &:hover,&.select{
+  li {
+    padding: 5px 12px;
+    cursor: pointer;
+    &:hover,
+    &.select {
       color: #298df8;
       background: #f2f8ff;
     }

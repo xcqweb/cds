@@ -1,6 +1,7 @@
 import Vue from "vue"
 import Vuex from "vuex"
 import moduleGetters from "./getters"
+import preview from "./modules/preview"
 import config from "@/config"
 import { uuid } from "@u/uuid"
 import appApi from "@a/apply"
@@ -31,7 +32,7 @@ export default new Vuex.Store({
     hint: { show: false, text: "" }, // 提示信息
     saveTime: new Date().getTime(),
     textEditorShow: { show: false, cid: "" }, //显示文本编辑器
-    dataConfigList:[],//应用数据源动态配置
+    dataConfigList: [] //应用数据源动态配置
   },
   mutations: {
     setRuler(state, data) {
@@ -46,7 +47,7 @@ export default new Vuex.Store({
       const tempObj = state.textEditorShow
       state.textEditorShow = { ...tempObj, ...data }
     },
-    setDataConfigList(state,data) {
+    setDataConfigList(state, data) {
       state.dataConfigList = data || []
     },
     addPage(state, data) {
@@ -75,26 +76,26 @@ export default new Vuex.Store({
         state.apply.pages.unshift(tempPage)
       }
     },
-    zIndexOperate(state,data) {
+    zIndexOperate(state, data) {
       let page = this.getters.currentPage
-      this.getters.selectWidgets.forEach(item=>{
-        const resIndex = page.widgets.findIndex(w=>w.cid==item.cid)
-        if(resIndex!=-1) {
-          const tempWdiget = {...item}
-          switch(data) {
-            case 'toTop':
-              page.widgets.splice(resIndex,1)
+      this.getters.selectWidgets.forEach(item => {
+        const resIndex = page.widgets.findIndex(w => w.cid == item.cid)
+        if (resIndex != -1) {
+          const tempWdiget = { ...item }
+          switch (data) {
+            case "toTop":
+              page.widgets.splice(resIndex, 1)
               page.widgets.push(tempWdiget)
               break
-            case 'toBottom':
-              page.widgets.splice(resIndex,1)
+            case "toBottom":
+              page.widgets.splice(resIndex, 1)
               page.widgets.unshift(tempWdiget)
               break
-            case 'nextZIndex':
-              page.widgts.splice(resIndex+1,0,tempWdiget)
+            case "nextZIndex":
+              page.widgts.splice(resIndex + 1, 0, tempWdiget)
               break
-            case 'lastZIndex':
-              page.widgts.splice(resIndex-1,0,tempWdiget)
+            case "lastZIndex":
+              page.widgts.splice(resIndex - 1, 0, tempWdiget)
               break
           }
         }
@@ -278,16 +279,17 @@ export default new Vuex.Store({
       store.dispatch("queryApply", applyId)
       const allPage = await pageApi.queryAll({ applyId })
       return new Promise(resolve => {
-        if(allPage.data.length>1) {// 获取首页
-          const resIndex = allPage.data.findIndex(item=>item.isHome)
-          if(resIndex!=-1) {
+        if (allPage.data.length > 1) {
+          // 获取首页
+          const resIndex = allPage.data.findIndex(item => item.isHome)
+          if (resIndex != -1) {
             const temp = allPage.data[resIndex]
             allPage.data.splice(resIndex, 1)
             allPage.data.unshift(temp)
           }
-        } 
-        const { pageId } = allPage.data[0] 
-        store.commit('setCurrentPageId',pageId)
+        }
+        const { pageId } = allPage.data[0]
+        store.commit("setCurrentPageId", pageId)
         const p1 = pageApi.query(pageId)
         const p2 = widgetApi.queryAll({ pageId })
         Promise.all([p1, p2]).then(res => {
@@ -309,7 +311,10 @@ export default new Vuex.Store({
             studioName: data.studioName,
             gridEnable: data.gridEnable || 1,
             ruleEnable: data.ruleEnable || 1,
-            id: data.id
+            id: data.id,
+            dataRate: data.dataRate || 3,
+            navPosition: data.navPosition,
+            navStyle: data.navStyle
           })
         }
       })
@@ -327,7 +332,7 @@ export default new Vuex.Store({
           pid: item.pid,
           widgetId: item.cid,
           widgetName: item.name,
-          text:item.text,
+          text: item.text,
           ...item.attrs
         }
       })
@@ -374,7 +379,9 @@ export default new Vuex.Store({
       })
     }
   },
-  modules: {},
+  modules: {
+    preview
+  },
   getters: {
     currentPageIndex: state => {
       let { apply, currentPageId } = state

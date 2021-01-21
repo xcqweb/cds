@@ -32,7 +32,7 @@ export default {
       alignItems,
       fontFamily,
       fontSize,
-      fontWeight,
+      fontWeight
     } = this.currentWidget.attrs
     this.objStyle = {
       left: `${left}px`,
@@ -55,7 +55,7 @@ export default {
       const cid = this.textEditorShow.cid
       const text = this.$refs.textRef.innerText
       this.$store.commit("setTextEditorShow", { show: false, cid: "" })
-      this.$store.commit("updateWidget", { active: true, cid,text })
+      this.$store.commit("updateWidget", { active: true, cid, text })
     },
     selectText(obj) {
       let range

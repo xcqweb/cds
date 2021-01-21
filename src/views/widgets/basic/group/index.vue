@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="gt-group"
-    :style="groupStyleObj"
-  >
+  <div class="gt-group" :style="groupStyleObj">
     <slot />
   </div>
 </template>
@@ -22,9 +19,7 @@ export default {
     return {}
   },
   created() {},
-  methods: {
-   
-  }
+  methods: {}
 }
 </script>
 <style lang="less" scoped>

@@ -7,7 +7,7 @@
       :is-preview="true"
     >
       <template v-if="widget.children">
-        <preview-item
+        <widget-item
           v-for="item in widget.children"
           :key="item.cid"
           :widget="item"
@@ -21,7 +21,7 @@
 import components from "@/views/widgets/index"
 
 export default {
-  name: "PreviewItem",
+  name: "WidgetItem",
   components: {
     ...components
   },
@@ -42,7 +42,7 @@ export default {
       left: `${left}px`,
       top: `${top}px`,
       transform: `rotate(${rotate}deg)`,
-      zIndex: 'auto',
+      zIndex: "auto"
     }
     if (this.actionList) {
       this.styleObj.cursor = "pointer"
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     click() {
-      clearTimeout(this.timer) // 同一元素 同时绑定单机和双击事件
+      clearTimeout(this.timer) // 同一元素 同时绑定单击和双击事件
       this.timer = setTimeout(() => {
         const eventList = this.filterEventTypeList("click")
         this.dealEvent(eventList)

@@ -104,8 +104,8 @@ export default {
   .ant-input {
     border-radius: 2px;
     border: 1px solid #f0f1f3;
-    font-size:12px;
-    color:#040c2c;
+    font-size: 12px;
+    color: #040c2c;
     &:focus,
     &:hover {
       box-shadow: unset;

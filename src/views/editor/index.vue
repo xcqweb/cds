@@ -38,7 +38,7 @@ export default {
     const applyId = this.$route.query.appId
     this.$store.dispatch("initApply", applyId).then(() => {
       this.isInit = true
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         undoManager.clearHistory()
       })
     })
