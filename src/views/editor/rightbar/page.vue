@@ -241,7 +241,12 @@ export default {
     },
     navStyle: {
       get() {
-        return this.$store.state.apply.navStyle || {}
+        let res = {}
+        const navStyle = this.$store.state.apply.navStyle
+        if(navStyle) {
+          res = JSON.parse(navStyle)
+        }
+        return res
       },
       set(navStyle) {
         this.$store.dispatch("updateApply", { navStyle })
@@ -264,7 +269,7 @@ export default {
       visibleColor: false,
       objStyle: {},
       navList: config.navList,
-      navModel: 0,
+      navModel: 'dark',
       navColorModel: 1,
       navColorList: config.navColorList,
       headerInfo: { Authorization: getToken() },
