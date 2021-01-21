@@ -23,7 +23,8 @@
         </a-menu-item >
         <a-sub-menu
           v-else 
-          @titleClick="titleClick" 
+          @titleClick="titleClick"
+          :data-id="item.pageId" 
           :key="item.pageId">
           <span slot="title">{{ item.pageName }}</span>
           <a-menu-item :key="c.pageId" v-for="c in item.children">
@@ -99,7 +100,7 @@ export default {
     mode(val) {},
     pages(val){
       if (val.length > 0){
-        this.selectedKeys = [val[0].pageId];
+        this.setOpenKeysAndSelectedKeys(this.pages);
       }
     },
   },
@@ -107,9 +108,7 @@ export default {
   },
   mounted() {
     // 如果pages有数据直接赋值，没数据在watch里赋值
-    if(this.pages.length > 0){
-      this.selectedKeys = [this.pages[0].pageId];
-    }
+    this.setOpenKeysAndSelectedKeys(this.pages);
   },
   methods: {
     initMenus() {},
@@ -121,6 +120,27 @@ export default {
       this.current = e.key;
       this.removeSelectClass();
       this.itemSelect(e.key);
+    },
+    setOpenKeysAndSelectedKeys(pages){
+      // 设置默认选中项
+      if(pages.length > 0){
+        let curId = this.pages[0].pageId;
+        this.selectedKeys = [curId];
+        if (this.pages[0].children && this.pages[0].children.length > 0){
+          this.$nextTick(() =>{
+            document.querySelector(`li[data-id="${curId}"] .ant-menu-submenu-title`).click()
+          });
+        }
+      }
+      // 纵向默认全部打开
+      if (this.mode === 'vertical'){
+        pages.forEach(el =>{
+          this.openKeys.push(el.pageId);
+          if (el.children && el.children.length > 0){
+            this.openKeys.push(el.pageId);
+          }
+        })
+      }
     },
     removeSelectClass(){
       document.querySelectorAll('.preview-menu-con .ant-menu-submenu').forEach(el => {
@@ -134,7 +154,6 @@ export default {
       let openKeysCopy = this.openKeys.slice();
       /* console.log('click',domEvent.target.className,domEvent);
       console.log('click',key,this.openKeys); */
-      this.selectedKeys = [key];
       
       if (domEvent.target.className.includes('ant-menu-submenu-title')){
         this.removeSelectClass();
@@ -150,7 +169,9 @@ export default {
         }else {
           domEvent.target.parentNode.setAttribute('data-height','auto');
         }
+        this.selectedKeys = [key];
         this.$nextTick(() => this.openKeys = openKeysCopy.slice());
+        this.itemSelect(key);
       }else if (domEvent.target.className === '' && domEvent.target.localName === 'span'){
         this.removeSelectClass();
         if (this.mode === 'horizontal'){
@@ -163,12 +184,13 @@ export default {
         }else {
           domEvent.target.parentNode.parentNode.setAttribute('data-height','auto');
         }
+        this.selectedKeys = [key];
          this.$nextTick(() => this.openKeys = openKeysCopy.slice());
+         this.itemSelect(key);
       }else if(domEvent.target.className === 'ant-menu-submenu-arrow') {
         domEvent.target.parentNode.parentNode.setAttribute('data-display','');
         domEvent.target.parentNode.parentNode.setAttribute('data-height','');
       }
-      this.itemSelect(key);
     },
   }
 }
@@ -213,9 +235,7 @@ export default {
       }
     }
   }
-  .ant-menu-submenu-horizontal{
-    
-  } 
+  
   // 使用js 添加 class 会被清掉，所以使用属性选择器
   li[data-display="none"]{
     .ant-menu{
@@ -231,6 +251,12 @@ export default {
   li[data-selected="selected"]{
     border-bottom: 2px solid #1890ff;
     color: #1890ff;
+    &.ant-menu-submenu-horizontal{
+      .ant-menu-submenu-title{
+        // background-color: #1890ff;
+        // color: #fff;
+      }
+    }
   }
 }
 </style>
