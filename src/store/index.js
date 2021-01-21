@@ -30,7 +30,8 @@ export default new Vuex.Store({
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
     saveTime: new Date().getTime(),
-    textEditorShow: { show: false, cid: "" } //显示文本编辑器
+    textEditorShow: { show: false, cid: "" }, //显示文本编辑器
+    dataConfigList:[],//应用数据源动态配置
   },
   mutations: {
     setRuler(state, data) {
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     setTextEditorShow(state, data) {
       const tempObj = state.textEditorShow
       state.textEditorShow = { ...tempObj, ...data }
+    },
+    setDataConfigList(state,data) {
+      state.dataConfigList = data || []
     },
     addPage(state, data) {
       if (data.pid) {

@@ -148,7 +148,11 @@ export default {
         arr.push(this.currentItem)
       }
       localStorage.setItem(this.recentLocalKey, JSON.stringify(arr))
-      this.$emit("itemClick", this.currentItem)
+      let res = this.currentItem
+      if(this.paramType) {
+        res = {...res,paramType:this.paramType}
+      }
+      this.$emit("itemClick", res)
       this.hide()
     },
     reset() {

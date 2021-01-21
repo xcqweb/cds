@@ -37,7 +37,8 @@ export default {
         top: `0`,
         transform: `rotate(0deg)`,
         zIndex: `${this.zIndex}`,
-        opacity: this.opacity
+        opacity: this.opacity,
+        backgroundColor: this.backgroundColor,
       }
     }
   },

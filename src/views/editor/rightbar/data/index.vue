@@ -1,7 +1,7 @@
 <template>
   <div class="data-con">
-    <div class="item-con no-border">
-      <label class="label-block">数据源</label>
+    <div class="item-con">
+      <label class="label-block font14">数据源</label>
       <a-select v-model="dsType" size="small" style="width:100%;">
         <a-select-option
           v-for="item in dsList"
@@ -13,22 +13,30 @@
       </a-select>
     </div>
     <template v-if="dsType == 'device'">
-      <div class="item-con no-border">
-        <label class="label-block">模型</label>
-        <div class="data-item-wrap fv" @click="chooseModel">
+      <div class="item-con">
+        <label class="label-block font14">模型</label>
+        <div class="data-item-wrap fv" @click="chooseModel" v-if="!choosedData.deviceModelMark">
           <svg-icon icon-class="add" class-name="icon" />
           <span>选择模型</span>
         </div>
+        <div class="data-item-wrap fs" @click="chooseModel" v-if="choosedData.deviceModelMark">
+          {{choosedData.deviceModelName}}
+           <svg-icon icon-class="delete" class-name="icon" @click.native="delOperate('model')"/>
+        </div>
       </div>
-      <div class="item-con no-border" v-if="choosedData.deviceModelMark">
-        <label class="label-block">设备</label>
-        <div class="data-item-wrap fv"  @click="chooseDevice">
+      <div class="item-con" v-if="choosedData.deviceModelMark">
+        <label class="label-block font14">设备</label>
+        <div class="data-item-wrap fv"  @click="chooseDevice" v-if="!choosedData.deviceMark">
           <svg-icon icon-class="add" class-name="icon" />
           <span>选择设备</span>
         </div>
+        <div class="data-item-wrap fs" @click="chooseDevice" v-if="choosedData.deviceMark">
+          {{choosedData.deviceName}}
+           <svg-icon icon-class="delete" class-name="icon" @click.native="delOperate('device')"/>
+        </div>
       </div>
-      <div class="item-con no-border" v-if="choosedData.deviceName">
-        <label class="label-block">数据项</label>
+      <div class="item-con" v-if="choosedData.deviceName">
+        <label class="label-block font14">数据项</label>
         <a-radio-group v-model="dataItem">
           <a-radio
             :value="item.value"
@@ -38,9 +46,24 @@
             {{ item.label }}
           </a-radio>
         </a-radio-group>
-        <div class="data-item-wrap fv" @click="chooseDataItem">
+        <div class="data-item-wrap fv" @click="chooseDataItem" v-if="!choosedData.paramMark">
           <svg-icon icon-class="add" class-name="icon" />
           <span>{{ chooseDataItemText }}</span>
+        </div>
+        <div class="data-item-wrap fs" @click="chooseDevice" v-if="choosedData.paramMark">
+          {{choosedData.paramName}}
+           <svg-icon icon-class="delete" class-name="icon" @click.native="delOperate('param')"/>
+        </div>
+        <div class="item-con no-border fv" v-if="dataItem == 'state'" style="padding-bottom:0;">
+          <a-radio-group v-model="stateModel" @change="stateChange">
+            <a-radio
+              :value="item.value"
+              v-for="item in stateList"
+              :key="item.value"
+            >
+              {{ item.label }}
+            </a-radio>
+          </a-radio-group>
         </div>
       </div>
     </template>
@@ -78,8 +101,11 @@ export default {
       return this.$store.state.apply.id
     },
     currentPageId() {
-      return this.$store.getters.currentPageId
-    }
+      return this.$store.state.currentPageId
+    },
+    dataConfigList() {
+      return this.$store.state.dataConfigList
+    },
   },
   data() {
     return {
@@ -99,8 +125,6 @@ export default {
       visible: false,
       allText: "全部模型",
       recentKey: "model",
-      list: [],
-      dataConfigList:[],
       url:'',
       dimUrl:'',
       code:'',
@@ -110,6 +134,11 @@ export default {
       choosedData:{},
       valueKey:'',
       paramType:0,// 参数类型(0-属性1-参数2-状态)
+      stateModel:'netStatus',
+      stateList:[
+        {label:'网络状态',value:'netStatus'},
+        {label:'运行状态',value:'status'},
+      ],
     }
   },
   created() {
@@ -131,16 +160,18 @@ export default {
       }
     },
     getDatasourceConfig() {
-      api.dataUrlList({}).then(res=>{
-        if(res.code === 0) {
-          this.dataConfigList = res.data
-        }
-      })
+      if(!this.dataConfigList.length) {
+        api.dataUrlList({}).then(res=>{
+          if(res.code === 0) {
+            this.$store.commit('setDataConfigList',res.data)
+          }
+        })
+      }
     },
     getDataInfo() {
-      api.query(this.widgetId).then(res=>{
+      api.query({widgetId:this.widgetId,pageId:this.pageId}).then(res=>{
         if(res.code == 0) {
-
+          this.choosedData = res.data || {}
         }
       })
     },
@@ -171,19 +202,21 @@ export default {
       this.visible = true
       this.code = 'E005'
       this.dimCode = 'E006'
-      this.labelKey = 'paramName'
       this.keywordKey = 'paramName'
-      this.valueKey = 'paramMark'
       this.url = findUrl(this.dataConfigList,this.code)
       switch(this.dataItem) {
         case 'property':
           this.allText = '全部属性'
           this.recentKey = 'gt-cds-property-recent'
+          this.labelKey = 'attributeName'
+          this.valueKey = 'attributeMark'
           this.paramType = 0
           break
         case 'param':
           this.allText = '全部参数'
           this.recentKey = 'gt-cds-param-recent'
+          this.labelKey = 'paramName'
+          this.valueKey = 'paramMark'
           this.paramType = 1
           break
         case 'state':
@@ -200,19 +233,81 @@ export default {
           this.choosedData.deviceModelName = itemLabel
           break
         case 'deviceName':
-          this.choosedData[this.valueKey] = itemValue
-          this.choosedData[this.labelKey] = itemLabel
+          this.choosedData.deviceMark = itemValue
+          this.choosedData.deviceName = itemLabel
           break
         case 'paramName':
-          this.choosedData[this.valueKey] = itemValue
-          this.choosedData[this.labelKey] = itemLabel
+          this.choosedData.paramMark = itemValue
+          this.choosedData.paramName = itemLabel
           this.choosedData.paramType = item.paramType
           break
       }
       this.saveDataInfo()
     },
+    stateChange(evt) {
+      const {value} = evt.target
+      this.choosedData.paramMark = value
+      if(value == 'netStatus') {
+        this.choosedData.paramName = '网络状态'
+      }else if(value == 'status') {
+        this.choosedData.paramName = '运行状态'
+      }
+      this.saveDataInfo()
+    },
     saveDataInfo() {
-
+      const studioDataSourceId = this.dataConfigList.find(item=>item.functionCode=='E007').id
+      let params = {
+        appId: this.applyId,
+        deviceModelMark: this.choosedData.deviceModelMark,
+        deviceModelName: this.choosedData.deviceModelName,
+        deviceMark: this.choosedData.deviceMark,
+        deviceName: this.choosedData.deviceName,
+        pageId:this.currentPageId,
+        paramMark: this.choosedData.paramMark,
+        paramName: this.choosedData.paramName,
+        paramType: this.choosedData.paramType,
+        studioDataSourceId,
+        widgetId: this.widgetId,
+      }
+      if(this.choosedData.id) {
+        params.id = this.choosedData.id
+        api.edit(params).then(res=>{
+          if(res.code == 0) {
+            this.$message.success('修改成功')
+          }
+        })
+      }else {
+        api.add(params).then(res=>{
+          if(res.code == 0) {
+            this.$message.success('保存成功')
+          }
+        })
+      }
+    },
+    delDataInfo() {
+      api.del({widgetId:this.widgetId,pageId:this.pageId}).then(res=>{
+        if(res.code === 0) {
+          this.$message.success('删除模型绑定成功')
+        }
+      })
+    },
+    delOperate(type) {
+      switch(type) {
+        case 'model':
+          this.delDataInfo()
+          break
+        case 'device':
+          this.choosedData.deviceMark = ''
+          this.choosedData.deviceName = ''
+          this.saveDataInfo()
+          break
+        case 'param':
+          this.choosedData.paramMark = ''
+          this.choosedData.paramName = ''
+          this.choosedData.paramType = 0
+          this.saveDataInfo()
+          break
+      }
     },
   }
 }
@@ -234,8 +329,11 @@ export default {
       margin-left: 10px;
     }
   }
+  .font14{
+    font-size:14px;
+    font-weight:bold;
+  }
   .ant-radio-group {
-    font-size: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -243,6 +341,9 @@ export default {
     /depp/span.ant-radio + * {
       padding-right: 4px;
       padding-left: 4px;
+    }
+    /deep/span{
+      font-size: 12px;
     }
   }
 }
