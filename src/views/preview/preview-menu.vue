@@ -45,122 +45,112 @@ export default {
 }
 </script>
 <style lang="less">
+@light:#fff;
+@dark: #001529;
+@themeSet:{
+  theme1:#1740dc;
+  theme2:#f5222d;
+  theme3:#f9531c;
+  theme4:#eb2f96;
+  theme5:#722ed1;
+  theme6:#13c2c2;
+}
 .preview-menu-con {
   position: absolute;
   opacity: 0.98;
   left: 0;
   top: 0;
+  font-size: 13px;
   &.dark {
-    background: #001529;
+    background: @dark;
     color: #fff;
     &.left {
-      &.theme1 {
-        .menu-item {
-          &:hover,
-          &.select {
-            background: #1740dc;
+      each(@themeSet,{
+        &.@{key} {
+          .menu-item {
+            &:hover,
+            &.select {
+              background: @value;
+            }
           }
         }
-      }
-      &.theme2 {
-        .menu-item {
-          &:hover,
-          &.select {
-            background: #f5222d;
+      })
+    }
+    &.top {
+      each(@themeSet,{
+        &.@{key} {
+          .menu-item {
+            &:hover,
+            &.select {
+              color: @value;
+            }
+            &.select {
+              border-bottom: solid 2px @value;
+            }
+            &.select-child{
+              color: @value;
+            }
+          }
+          .submenu-item {
+            &:hover,
+            &.select {
+              color: @value;
+              background: fade(@value,5%);
+            }
           }
         }
-      }
-      &.theme3 {
-        .menu-item {
-          &:hover,
-          &.select {
-            background: #f9531c;
-          }
-        }
-      }
-      &.theme4 {
-        .menu-item {
-          &:hover,
-          &.select {
-            background: #eb2f96;
-          }
-        }
-      }
-      &.theme5 {
-        .menu-item {
-          &:hover,
-          &.select {
-            background: #722ed1;
-          }
-        }
-      }
-      &.theme6 {
-        .menu-item {
-          &:hover,
-          &.select {
-            background: #13c2c2;
-          }
-        }
+      })
+      .submenu-con {
+        background: @dark;
+        box-shadow: 0px 2px 6px 0px rgba(4, 12, 44, 0.25);
+        border: 1px solid #000310;
       }
     }
   }
   &.light {
-    background: #fff;
+    background: @light;
     color: #040c2c;
     &.left {
-      &.theme1 {
-        .menu-item {
-          &:hover,
-          &.select {
-            color: rgba(23, 64, 220, 1);
-            background: rgba(23, 64, 220, 0.05);
+      each(@themeSet,{
+        &.@{key} {
+          .menu-item {
+            &:hover,
+            &.select {
+              background: fade(@value,5%);
+              color: @value;
+            }
           }
         }
-      }
-      &.theme2 {
-        .menu-item {
-          &:hover,
-          &.select {
-            color: rgba(245, 34, 45, 1);
-            background: rgba(245, 34, 45, 0.05);
+      })
+    }
+    &.top {
+      each(@themeSet,{
+        &.@{key} {
+          .menu-item {
+            &:hover,
+            &.select {
+              color: @value;
+            }
+            &.select {
+              border-bottom: solid 2px @value;
+            }
+            &.select-child{
+              color: @value;
+            }
+          }
+          .submenu-item {
+            &:hover,
+            &.select {
+              color: @value;
+              background: fade(@value,5%);
+            }
           }
         }
-      }
-      &.theme3 {
-        .menu-item {
-          &:hover,
-          &.select {
-            color: rgba(249, 83, 28, 1);
-            background: rgba(249, 83, 28, 0.05);
-          }
-        }
-      }
-      &.theme4 {
-        .menu-item {
-          &:hover,
-          &.select {
-            color: rgba(114, 46, 209, 1);
-            background: rgba(114, 46, 209, 0.05);
-          }
-        }
-      }
-      &.theme5 {
-        .menu-item {
-          &:hover,
-          &.select {
-            color: rgba(19, 194, 194, 1);
-            background: rgba(19, 194, 194, 0.05);
-          }
-        }
-      }
-      &.theme6 {
-        .menu-item {
-          &:hover,
-          &.select {
-            color: rgba(235, 47, 150, 1);
-            background: rgba(235, 47, 150, 0.05);
-          }
-        }
+      })
+      .submenu-con {
+        background: @light;
+        box-shadow: 0px 2px 6px 0px rgba(4, 12, 44, 0.25);
+        border: 1px solid #e6e7ea;
       }
     }
   }
@@ -171,7 +161,7 @@ export default {
   &.top {
     height: 50px;
     width: 100%;
-    align-items: center;
+    box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
   }
 }
 </style>

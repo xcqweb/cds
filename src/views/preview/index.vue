@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-con-wrap">
+  <div class="preview-con-wrap" v-if="currentPage && apply">
     <div class="preview-con" :style="viewStyleObj">
       <widget-item
         v-for="widget in widgets"
@@ -10,13 +10,15 @@
     </div>
     <preview-menu v-if="currentPage && apply && position" />
   </div>
+  <loading v-else />
 </template>
 <script>
+import Loading from "@c/loading"
 import pageApi from "@a/page"
 import applyApi from "@a/apply"
 import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
-import { dealWidgetData } from "@u/deal"
+import { dealWidgetData, dealHomePage } from "@u/deal"
 import WidgetItem from "./widget-item"
 import mutualApi from "@a/mutual"
 import PreviewMenu from "./preview-menu"
@@ -26,7 +28,8 @@ export default {
   name: "Preview",
   components: {
     WidgetItem,
-    PreviewMenu
+    PreviewMenu,
+    Loading
   },
   computed: {
     currentPage() {
@@ -61,6 +64,12 @@ export default {
   created() {
     this.init()
   },
+  beforeDestroy() {
+    if (this.timer) {
+      window.clearTimeout(this.timer)
+      this.timer = null
+    }
+  },
   methods: {
     init() {
       this.getDatasourceConfig() // 获取最后一笔数据的请求url
@@ -92,20 +101,16 @@ export default {
             parentProperty: "pid",
             customID: "pageId"
           })
-          if (pages.length > 1) {
-            // 获取首页
-            const resIndex = pages.findIndex(item => item.isHome)
-            if (resIndex != -1) {
-              const temp = pages[resIndex]
-              pages.splice(resIndex, 1)
-              pages.unshift(temp)
-            }
-          }
+          pages = dealHomePage(pages)
           this.$store.commit("preview/setPages", pages)
           this.$store.commit("preview/setCurrentPage", pages[0])
           this.queryAllActions()
           this.initPageAttrs()
           this.queryPageWidgetsDatas() //获取当前页面所有控件的绑定数据
+          this.timer = setTimeout(() => {
+            // 定时拉取
+            this.queryPageWidgetsDatas()
+          }, (this.apply.dataRate || 3) * 1000)
         }
       })
     },
@@ -127,20 +132,20 @@ export default {
     queryPageWidgetsDatas() {
       // 获取当前页面所有控件的数据绑定
       const pageId = this.currentPage.pageId
-      dataApi.queryPageWidgetsDataBind({ pageId }).then(res => {
-        if (res.code === 0 && this.lastDataRequestUrl) {
-          let tempData = res.data || []
-          let params = []
-          tempData.forEach(item => {
-            // 收集控件绑定的参数批量请求
-          })
-          instance.post(this.lastDataRequestUrl, params).then(result => {
-            if (result.code === 0) {
-              this.dealPageWidgetsData(result.data || [])
-            }
-          })
-        }
-      })
+      // dataApi.queryPageWidgetsDataBind({ pageId }).then(res => {
+      //   if (res.code === 0 && this.lastDataRequestUrl) {
+      //     let tempData = res.data || []
+      //     let params = []
+      //     tempData.forEach(item => {
+      //       // 收集控件绑定的参数批量请求
+      //     })
+      //     instance.post(this.lastDataRequestUrl, params).then(result => {
+      //       if (result.code === 0) {
+      //         this.dealPageWidgetsData(result.data || [])
+      //       }
+      //     })
+      //   }
+      // })
     },
     dealPageWidgetsData(data) {
       // 对应的数据映射到对应的控件

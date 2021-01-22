@@ -114,12 +114,16 @@
     </div>
     <div class="item-con" v-if="navPosition > 0">
       <label class="label-block">导航风格</label>
-      <a-select v-model="navModel" size="small" style="width:100%;">
+      <a-select
+        v-model="navModel"
+        size="small"
+        style="width:100%;"
+        @change="navThemeChange"
+      >
         <a-select-option
           v-for="item in navList"
           :key="item.value"
           :value="item.value"
-          @change="navThemeChange"
         >
           {{ item.label }}
         </a-select-option>
@@ -135,6 +139,17 @@
           <div :style="{ backgroundColor: d.label }" class="item" />
         </div>
       </div>
+    </div>
+    <div class="item-con fs">
+      <label>数据拉取频率</label>
+      <a-input-number
+        size="small"
+        v-model="dataRate"
+        type="number"
+        :min="3"
+        suffix="秒"
+        style="width: 60%"
+      />
     </div>
     <color-picker
       :visible.sync="visibleColor"
@@ -242,14 +257,22 @@ export default {
     navStyle: {
       get() {
         let res = {}
-        const navStyle = this.$store.state.apply.navStyle
-        if(navStyle) {
-          res = JSON.parse(navStyle)
+        const navStyleTemp = this.$store.state.apply.navStyle
+        if (navStyleTemp) {
+          res = JSON.parse(navStyleTemp)
         }
         return res
       },
       set(navStyle) {
         this.$store.dispatch("updateApply", { navStyle })
+      }
+    },
+    dataRate: {
+      get() {
+        return this.$store.state.apply.dataRate || 3
+      },
+      set(dataRate) {
+        this.$store.dispatch("updateApply", { dataRate })
       }
     }
   },
@@ -269,7 +292,7 @@ export default {
       visibleColor: false,
       objStyle: {},
       navList: config.navList,
-      navModel: 'dark',
+      navModel: "dark",
       navColorModel: 1,
       navColorList: config.navColorList,
       headerInfo: { Authorization: getToken() },

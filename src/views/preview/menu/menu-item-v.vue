@@ -17,10 +17,7 @@
           <svg-icon icon-class="arrow-left" />
         </a>
       </div>
-      <menu-item-v
-        :pages="item.children"
-        v-if="item.children && !item.expand"
-      />
+      <menu-item-v :pages="item.children" v-if="item.children && item.expand" />
     </li>
   </ul>
 </template>

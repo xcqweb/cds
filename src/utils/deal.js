@@ -161,3 +161,15 @@ export function findUrl(arr, code, special) {
   }
   return res
 }
+// 获取首页
+export function dealHomePage(pages) {
+  if (pages.length > 1) {
+    const resIndex = pages.findIndex(item => item.isHome)
+    if (resIndex != -1) {
+      const temp = pages[resIndex]
+      pages.splice(resIndex, 1)
+      pages.unshift(temp)
+    }
+  }
+  return pages
+}

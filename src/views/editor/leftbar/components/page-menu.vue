@@ -21,7 +21,7 @@
           @click.stop.prevent="expand(page)"
           @dblclick.stop
         >
-          <svg-icon icon-class="arrow-left" />
+          <svg-icon icon-class="page-arrow" />
         </a>
         <div class="name-con">
           <div class="name-icon">
