@@ -142,6 +142,14 @@ export function dealWidgetData(data) {
   })
   return result
 }
+export function dealDataConfigUrlDev(res) {
+  const isDev = process.env.NODE_ENV === "development"
+  if (isDev && res) {
+    const apiIndex = res.indexOf("/api")
+    res = res.substr(apiIndex)
+  }
+  return res
+}
 
 export function findUrl(arr, code, special) {
   // 数据源接口查询
@@ -153,11 +161,7 @@ export function findUrl(arr, code, special) {
     } else {
       res = tempObj.apiPathUrl
     }
-    const isDev = process.env.NODE_ENV === "development"
-    if (isDev) {
-      const apiIndex = res.indexOf("/api")
-      res = res.substr(apiIndex)
-    }
+    res = dealDataConfigUrlDev(res)
   }
   return res
 }

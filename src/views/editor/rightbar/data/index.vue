@@ -32,7 +32,7 @@
           <svg-icon
             icon-class="delete"
             class-name="icon"
-            @click.native="delOperate('model')"
+            @click.native.stop="delOperate('model')"
           />
         </div>
       </div>
@@ -55,13 +55,13 @@
           <svg-icon
             icon-class="delete"
             class-name="icon"
-            @click.native="delOperate('device')"
+            @click.native.stop="delOperate('device')"
           />
         </div>
       </div>
       <div class="item-con" v-if="choosedData.deviceName">
         <label class="label-block font14">数据项</label>
-        <a-radio-group v-model="dataItem">
+        <a-radio-group v-model="dataItem" @change="dataItemChange">
           <a-radio
             :value="item.value"
             v-for="item in dataItemList"
@@ -73,7 +73,7 @@
         <div
           class="data-item-wrap fv"
           @click="chooseDataItem"
-          v-if="!choosedData.paramMark"
+          v-if="!choosedData.paramMark && dataItem !== 'state'"
         >
           <svg-icon icon-class="add" class-name="icon" />
           <span>{{ chooseDataItemText }}</span>
@@ -83,11 +83,11 @@
           @click="chooseDevice"
           v-if="choosedData.paramMark"
         >
-          {{ choosedData.paramName }}
+          {{ choosedData.paramName || choosedData.paramMark }}
           <svg-icon
             icon-class="delete"
             class-name="icon"
-            @click.native="delOperate('param')"
+            @click.native.stop="delOperate('param')"
           />
         </div>
         <div
@@ -128,6 +128,7 @@
 import DatasourcePanel from "./components/datasource-panel"
 import api from "@a/data"
 import { findUrl } from "@u/deal"
+const dataItemArr = ["property", "param", "state"]
 export default {
   name: "Datasource",
   components: {
@@ -171,10 +172,18 @@ export default {
       dimCode: "", // 模糊查询的code
       labelKey: "",
       keywordKey: "", //搜索的关键字字段
-      choosedData: {},
+      choosedData: {
+        deviceModelMark: "",
+        deviceModelName: "",
+        deviceMark: "",
+        deviceName: "",
+        paramMark: "",
+        paramName: "",
+        paramType: ""
+      },
       valueKey: "",
       paramType: 0, // 参数类型(0-属性1-参数2-状态)
-      stateModel: "deviceNetStatus",
+      stateModel: "",
       stateList: [
         { label: "网络状态", value: "deviceNetStatus" },
         { label: "运行状态", value: "deviceStatus" }
@@ -190,14 +199,17 @@ export default {
       switch (evt.target.value) {
         case "property":
           this.chooseDataItemText = "选择属性"
+          this.paramType = 0
           break
         case "param":
           this.chooseDataItemText = "选择参数"
+          this.paramType = 1
           break
         case "state":
-          this.chooseDataItemText = "选择状态"
+          this.paramType = 2
           break
       }
+      this.choosedData.paramType = this.paramType
     },
     getDatasourceConfig() {
       if (!this.dataConfigList.length) {
@@ -213,7 +225,12 @@ export default {
         .query({ widgetId: this.widgetId, pageId: this.currentPageId })
         .then(res => {
           if (res.code == 0) {
-            this.choosedData = res.data || {}
+            if (res.data.length) {
+              this.choosedData = res.data[0]
+              const temp = this.choosedData.paramType
+              this.dataItem = dataItemArr[temp]
+              this.paramType = temp
+            }
           }
         })
     },
@@ -281,7 +298,7 @@ export default {
         case "paramName":
           this.choosedData.paramMark = itemValue
           this.choosedData.paramName = itemLabel
-          this.choosedData.paramType = item.paramType
+          this.choosedData.paramType = this.paramType
           break
       }
       this.saveDataInfo()
@@ -317,25 +334,25 @@ export default {
         params.id = this.choosedData.id
         api.edit(params).then(res => {
           if (res.code == 0) {
-            this.$message.success("修改成功")
+            // this.$message.success("修改成功")
           }
         })
       } else {
         api.add(params).then(res => {
           if (res.code == 0) {
+            this.choosedData.id = res.data.id
             this.$message.success("保存成功")
           }
         })
       }
     },
     delDataInfo() {
-      api
-        .del({ widgetId: this.widgetId, pageId: this.currentPageId })
-        .then(res => {
-          if (res.code === 0) {
-            this.$message.success("删除模型绑定成功")
-          }
-        })
+      api.del([this.choosedData.id]).then(res => {
+        if (res.code === 0) {
+          this.choosedData.deviceModelMark = null
+          this.$message.success("删除模型绑定成功")
+        }
+      })
     },
     delOperate(type) {
       switch (type) {

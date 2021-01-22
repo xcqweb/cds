@@ -9,7 +9,7 @@ const modify = params => instance.put(`/api/ruban-cds/studio/pageInfo`, params)
 
 const query = id => instance.get(`/api/ruban-cds/studio/pageInfo/${id}`)
 
-const del = id => instance.delete(`/api/ruban-cds/studio/pageInfo/${id}`)
+const del = ids => instance.delete(`/api/ruban-cds/studio/pageInfo/${ids}`)
 
 const setHome = params =>
   instance.post(`/api/ruban-cds/studio/pageInfo/setIndex`, params)

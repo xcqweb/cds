@@ -24,7 +24,7 @@
             @click.native="reset"
           />
         </div>
-        <ul>
+        <ul class="scroll-con">
           <li
             v-for="item in list"
             :key="item[valueKey]"
@@ -32,18 +32,18 @@
             @click="itemClick(item)"
             :class="{ select: selectId == item[valueKey] }"
           >
-            {{ item[labelKey] }}
+            {{ item[labelKey] || item[valueKey] }}
           </li>
         </ul>
       </a-tab-pane>
       <a-tab-pane key="recent" :tab="recentText">
-        <ul>
+        <ul class="scroll-con">
           <li
             v-for="item in recentList"
             :key="item[valueKey]"
             :value="item[valueKey]"
           >
-            {{ item[labelKey] }}
+            {{ item[labelKey] || item[valueKey] }}
           </li>
         </ul>
       </a-tab-pane>
@@ -167,11 +167,7 @@ export default {
         arr.push(this.currentItem)
       }
       localStorage.setItem(this.recentLocalKey, JSON.stringify(arr))
-      let res = this.currentItem
-      if (this.paramType) {
-        res = { ...res, paramType: this.paramType }
-      }
-      this.$emit("itemClick", res)
+      this.$emit("itemClick", this.currentItem)
       this.hide()
     },
     reset() {
@@ -190,9 +186,13 @@ export default {
   border-radius: 2px;
   border: 1px solid #e6e7ea;
   .content-con {
-    max-height: 40vh;
-    overflow: auto;
+    max-height: 60vh;
+    overflow: hidden;
     border-bottom: solid 1px #e5e6e9;
+  }
+  .scroll-con {
+    max-height: 60vh;
+    overflow: auto;
   }
   .footer {
     display: flex;

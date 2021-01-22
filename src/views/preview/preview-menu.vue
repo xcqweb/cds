@@ -1,7 +1,29 @@
 <template>
-  <div class="preview-menu-con" :class="conCls">
+  <div class="preview-menu-con" :class="conCls" :style="objStyle">
     <menu-item-v v-if="position == 1" :pages="pages" />
     <menu-item-h v-if="position == 2" :pages="pages" />
+    <div class="trigger-con" :class="triggerCls" @click.stop="operateMenu">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="svg-icon"
+        viewBox="0 0 16 86"
+        aria-hidden="true"
+        width="16"
+        height="86"
+      >
+        <g fill="none" fill-rule="evenodd">
+          <path
+            class="path-wapper"
+            d="M0 0l14.12 8.825A4 4 0 0116 12.217v61.566a4 4 0 01-1.88 3.392L0 86V0z"
+          />
+          <path
+            class="path-arrow"
+            d="M10.758 48.766a.778.778 0 000-1.127L6.996 43l3.762-4.639a.778.778 0 000-1.127.85.85 0 00-1.172 0l-4.344 5.202a.78.78 0 000 1.128l4.344 5.202a.85.85 0 001.172 0z"
+            fill-rule="nonzero"
+          />
+        </g>
+      </svg>
+    </div>
   </div>
 </template>
 <script>
@@ -36,12 +58,40 @@ export default {
       return `${posArr[this.position - 1]} theme${this.navStyle.theme} ${
         this.navStyle.mode
       }`
+    },
+    triggerCls() {
+      return [
+        `trigger-${posArr[this.position - 1]}`,
+        { "is-minimized": !this.showMenu }
+      ]
     }
   },
   data() {
-    return {}
+    return {
+      showMenu: true,
+      objStyle: {}
+    }
   },
-  mounted() {}
+  mounted() {},
+  methods: {
+    operateMenu() {
+      const pos = posArr[this.position - 1]
+      if (pos == "left") {
+        if (this.showMenu) {
+          this.objStyle.width = 0
+        } else {
+          this.objStyle.width = "200px"
+        }
+      } else {
+        if (this.showMenu) {
+          this.objStyle.height = 0
+        } else {
+          this.objStyle.height = "50px"
+        }
+      }
+      this.showMenu = !this.showMenu
+    }
+  }
 }
 </script>
 <style lang="less">
@@ -61,6 +111,9 @@ export default {
   left: 0;
   top: 0;
   font-size: 13px;
+  z-index:200;
+  transition: all 0.3s ease-in-out 0s;
+  z-index: 100;
   &.dark {
     background: @dark;
     color: #fff;
@@ -105,6 +158,12 @@ export default {
         box-shadow: 0px 2px 6px 0px rgba(4, 12, 44, 0.25);
         border: 1px solid #000310;
       }
+    }
+    .path-wapper {
+      fill:@dark;
+    }
+    .path-arrow{
+      fill:@light;
     }
   }
   &.light {
@@ -153,15 +212,77 @@ export default {
         border: 1px solid #e6e7ea;
       }
     }
+    .path-wapper {
+      fill:@light;
+    }
+    .path-arrow{
+      fill:@dark;
+    }
+  }
+  .trigger-con{
+    position:absolute;
+    display: flex;
+    z-index: 1;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: auto;
+    transition: opacity 0.2s ease-in-out 0s;
+    .svg-icon{
+      font-size:16px;
+    }
+    &.is-minimized{
+      opacity: 1;
+      pointer-events: auto;
+      .path-arrow {
+        transform-origin: center center;
+        transform: rotate(180deg);
+      }
+      &:hover:not(.is-minimized) {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+    &.trigger-left{
+      left:100%;
+    }
+    &.trigger-top{
+      top:-31px;
+    }
   }
   &.left {
     width: 200px;
     height: 100%;
+    .trigger-con{
+      width: 16px;
+      height: 172px;
+      align-items: center;
+      top: 50%;
+      margin-top: -86px;
+    }
   }
   &.top {
     height: 50px;
     width: 100%;
     box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
+    .trigger-con{
+      width: 172px;
+      height: 16px;
+      left:50%;
+      margin-left:-86px;
+      transform:rotate(270deg);
+      .path-wapper {
+        fill:@dark;
+      }
+      .path-arrow{
+        fill:@light;
+      }
+    }
+  }
+  &:hover{
+    .trigger-con{
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 </style>

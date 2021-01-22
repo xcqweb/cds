@@ -16,7 +16,7 @@
         class="submenu-con"
         v-if="item.children && item.expand"
         v-click-out-side="() => collapseParent(item)"
-        @mouseleave="collapseParent(item)"
+        @mouseleave="collapseAll"
       >
         <div
           class="submenu-item"
@@ -48,7 +48,9 @@ export default {
   mounted() {},
   methods: {
     expandParent(page) {
-      this.$set(page, "expand", true)
+      this.pages.forEach(item => {
+        this.$set(item, "expand", item.pageId == page.pageId)
+      })
     },
     collapseParent(page) {
       this.$set(page, "expand", false)
@@ -59,13 +61,14 @@ export default {
         this.$set(p, "isChildSelect", false)
       })
     },
+    collapseAll() {
+      this.pages.forEach(p => {
+        this.$set(p, "expand", false)
+      })
+    },
     changeChildPage(page, item) {
       this.pages.forEach(p => {
-        if (p.pageId == item.pageId) {
-          this.$set(p, "isChildSelect", true)
-        } else {
-          this.$set(p, "isChildSelect", false)
-        }
+        this.$set(item, "isChildSelect", p.pageId == item.pageId)
       })
       this.collapseParent(item)
       this.$store.commit("preview/setCurrentPage", page)

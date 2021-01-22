@@ -48,6 +48,9 @@ export default {
 </script>
 <style lang="less">
 .menu-item-v {
+  li {
+    overflow: hidden;
+  }
   .menu-item {
     height: 40px;
     padding: 0 10px;

@@ -18,7 +18,7 @@ import pageApi from "@a/page"
 import applyApi from "@a/apply"
 import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
-import { dealWidgetData, dealHomePage } from "@u/deal"
+import { dealWidgetData, dealHomePage,dealDataConfigUrlDev } from "@u/deal"
 import WidgetItem from "./widget-item"
 import mutualApi from "@a/mutual"
 import PreviewMenu from "./preview-menu"
@@ -49,8 +49,13 @@ export default {
     }
   },
   watch: {
-    currentPageId() {
-      this.queryWidgets()
+    currentPageId:{
+      handler(val) {
+        if(val) {
+          this.initPageInfo()
+        }
+      },
+      immediate:true,
     }
   },
   data() {
@@ -64,37 +69,30 @@ export default {
   created() {
     this.init()
   },
-  beforeDestroy() {
-    if (this.timer) {
-      window.clearTimeout(this.timer)
-      this.timer = null
-    }
-  },
   methods: {
     init() {
-      this.getDatasourceConfig() // 获取最后一笔数据的请求url
       const applyId = this.$route.query.applyId
+      this.getDatasourceConfig() 
       this.queryApply(applyId)
       this.queryAllPage(applyId)
     },
-    queryApply(applyId) {
+    getDatasourceConfig() { // 获取最后一笔数据的请求url
+      dataApi.dataUrlList({}).then(res => {
+        if (res.code === 0) {
+          const configList = res.data || []
+          this.lastDataRequestUrl = configList.find(item => item.functionCode == "E007").dsParamValueUrl
+          this.lastDataRequestUrl = dealDataConfigUrlDev(this.lastDataRequestUrl)
+        }
+      })
+    },
+    queryApply(applyId) { // 查询应用
       applyApi.query(applyId).then(res => {
         if (res.code === 0) {
           this.$store.commit("preview/setApply", res.data || [])
         }
       })
     },
-    getDatasourceConfig() {
-      dataApi.dataUrlList({}).then(res => {
-        if (res.code === 0) {
-          const configList = res.data || []
-          this.lastDataRequestUrl = configList.find(
-            item => item.functionCode == "E007"
-          ).dsParamValueUrl
-        }
-      })
-    },
-    queryAllPage(applyId) {
+    queryAllPage(applyId) { // 所有页面
       pageApi.queryAll({ applyId }).then(res => {
         if (res.code === 0) {
           let pages = arrayToTree(res.data, {
@@ -104,17 +102,25 @@ export default {
           pages = dealHomePage(pages)
           this.$store.commit("preview/setPages", pages)
           this.$store.commit("preview/setCurrentPage", pages[0])
-          this.queryAllActions()
-          this.initPageAttrs()
-          this.queryPageWidgetsDatas() //获取当前页面所有控件的绑定数据
-          this.timer = setTimeout(() => {
-            // 定时拉取
-            this.queryPageWidgetsDatas()
-          }, (this.apply.dataRate || 3) * 1000)
+          // this.startTimerPullData()
         }
       })
     },
-    queryWidgets() {
+    startTimerPullData() {// 定时拉取
+      this.timer = setTimeout(() => { 
+        this.queryPageWidgetsDatas()
+      }, (this.apply.dataRate || 3) * 1000)
+    },
+    initPageAttrs() { // 页面属性
+      const { width, height,  backgroundColor, backgroundImage } = this.currentPage
+      this.viewStyleObj = {
+        width: `${width}px`,
+        height: `${height}px`,
+        backgroundColor: backgroundColor || "#fff",
+        backgroundImage: `url(${backgroundImage})`
+      }
+    },
+    queryPageWidgets() { // 页面所有的控件的基本信息
       const pageId = this.currentPage.pageId
       widgetApi.queryAll({ pageId }).then(res => {
         if (res.code === 0) {
@@ -129,44 +135,90 @@ export default {
         }
       })
     },
-    queryPageWidgetsDatas() {
-      // 获取当前页面所有控件的数据绑定
+    queryPageActions() { // 页面所有控件的交互
+      mutualApi.queryPageWidgetsActions({ pageId: this.currentPage.pageId }).then(res => {
+        if (res.code === 0) {
+          res.data.forEach(item => {
+            this.actionMap.set(item.widgetId, item.widgetActionEntityList)
+          })
+        }
+      })
+    },
+    initPageInfo() {
+      this.initPageAttrs() 
+      this.queryPageWidgets() 
+      this.queryPageActions() 
+      this.queryPageWidgetsDatas() 
+    },
+    queryPageWidgetsDatas() { // 页面所有控件的绑定数据
       const pageId = this.currentPage.pageId
-      // dataApi.queryPageWidgetsDataBind({ pageId }).then(res => {
-      //   if (res.code === 0 && this.lastDataRequestUrl) {
-      //     let tempData = res.data || []
-      //     let params = []
-      //     tempData.forEach(item => {
-      //       // 收集控件绑定的参数批量请求
-      //     })
-      //     instance.post(this.lastDataRequestUrl, params).then(result => {
-      //       if (result.code === 0) {
-      //         this.dealPageWidgetsData(result.data || [])
-      //       }
-      //     })
-      //   }
-      // })
+      dataApi.queryPageWidgetsDataBind({ pageId }).then(res => {
+        if (res.code === 0 && this.lastDataRequestUrl) {
+          let tempData = res.data || []
+          let params = []
+          let maps = new Map()
+          let tempArr = []
+          tempData.forEach(item => {
+            tempArr = maps.get(item.paramType) || []
+            tempArr.push(item)
+            maps.set(item.paramType,tempArr)
+          })
+          let requestArr = []
+          for(let key of maps.keys()) {
+            let queryList = this.dealWidgetBind(maps.get(key))
+            if(queryList.length) {
+              let p =this.requestLastData({
+                paramType:key,
+                tenantMark:this.apply.tenantId,
+                queryList,
+              })
+              requestArr.push(p)
+            }
+          }
+          Promise.all(requestArr).then(res=>{
+            console.log(res)
+          })
+        }
+      })
     },
-    dealPageWidgetsData(data) {
-      // 对应的数据映射到对应的控件
+    requestLastData(params) {
+      return instance.post(this.lastDataRequestUrl, params)
     },
-    initPageAttrs() {
-      const { width, height } = this.currentPage
-      this.viewStyleObj = {
-        width: `${width}px`,
-        height: `${height}px`
-      }
-    },
-    queryAllActions() {
-      mutualApi
-        .queryPageWidgetsActions({ pageId: this.currentPage.pageId })
-        .then(res => {
-          if (res.code === 0) {
-            res.data.forEach(item => {
-              this.actionMap.set(item.widgetId, item.widgetActionEntityList)
-            })
+    dealWidgetBind(dealArr) {// 处理根据paramType分类之后的数据
+      let queryList = []
+      let tempArr = []
+      let modelMaps = new Map()
+      let key
+      let splitArr
+      let deviceParams
+      dealArr.forEach(item=>{
+        key = `${item.deviceModelMark}-${item.deviceMark}`
+        tempArr = modelMaps.get(key) || []
+        tempArr.push(item)
+        modelMaps.set(key,tempArr)
+      })
+      for(let key of modelMaps.keys()){
+        deviceParams = []
+        splitArr = key.split('-')
+        let valueList = modelMaps.get(key)
+        valueList.forEach(item=>{
+          if(item.paramType!=2) {
+            deviceParams.push(item.paramMark)
           }
         })
+        queryList.push({
+          deviceModelMark:splitArr[0],
+          deviceParams,
+          deviceMark:splitArr[1],
+        })
+　　　}
+      return queryList
+    },
+  },
+  beforeDestroy() {
+    if (this.timer) {
+      window.clearTimeout(this.timer)
+      this.timer = null
     }
   }
 }
