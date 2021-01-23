@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     isShowTextEditor() {
-      return this.textEditorShow.show
+      return this.textEditor.show
     },
     widgets() {
       let widgets = this.currentPage.widgets

@@ -3,7 +3,8 @@ export default {
   state: {
     apply: [],
     pages: [],
-    currentPage: []
+    currentPage: [],
+    frameContent: { texts: null, show: false, pos: { x: -200, y: -200 } } //是否显示浮窗
   },
   mutations: {
     setPages(state, data) {
@@ -14,6 +15,10 @@ export default {
     },
     setApply(state, data) {
       state.apply = data
+    },
+    setFrameContent(state, data) {
+      let res = state.frameContent
+      state.frameContent = { ...res, ...data }
     }
   }
 }

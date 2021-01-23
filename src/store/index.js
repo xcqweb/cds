@@ -31,7 +31,7 @@ export default new Vuex.Store({
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
     saveTime: new Date().getTime(),
-    textEditorShow: { show: false, cid: "" }, //显示文本编辑器
+    textEditor: { show: false, cid: "" }, //显示文本编辑器
     dataConfigList: [] //应用数据源动态配置
   },
   mutations: {
@@ -43,9 +43,9 @@ export default new Vuex.Store({
     setSaveTime(state, data) {
       state.saveTime = data
     },
-    setTextEditorShow(state, data) {
-      const tempObj = state.textEditorShow
-      state.textEditorShow = { ...tempObj, ...data }
+    setTextEditor(state, data) {
+      const tempObj = state.textEditor
+      state.textEditor = { ...tempObj, ...data }
     },
     setDataConfigList(state, data) {
       state.dataConfigList = data || []
@@ -278,17 +278,14 @@ export default new Vuex.Store({
     async initApply(store, applyId) {
       store.dispatch("queryApply", applyId)
       const allPageResponse = await pageApi.queryAll({ applyId })
+      let allPages = allPageResponse.data
+      allPages = dealHomePage(allPages)
+      const { pageId } = allPages[0]
+      store.commit("initPages", allPages)
+      store.commit("setCurrentPageId", pageId)
       return new Promise(resolve => {
-        let allPages = allPageResponse.data
-        allPages = dealHomePage(allPages)
-        const { pageId } = allPages[0]
-        store.commit("setCurrentPageId", pageId)
-        const p1 = pageApi.query(pageId)
-        const p2 = widgetApi.queryAll({ pageId })
-        Promise.all([p1, p2]).then(res => {
-          const widgetData = res[1].data
-          store.commit("initPages", allPages)
-          store.commit("setCurrentPageWidgets", dealWidgetData(widgetData))
+        widgetApi.queryAll({ pageId }).then(res => {
+          store.commit("setCurrentPageWidgets", dealWidgetData(res.data))
           resolve()
         })
       })
@@ -339,16 +336,18 @@ export default new Vuex.Store({
           if (res.code === 0) {
             store.commit("setSaveTime", new Date().getTime())
             if (!isNoTip) {
-              console.log("保存页面的控件成功")
+              Vue.prototype.$message.success("保存成功")
             }
           }
         })
+      } else {
+        store.commit("setSaveTime", new Date().getTime())
+        Vue.prototype.$message.success("保存成功")
       }
     },
     patchDelWidgets(store, data) {
       widgetApi.delPatch(data.join(",")).then(res => {
         if (res.code === 0) {
-          console.log("删除控件成功")
           store.commit("setDelWidgets", [])
         }
       })
@@ -358,7 +357,7 @@ export default new Vuex.Store({
       store.commit("setApply", data)
       appApi.edit(params).then(res => {
         if (res.code === 0) {
-          console.log("保存应用成功")
+          store.commit("setSaveTime", new Date().getTime())
         }
       })
     },
@@ -367,7 +366,7 @@ export default new Vuex.Store({
       store.commit("setPageInfo", data)
       pageApi.modify(params).then(res => {
         if (res.code === 0) {
-          console.log("修改页面成功")
+          store.commit("setSaveTime", new Date().getTime())
         }
       })
     }

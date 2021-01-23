@@ -19,15 +19,17 @@ export default {
     showHelpLine() {
       return this.$store.getters["showHelpLine"]
     },
-    textEditorShow() {
-      return this.$store.state.textEditorShow
+    textEditor() {
+      return this.$store.state.textEditor
     },
     operateWidget() {
       if (this.currentWidget) {
         return this.currentWidget
       }
-      if (this.textEditorShow.cid) {
-        return findWidgetById(this.currentPage.widgets, this.textEditorShow.cid)
+      const cid = this.textEditor.cid
+      if (cid) {
+        // 只有文本操作时候，所有的控件都取消激活状态了，当前操作的控件需要去获取
+        return findWidgetById(this.currentPage.widgets, cid)
       }
       return null
     },

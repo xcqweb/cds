@@ -1,6 +1,6 @@
 <template>
   <div class="right-con">
-    <page-style v-if="isPage && !textEditorShow" />
+    <page-style v-if="isPage && !textEditorShowFlag" />
     <a-tabs v-else size="small" :animated="false">
       <a-tab-pane key="style" tab="样式">
         <widget-style />
@@ -8,7 +8,7 @@
       <a-tab-pane key="mutual" tab="交互">
         <mutual />
       </a-tab-pane>
-      <a-tab-pane key="data" tab="数据">
+      <a-tab-pane key="data" tab="数据" v-if="showDataTab">
         <datasource />
       </a-tab-pane>
     </a-tabs>
@@ -19,7 +19,10 @@ import PageStyle from "./page.vue"
 import WidgetStyle from "./style"
 import Mutual from "./mutual"
 import Datasource from "./data"
+const showDataWidgetList = ["GtRect", "GtCircle", "GtText"]
+import helpComputed from "@/mixins/help-computed"
 export default {
+  mixins: [helpComputed],
   components: {
     PageStyle,
     WidgetStyle,
@@ -30,9 +33,14 @@ export default {
     isPage() {
       return this.$store.getters.selectWidgets.length == 0
     },
-    textEditorShow() {
+    textEditorShowFlag() {
       // 编辑控件文本
-      return this.$store.state.textEditorShow.show
+      return this.textEditor.show
+    },
+    showDataTab() {
+      let cname = ""
+      cname = this.currentWidget.cname
+      return showDataWidgetList.includes(cname)
     }
   },
   data() {

@@ -1,5 +1,13 @@
 <template>
-  <div class="group-item" :style="styleObj" @click="click" @dblclick="dblclick">
+  <div
+    class="group-item"
+    :style="styleObj"
+    @click="click"
+    @dblclick="dblclick"
+    @mouseenter="mouseenter"
+    @mousemove="mousemove"
+    @mouseleave="mouseleave"
+  >
     <component
       :is="widget.cname"
       v-bind="widget.attrs"
@@ -29,6 +37,14 @@ export default {
     widget: Object,
     actionList: Array
   },
+  computed: {
+    pages() {
+      return this.$store.state.preview.pages
+    },
+    frameShow() {
+      return this.$store.state.preview.frameContent.show
+    }
+  },
   data() {
     return {
       styleObj: {}
@@ -47,7 +63,6 @@ export default {
     if (this.actionList) {
       this.styleObj.cursor = "pointer"
     }
-    console.log(this.actionList)
   },
   methods: {
     click() {
@@ -70,10 +85,14 @@ export default {
       return res
     },
     dealEvent(eventList) {
+      let page
       eventList.forEach(item => {
         switch (item.actionType) {
           case "link-page":
-            console.log("---changepage--")
+            page = this.pages.find(p => p.pageId === item.content.pageId)
+            if (page) {
+              this.$store.commit("preview/setCurrentPage", page)
+            }
             break
           case "show-hide-widget":
             this.changeWidgetVisible(item.content)
@@ -85,7 +104,32 @@ export default {
       })
     },
     changeWidgetVisible(content) {},
-    openLink(content) {}
+    openLink(content) {
+      const { openWay, linkUrl } = content
+      window.open(linkUrl, openWay)
+    },
+    mouseenter(evt) {
+      const texts = this.widget.frameTexts
+      if (texts && !this.frameShow) {
+        const { x, y } = evt
+        this.$store.commit("preview/setFrameContent", {
+          texts,
+          show: true,
+          pos: { x, y }
+        })
+      }
+    },
+    mousemove(evt) {
+      if (this.frameShow) {
+        const { x, y } = evt
+        this.$store.commit("preview/setFrameContent", { pos: { x, y } })
+      }
+    },
+    mouseleave() {
+      if (this.frameShow) {
+        this.$store.commit("preview/setFrameContent", { show: false })
+      }
+    }
   }
 }
 </script>

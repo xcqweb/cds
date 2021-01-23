@@ -105,6 +105,7 @@ export default {
       widgetApi.queryAll({ pageId }).then(res => {
         if (res.code === 0) {
           this.$store.commit("setCurrentPageWidgets", dealWidgetData(res.data))
+          this.$store.commit("setSaveTime", res.data.updateTime)
         }
       })
       this.$store.commit("setCurrentPageId", pageId)

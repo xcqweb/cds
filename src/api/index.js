@@ -37,7 +37,7 @@ instance.interceptors.response.use(response => {
   if (code !== 0 && code !== 406) {
     switch (code) {
       case 401:
-        console.log("登录已失效")
+        Vue.prototype.$message.error("登录已失效")
         break
       default:
         Vue.prototype.$message.error(data.msg)

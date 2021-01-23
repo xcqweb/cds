@@ -112,7 +112,7 @@ export default {
       set(fontFamily) {
         this.$store.commit("updateWidgetAttrs", {
           fontFamily,
-          cid: this.textEditorShow.cid
+          cid: this.textEditor.cid
         })
       }
     },
@@ -123,7 +123,7 @@ export default {
       set(fontSize) {
         this.$store.commit("updateWidgetAttrs", {
           fontSize,
-          cid: this.textEditorShow.cid
+          cid: this.textEditor.cid
         })
       }
     },
@@ -149,7 +149,7 @@ export default {
     changeFontBold(val) {
       this.$store.commit("updateWidgetAttrs", {
         fontWeight: !val,
-        cid: this.textEditorShow.cid
+        cid: this.textEditor.cid
       })
     },
     showColorPicker(type, evt) {
@@ -161,7 +161,7 @@ export default {
       res[arr[type - 1]] = align
       this.$store.commit("updateWidgetAttrs", {
         ...res,
-        cid: this.textEditorShow.cid
+        cid: this.textEditor.cid
       })
     }
   }

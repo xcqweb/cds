@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     textEditorShow() {
-      const obj = this.$store.state.textEditorShow
+      const obj = this.$store.state.textEditor
       return obj.show && this.cid == obj.cid
     },
     objStyle() {

@@ -52,7 +52,7 @@ export default {
       let res = {}
       switch (this.colorType) {
         case "fontColor":
-          res = { color: val, cid: this.textEditorShow.cid }
+          res = { color: val, cid: this.textEditor.cid }
           break
         case "fillColor":
           res = { backgroundColor: val }

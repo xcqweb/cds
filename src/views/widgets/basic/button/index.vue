@@ -24,7 +24,7 @@ export default {
   methods: {
     dblclick() {
       if (!this.isPreview) {
-        this.$store.commit("setTextEditorShow", { show: true, cid: this.cid })
+        this.$store.commit("setTextEditor", { show: true, cid: this.cid })
       }
     }
   }
