@@ -310,6 +310,9 @@ export default new Vuex.Store({
       })
     },
     patchModifyWidgets(store, isNoTip) {
+      if(!store.getters.currentPage) {
+        return
+      }
       const widgets = store.getters.currentPage.widgets
       let params = cloneDeep(widgets)
       params = params.filter(item => item.isEdit)

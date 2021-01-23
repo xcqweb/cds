@@ -94,7 +94,7 @@ export default {
     height: 50px;
     align-items: center;
     justify-content: center;
-    min-width: 80px;
+    min-width: 100px;
     position: relative;
     cursor: pointer;
   }
@@ -102,6 +102,7 @@ export default {
     position: absolute;
     top: 48px;
     padding: 10px 0;
+    min-width: 100px;
     border-radius: 2px;
     .submenu-item {
       display: flex;

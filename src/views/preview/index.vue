@@ -200,6 +200,54 @@ export default {
         }
       })
     },
+    updateWidgetText(cid, frameText) {
+    // 更新控件文本
+    if (!frameText) {
+      return
+    }
+    let frameTexts = resItem.frameTexts
+    if (frameTexts) {
+      const tempIndex = frameTexts.findIndex(
+        item => item.paramMark == frameText.frameText
+      )
+      if (tempIndex != -1) {
+        frameTexts[tempIndex] = frameText
+      } else {
+        frameTexts.push(frameText)
+      }
+    } else {
+      frameTexts = [frameText]
+    }
+    let defaultVal = frameTexts[0].paramValue
+
+    const resIndex = this.widgets.findIndex(item => item.cid === cid)
+    const resItem = this.widgets[resIndex]
+    if (resIndex != -1) {
+      this.widgets.splice(resIndex, 1, {
+        ...resItem,
+        text: defaultVal,
+        frameTexts
+      })
+    }
+  },
+    dealWidgetsText(data) {
+    // 处理控件要显示的文本
+    let maps = new Map()
+    let key
+    data.forEach(item => {
+      if (item.paramDatas) {
+        item.paramDatas.forEach(p => {
+          key = `${item.source}-${item.paramType}-${p.paramMark}`
+          maps.set(key, p)
+        })
+      }
+    })
+    this.widgetDatas.forEach(item => {
+      key = `${item.deviceModelMark}-${item.deviceMark}-${item.paramMark}`
+      this.updateWidgetText(item.cid, maps.get(key))
+    })
+    this.widgetDatasRequest
+  },
     requestLastData() {
       // 最后一笔数据
       let requestArr = []
@@ -257,54 +305,6 @@ export default {
         })
       }
       return queryList
-    }
-  },
-  dealWidgetsText(data) {
-    // 处理控件要显示的文本
-    let maps = new Map()
-    let key
-    data.forEach(item => {
-      if (item.paramDatas) {
-        item.paramDatas.forEach(p => {
-          key = `${item.source}-${item.paramType}-${p.paramMark}`
-          maps.set(key, p)
-        })
-      }
-    })
-    this.widgetDatas.forEach(item => {
-      key = `${item.deviceModelMark}-${item.deviceMark}-${item.paramMark}`
-      this.updateWidgetText(item.cid, maps.get(key))
-    })
-    this.widgetDatasRequest
-  },
-  updateWidgetText(cid, frameText) {
-    // 更新控件文本
-    if (!frameText) {
-      return
-    }
-    let frameTexts = resItem.frameTexts
-    if (frameTexts) {
-      const tempIndex = frameTexts.findIndex(
-        item => item.paramMark == frameText.frameText
-      )
-      if (tempIndex != -1) {
-        frameTexts[tempIndex] = frameText
-      } else {
-        frameTexts.push(frameText)
-      }
-    } else {
-      frameTexts = [frameText]
-    }
-    let defaultVal = frameTexts[0].paramValue
-
-    const resIndex = this.widgets.findIndex(item => item.cid === cid)
-    const resItem = this.widgets[resIndex]
-    if (resIndex != -1) {
-      this.widgets.splice(resIndex, 1, {
-        ...resItem,
-        text: defaultVal,
-        frameTexts
-      })
     }
   },
   beforeDestroy() {

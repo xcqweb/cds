@@ -72,13 +72,16 @@ export default {
     }
   },
   watch: {
-    cname(val) {
-      if (val === "GtLine") {
-        this.handles = ["mr", "ml"]
-        this.cursors = ["ew-resize", "ew-resize"]
-      } else {
-        this.handles = handles
-      }
+    cname:{
+      handler(val) {
+        if (val === "GtLine") {
+          this.handles = ["mr", "ml"]
+          this.cursors = ["ew-resize", "ew-resize"]
+        } else {
+          this.handles = handles
+        }
+      },
+      immediate:true,
     }
   },
   data() {

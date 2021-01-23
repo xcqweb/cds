@@ -142,7 +142,15 @@ export default {
     saveTime() {
       let date = this.$store.state.saveTime
       date = new Date(date)
-      return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+      let min = date.getMinutes()
+      if(min<10) {
+        min = `0${min}`
+      }
+      let sec = date.getSeconds()
+      if(sec<10) {
+        sec = `0${sec}`
+      }
+      return date.getHours() + ":" + min + ":" + sec
     }
   },
   data() {
