@@ -67,16 +67,27 @@ export const findWidgetChildren = (widgetList, widget) => {
 /**
  * 当前点击的点是否在控件内部
  */
-export const pointIsInWidget = (point, widget, pWidget) => {
+export const pointIsInWidget = (point, widget) => {
   const { x, y } = point
   let { left, top, width, height } = widget.attrs
-  if (pWidget) {
-    left += pWidget.attrs.left
-    top += pWidget.attrs.top
-  }
   return x >= left && x <= left + width && y >= top && y <= top + height
 }
-
+/**
+判断当前点击的是哪个子控件
+ */
+export function clickWhichWidget(widgets,widget,point) {
+  let res = null
+  const widgetChildren = findWidgetChildren(widgets,widget)
+  if(widgetChildren.length) {
+    for(let i=0;i<widgetChildren.length;i++) {
+      if(pointIsInWidget(point,widgetChildren[i])) {
+        res = widgetChildren[i]
+        break
+      }
+    }
+  }
+  return res
+}
 export const findWidgetById = (widgets, id) => {
   return widgets.find(item => item.cid === id)
 }

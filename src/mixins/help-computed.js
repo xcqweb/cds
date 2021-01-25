@@ -1,4 +1,3 @@
-import { findWidgetById } from "@u/deal"
 export default {
   computed: {
     currentPageIndex() {
@@ -26,12 +25,7 @@ export default {
       if (this.currentWidget) {
         return this.currentWidget
       }
-      const cid = this.textEditor.cid
-      if (cid) {
-        // 只有文本操作时候，所有的控件都取消激活状态了，当前操作的控件需要去获取
-        return findWidgetById(this.currentPage.widgets, cid)
-      }
-      return null
+      return this.textEditor.widget
     },
     cname() {
       let res = ""

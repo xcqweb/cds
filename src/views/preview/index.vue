@@ -20,12 +20,12 @@ import applyApi from "@a/apply"
 import widgetApi from "@a/widget"
 import arrayToTree from "array-to-tree"
 import { dealWidgetData, dealHomePage, dealDataConfigUrlDev } from "@u/deal"
-import WidgetItem from "./widget-item"
+import WidgetItem from "./components/widget-item"
 import mutualApi from "@a/mutual"
-import PreviewMenu from "./preview-menu"
+import PreviewMenu from "./components/preview-menu"
 import dataApi from "@a/data"
 import instance from "@/api/index"
-import FrameText from "./frame-text"
+import FrameText from "./components/frame-text"
 export default {
   name: "Preview",
   components: {
@@ -201,53 +201,53 @@ export default {
       })
     },
     updateWidgetText(cid, frameText) {
-    // 更新控件文本
-    if (!frameText) {
-      return
-    }
-    let frameTexts = resItem.frameTexts
-    if (frameTexts) {
-      const tempIndex = frameTexts.findIndex(
-        item => item.paramMark == frameText.frameText
-      )
-      if (tempIndex != -1) {
-        frameTexts[tempIndex] = frameText
-      } else {
-        frameTexts.push(frameText)
+      // 更新控件文本
+      if (!frameText) {
+        return
       }
-    } else {
-      frameTexts = [frameText]
-    }
-    let defaultVal = frameTexts[0].paramValue
+      let frameTexts = resItem.frameTexts
+      if (frameTexts) {
+        const tempIndex = frameTexts.findIndex(
+          item => item.paramMark == frameText.frameText
+        )
+        if (tempIndex != -1) {
+          frameTexts[tempIndex] = frameText
+        } else {
+          frameTexts.push(frameText)
+        }
+      } else {
+        frameTexts = [frameText]
+      }
+      let defaultVal = frameTexts[0].paramValue
 
-    const resIndex = this.widgets.findIndex(item => item.cid === cid)
-    const resItem = this.widgets[resIndex]
-    if (resIndex != -1) {
-      this.widgets.splice(resIndex, 1, {
-        ...resItem,
-        text: defaultVal,
-        frameTexts
-      })
-    }
-  },
-    dealWidgetsText(data) {
-    // 处理控件要显示的文本
-    let maps = new Map()
-    let key
-    data.forEach(item => {
-      if (item.paramDatas) {
-        item.paramDatas.forEach(p => {
-          key = `${item.source}-${item.paramType}-${p.paramMark}`
-          maps.set(key, p)
+      const resIndex = this.widgets.findIndex(item => item.cid === cid)
+      const resItem = this.widgets[resIndex]
+      if (resIndex != -1) {
+        this.widgets.splice(resIndex, 1, {
+          ...resItem,
+          text: defaultVal,
+          frameTexts
         })
       }
-    })
-    this.widgetDatas.forEach(item => {
-      key = `${item.deviceModelMark}-${item.deviceMark}-${item.paramMark}`
-      this.updateWidgetText(item.cid, maps.get(key))
-    })
-    this.widgetDatasRequest
-  },
+    },
+    dealWidgetsText(data) {
+      // 处理控件要显示的文本
+      let maps = new Map()
+      let key
+      data.forEach(item => {
+        if (item.paramDatas) {
+          item.paramDatas.forEach(p => {
+            key = `${item.source}-${item.paramType}-${p.paramMark}`
+            maps.set(key, p)
+          })
+        }
+      })
+      this.widgetDatas.forEach(item => {
+        key = `${item.deviceModelMark}-${item.deviceMark}-${item.paramMark}`
+        this.updateWidgetText(item.cid, maps.get(key))
+      })
+      this.widgetDatasRequest
+    },
     requestLastData() {
       // 最后一笔数据
       let requestArr = []

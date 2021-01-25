@@ -12,6 +12,7 @@
 </template>
 <script>
 import helpComputed from "@/mixins/help-computed"
+import { findWidgetById } from "@u/deal"
 export default {
   name: "TextEditor",
   mixins: [helpComputed],
@@ -22,7 +23,8 @@ export default {
     }
   },
   mounted() {
-    const {
+    const widget = this.textEditor.widget
+    let {
       left,
       top,
       width,
@@ -33,7 +35,7 @@ export default {
       fontFamily,
       fontSize,
       fontWeight
-    } = this.currentWidget.attrs
+    } = widget.attrs
     this.objStyle = {
       left: `${left}px`,
       top: `${top}px`,
@@ -46,16 +48,16 @@ export default {
       fontSize: `${fontSize}px`,
       fontWeight: fontWeight ? "bolder" : "normal"
     }
-    this.text = this.currentWidget.text
-    this.$store.commit("updateWidget", { active: false })
+    this.text = widget.text
+    this.$store.commit("updateWidget", {active: false,cid:widget.cid })
     this.selectText(this.$refs.textRef)
   },
   methods: {
     blur() {
-      const cid = this.textEditor.cid
+      const widget = this.textEditor.widget
       const text = this.$refs.textRef.innerText
-      this.$store.commit("setTextEditor", { show: false, cid: "" })
-      this.$store.commit("updateWidget", { active: true, cid, text })
+      this.$store.commit("setTextEditor", { show: false, widget: null })
+      this.$store.commit("updateWidget", {cid:widget.cid, text })
     },
     selectText(obj) {
       let range

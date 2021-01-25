@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-circle" :style="styleObj" @dblclick.capture="dblclick">
+  <div class="gt-circle" :style="styleObj">
     <text-con v-bind="$props" />
   </div>
 </template>
@@ -18,11 +18,7 @@ export default {
   },
   created() {},
   methods: {
-    dblclick() {
-      if (!this.isPreview) {
-        this.$store.commit("setTextEditor", { show: true, cid: this.cid })
-      }
-    }
+     
   }
 }
 </script>

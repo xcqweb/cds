@@ -9,8 +9,8 @@
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-main" :style="widgetConStyle">
-            <div class="goup-list" @dragover.prevent @drop="drop">
-              <drag-widget
+            <div class="group-list" @dragover.prevent @drop="drop">
+              <widget-item
                 v-for="widget in widgets"
                 :key="widget.cid"
                 :widget="widget"
@@ -18,14 +18,14 @@
             </div>
           </div>
           <div class="canvas-sub" :style="widgetConStyle">
+            <!-- 控件拖拽框 -->
+            <widget-drag />
             <!-- 提示框 -->
             <hint />
             <!-- 框选组件 -->
             <selection-widget />
             <!-- 辅助线 -->
             <widget-help-line />
-            <!-- 组合选择框 -->
-            <group-selection style="z-index:1000;" />
             <text-editor v-if="isShowTextEditor" />
             <contextmenu />
           </div>
@@ -44,10 +44,10 @@ import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import arrayToTree from "array-to-tree"
-import DragWidget from "@c/drag-resize/drag-widget"
-import GroupSelection from "@c/group-selection/"
+import WidgetItem from "../components/widget-item"
 import components from "@/views/widgets/index"
-import Contextmenu from "./components/contextmenu"
+import Contextmenu from "../components/contextmenu"
+import WidgetDrag from "../components/widget-drag"
 import TextEditor from "@c/text-editor"
 export default {
   name: "EditorMain",
@@ -56,9 +56,9 @@ export default {
     SelectionWidget,
     WidgetHelpLine,
     Hint,
-    DragWidget,
-    GroupSelection,
+    WidgetItem,
     Contextmenu,
+    WidgetDrag,
     TextEditor,
     ...components
   },
@@ -281,77 +281,10 @@ export default {
       pointer-events: none;
     }
   }
-  .goup-list {
+  .group-list {
     position: relative;
     z-index: 1;
     height: 100%;
-  }
-  .group-item {
-    position: absolute;
-    cursor: move;
-    &:hover::before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      right: -1px;
-      bottom: -1px;
-      left: -1px;
-      border: 2px solid rgb(30, 152, 234);
-      //pointer-events:none;
-      z-index: 999999999;
-    }
-    &.active:before {
-      border: 1px dashed #298df8;
-    }
-    .handle {
-      width: 18px;
-      height: 18px;
-      border: none;
-      background: url("~@/assets/images/icon/resize-dot.svg") 100% 100%;
-      &.handle-tl {
-        top: -9px;
-        left: -9px;
-      }
-      &.handle-tm {
-        top: -9px;
-        left: 50%;
-        margin-left: -9px;
-      }
-      &.handle-tr {
-        top: -9px;
-        right: -9px;
-      }
-      &.handle-mr {
-        right: -9px;
-        margin-top: -9px;
-      }
-      &.handle-br {
-        bottom: -9px;
-        right: -9px;
-      }
-      &.handle-bm {
-        bottom: -9px;
-        margin-left: -9px;
-      }
-      &.handle-bl {
-        bottom: -9px;
-        left: -9px;
-      }
-      &.handle-ml {
-        left: -9px;
-        margin-top: -9px;
-      }
-      &.handle-rot {
-        background: url("~@/assets/images/icon/rotate-dot.svg") 100% 100%
-          no-repeat;
-        margin-top: -28px;
-        &:before {
-          width: 0;
-          height: 0;
-          border: 0;
-        }
-      }
-    }
   }
 }
 </style>

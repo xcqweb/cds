@@ -92,10 +92,7 @@ export default {
 <style lang="less" scoped>
 .help-line-con {
   z-index: 999;
-  position: relative;
   pointer-events: none;
-  left: 0;
-  top: 0;
   height: 100%;
   width: 100%;
   .line {

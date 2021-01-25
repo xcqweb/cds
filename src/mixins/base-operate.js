@@ -6,7 +6,7 @@ import { uuid } from "@u/uuid"
 export default {
   mixins: [helpMethods, helpComputed],
   methods: {
-    group() {
+    group( ) {
       let widgets = this.selectWidgets
       const cname = config.groupName
       const name = `组合`
@@ -19,9 +19,6 @@ export default {
       widgets = this.selectWidgets
       const cid = uuid(16, 16)
       widgets.forEach(item => {
-        let left = item.attrs.left - attrs.left
-        let top = item.attrs.top - attrs.top
-        this.$store.commit("updateWidgetAttrs", { left, top, cid: item.cid })
         this.$store.commit("updateWidget", {
           pid: cid,
           active: false,
@@ -46,9 +43,6 @@ export default {
             cid: item.cid,
             active: true
           })
-          left = item.attrs.left + left
-          top = item.attrs.top + top
-          this.$store.commit("updateWidgetAttrs", { left, top, cid: item.cid })
         })
         this.$store.commit("widgetDel", [widget])
       }

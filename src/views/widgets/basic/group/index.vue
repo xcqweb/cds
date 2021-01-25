@@ -1,7 +1,5 @@
 <template>
-  <div class="gt-group" :style="groupStyleObj">
-    <slot />
-  </div>
+  <div class="group-item" :style="groupStyleObj" />
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
@@ -23,7 +21,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.gt-group {
-  background: transparent;
-}
+ 
 </style>

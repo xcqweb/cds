@@ -17,6 +17,7 @@
       <template v-if="widget.children">
         <widget-item
           v-for="item in widget.children"
+          :pwidget="widget"
           :key="item.cid"
           :widget="item"
         />
@@ -35,6 +36,7 @@ export default {
   },
   props: {
     widget: Object,
+    pwidget:Object,// 父控件
     actionList: Array
   },
   computed: {
@@ -51,7 +53,12 @@ export default {
     }
   },
   created() {
-    const { width, height, left, top, rotate } = this.widget.attrs
+    let { width, height, left, top, rotate } = this.widget.attrs
+    if(this.pwidget) {
+      const {left:pleft,top:ptop} = this.pwidget.attrs
+      left = left - pleft
+      top = top - ptop
+    }
     this.styleObj = {
       width: `${width}px`,
       height: `${height}px`,

@@ -149,5 +149,5 @@ export default {
     { label: "亮色", value: "light" },
     { label: "暗色", value: "dark" }
   ],
-  dataItemStateList: []
+  editableWidetList: ['GtText','GtRect','GtCircle']
 }

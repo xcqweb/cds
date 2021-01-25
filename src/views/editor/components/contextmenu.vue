@@ -31,6 +31,7 @@ import helpComputed from "@/mixins/help-computed"
 import baseOperate from "@/mixins/base-operate"
 import key from "keymaster"
 import { cloneDeep } from "lodash"
+import {isGroup,findWidgetChildren,findWidgetById} from "@u/deal"
 export default {
   name: "Contextmenu",
   mixins: [helpComputed, baseOperate],
@@ -181,20 +182,30 @@ export default {
     },
     paste() {
       if (this.copyData && this.copyData.length) {
-        let len = 0
+        let resArr = []
         this.copyData.forEach(item => {
+          let cid = uuid(16, 16)
           if (!this.isCut) {
             this.$store.commit("updateWidget", { cid: item.cid, active: false })
           }
-          item.copyNum = item.copyNum + 1
-          item = { ...item.attrs, ...item }
-          len = item.copyNum === 1 ? "" : item.copyNum
-          item.left = item.left + 20
-          item.top = item.top + 20
-          item.dname = `${this.copyData.cname} Copy${len}`
-          this.$store.commit("widgetAdd", { ...item, cid: "", active: true })
+          this.$store.commit("widgetAdd", { ...this.dealCopyItem(item), cid,pid:'',active: true })
+          if(isGroup(item)) {
+            let widgetChildren = findWidgetChildren(this.currentPage.widgets,item)
+            widgetChildren.forEach(w=>{
+              this.$store.commit("widgetAdd", { ...this.dealCopyItem(w), cid,pid:cid,active: true })
+            })
+          }
         })
       }
+    },
+    dealCopyItem(item) {
+      item.copyNum = item.copyNum + 1
+      item = { ...item.attrs, ...item }
+      let len = item.copyNum === 1 ? "" : item.copyNum
+      item.left = item.left
+      item.top = item.top + item.height
+      item.dname = `${item.name || item.cname} Copy${len}`
+      return item
     },
     copy() {
       this.dealCopyData(false)
@@ -204,7 +215,7 @@ export default {
       this.$store.commit("widgetDel")
     },
     dealCopyData(isCut) {
-      if (this.selectWidgets.length) {
+      if (this.selectWidgets.length) {                                       
         this.isCut = isCut
         this.copyData = cloneDeep(this.selectWidgets)
       }

@@ -8,7 +8,8 @@ import appApi from "@a/apply"
 import pageApi from "@a/page"
 import widgetApi from "@a/widget"
 import { cloneDeep } from "lodash"
-import { dealPageData, dealWidgetData, dealHomePage } from "@u/deal"
+import arrayToTree from "array-to-tree"
+import { dealPageData, dealWidgetData, dealHomePage,isGroup,findWidgetChildren } from "@u/deal"
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
@@ -27,11 +28,10 @@ export default new Vuex.Store({
     },
     widgets: config.widgets, // 左侧组件区域
     isShowSelection: false, // 是否显示框选,
-    groupSelection: { show: false, widget: {} },
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
     saveTime: new Date().getTime(),
-    textEditor: { show: false, cid: "" }, //显示文本编辑器
+    textEditor: { show: false, widget: null }, //显示文本编辑器
     dataConfigList: [] //应用数据源动态配置
   },
   mutations: {
@@ -135,9 +135,6 @@ export default new Vuex.Store({
     setDelWidgets(state, data) {
       // 设置删除的控件
       state.delWidgets = data
-    },
-    setGroupSelection(state, data) {
-      state.groupSelection = data
     },
     setShowHelpLine(state, data) {
       state.showHelpLine = data
@@ -256,7 +253,14 @@ export default new Vuex.Store({
         widgets = this.getters.selectWidgets
       }
       const currentPage = this.getters.currentPage
-      widgets.forEach(item => {
+      let tempArr = []
+      widgets.forEach(item=>{
+        if(isGroup(item)) {
+          tempArr.push(findWidgetChildren(currentPage.widgets,item))
+        } 
+        tempArr.push(item)
+      })
+      tempArr.forEach(item => {
         let currentWidgetIndex = currentPage.widgets.findIndex(
           w => w.cid == item.cid
         )
@@ -265,16 +269,25 @@ export default new Vuex.Store({
           currentPage.widgets.splice(currentWidgetIndex, 1)
         }
       })
+      // 寻找控件的pid数量为1的，（组合里面只剩一个元素时候，要删除组合)
+      if(this.getters.selectWidgets.length === 1 && !isGroup(this.getters.currentWidget)) {
+        let tempWidgets = cloneDeep(currentPage.widgets)
+        tempWidgets = arrayToTree(tempWidgets, { parentProperty: "pid", customID: "cid" })
+        tempWdigets.forEach(item=>{
+          if(item.length === 1) {
+            let resIndex1 = currentPage.widgets.findIndex(w=>w.cid == item.pid)
+            let resIndex2 = currentPage.widgets.findIndex(w=>w.cid == item.cid)
+            currentPage.widgets.splice(resIndex1, 1)
+            currentPage.widgets.splice(resIndex2, 1,{isEdit:true,pid:''})
+          }
+        })
+      }
     },
     setIsShowSelection(state, data) {
       state.isShowSelection = data
     }
   },
   actions: {
-    updateGroupSelection(store, data) {
-      store.commit("updateWidget", { active: true, cid: data.widget.cid })
-      store.commit("setGroupSelection", data)
-    },
     async initApply(store, applyId) {
       store.dispatch("queryApply", applyId)
       const allPageResponse = await pageApi.queryAll({ applyId })
@@ -310,7 +323,7 @@ export default new Vuex.Store({
       })
     },
     patchModifyWidgets(store, isNoTip) {
-      if(!store.getters.currentPage) {
+      if (!store.getters.currentPage) {
         return
       }
       const widgets = store.getters.currentPage.widgets
@@ -345,7 +358,9 @@ export default new Vuex.Store({
         })
       } else {
         store.commit("setSaveTime", new Date().getTime())
-        Vue.prototype.$message.success("保存成功")
+        if (!isNoTip) {
+          Vue.prototype.$message.success("保存成功")
+        }
       }
     },
     patchDelWidgets(store, data) {

@@ -38,9 +38,7 @@ export default {
       return this.textEditor.show
     },
     showDataTab() {
-      let cname = ""
-      cname = this.currentWidget.cname
-      return showDataWidgetList.includes(cname)
+      return showDataWidgetList.includes(this.cname)
     }
   },
   data() {
