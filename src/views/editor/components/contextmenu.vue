@@ -190,7 +190,7 @@ export default {
           }
           this.$store.commit("widgetAdd", { ...this.dealCopyItem(item), cid,pid:'',active: true })
           if(isGroup(item)) {
-            let widgetChildren = findWidgetChildren(this.currentPage.widgets,item)
+            let widgetChildren = findWidgetChildren(this.currentPage.widgets,item.cid)
             widgetChildren.forEach(w=>{
               this.$store.commit("widgetAdd", { ...this.dealCopyItem(w), cid,pid:cid,active: true })
             })

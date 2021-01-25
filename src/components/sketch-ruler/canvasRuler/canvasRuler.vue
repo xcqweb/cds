@@ -28,7 +28,7 @@ export default {
     height: Number,
     canvasConfigs: Object,
     selectStart: Number,
-    selectLength: Number
+    selectLength: Number|String
   },
   watch: {
     start() {

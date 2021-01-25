@@ -256,7 +256,7 @@ export default new Vuex.Store({
       let tempArr = []
       widgets.forEach(item=>{
         if(isGroup(item)) {
-          tempArr.push(findWidgetChildren(currentPage.widgets,item))
+          tempArr = tempArr.concat(findWidgetChildren(currentPage.widgets,item.cid))
         } 
         tempArr.push(item)
       })

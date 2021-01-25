@@ -11,6 +11,8 @@
       :r="widget.attrs.rotate"
       :z="widget.attrs.zIndex"
       :active.sync="widget.active"
+      @dragstart="onDragStart"
+      @dragging="(left,top)=>onDrag(left,top,widget)"
       @rotating="rotate => onRotate(rotate, widget)"
       @resizestart="
         (left, top, width, height) =>
@@ -23,6 +25,7 @@
       @resizestop="onResizeStop"
       @rotatestop="onRotateStop"
       @deactivated="onDeactivated(widget)"
+      @dblclick.native="dblclick(widget,$event)"
     />
   </div>
 </template>
@@ -32,6 +35,7 @@ import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
 import { cloneDeep } from "lodash"
 import { isGroup,findWidgetChildren,clickWhichWidget,findWidgetById } from "@u/deal"
+import config from "@/config"
 export default {
   name: "WidgetDrag",
   components: {
@@ -50,7 +54,11 @@ export default {
     onDragStart(left, top) {
       this.startDragLeft = left
       this.startDargTop = top
-      this.selectWidgetsCopy = cloneDeep(this.selectWidgets)
+      if (this.selectWidgets.length === 1 && isGroup(this.selectWidgets[0])) {
+        this.selectWidgetsCopy = findWidgetChildren(this.currentPage.widgets,this.selectWidgets[0].cid)
+      } else {
+        this.selectWidgetsCopy = cloneDeep(this.selectWidgets)
+      }
     },
     onDrag(left, top, widget) {
       if (this.selectWidgets.length === 1) {
@@ -67,9 +75,10 @@ export default {
         this.$store.commit("setRuler", {
           shadow: { x: left, y: top, width, height }
         })
-      } else {
-        const disLeft = left - this.startDragLeft
-        const disTop = top - this.startDargTop
+      } 
+      const disLeft = left - this.startDragLeft
+      const disTop = top - this.startDargTop
+      if(this.selectWidgetsCopy) {
         this.selectWidgetsCopy.forEach(item => {
           this.$store.commit("updateWidgetAttrs", {
             left: item.attrs.left + disLeft,
@@ -82,7 +91,7 @@ export default {
     onResizeStart(left, top, width, height, widget) {
       this.startResizeWidth = width
       this.startResizeHeight = height
-      const widgetChildren = findWidgetChildren(this.currentPage.widgets,widget)
+      const widgetChildren = findWidgetChildren(this.currentPage.widgets,widget.cid)
       this.groupWidgetChildrenCopy = cloneDeep(widgetChildren)
     },
     onResize(left, top, width, height, widget) {
@@ -103,10 +112,10 @@ export default {
             width: width * rateW,
             height: height * rateH
           }
-          if (item.attrs.left != 0) {
+          if (item.attrs.left - left != 0) {
             obj.left = disW - obj.width + item.attrs.left + item.attrs.width
           }
-          if (item.attrs.top != 0) {
+          if (item.attrs.top - top != 0) {
             obj.top = disH - obj.height + item.attrs.top + item.attrs.height
           }
           this.$store.commit("updateWidgetAttrs", {
@@ -165,6 +174,10 @@ export default {
         active: false,
         cid: widget.cid
       })
+      let {width,height} = this.currentPage
+      this.$store.commit("setRuler", {
+        shadow: { x: 0, y: 0, width, height }
+      })
     },
     updateHint(show, text) {
       this.$store.commit("setHint", { show, text })
@@ -179,12 +192,12 @@ export default {
   height:100%;
   .my-drag {
     cursor: move;
-    pointer-events:none;
+    pointer-events:auto;
     .handle {
       width: 18px;
       height: 18px;
       border: none;
-      pointer-events:auto;
+      // pointer-events:auto;
       background: url("~@/assets/images/icon/resize-dot.svg") 100% 100%;
       &.handle-tl {
         top: -9px;

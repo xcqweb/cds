@@ -57,7 +57,7 @@ export default {
     start: Number,
     lines: Array,
     selectStart: Number,
-    selectLength: Number,
+    selectLength: Number|String,
     canvasConfigs: Object,
     palette: Object,
     isShowReferLine: Boolean,

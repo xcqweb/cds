@@ -34,7 +34,7 @@ export default {
       if (isGroup(widget)) {
         const childWidgets = findWidgetChildren(
           this.currentPage.widgets,
-          widget
+          widget.cid
         )
         childWidgets.forEach(item => {
           let { left, top } = widget.attrs

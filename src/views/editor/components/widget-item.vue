@@ -2,9 +2,6 @@
   <div 
     class="group-item" 
     :style="objStyle"
-    @mousedown="mousedown"
-    @mousemove="mousemove"
-    @dblclick="dblclick"
     @mouseup="mouseup"
   >
   <template v-if="widget.children">
@@ -74,7 +71,7 @@ export default {
       let tempArr = [...this.selectWidgets]
       tempArr.forEach(item=>{
         if(isGroup(item)) {
-          resChildren = findWidgetChildren(this.currentPage.widgets,item)
+          resChildren = findWidgetChildren(this.currentPage.widgets,item.cid)
           if(resChildren) {
             this.widgetArr = this.widgetArr.concat(resChildren)
           }
@@ -105,9 +102,29 @@ export default {
 
     },
     mouseup() {
+      // clearTimeout(this.timer) // 同一元素 同时绑定单击和双击事件
+      // this.timer = setTimeout(() => {
+      //   let {cid,pid} = this.widget
+      //   let resWidget = this.widget
+      //   console.log(this.widget,"dd------------")
+      //   if(pid) {
+      //     cid = pid
+      //     resWidget = findWidgetById(this.currentPage.widgets,cid)
+      //   }  
+      //   this.$store.commit("updateWidget", { active: true, cid})
+      //   const {left,top,width,height} = resWidget.attrs
+      //   this.$store.commit("setRuler", {
+      //     shadow: { x: left, y: top, width, height }
+      //   })
+      // },100)
       let {cid,pid} = this.widget
       if(pid) {
         cid = pid
+        // 重新计算父组合的信息
+        let widgets = findWidgetChildren(this.currentPage.widgets,cid)
+        const attrs = this.calculateSelectWidgets(widgets)
+        const {left,top,width,height} = attrs
+        this.$store.commit("updateWidgetAttrs",{cid,left,top,width,height})
       }  
       this.$store.commit("updateWidget", { active: true, cid})
     },
@@ -116,6 +133,7 @@ export default {
       this.moving = false
     },
     dblclick(evt) {
+      clearTimeout(this.timer)
       let { x, y } = evt
       const ele = document.querySelector(".viewport")
       const { left, top } = ele.getBoundingClientRect()

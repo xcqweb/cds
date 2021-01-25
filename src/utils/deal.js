@@ -58,11 +58,11 @@ export const isGroup = widget => {
   return widget.cname === config.groupName
 }
 
-export const findWidgetChildren = (widgetList, widget) => {
-  if (!isGroup(widget)) {
+export const findWidgetChildren = (widgetList, cid) => {
+  if (!isGroup(findWidgetById(widgetList,cid))) {
     return []
   }
-  return widgetList.filter(item => item.pid === widget.cid)
+  return widgetList.filter(item => item.pid === cid)
 }
 /**
  * 当前点击的点是否在控件内部
@@ -77,7 +77,7 @@ export const pointIsInWidget = (point, widget) => {
  */
 export function clickWhichWidget(widgets,widget,point) {
   let res = null
-  const widgetChildren = findWidgetChildren(widgets,widget)
+  const widgetChildren = findWidgetChildren(widgets,widget.cid)
   if(widgetChildren.length) {
     for(let i=0;i<widgetChildren.length;i++) {
       if(pointIsInWidget(point,widgetChildren[i])) {
