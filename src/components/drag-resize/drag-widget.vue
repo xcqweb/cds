@@ -1,7 +1,6 @@
 <template>
   <vue-draggable-resizable
     class="group-item"
-    type="node"
     :w="widget.attrs.width"
     :h="widget.attrs.height"
     :x="widget.attrs.left"
