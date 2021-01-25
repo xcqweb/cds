@@ -1,7 +1,7 @@
 <template>
   <vue-draggable-resizable
     class="group-item"
-    type="node"
+    type="draglayer"
     :w="widget.attrs.width"
     :h="widget.attrs.height"
     :x="widget.attrs.left"
@@ -22,7 +22,7 @@
     :handles="handles"
     :cursors="cursors"
   >
-    <component
+    <!-- <component
       :is="widget.cname"
       v-bind="widget.attrs"
       :text="widget.text"
@@ -36,11 +36,11 @@
           :widget="item"
         />
       </template>
-    </component>
+    </component> -->
   </vue-draggable-resizable>
 </template>
 <script>
-import VueDraggableResizable from "./vue-draggable-resizable"
+import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import { cloneDeep } from "lodash"
 import components from "@/views/widgets/index"
 import helpComputed from "@/mixins/help-computed"

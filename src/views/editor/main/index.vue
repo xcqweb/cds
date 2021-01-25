@@ -29,6 +29,14 @@
             <text-editor v-if="isShowTextEditor" />
             <contextmenu />
           </div>
+          <!-- 拖拽层 -->
+          <div class="canvas-layer1">
+            <div class="goup-list" @dragover.prevent @drop="drop">
+              <drag-layer v-for="(widget,index) in widgets"
+                :key="widget.cid + index"
+                :widget="widget" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +54,7 @@ import helpComputed from "@/mixins/help-computed"
 import arrayToTree from "array-to-tree"
 import DragWidget from "@c/drag-resize/drag-widget"
 import GroupSelection from "@c/group-selection/"
+import DragLayer from "@c/drag-layer/"
 import components from "@/views/widgets/index"
 import Contextmenu from "./components/contextmenu"
 import TextEditor from "@c/text-editor"
@@ -60,6 +69,7 @@ export default {
     GroupSelection,
     Contextmenu,
     TextEditor,
+    DragLayer,
     ...components
   },
   computed: {
@@ -275,10 +285,15 @@ export default {
       top: 0;
       width: 100%;
       height: 100%;
+      z-index: 2;
     }
     .canvas-sub {
       .canvas-main;
       pointer-events: none;
+    }
+    .canvas-layer1{
+      .canvas-main;
+      z-index: 3;
     }
   }
   .goup-list {

@@ -2,6 +2,13 @@
   <div
     class="vdrr"
     :style="style"
+    v-if="type === 'node'"
+  >
+    <slot></slot>
+  </div>
+  <div v-else
+    class="vdrr"
+    :style="style"
     :class="{
       draggable: draggable,
       resizable: resizable,
@@ -14,7 +21,7 @@
     @mousedown.stop="elmDown"
     @touchstart.prevent.stop="elmDown"
   >
-    <slot></slot>
+    <!-- <slot></slot> -->
     <template v-if="resizable">
       <div
         v-for="(handle, index) in handles"
@@ -34,7 +41,6 @@
 
 <script>
 import { matchesSelectorToParentElements } from "@u/dom"
-
 export default {
   replace: true,
   name: "VueDraggableResizableRotatable",
@@ -42,6 +48,10 @@ export default {
     active: {
       type: Boolean,
       default: false
+    },
+    type: {
+      type: String,
+      default: ''
     },
     draggable: {
       type: Boolean,
@@ -186,24 +196,27 @@ export default {
     this.fixedY = 0
   },
   mounted() {
-    this.elBase = document.querySelector(".view-con")
-    this.leftEl = document.querySelector(".left-con")
 
-    this.elBase.addEventListener("mousemove", this.handleMove, true)
-    this.elBase.addEventListener("mousedown", this.deselect, true)
-    this.elBase.addEventListener("mouseup", this.handleUp, true)
+    if (this.type === 'draglayer'){
+      this.elBase = document.querySelector(".view-con")
+      this.leftEl = document.querySelector(".left-con")
 
-    // touch events bindings
-    this.elBase.addEventListener("touchmove", this.handleMove, true)
-    this.elBase.addEventListener("touchend touchcancel", this.deselect, true)
-    this.elBase.addEventListener("touchstart", this.handleUp, true)
+      this.elBase.addEventListener("mousemove", this.handleMove, true)
+      this.elBase.addEventListener("mousedown", this.deselect, true)
+      this.elBase.addEventListener("mouseup", this.handleUp, true)
 
-    this.elmX = parseInt(this.$el.style.left)
-    this.elmY = parseInt(this.$el.style.top)
-    this.elmW = this.$el.offsetWidth || this.$el.clientWidth
-    this.elmH = this.$el.offsetHeight || this.$el.clientHeight
+      // touch events bindings
+      this.elBase.addEventListener("touchmove", this.handleMove, true)
+      this.elBase.addEventListener("touchend touchcancel", this.deselect, true)
+      this.elBase.addEventListener("touchstart", this.handleUp, true)
 
-    this.leftEl.addEventListener("mousedown", this.deselect, true)
+      this.elmX = parseInt(this.$el.style.left)
+      this.elmY = parseInt(this.$el.style.top)
+      this.elmW = this.$el.offsetWidth || this.$el.clientWidth
+      this.elmH = this.$el.offsetHeight || this.$el.clientHeight
+
+      this.leftEl.addEventListener("mousedown", this.deselect, true)
+    }
 
     // this.reviewDimensions() // 先注释掉
   },
@@ -674,6 +687,9 @@ export default {
   bottom: -1px;
   left: -1px;
   border: 1px dashed #298df8;
+}
+.vdrr.active{
+  z-index: 1 !important;
 }
 .handle {
   box-sizing: border-box;
