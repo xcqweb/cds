@@ -120,11 +120,6 @@ export default {
       let {cid,pid} = this.widget
       if(pid) {
         cid = pid
-        // 重新计算父组合的信息
-        let widgets = findWidgetChildren(this.currentPage.widgets,cid)
-        const attrs = this.calculateSelectWidgets(widgets)
-        const {left,top,width,height} = attrs
-        this.$store.commit("updateWidgetAttrs",{cid,left,top,width,height})
       }  
       this.$store.commit("updateWidget", { active: true, cid})
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="widget-drag-con" v-show="isShow">
+  <div class="widget-drag-con">
     <vue-draggable-resizable
       v-for="widget in widgets"
       :key="widget.cid"
@@ -21,9 +21,10 @@
       @resizing="
         (left, top, width, height) => onResize(left, top, width, height, widget)
       "
-      @dragstop="onDragStop"
-      @resizestop="onResizeStop"
+      @dragstop="onDragStop(widget)"
+      @resizestop="onResizeStop(widget)"
       @rotatestop="onRotateStop"
+      @activated="onAcivated(widget)"
       @deactivated="onDeactivated(widget)"
       @dblclick.native="dblclick(widget,$event)"
     />
@@ -33,6 +34,7 @@
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
 import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
+import helpMethods from "@/mixins/help-methods"
 import { cloneDeep } from "lodash"
 import { isGroup,findWidgetChildren,clickWhichWidget,findWidgetById } from "@u/deal"
 import config from "@/config"
@@ -41,13 +43,11 @@ export default {
   components: {
     VueDraggableResizable
   },
-  mixins: [helpComputed],
+  mixins: [helpComputed,helpMethods],
   computed: {
-    isShow() {
-      return this.selectWidgets.length>0
-    },
     widgets() {
-      return this.selectWidgets
+      // return this.selectWidgets
+      return this.currentPage.widgets
     },
   },
   methods: {
@@ -78,6 +78,7 @@ export default {
       } 
       const disLeft = left - this.startDragLeft
       const disTop = top - this.startDargTop
+      console.log(disLeft,disTop)
       if(this.selectWidgetsCopy) {
         this.selectWidgetsCopy.forEach(item => {
           this.$store.commit("updateWidgetAttrs", {
@@ -109,14 +110,14 @@ export default {
           const disW = width - this.startResizeWidth
           const disH = height - this.startResizeHeight
           let obj = {
-            width: width * rateW,
-            height: height * rateH
+            width: parseInt(width * rateW),
+            height: parseInt(height * rateH)
           }
           if (item.attrs.left - left != 0) {
-            obj.left = disW - obj.width + item.attrs.left + item.attrs.width
+            obj.left = parseInt(disW - obj.width + item.attrs.left + item.attrs.width)
           }
           if (item.attrs.top - top != 0) {
-            obj.top = disH - obj.height + item.attrs.top + item.attrs.height
+            obj.top = parseInt(disH - obj.height + item.attrs.top + item.attrs.height)
           }
           this.$store.commit("updateWidgetAttrs", {
             ...obj,
@@ -129,6 +130,9 @@ export default {
         shadow: { x: left, y: top, width, height }
       })
     },
+    onAcivated(widget) {
+      console.log(widget,"d------")
+    },
     dblclick(widget,evt) {
       let { x, y } = evt
       const ele = document.querySelector(".viewport")
@@ -138,10 +142,14 @@ export default {
       const editableWidetList = config.editableWidetList
       let {cname} = widget
       const resWidget = clickWhichWidget(this.currentPage.widgets,widget,{x,y})
+      console.log(resWidget,'c-----',widget)
       if(resWidget) {
         cname = resWidget.cname
         this.onDeactivated(widget)
         this.$store.commit("updateWidget", { active: true,  cid: resWidget.cid })
+        // if(editableWidetList.includes( resWidget.cname)) {
+        //   this.$store.commit("setTextEditor", { show: true, widget: resWidget})
+        // }
       } else {
         if(editableWidetList.includes(cname)) {
           this.onDeactivated(widget)
@@ -156,18 +164,20 @@ export default {
       })
       this.updateHint(true, `${rotate}`)
     },
-    onResizeStop() {
+    onResizeStop(widget) {
       undoManager.saveApplyChange()
       this.updateHint(false, "")
+      this.calculateGroup(widget)
     },
     onRotateStop() {
       undoManager.saveApplyChange()
       this.updateHint(false, "")
     },
-    onDragStop() {
+    onDragStop(widget) {
       undoManager.saveApplyChange()
       this.updateHint(false, "")
       this.$store.commit("setShowHelpLine", false)
+      this.calculateGroup(widget)
     },
     onDeactivated(widget) {
       this.$store.commit("updateWidget", {
@@ -181,7 +191,15 @@ export default {
     },
     updateHint(show, text) {
       this.$store.commit("setHint", { show, text })
-    }
+    },
+    calculateGroup(widget) {
+      if(widget.pid) {
+        let widgets = findWidgetChildren(this.currentPage.widgets,widget.pid)
+        const attrs = this.calculateSelectWidgets(widgets)
+        const {left,top,width,height} = attrs
+        this.$store.commit("updateWidgetAttrs",{cid:widget.pid,left,top,width,height})
+      }
+    },
   }
 }
 </script>

@@ -32,6 +32,7 @@ import baseOperate from "@/mixins/base-operate"
 import key from "keymaster"
 import { cloneDeep } from "lodash"
 import {isGroup,findWidgetChildren,findWidgetById} from "@u/deal"
+import { uuid } from "@u/uuid"
 export default {
   name: "Contextmenu",
   mixins: [helpComputed, baseOperate],
