@@ -60,7 +60,7 @@ export default {
   mixins: [helpComputed,helpMethods],
   computed: {
     widgets() {
-      return this.selectWidgets
+      return this.currentPage.widgets
     },
   },
   watch: {
@@ -185,7 +185,6 @@ export default {
         cname = resWidget.cname
         this.onDeactivated(widget)
         this.$store.commit("updateWidget", { active: true,  cid: resWidget.cid })
-        this.$store.commit("setTextEditor", { show: true, widget: resWidget})
         // if(editableWidetList.includes( resWidget.cname)) {
         //   this.$store.commit("setTextEditor", { show: true, widget: resWidget})
         // }

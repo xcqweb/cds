@@ -46,7 +46,7 @@ export default {
       alignItems,
       fontFamily,
       fontSize: `${fontSize}px`,
-      fontWeight: fontWeight ? "bolder" : "normal"
+      fontWeight: fontWeight ? "bolder" : "normal",
     }
     this.text = widget.text
     this.$store.commit("updateWidget", {active: false,cid:widget.cid })
