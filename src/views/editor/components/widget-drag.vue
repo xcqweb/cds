@@ -19,7 +19,7 @@
           onResizeStart(left, top, width, height, widget)
       "
       @resizing="
-        (left, top, width, height) => onResize(left, top, width, height, widget)
+        (left, top, width, height,rotate) => onResize(left, top, width, height, widget,)
       "
       @dragstop="onDragStop(widget)"
       @resizestop="onResizeStop(widget)"
@@ -27,6 +27,9 @@
       @activated="onAcivated(widget)"
       @deactivated="onDeactivated(widget)"
       @dblclick.native="dblclick(widget,$event)"
+      @resizingLine="(dx,dy,rotate)=>resizingLine(dx,dy,rotate,widget)"
+      :handles="handles"
+      :cursors="cursors"
     />
   </div>
 </template>
@@ -38,6 +41,17 @@ import helpMethods from "@/mixins/help-methods"
 import { cloneDeep } from "lodash"
 import { isGroup,findWidgetChildren,clickWhichWidget,findWidgetById } from "@u/deal"
 import config from "@/config"
+const handles = ["tl", "tm", "tr", "mr", "br", "bm", "bl", "ml", "rot"]
+const cursors = [
+  "nw-resize",
+  "n-resize",
+  "ne-resize",
+  "e-resize",
+  "se-resize",
+  "s-resize",
+  "sw-resize",
+  "w-resize"
+]
 export default {
   name: "WidgetDrag",
   components: {
@@ -46,27 +60,44 @@ export default {
   mixins: [helpComputed,helpMethods],
   computed: {
     widgets() {
-      // return this.selectWidgets
-      return this.currentPage.widgets
+      return this.selectWidgets
     },
+  },
+  watch: {
+    cname:{
+      handler(val) {
+        if (val === "GtLine") {
+          this.handles = ["mr", "ml"]
+          this.cursors = ["e-resize", "w-resize"]
+        } else {
+          this.handles = handles
+          this.cursors = cursors
+        }
+      },
+      immediate:true,
+    }
+  },
+  data() {
+    return {
+      handles,
+      cursors
+    }
   },
   methods: {
     onDragStart(left, top) {
       this.startDragLeft = left
       this.startDargTop = top
-      if (this.selectWidgets.length === 1 && isGroup(this.selectWidgets[0])) {
-        this.selectWidgetsCopy = findWidgetChildren(this.currentPage.widgets,this.selectWidgets[0].cid)
+      if (this.selectWidgets.length === 1) {
+        const widget = this.selectWidgets[0]
+        if(isGroup(widget)) {
+          this.selectWidgetsCopy = findWidgetChildren(this.currentPage.widgets,widget.cid)
+        }
       } else {
         this.selectWidgetsCopy = cloneDeep(this.selectWidgets)
       }
     },
     onDrag(left, top, widget) {
       if (this.selectWidgets.length === 1) {
-        this.$store.commit("updateWidgetAttrs", {
-          left,
-          top,
-          cid: widget.cid
-        })
         this.updateHint(true, `${left},${top}`)
         const { rotate, width, height } = widget.attrs
         if (rotate % 180 == 0) {
@@ -78,7 +109,6 @@ export default {
       } 
       const disLeft = left - this.startDragLeft
       const disTop = top - this.startDargTop
-      console.log(disLeft,disTop)
       if(this.selectWidgetsCopy) {
         this.selectWidgetsCopy.forEach(item => {
           this.$store.commit("updateWidgetAttrs", {
@@ -88,12 +118,20 @@ export default {
           })
         })
       }
+      this.$store.commit("updateWidgetAttrs", {
+        left,
+        top,
+        cid: widget.cid
+      })
     },
     onResizeStart(left, top, width, height, widget) {
       this.startResizeWidth = width
       this.startResizeHeight = height
       const widgetChildren = findWidgetChildren(this.currentPage.widgets,widget.cid)
       this.groupWidgetChildrenCopy = cloneDeep(widgetChildren)
+      if(this.handles.length == 2) {
+        this.copyLineAttrs = cloneDeep(widget.attrs)
+      }
     },
     onResize(left, top, width, height, widget) {
       this.$store.commit("updateWidgetAttrs", {
@@ -110,14 +148,14 @@ export default {
           const disW = width - this.startResizeWidth
           const disH = height - this.startResizeHeight
           let obj = {
-            width: parseInt(width * rateW),
-            height: parseInt(height * rateH)
+            width: Math.round(width * rateW),
+            height: Math.round(height * rateH)
           }
           if (item.attrs.left - left != 0) {
-            obj.left = parseInt(disW - obj.width + item.attrs.left + item.attrs.width)
+            obj.left = (disW - obj.width + item.attrs.left + item.attrs.width)
           }
           if (item.attrs.top - top != 0) {
-            obj.top = parseInt(disH - obj.height + item.attrs.top + item.attrs.height)
+            obj.top = (disH - obj.height + item.attrs.top + item.attrs.height)
           }
           this.$store.commit("updateWidgetAttrs", {
             ...obj,
@@ -165,19 +203,21 @@ export default {
       this.updateHint(true, `${rotate}`)
     },
     onResizeStop(widget) {
-      undoManager.saveApplyChange()
       this.updateHint(false, "")
       this.calculateGroup(widget)
+      undoManager.saveApplyChange()
+      this.groupWidgetChildrenCopy = []
     },
     onRotateStop() {
-      undoManager.saveApplyChange()
       this.updateHint(false, "")
+      undoManager.saveApplyChange()
     },
     onDragStop(widget) {
-      undoManager.saveApplyChange()
       this.updateHint(false, "")
       this.$store.commit("setShowHelpLine", false)
       this.calculateGroup(widget)
+      undoManager.saveApplyChange()
+      this.selectWidgetsCopy = null
     },
     onDeactivated(widget) {
       this.$store.commit("updateWidget", {
@@ -193,13 +233,22 @@ export default {
       this.$store.commit("setHint", { show, text })
     },
     calculateGroup(widget) {
+      let widgets
       if(widget.pid) {
-        let widgets = findWidgetChildren(this.currentPage.widgets,widget.pid)
+        widgets = findWidgetChildren(this.currentPage.widgets,widget.pid)
+      } else if(isGroup(widget)) {
+        widgets = findWidgetChildren(this.currentPage.widgets,widget.cid)
+      }
+      if(widgets) {
         const attrs = this.calculateSelectWidgets(widgets)
         const {left,top,width,height} = attrs
         this.$store.commit("updateWidgetAttrs",{cid:widget.pid,left,top,width,height})
       }
     },
+    resizingLine(dx,dy,rotate,widget) {
+      console.log(dx,dy,"a------",rotate)
+      const {left,top,width,height} = this.copyLineAttrs
+    }
   }
 }
 </script>

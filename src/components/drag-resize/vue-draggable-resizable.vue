@@ -112,14 +112,14 @@ export default {
       type: Array,
       default: function() {
         return [
-          "nwse-resize",
-          "ns-resize",
-          "nesw-resize",
-          "ew-resize",
-          "nwse-resize",
-          "ns-resize",
-          "nesw-resize",
-          "ew-resize"
+          "nw-resize",
+          "n-resize",
+          "ne-resize",
+          "e-resize",
+          "se-resize",
+          "s-resize",
+          "sw-resize",
+          "w-resize"
         ]
       }
     },
@@ -377,75 +377,77 @@ export default {
         return
       }
       let { x: mouseX, y: mouseY } = this.getMouseCoordinate(e)
-
       if (this.resizing) {
         let rotate = this.rotate
         let width = mouseX - this.lastMouseX
         let height = mouseY - this.lastMouseY
-        let c = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))
         let angle = this.getAngle(width, height)
-        let rad = (Math.PI / 180) * (angle - rotate)
-        let diffY = Math.round(Math.sin(rad) * c)
-        let diffX = Math.round(Math.cos(rad) * c)
-
-        this.elmX = this.lastElmX
-        this.elmY = this.lastElmY
-        this.elmW = this.lastElmW
-        this.elmH = this.lastElmH
-
-        let [handleY, handleX] = this.handle
-
-        if (handleX !== "m") {
-          this.elmW += diffX * (handleX === "r" ? 1 : -1)
-        }
-
-        if (handleY !== "m") {
-          this.elmH += diffY * (handleY === "b" ? 1 : -1)
-        }
-
-        if (this.elmW < this.minw) {
-          this.elmW = this.minw
-        }
-
-        if (this.elmH < this.minh) {
-          this.elmH = this.minh
-        }
-
-        this.fixedTo()
-
-        if (this.parent) {
-          let change = false
-
-          if (this.elmX < this.parentX) {
-            this.elmW -= Math.round(this.parentX - this.elmX)
-            change = true
+        if(this.handles.length ===2)  {// 直线
+          this.$emit("resizingLine", width,height,angle)
+        } else {
+          let c = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))
+          let rad = (Math.PI / 180) * (angle - rotate)
+          let diffY = Math.round(Math.sin(rad) * c)
+          let diffX = Math.round(Math.cos(rad) * c)
+          this.elmX = this.lastElmX
+          this.elmY = this.lastElmY
+          this.elmW = this.lastElmW
+          this.elmH = this.lastElmH
+  
+          let [handleY, handleX] = this.handle
+  
+          if (handleX !== "m") {
+            this.elmW += diffX * (handleX === "r" ? 1 : -1)
           }
-
-          if (this.elmY < this.parentY) {
-            this.elmH -= Math.round(this.parentY - this.elmY)
-            change = true
+  
+          if (handleY !== "m") {
+            this.elmH += diffY * (handleY === "b" ? 1 : -1)
           }
-
-          if (this.elmX + this.elmW > this.parentW) {
-            this.elmW = Math.round(this.parentW - this.elmX)
-            change = true
+  
+          if (this.elmW < this.minw) {
+            this.elmW = this.minw
           }
-
-          if (this.elmY + this.elmH > this.parentH) {
-            this.elmH = Math.round(this.parentH - this.elmY)
-            change = true
+  
+          if (this.elmH < this.minh) {
+            this.elmH = this.minh
           }
-
-          if (change) {
-            this.fixedTo()
+  
+          this.fixedTo()
+  
+          if (this.parent) {
+            let change = false
+  
+            if (this.elmX < this.parentX) {
+              this.elmW -= Math.round(this.parentX - this.elmX)
+              change = true
+            }
+  
+            if (this.elmY < this.parentY) {
+              this.elmH -= Math.round(this.parentY - this.elmY)
+              change = true
+            }
+  
+            if (this.elmX + this.elmW > this.parentW) {
+              this.elmW = Math.round(this.parentW - this.elmX)
+              change = true
+            }
+  
+            if (this.elmY + this.elmH > this.parentH) {
+              this.elmH = Math.round(this.parentH - this.elmY)
+              change = true
+            }
+  
+            if (change) {
+              this.fixedTo()
+            }
           }
+  
+          this.left = Math.round(this.elmX / this.grid[0]) * this.grid[0]
+          this.top = Math.round(this.elmY / this.grid[1]) * this.grid[1]
+          this.width = Math.round(this.elmW / this.grid[0]) * this.grid[0]
+          this.height = Math.round(this.elmH / this.grid[1]) * this.grid[1]
+          this.$emit("resizing", this.left, this.top, this.width, this.height)
         }
-
-        this.left = Math.round(this.elmX / this.grid[0]) * this.grid[0]
-        this.top = Math.round(this.elmY / this.grid[1]) * this.grid[1]
-        this.width = Math.round(this.elmW / this.grid[0]) * this.grid[0]
-        this.height = Math.round(this.elmH / this.grid[1]) * this.grid[1]
-        this.$emit("resizing", this.left, this.top, this.width, this.height)
       } else if (this.dragging) {
         this.elmX = this.lastElmX
         this.elmY = this.lastElmY

@@ -27,20 +27,29 @@ export default {
   mixins: [baseWidget],
   computed: {
     d() {
+      let lineH = this.height == 1 ? 0.5 : this.height
       let sx = 0
-      let sy = 0.5
-      let ex = 150
-      let ey = 0.5
+      let sy = lineH
+      let ex = this.width
+      let ey = lineH
       return `M ${sx} ${sy} L ${ex} ${ey}`
     },
     stroke() {
-      return `rgba(187,187,187,1)`
+      return this.borderColor || "#bbb"
+      
     },
     strokeWidth() {
-      return 1
+      let res = this.borderWidth || 1
+      return `${res}px`
     },
     strokeDasharray() {
-      return []
+      let res = []
+      if(this.borderStyle == 'dotted') {
+        res = [this.borderWidth*2,this.borderWidth]
+      }else if(this.borderStyle == 'dashed') {
+        res = [this.borderWidth,this.borderWidth]
+      }
+      return res.join(' ')
     }
   },
   data() {

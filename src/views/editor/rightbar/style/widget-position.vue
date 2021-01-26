@@ -30,10 +30,11 @@
           v-model.number="attrs.height"
           type="number"
           suffix="H"
+          :disabled="cname=='GtLine'"
           style="width: 40%"
         />
       </div>
-      <div class="input-con fs" v-if="cname != 'GtLine'">
+      <div class="input-con fs">
         <a-input
           size="small"
           v-model.number="attrs.rotate"

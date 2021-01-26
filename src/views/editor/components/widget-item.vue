@@ -12,13 +12,13 @@
       :widget="item"
     />
   </template>
-   <component
-      v-else
-      :is="widget.cname"
-      v-bind="widget.attrs"
-      :text="widget.text"
-      :cid="widget.cid"
-    />
+  <component
+    v-else
+    :is="widget.cname"
+    v-bind="widget.attrs"
+    :text="widget.text"
+    :cid="widget.cid"
+  />
   </div>
 </template>
 <script>
@@ -120,7 +120,7 @@ export default {
       let {cid,pid} = this.widget
       if(pid) {
         cid = pid
-      }  
+      } 
       this.$store.commit("updateWidget", { active: true, cid})
     },
     mouseupBody() {
