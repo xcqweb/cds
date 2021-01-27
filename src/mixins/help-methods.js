@@ -1,3 +1,4 @@
+import { dealRotatePos } from "@u/deal"
 export default {
   methods: {
     calculateSelectWidgets(selectWidgets) {
@@ -7,7 +8,7 @@ export default {
         maxY = 0,
         maxZIndex = 0
       selectWidgets.forEach(item => {
-        let { left, top, width, height, zIndex } = item.attrs
+        let { left, top, width, height, zIndex } = dealRotatePos(item.attrs)
         minX = Math.min(left, minX)
         minY = Math.min(top, minY)
         maxX = Math.max(left + width, maxX)
