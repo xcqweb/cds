@@ -53,7 +53,7 @@ export default {
         height: `${height}px`,
         left: `${left}px`,
         top: `${top}px`,
-        transform: `rotate(${rotate}deg)`
+        transform: `rotate(${rotate}deg)`,
       }
     }
   },
