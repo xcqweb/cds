@@ -58,17 +58,17 @@ export default {
         lx = 0
         ly = this.height
       }
-      // else if(this.rotate ==  180) {
-      //   mx = this.width
-      //   my = 0.5
-      //   lx = 0
-      //   ly = 0.5
-      // } else if(this.rotate>180) {
-      //   mx = this.width
-      //   my = this.height
-      //   lx = 0
-      //   ly = 0
-      // }
+      else if(this.rotate ==  180) {
+        mx = this.width
+        my = 0.5
+        lx = 0
+        ly = 0.5
+      } else if(this.rotate>180) {
+        mx = this.width
+        my = this.height
+        lx = 0
+        ly = 0
+      }
       return `M ${mx} ${my} L ${lx} ${ly}`
     },
     stroke() {

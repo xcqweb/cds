@@ -44,9 +44,12 @@ export default {
       const {width,height} = this.widget.attrs
       let left = -9
       let top = -9
-      if(this.rotate>90) {
-        left = width - 9
+      if(this.rotate>180) {
+
       }
+      else if(this.rotate>90) {
+        left = width - 9
+      } 
       return {
         cursor:this.cursor,
         left:`${left}px`,
@@ -57,7 +60,10 @@ export default {
       const {width,height} = this.widget.attrs
       let left = width - 9
       let top = height - 9
-      if(this.rotate>90) {
+      if(this.rotate>180) {
+        
+      }
+      else if(this.rotate>90) {
         left = -9
       }
       return {
@@ -72,13 +78,13 @@ export default {
     }
   },
   mounted() {
-    this.elBase = document.querySelector("body")
-    this.elBase.addEventListener("mousedown", this.deselect, true)
-    this.elBase.addEventListener("mouseup", this.mouseup, true)
-    this.$nextTick(()=>{
-      this.ele = document.querySelector(".viewport")
-      this.elBase.addEventListener("mousemove",this.mousemove,true)
-    })
+    // this.elBase = document.querySelector("body")
+    // this.elBase.addEventListener("mousedown", this.deselect, true)
+    // this.elBase.addEventListener("mouseup", this.mouseup, true)
+    // this.$nextTick(()=>{
+    //   this.ele = document.querySelector(".viewport")
+    //   this.elBase.addEventListener("mousemove",this.mousemove,true)
+    // })
   },
   beforeDestroy() {
     this.elBase.removeEventListener("mousedown", this.deselect, true)
@@ -111,7 +117,6 @@ export default {
         height = epos.y-spos.y
         let rotate = this.getAngle(width,height)
         width = Math.abs(width)
-        console.log(width,"a------")
         height = Math.abs(height)
         if(rotate>90) {
           left = left - width
