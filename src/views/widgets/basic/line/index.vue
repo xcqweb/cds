@@ -63,10 +63,20 @@ export default {
         my = 0.5
         lx = 0
         ly = 0.5
-      } else if(this.rotate>180) {
+      } else if(this.rotate>180 && this.rotate<270) {
         mx = this.width
         my = this.height
         lx = 0
+        ly = 0
+      } else if(this.rotate == 270) {
+        mx = 0.5
+        my = this.height
+        lx = 0.5
+        ly = 0
+      }else if(this.rotate>270) {
+        mx = 0
+        my = this.height
+        lx = this.width
         ly = 0
       }
       return `M ${mx} ${my} L ${lx} ${ly}`
