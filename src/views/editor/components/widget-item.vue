@@ -2,7 +2,7 @@
   <div 
     class="group-item" 
     :style="objStyle"
-    @mouseup="mouseup"
+    @click="click"
   >
   <template v-if="widget.children">
     <widget-item
@@ -45,6 +45,9 @@ export default {
         left = left - pleft
         top = top - ptop
       }
+      if(this.widget.cname=='GtLine') {
+        rotate = 0
+      }
       return {
         width: `${width}px`,
         height: `${height}px`,
@@ -58,101 +61,16 @@ export default {
     return {}
   },
   created() {
-    document.querySelector('body').addEventListener('mouseup',this.mouseupBody)
   },
   beforeDestroy() {
-    document.querySelector('body').removeEventListener('mouseup',this.mouseupBody)
   },
   methods: {
-    mousedown(evt) {
-      const {x,y,target} = evt
-      this.widgetArr = []
-      let resChildren
-      let tempArr = [...this.selectWidgets]
-      tempArr.forEach(item=>{
-        if(isGroup(item)) {
-          resChildren = findWidgetChildren(this.currentPage.widgets,item.cid)
-          if(resChildren) {
-            this.widgetArr = this.widgetArr.concat(resChildren)
-          }
-        }
-        if(item.cid!=this.widget.cid) {
-          this.widgetArr.push(item)
-        }
-      })
-      this.widgetArr.push(this.widget)
-      this.widgetStartX = x
-      this.widgetStartY = y
-      this.widgetMoveStart = true
-    },
-    mousemove(evt) {
-      if(this.widgetMoveStart) {
-        this.moving = true
-        const {x,y,target} = evt
-        let disX = x - this.widgetStartX
-        let disY = y - this.widgetStartY
-        this.widgetArr.forEach(item=>{
-          this.$store.commit("updateWidgetAttrs", {
-            left:item.attrs.left + disX,
-            top:item.attrs.top + disY,
-            cid:item.cid
-          })
-        })
-      }
-
-    },
-    mouseup() {
-      // clearTimeout(this.timer) // 同一元素 同时绑定单击和双击事件
-      // this.timer = setTimeout(() => {
-      //   let {cid,pid} = this.widget
-      //   let resWidget = this.widget
-      //   console.log(this.widget,"dd------------")
-      //   if(pid) {
-      //     cid = pid
-      //     resWidget = findWidgetById(this.currentPage.widgets,cid)
-      //   }  
-      //   this.$store.commit("updateWidget", { active: true, cid})
-      //   const {left,top,width,height} = resWidget.attrs
-      //   this.$store.commit("setRuler", {
-      //     shadow: { x: left, y: top, width, height }
-      //   })
-      // },100)
+    click() {
       let {cid,pid} = this.widget
       if(pid) {
         cid = pid
       } 
       this.$store.commit("updateWidget", { active: true, cid})
-    },
-    mouseupBody() {
-      this.widgetMoveStart = false
-      this.moving = false
-    },
-    dblclick(evt) {
-      clearTimeout(this.timer)
-      let { x, y } = evt
-      const ele = document.querySelector(".viewport")
-      const { left, top } = ele.getBoundingClientRect()
-      x = x - left
-      y = y - top
-      const editableWidetList = config.editableWidetList
-      let {cname} = this.widget
-      const resWidget = clickWhichWidget(this.currentPage.widgets,this.widget,{x,y})
-      if(resWidget) {
-        cname = resWidget.cname
-         this.$store.commit("updateWidget", {
-          active: false,
-          cid: this.widget.cid
-        })
-        this.$store.commit("updateWidget", { active: true,  cid: resWidget.cid })
-      } else {
-        if(editableWidetList.includes(cname)) {
-          this.$store.commit("updateWidget", {
-            active: false,
-            cid: this.widget.cid
-          })
-          this.$store.commit("setTextEditor", { show: true, widget:this.widget})
-        }
-      }
     },
   }
 }

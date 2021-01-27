@@ -1,61 +1,53 @@
 <template>
   <div class="widget-drag-con">
-    <vue-draggable-resizable
-      v-for="widget in widgets"
-      :key="widget.cid"
-      class="my-drag"
-      :w="widget.attrs.width"
-      :h="widget.attrs.height"
-      :x="widget.attrs.left"
-      :y="widget.attrs.top"
-      :r="widget.attrs.rotate"
-      :z="widget.attrs.zIndex"
-      :active.sync="widget.active"
-      @dragstart="onDragStart"
-      @dragging="(left,top)=>onDrag(left,top,widget)"
-      @rotating="rotate => onRotate(rotate, widget)"
-      @resizestart="
-        (left, top, width, height) =>
-          onResizeStart(left, top, width, height, widget)
-      "
-      @resizing="
-        (left, top, width, height,rotate) => onResize(left, top, width, height, widget,)
-      "
-      @dragstop="onDragStop(widget)"
-      @resizestop="onResizeStop(widget)"
-      @rotatestop="onRotateStop"
-      @activated="onAcivated(widget)"
-      @deactivated="onDeactivated(widget)"
-      @dblclick.native="dblclick(widget,$event)"
-      @resizingLine="(dx,dy,rotate)=>resizingLine(dx,dy,rotate,widget)"
-      :handles="handles"
-      :cursors="cursors"
-    />
+    <template v-for="widget in widgets">
+      <drag-line v-if="widget.cname=='GtLine'" :widget="widget"/>
+      <vue-draggable-resizable
+        v-else
+        :key="widget.cid"
+        class="my-drag"
+        :w="widget.attrs.width"
+        :h="widget.attrs.height"
+        :x="widget.attrs.left"
+        :y="widget.attrs.top"
+        :r="widget.attrs.rotate"
+        :z="widget.attrs.zIndex"
+        :active.sync="widget.active"
+        @dragstart="onDragStart"
+        @dragging="(left,top)=>onDrag(left,top,widget)"
+        @rotating="rotate => onRotate(rotate, widget)"
+        @resizestart="
+          (left, top, width, height) =>
+            onResizeStart(left, top, width, height, widget)
+        "
+        @resizing="
+          (left, top, width, height,rotate) => onResize(left, top, width, height, widget,)
+        "
+        @dragstop="onDragStop(widget)"
+        @resizestop="onResizeStop(widget)"
+        @rotatestop="onRotateStop"
+        @activated="onAcivated(widget)"
+        @deactivated="onDeactivated(widget)"
+        @dblclick.native="dblclick(widget,$event)"
+        :resizable="widget.active"
+      />
+    </template>
   </div>
 </template>
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
+import DragLine from '@c/drag-resize/drag-line'
 import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
 import { cloneDeep } from "lodash"
 import { isGroup,findWidgetChildren,clickWhichWidget,findWidgetById } from "@u/deal"
 import config from "@/config"
-const handles = ["tl", "tm", "tr", "mr", "br", "bm", "bl", "ml", "rot"]
-const cursors = [
-  "nw-resize",
-  "n-resize",
-  "ne-resize",
-  "e-resize",
-  "se-resize",
-  "s-resize",
-  "sw-resize",
-  "w-resize"
-]
 export default {
   name: "WidgetDrag",
   components: {
-    VueDraggableResizable
+    VueDraggableResizable,
+    DragLine
   },
   mixins: [helpComputed,helpMethods],
   computed: {
@@ -63,24 +55,8 @@ export default {
       return this.currentPage.widgets
     },
   },
-  watch: {
-    cname:{
-      handler(val) {
-        if (val === "GtLine") {
-          this.handles = ["mr", "ml"]
-          this.cursors = ["e-resize", "w-resize"]
-        } else {
-          this.handles = handles
-          this.cursors = cursors
-        }
-      },
-      immediate:true,
-    }
-  },
   data() {
     return {
-      handles,
-      cursors
     }
   },
   methods: {
@@ -129,7 +105,7 @@ export default {
       this.startResizeHeight = height
       const widgetChildren = findWidgetChildren(this.currentPage.widgets,widget.cid)
       this.groupWidgetChildrenCopy = cloneDeep(widgetChildren)
-      if(this.handles.length == 2) {
+      if(widget.cname == 'GtLine') {
         this.copyLineAttrs = cloneDeep(widget.attrs)
       }
     },
@@ -245,10 +221,6 @@ export default {
         this.$store.commit("updateWidgetAttrs",{cid:widget.pid,left,top,width,height})
       }
     },
-    resizingLine(dx,dy,rotate,widget) {
-      console.log(dx,dy,"a------",rotate)
-      const {left,top,width,height} = this.copyLineAttrs
-    }
   }
 }
 </script>

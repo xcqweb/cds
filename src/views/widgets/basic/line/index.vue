@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-line" :style="styleObj">
+  <div class="gt-line" :style="lineStyle">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       style="overflow: visible; filter: none;"
@@ -26,13 +26,50 @@ export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
+    lineStyle() {
+      return {
+        ...this.styleObj,
+        background:'transparent'
+      }
+    },
     d() {
-      let lineH = this.height == 1 ? 0.5 : this.height
-      let sx = 0
-      let sy = lineH
-      let ex = this.width
-      let ey = lineH
-      return `M ${sx} ${sy} L ${ex} ${ey}`
+      let mx = 0
+      let my = 0
+      let lx = 0
+      let ly = 0
+      if(this.rotate==0) {
+        mx = 0
+        my = 0.5
+        lx = this.width
+        ly = 0.5
+      }else if(this.rotate>0 && this.rotate<90) {
+        mx = 0
+        my = 0
+        lx = this.width
+        ly = this.height
+      }else if(this.rotate == 90) {
+        mx = 0.5
+        my = 0
+        lx = 0.5
+        ly = this.height
+      } else if(this.rotate>90 && this.rotate<180) {
+        mx = this.width
+        my = 0
+        lx = 0
+        ly = this.height
+      }
+      // else if(this.rotate ==  180) {
+      //   mx = this.width
+      //   my = 0.5
+      //   lx = 0
+      //   ly = 0.5
+      // } else if(this.rotate>180) {
+      //   mx = this.width
+      //   my = this.height
+      //   lx = 0
+      //   ly = 0
+      // }
+      return `M ${mx} ${my} L ${lx} ${ly}`
     },
     stroke() {
       return this.borderColor || "#bbb"
@@ -55,12 +92,21 @@ export default {
   data() {
     return {}
   },
-  created() {},
+  created() {
+  },
   methods: {}
 }
 </script>
 <style lang="less" scoped>
 .gt-line {
   pointer-events: none;
+  svg{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: inherit;
+    position:absolute;
+  }
 }
 </style>
