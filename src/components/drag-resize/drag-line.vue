@@ -114,7 +114,7 @@ export default {
         console.log(width,"a------")
         height = Math.abs(height)
         if(rotate>90) {
-          left = left + width
+          left = left - width
         }
         this.$store.commit('updateWidgetAttrs',{width,height,left,top,cid:this.widget.cid,rotate})
       }
