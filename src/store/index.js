@@ -185,7 +185,6 @@ export default new Vuex.Store({
       state.ruler.shadow = { x: left, y: top, width, height }
     },
     updateWidgetAttrs(state, attrs) {
-      debugger
       let currentWidget = this.getters.currentWidget
       const currentPage = this.getters.currentPage
       if (attrs.cid) {

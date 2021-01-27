@@ -11,7 +11,6 @@
         :x="widget.attrs.left"
         :y="widget.attrs.top"
         :r="widget.attrs.rotate"
-        :z="widget.attrs.zIndex"
         :active.sync="widget.active"
         @dragstart="onDragStart"
         @dragging="(left,top)=>onDrag(left,top,widget)"
@@ -145,9 +144,10 @@ export default {
       })
     },
     onAcivated(widget) {
-      console.log(widget,"d------")
+      console.log(widget,"d----onAcivated--")
     },
     dblclick(widget,evt) {
+      console.log("why---------")
       let { x, y } = evt
       const ele = document.querySelector(".viewport")
       const { left, top } = ele.getBoundingClientRect()
