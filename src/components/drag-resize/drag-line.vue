@@ -5,13 +5,11 @@
         class="handle" 
         :style="startStyle" 
         @mousedown="mousedown" 
-        @mousemove="mousemove"
       />
       <div 
         class="handle" 
         :style="endStyle"
         @mousedown="mousedown" 
-        @mousemove="mousemove"
       />
     </template>
   </div>
@@ -77,10 +75,15 @@ export default {
     this.elBase = document.querySelector("body")
     this.elBase.addEventListener("mousedown", this.deselect, true)
     this.elBase.addEventListener("mouseup", this.mouseup, true)
+    this.$nextTick(()=>{
+      this.ele = document.querySelector(".viewport")
+      this.elBase.addEventListener("mousemove",this.mousemove,true)
+    })
   },
   beforeDestroy() {
     this.elBase.removeEventListener("mousedown", this.deselect, true)
     this.elBase.removeEventListener("mouseup", this.mouseup, true)
+    this.elBase.removeEventListener("mousemove",this.mousemove,true)
   },
   methods: {
     deselect(e) {
@@ -95,8 +98,7 @@ export default {
       let {x,y} = evt
       this.widgetAttrs = this.widget.attrs
       this.resizing = true
-      const ele = document.querySelector(".viewport")
-      let { left, top } = ele.getBoundingClientRect()
+      let { left, top } = this.ele.getBoundingClientRect()
       this.basePos = {x:left,y:top}
     },
     mousemove(evt) {
@@ -111,9 +113,9 @@ export default {
         width = Math.abs(width)
         console.log(width,"a------")
         height = Math.abs(height)
-        // if(rotate>90) {
-        //   left = left + width
-        // }
+        if(rotate>90) {
+          left = left + width
+        }
         this.$store.commit('updateWidgetAttrs',{width,height,left,top,cid:this.widget.cid,rotate})
       }
     },
