@@ -142,27 +142,33 @@ export default {
     return {}
   },
   mounted() {
-    this.elBase = document.querySelector(".view-con")
-    this.leftEl = document.querySelector(".left-con")
-    this.elBase.addEventListener("mousedown", this.deselect, true)
-    this.leftEl.addEventListener("mousedown", this.deselect, true)
-    this.elBase.addEventListener("mouseup", this.mouseup, true)
-    this.elBase.addEventListener("mousemove", this.mousemove, true)
+    if(!this.isPreview) {
+      this.elBase = document.querySelector(".view-con")
+      this.leftEl = document.querySelector(".left-con")
+      this.elBase.addEventListener("mousedown", this.deselect, true)
+      this.leftEl.addEventListener("mousedown", this.deselect, true)
+      this.elBase.addEventListener("mouseup", this.mouseup, true)
+      this.elBase.addEventListener("mousemove", this.mousemove, true)
+    }
   },
   beforeDestroy() {
-    this.elBase.removeEventListener("mousedown", this.deselect, true)
-    this.leftEl.removeEventListener("mousedown", this.deselect, true)
-    this.elBase.removeEventListener("mouseup", this.mouseup, true)
-    this.elBase.removeEventListener("mousemove", this.mousemove, true)
+    if(!this.isPreview) {
+      this.elBase.removeEventListener("mousedown", this.deselect, true)
+      this.leftEl.removeEventListener("mousedown", this.deselect, true)
+      this.elBase.removeEventListener("mouseup", this.mouseup, true)
+      this.elBase.removeEventListener("mousemove", this.mousemove, true)
+    }
   },
   methods: {
     elmDown(evt) {
-      this.dragging = true
-      let { x, y } = evt
-      this.lastX = x - this.left
-      this.lastY = y - this.top
-      this.getBasePos()
-      this.$store.commit("updateWidget", { active: true, cid: this.cid })
+      if(!this.isPreview) {
+        this.dragging = true
+        let { x, y } = evt
+        this.lastX = x - this.left
+        this.lastY = y - this.top
+        this.getBasePos()
+        this.$store.commit("updateWidget", { active: true, cid: this.cid })
+      }
     },
     getBasePos() {
       const ele = document.querySelector(".viewport")
