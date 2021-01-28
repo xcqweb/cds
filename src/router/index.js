@@ -24,7 +24,11 @@ const routes = [
     name: "Preview",
     component: () =>
       import(/* webpackChunkName: "Preview" */ "@v/preview/index.vue")
-  }
+  },
+  {
+    path: "*",
+    redirect: "/"
+  },
 ]
 
 const router = new VueRouter({

@@ -17,7 +17,7 @@
           style="width: 40%"
         />
       </div>
-      <div class="input-con fs">
+      <div class="input-con fs" v-if="show">
         <a-input
           size="small"
           v-model.number="attrs.width"
@@ -30,11 +30,10 @@
           v-model.number="attrs.height"
           type="number"
           suffix="H"
-          :disabled="cname == 'GtLine'"
           style="width: 40%"
         />
       </div>
-      <div class="input-con fs">
+      <div class="input-con fs" v-if="show">
         <a-input
           size="small"
           v-model.number="attrs.rotate"
@@ -61,6 +60,12 @@ const keyList = ["up", "right", "down", "left"]
 export default {
   name: "WidgetPosition",
   mixins: [helpComputed],
+  computed: {
+    show() {
+      const widgetNames = ["GtLine"]
+      return !widgetNames.includes(this.cname)
+    }
+  },
   data() {
     return {}
   },

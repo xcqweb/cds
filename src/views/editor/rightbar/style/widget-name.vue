@@ -12,7 +12,7 @@
       <div class="fs">
         <label>不透明度</label>
         <a-slider
-          v-model="attrs.opacity"
+          v-model.number="attrs.opacity"
           :min="0"
           :max="100"
           style="width:30%"
