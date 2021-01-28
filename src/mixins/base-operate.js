@@ -10,6 +10,7 @@ export default {
       let widgets = this.selectWidgets
       const cname = config.groupName
       const name = `组合`
+      
       const attrs = this.calculateSelectWidgets(widgets)
       widgets.forEach(item => {
         if (isGroup(item)) {

@@ -42,5 +42,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
+  word-break: break-word;
+  overflow: hidden;
 }
 </style>

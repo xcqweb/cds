@@ -34,6 +34,7 @@ export default {
       alignItems,
       fontFamily,
       fontSize,
+      rotate,
       fontWeight
     } = widget.attrs
     this.objStyle = {
@@ -45,6 +46,7 @@ export default {
       justifyContent,
       alignItems,
       fontFamily,
+      transform: "rotate(" + rotate + "deg)",
       fontSize: `${fontSize}px`,
       fontWeight: fontWeight ? "bolder" : "normal",
     }

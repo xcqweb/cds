@@ -24,11 +24,9 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.el = document.querySelector(".view-con")
-      if (this.el) {
-        this.el.addEventListener("mousedown", this.mousedown,false)
-        this.el.addEventListener("mousemove", this.mousemove,false)
-        document.body.addEventListener("mouseup", this.mouseup,false)
-      }
+      this.el.addEventListener("mousedown", this.mousedown,false)
+      this.el.addEventListener("mousemove", this.mousemove,false)
+      document.body.addEventListener("mouseup", this.mouseup,false)
     })
   },
   beforeDestroy() {
