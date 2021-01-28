@@ -43,6 +43,7 @@ export default {
   width: 100%;
   height: 18px;
   background: url("~@/assets/images/icon/arrow_letf.png") no-repeat center left;
+  background-size: contain;
   cursor: pointer;
   pointer-events: auto;
 }
@@ -50,6 +51,7 @@ export default {
   width: 100%;
   height: 18px;
   background: url("~@/assets/images/icon/arrow_right.png") no-repeat center left;
+  background-size: contain;
   cursor: pointer;
   pointer-events: auto;
 }
@@ -57,10 +59,9 @@ export default {
   width: 100%;
   height: 18px;
   background: url("~@/assets/images/icon/arrow_twoway.png") no-repeat center
-    left;
+    right;
+  background-size: contain;
   cursor: pointer;
   pointer-events: auto;
-  position: relative;
-  left: -6px;
 }
 </style>

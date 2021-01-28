@@ -36,7 +36,7 @@ export default {
   },
   props: {
     widget: Object,
-    pwidget:Object,// 父控件
+    pwidget: Object, // 父控件
     actionList: Array
   },
   computed: {
@@ -54,8 +54,8 @@ export default {
   },
   created() {
     let { width, height, left, top, rotate } = this.widget.attrs
-    if(this.pwidget) {
-      const {left:pleft,top:ptop} = this.pwidget.attrs
+    if (this.pwidget) {
+      const { left: pleft, top: ptop } = this.pwidget.attrs
       left = left - pleft
       top = top - ptop
     }

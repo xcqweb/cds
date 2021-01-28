@@ -101,7 +101,7 @@ export default {
       type: Array,
       default: function() {
         return ["tl", "tm", "tr", "mr", "br", "bm", "bl", "ml", "rot"]
-      },
+      }
     },
     cursors: {
       type: Array,
@@ -667,8 +667,8 @@ export default {
   left: -1px;
   border: 1px dashed #298df8;
 }
-.vdrr.active{
-  z-index:1 !important;
+.vdrr.active {
+  z-index: 1 !important;
 }
 .handle {
   box-sizing: border-box;

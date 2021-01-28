@@ -12,7 +12,6 @@
 </template>
 <script>
 import helpComputed from "@/mixins/help-computed"
-import { findWidgetById } from "@u/deal"
 export default {
   name: "TextEditor",
   mixins: [helpComputed],
@@ -48,10 +47,10 @@ export default {
       fontFamily,
       transform: "rotate(" + rotate + "deg)",
       fontSize: `${fontSize}px`,
-      fontWeight: fontWeight ? "bolder" : "normal",
+      fontWeight: fontWeight ? "bolder" : "normal"
     }
     this.text = widget.text
-    this.$store.commit("updateWidget", {active: false,cid:widget.cid })
+    this.$store.commit("updateWidget", { active: false, cid: widget.cid })
     this.selectText(this.$refs.textRef)
   },
   methods: {
@@ -59,7 +58,7 @@ export default {
       const widget = this.textEditor.widget
       const text = this.$refs.textRef.innerText
       this.$store.commit("setTextEditor", { show: false, widget: null })
-      this.$store.commit("updateWidget", {cid:widget.cid, text })
+      this.$store.commit("updateWidget", { cid: widget.cid, text })
     },
     selectText(obj) {
       let range

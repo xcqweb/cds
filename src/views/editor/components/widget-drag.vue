@@ -1,7 +1,11 @@
 <template>
   <div class="widget-drag-con">
     <template v-for="widget in widgets">
-      <drag-line v-if="widget.cname=='GtLine'" :widget="widget"/>
+      <drag-line
+        v-if="widget.cname == 'GtLine'"
+        :widget="widget"
+        :key="widget.cid"
+      />
       <vue-draggable-resizable
         v-else
         :key="widget.cid"
@@ -13,21 +17,21 @@
         :r="widget.attrs.rotate"
         :active.sync="widget.active"
         @dragstart="onDragStart"
-        @dragging="(left,top)=>onDrag(left,top,widget)"
+        @dragging="(left, top) => onDrag(left, top, widget)"
         @rotating="rotate => onRotate(rotate, widget)"
         @resizestart="
           (left, top, width, height) =>
             onResizeStart(left, top, width, height, widget)
         "
         @resizing="
-          (left, top, width, height,rotate) => onResize(left, top, width, height, widget,)
+          (left, top, width, height, rotate) =>
+            onResize(left, top, width, height, widget)
         "
         @dragstop="onDragStop(widget)"
         @resizestop="onResizeStop(widget)"
         @rotatestop="onRotateStop"
-        @activated="onAcivated(widget)"
         @deactivated="onDeactivated(widget)"
-        @dblclick.native="dblclick(widget,$event)"
+        @dblclick.native="dblclick(widget, $event)"
         :resizable="widget.active"
       />
     </template>
@@ -35,12 +39,12 @@
 </template>
 <script>
 import VueDraggableResizable from "@c/drag-resize/vue-draggable-resizable"
-import DragLine from '@c/drag-resize/drag-line'
+import DragLine from "@c/drag-resize/drag-line"
 import undoManager from "@u/undo-manager"
 import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
 import { cloneDeep } from "lodash"
-import { isGroup,findWidgetChildren,clickWhichWidget,findWidgetById } from "@u/deal"
+import { isGroup, findWidgetChildren, clickWhichWidget } from "@u/deal"
 import config from "@/config"
 export default {
   name: "WidgetDrag",
@@ -48,15 +52,14 @@ export default {
     VueDraggableResizable,
     DragLine
   },
-  mixins: [helpComputed,helpMethods],
+  mixins: [helpComputed, helpMethods],
   computed: {
     widgets() {
       return this.currentPage.widgets
-    },
+    }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     onDragStart(left, top) {
@@ -64,8 +67,11 @@ export default {
       this.startDargTop = top
       if (this.selectWidgets.length === 1) {
         const widget = this.selectWidgets[0]
-        if(isGroup(widget)) {
-          this.selectWidgetsCopy = findWidgetChildren(this.currentPage.widgets,widget.cid)
+        if (isGroup(widget)) {
+          this.selectWidgetsCopy = findWidgetChildren(
+            this.currentPage.widgets,
+            widget.cid
+          )
         }
       } else {
         this.selectWidgetsCopy = cloneDeep(this.selectWidgets)
@@ -81,10 +87,10 @@ export default {
         this.$store.commit("setRuler", {
           shadow: { x: left, y: top, width, height }
         })
-      } 
+      }
       const disLeft = left - this.startDragLeft
       const disTop = top - this.startDargTop
-      if(this.selectWidgetsCopy) {
+      if (this.selectWidgetsCopy) {
         this.selectWidgetsCopy.forEach(item => {
           this.$store.commit("updateWidgetAttrs", {
             left: item.attrs.left + disLeft,
@@ -102,9 +108,12 @@ export default {
     onResizeStart(left, top, width, height, widget) {
       this.startResizeWidth = width
       this.startResizeHeight = height
-      const widgetChildren = findWidgetChildren(this.currentPage.widgets,widget.cid)
+      const widgetChildren = findWidgetChildren(
+        this.currentPage.widgets,
+        widget.cid
+      )
       this.groupWidgetChildrenCopy = cloneDeep(widgetChildren)
-      if(widget.cname == 'GtLine') {
+      if (widget.cname == "GtLine") {
         this.copyLineAttrs = cloneDeep(widget.attrs)
       }
     },
@@ -127,10 +136,10 @@ export default {
             height: Math.round(height * rateH)
           }
           if (item.attrs.left - left != 0) {
-            obj.left = (disW - obj.width + item.attrs.left + item.attrs.width)
+            obj.left = disW - obj.width + item.attrs.left + item.attrs.width
           }
           if (item.attrs.top - top != 0) {
-            obj.top = (disH - obj.height + item.attrs.top + item.attrs.height)
+            obj.top = disH - obj.height + item.attrs.top + item.attrs.height
           }
           this.$store.commit("updateWidgetAttrs", {
             ...obj,
@@ -143,31 +152,26 @@ export default {
         shadow: { x: left, y: top, width, height }
       })
     },
-    onAcivated(widget) {
-      console.log(widget,"d----onAcivated--")
-    },
-    dblclick(widget,evt) {
-      console.log("why---------")
+    dblclick(widget, evt) {
       let { x, y } = evt
       const ele = document.querySelector(".viewport")
       const { left, top } = ele.getBoundingClientRect()
       x = x - left
       y = y - top
       const editableWidetList = config.editableWidetList
-      let {cname} = widget
-      const resWidget = clickWhichWidget(this.currentPage.widgets,widget,{x,y})
-      console.log(resWidget,'c-----',widget)
-      if(resWidget) {
+      let { cname } = widget
+      const resWidget = clickWhichWidget(this.currentPage.widgets, widget, {
+        x,
+        y
+      })
+      if (resWidget) {
         cname = resWidget.cname
         this.onDeactivated(widget)
-        this.$store.commit("updateWidget", { active: true,  cid: resWidget.cid })
-        // if(editableWidetList.includes( resWidget.cname)) {
-        //   this.$store.commit("setTextEditor", { show: true, widget: resWidget})
-        // }
+        this.$store.commit("updateWidget", { active: true, cid: resWidget.cid })
       } else {
-        if(editableWidetList.includes(cname)) {
+        if (editableWidetList.includes(cname)) {
           this.onDeactivated(widget)
-          this.$store.commit("setTextEditor", { show: true, widget})
+          this.$store.commit("setTextEditor", { show: true, widget })
         }
       }
     },
@@ -200,7 +204,7 @@ export default {
         active: false,
         cid: widget.cid
       })
-      let {width,height} = this.currentPage
+      let { width, height } = this.currentPage
       this.$store.commit("setRuler", {
         shadow: { x: 0, y: 0, width, height }
       })
@@ -210,33 +214,38 @@ export default {
     },
     calculateGroup(widget) {
       let widgets
-      if(widget.pid) {
-        widgets = findWidgetChildren(this.currentPage.widgets,widget.pid)
-      } else if(isGroup(widget)) {
-        widgets = findWidgetChildren(this.currentPage.widgets,widget.cid)
+      if (widget.pid) {
+        widgets = findWidgetChildren(this.currentPage.widgets, widget.pid)
+      } else if (isGroup(widget)) {
+        widgets = findWidgetChildren(this.currentPage.widgets, widget.cid)
       }
-      if(widgets) {
+      if (widgets) {
         const attrs = this.calculateSelectWidgets(widgets)
-        const {left,top,width,height} = attrs
-        this.$store.commit("updateWidgetAttrs",{cid:widget.pid,left,top,width,height})
+        const { left, top, width, height } = attrs
+        this.$store.commit("updateWidgetAttrs", {
+          cid: widget.pid,
+          left,
+          top,
+          width,
+          height
+        })
       }
-    },
+    }
   }
 }
 </script>
 <style lang="less">
 .widget-drag-con {
   pointer-events: none;
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
   .my-drag {
     cursor: move;
-    pointer-events:auto;
+    pointer-events: auto;
     .handle {
       width: 18px;
       height: 18px;
       border: none;
-      // pointer-events:auto;
       background: url("~@/assets/images/icon/resize-dot.svg") 100% 100%;
       &.handle-tl {
         top: -9px;

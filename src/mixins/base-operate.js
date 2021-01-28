@@ -6,11 +6,11 @@ import { uuid } from "@u/uuid"
 export default {
   mixins: [helpMethods, helpComputed],
   methods: {
-    group( ) {
+    group() {
       let widgets = this.selectWidgets
       const cname = config.groupName
       const name = `组合`
-      
+
       const attrs = this.calculateSelectWidgets(widgets)
       widgets.forEach(item => {
         if (isGroup(item)) {
@@ -38,7 +38,6 @@ export default {
           widget.cid
         )
         childWidgets.forEach(item => {
-          let { left, top } = widget.attrs
           this.$store.commit("updateWidget", {
             pid: "",
             cid: item.cid,

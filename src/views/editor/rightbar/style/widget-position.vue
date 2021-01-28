@@ -30,7 +30,7 @@
           v-model.number="attrs.height"
           type="number"
           suffix="H"
-          :disabled="cname=='GtLine'"
+          :disabled="cname == 'GtLine'"
           style="width: 40%"
         />
       </div>

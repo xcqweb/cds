@@ -21,9 +21,7 @@ export default {
       this.$store.commit("updateWidget", { text: "按钮", cid: this.cid })
     }
   },
-  methods: {
-    
-  }
+  methods: {}
 }
 </script>
 <style lang="less" scoped>
