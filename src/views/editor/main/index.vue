@@ -8,7 +8,7 @@
     >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
-          <div class="canvas-main" :style="widgetConStyle">
+          <div class="canvas-main">
             <div class="group-list" @dragover.prevent @drop="drop">
               <widget-item
                 v-for="widget in widgets"
@@ -17,7 +17,7 @@
               />
             </div>
           </div>
-          <div class="canvas-sub" :style="widgetConStyle">
+          <div class="canvas-sub">
             <!-- 控件拖拽框 -->
             <widget-drag />
             <!-- 提示框 -->
@@ -71,6 +71,9 @@ export default {
       widgets = arrayToTree(widgets, { parentProperty: "pid", customID: "cid" })
       return widgets
     },
+    scale() {
+      return this.$store.state.apply.scale
+    },
     portConStyle() {
       const { scale, width, height } = this.$store.state.apply
       let conWidth = width * 2
@@ -96,7 +99,8 @@ export default {
       const res = {
         width: width + "px",
         height: height + "px",
-        backgroundColor
+        backgroundColor,
+        transform: `scale(${scale})`,
       }
       if (backgroundImage) {
         res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
@@ -107,12 +111,6 @@ export default {
         }
       }
       return res
-    },
-    widgetConStyle() {
-      const { scale } = this.$store.state.apply
-      return {
-        transform: `scale(${scale})`
-      }
     },
     ruleEnable() {
       return this.$store.state.apply.ruleEnable
@@ -129,6 +127,11 @@ export default {
         top: top + "px"
       }
     }
+  },
+  watch:{
+    scale() {
+      this.centerView()
+    },
   },
   data() {
     return {}

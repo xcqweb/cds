@@ -7,7 +7,7 @@
         :key="widget.cid"
       />
       <template v-else>
-        <div v-if="widget.pid" :style="objStyle(widget)" :key="widget.cid" class="p-drag-con">
+        <div v-if="widget.pid" :style="objStyle(widget)" :key="widget.cid" class="p-drag-con" :class="{'active':widget.active}">
           <drag-item :widget="widget" :pwidget="getPwidget(widget)"/>
         </div>
         <drag-item :widget="widget" :key="widget.cid" v-else/>
@@ -60,6 +60,9 @@ export default {
   .p-drag-con{
     position: absolute;
     pointer-events: none;
+    &.active{
+      z-index:1;
+    }
   }
 }
 </style>

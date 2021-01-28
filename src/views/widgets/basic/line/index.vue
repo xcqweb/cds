@@ -191,6 +191,9 @@ export default {
         let left = x - this.lastX
         let top = y - this.lastY
         this.$store.commit("updateWidgetAttrs", { left, top, cid: this.cid })
+        this.$store.commit("setRuler", {
+          shadow: { x: left, y: top, width:this.width, height:this.height }
+        })
       }
     },
     mouseup() {

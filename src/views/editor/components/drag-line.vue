@@ -187,6 +187,9 @@ export default {
             cid: this.widget.cid,
             rotate
           })
+          this.$store.commit("setRuler", {
+            shadow: { x: left, y: top, width, height }
+          })
         }
       }
     },

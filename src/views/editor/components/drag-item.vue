@@ -96,6 +96,7 @@ export default {
             top: item.attrs.top + disTop,
             cid: item.cid
           })
+          this.calculateGroup(item)
         })
       }
       this.$store.commit("updateWidgetAttrs", {
