@@ -104,7 +104,7 @@ export default {
       }
       if (backgroundImage) {
         res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
-        res.backgroundSize = "contain"
+        res.backgroundSize = "cover"
       } else {
         if (gridEnable) {
           res.backgroundImage = createGridBg(size, color, scale)

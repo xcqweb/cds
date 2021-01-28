@@ -416,6 +416,7 @@ export default {
       justify-content: center;
     }
     .pic-con {
+      position: relative;
       .pic-cls {
         max-width: 130px;
         max-height: 81px;
@@ -423,9 +424,9 @@ export default {
       .icon-del {
         color: #333;
         cursor: pointer;
-        position: relative;
-        top: -32px;
-        right: -6px;
+        position: absolute;
+        top: -3px;
+        right: 0;
       }
     }
   }
