@@ -105,7 +105,7 @@
     </div>
     <div>
       <div class="center-item" style="width:106px;">
-        自动保存 {{ saveTime }}
+        自动保存 {{ updateTime }}
       </div>
     </div>
   </div>
@@ -155,8 +155,8 @@ export default {
       }
       return res
     },
-    saveTime() {
-      let date = this.$store.state.saveTime
+    updateTime() {
+      let date = this.$store.state.apply.updateTime
       date = new Date(date)
       let min = date.getMinutes()
       if (min < 10) {

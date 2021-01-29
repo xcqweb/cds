@@ -23,7 +23,7 @@ export default {
     },
     background() {
       let color = this.attrs.backgroundColor
-      if(color === '#00000000' || color === 'transparent') {
+      if (color === "#00000000" || color === "transparent") {
         color = transparentImg
       }
       return color

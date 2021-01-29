@@ -201,7 +201,10 @@ export default {
           backgroundColor = this.currentPage.backgroundColor
         }
         let background = backgroundColor
-        if(backgroundColor === '#00000000' || backgroundColor === 'transparent') {
+        if (
+          backgroundColor === "#00000000" ||
+          backgroundColor === "transparent"
+        ) {
           background = transparentImg
         }
         return { background }
@@ -244,7 +247,7 @@ export default {
           color = grid.color
         }
         let background = color
-        if(color === '#00000000' || color === 'transparent') {
+        if (color === "#00000000" || color === "transparent") {
           background = transparentImg
         }
         return { background }

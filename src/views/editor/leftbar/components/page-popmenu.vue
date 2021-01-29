@@ -83,7 +83,7 @@ export default {
     addChildPage() {
       const { width, height } = this.$store.state.apply
       let len = 0
-      if(this.page.children) {
+      if (this.page.children) {
         len = this.page.children.length
       }
       const newPageId = `new-page-${len}`
@@ -101,7 +101,7 @@ export default {
     },
     copy() {
       let len = 0
-      if(this.page.children) {
+      if (this.page.children) {
         len = this.page.children.length
       } else {
         len = this.$store.state.apply.pages.length

@@ -70,7 +70,6 @@ export default {
     if (this.actionList) {
       this.styleObj.cursor = "pointer"
     }
-    console.log(this.widget,"a---")
   },
   methods: {
     click() {

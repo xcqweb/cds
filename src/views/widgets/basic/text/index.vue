@@ -13,15 +13,15 @@ export default {
     TextCon
   },
   mixins: [baseWidget],
-  computed:{
+  computed: {
     textStyle() {
       return {
         ...this.styleObj,
-        borderStyle:this.borderStyle,
-        borderWidth:this.borderWidth,
-        borderColor:this.borderColor,
+        borderStyle: this.borderStyle,
+        borderWidth: this.borderWidth,
+        borderColor: this.borderColor
       }
-    },
+    }
   },
   data() {
     return {}

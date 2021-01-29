@@ -121,7 +121,7 @@ export default {
       this.savePage(pageId)
     },
     savePage(pageId) {
-      this.$emit("clickAddFlag",false)
+      this.$emit("clickAddFlag", false)
       let method
       const tempPage = this.$store.state.apply.pages.find(
         item => item.pageId == pageId
@@ -144,7 +144,7 @@ export default {
             resObj = { ...resObj, newPageId: res.data.pageId }
           }
           this.$store.commit("setPageInfo", resObj)
-          this.$emit("clickAddFlag",true)
+          this.$emit("clickAddFlag", true)
           this.$message.success(msg)
         }
       })

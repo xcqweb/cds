@@ -5,7 +5,7 @@
       <div class="fs">
         <div
           class="border-bg"
-          :style="{ background:borderColor }"
+          :style="{ background: borderColor }"
           @click="showColorPicker('borderColor', $event)"
         />
         <a-select v-model="attrs.borderStyle" size="small" style="width:40%;">
@@ -44,11 +44,11 @@ export default {
     },
     borderColor() {
       let color = this.attrs.borderColor
-      if(color === '#00000000' || color === 'transparent') {
+      if (color === "#00000000" || color === "transparent") {
         color = transparentImg
       }
       return color
-    },
+    }
   },
   data() {
     return {

@@ -111,7 +111,6 @@ export default {
     widgets: [],
     width: 1366,
     height: 768,
-    widgetsInfo: {}, // 控件信息
     lines: {
       // 坐标辅助线
       h: [],
@@ -137,7 +136,7 @@ export default {
     fontSize: 12,
     fontFamily: "PingFangSC-Regular",
     opacity: 1,
-    visible: false,
+    visible: true,
     borderRadius: 0,
     color: "#040c2c"
   },

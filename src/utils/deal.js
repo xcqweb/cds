@@ -92,14 +92,13 @@ export const findWidgetById = (widgets, id) => {
   return widgets.find(item => item.cid === id)
 }
 export function dealPageData(data) {
-  const { grid, lines, backgroundColor, widgetsInfo } = config.defaultPage
+  const { grid, lines, backgroundColor} = config.defaultPage
   return {
     grid: data.grid || grid,
     pageId: data.pageId,
     widgets: [],
     width: data.width,
     height: data.height,
-    widgetsInfo: data.widgetsInfo || widgetsInfo,
     lines: data.lines || lines,
     sort: data.sort,
     pid: data.pid,
@@ -148,7 +147,7 @@ export function dealWidgetData(data) {
         opacity: item.opacity || dw.opacity,
         visible: item.visible || dw.visible,
         borderRadius: item.borderRadius || dw.borderRadius,
-        color:item.color || dw.color
+        color: item.color || dw.color
       }
     })
   })
@@ -188,4 +187,8 @@ export function dealHomePage(pages) {
     }
   }
   return pages
+}
+
+export function pageWidgetsNum(widgets,cname) {
+  return widgets.filter(item=>item.cname === cname).length
 }

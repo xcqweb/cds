@@ -156,7 +156,7 @@ export default {
     drop(evt) {
       const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
       const dataItem = dataTransfer.getData("item")
-      if(dataItem) {
+      if (dataItem) {
         const item = JSON.parse(dataItem)
         const { dx, dy } = item
         const ele = document.querySelector(".viewport")

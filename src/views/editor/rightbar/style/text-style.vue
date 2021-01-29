@@ -133,7 +133,7 @@ export default {
     },
     colorModel() {
       let color = this.attrs.color
-      if(color === '#00000000' || color === 'transparent') {
+      if (color === "#00000000" || color === "transparent") {
         color = transparentImg
       }
       return color

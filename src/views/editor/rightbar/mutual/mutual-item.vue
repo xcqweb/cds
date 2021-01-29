@@ -15,7 +15,7 @@
       />
     </div>
     <div class="item-action fs">
-      <label>事件</label>
+      <label style="font-weight:normal;">事件</label>
       <a-select
         size="small"
         v-model="action.eventType"
@@ -33,7 +33,7 @@
       </a-select>
     </div>
     <div class="item-action fs">
-      <label>动作</label>
+      <label style="font-weight:normal;">动作</label>
       <a-select
         size="small"
         style="width:80%;"
@@ -51,7 +51,7 @@
       </a-select>
     </div>
     <div class="item-action fs" v-if="action.actionType == 'link-page'">
-      <label>页面</label>
+      <label style="font-weight:normal;">页面</label>
       <a-cascader
         :options="pages"
         placeholder="选择跳转的页面"

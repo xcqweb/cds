@@ -5,9 +5,9 @@
       <a-icon type="plus" class="icon" @click="addPage" />
     </div>
     <div class="scroll-con">
-      <page-menu :pages="pages" @clickAddFlag="clickAddFlag"/>
+      <page-menu :pages="pages" @clickAddFlag="clickAddFlag" />
     </div>
-    <page-popmenu :show-del="showDel"/>
+    <page-popmenu :show-del="showDel" />
   </div>
 </template>
 <script>
@@ -27,12 +27,12 @@ export default {
       return pages
     },
     showDel() {
-      return this.pages.length !==1
+      return this.pages.length !== 1
     }
   },
   data() {
     return {
-      clickAdd:true,
+      clickAdd: true
     }
   },
   created() {},
@@ -41,10 +41,11 @@ export default {
       this.clickAdd = val
     },
     addPage() {
-      if(!this.clickAdd) { // 新建页面请求成功后，才可以点击下一次新增
+      if (!this.clickAdd) {
+        // 新建页面请求成功后，才可以点击下一次新增
         return
       }
-      const { width, height, pages} = this.$store.state.apply
+      const { width, height, pages } = this.$store.state.apply
       const len = pages.length + 1
       const newPageId = `new-page-${len}`
       let temp = {
@@ -55,7 +56,7 @@ export default {
         pageName: `页面 ${len}`,
         isEdit: true
       }
-      this.$store.commit("addPage",temp )
+      this.$store.commit("addPage", temp)
       this.$store.commit("setCurrentPageId", newPageId)
     }
   }

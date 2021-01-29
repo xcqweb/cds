@@ -21,6 +21,7 @@ export default {
       this.$store.dispatch("patchModifyWidgets")
     },
     run() {
+      this.$store.dispatch("patchModifyWidgets")
       const url = this.$router.resolve({
         path: "/preview-app",
         query: { applyId: this.$store.state.apply.id }

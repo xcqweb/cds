@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     onDragStart(left, top) {
-      if(this.pwidget) {
+      if (this.pwidget) {
         left += this.pwidget.attrs.left
         top += this.pwidget.attrs.top
       }
@@ -82,7 +82,7 @@ export default {
       }
     },
     onDrag(left, top, widget) {
-      if(this.pwidget) {
+      if (this.pwidget) {
         left += this.pwidget.attrs.left
         top += this.pwidget.attrs.top
       }
@@ -115,7 +115,7 @@ export default {
       })
     },
     onResizeStart(left, top, width, height, widget) {
-      if(this.pwidget) {
+      if (this.pwidget) {
         left += this.pwidget.attrs.left
         top += this.pwidget.attrs.top
       }
@@ -131,7 +131,7 @@ export default {
       }
     },
     onResize(left, top, width, height, widget) {
-      if(this.pwidget) {
+      if (this.pwidget) {
         left += this.pwidget.attrs.left
         top += this.pwidget.attrs.top
       }
@@ -227,7 +227,7 @@ export default {
       })
     },
     onActivated(widget) {
-      const {left,top,width,height} = widget.attrs
+      const { left, top, width, height } = widget.attrs
       this.$store.commit("setRuler", {
         shadow: { x: left, y: top, width, height }
       })

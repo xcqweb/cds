@@ -1,6 +1,6 @@
 <template>
   <div class="group-item" :style="groupStyleObj">
-    <slot/>
+    <slot />
   </div>
 </template>
 <script>

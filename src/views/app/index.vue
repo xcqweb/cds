@@ -17,21 +17,22 @@
           :label-col="{ span: 5 }"
           :wrapper-col="{ span: 12 }"
         >
-          <a-form-item
-            label="应用名称"
-          >
+          <a-form-item label="应用名称">
             <a-input
               v-decorator="[
                 'studioName',
-                { rules: 
-                  [
+                {
+                  rules: [
                     { required: true, message: '应用名称不能为空' },
-                    {pattern:/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/g,message:'应用名称不能包含除下划线以外的其他特殊字符'},
-                  ] 
-                },
+                    {
+                      pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/g,
+                      message: '应用名称不能包含除下划线以外的其他特殊字符'
+                    }
+                  ]
+                }
               ]"
               placeholder="请输入应用名称"
-              :maxLength='50'
+              :maxLength="50"
             />
           </a-form-item>
         </a-form>
@@ -83,20 +84,20 @@ const columns = [
 export default {
   data() {
     return {
-      pageTitle:'新增应用',
+      pageTitle: "新增应用",
       data: [],
       columns,
       visible: false,
       form: this.$form.createForm(this),
-      pagination: {   
+      pagination: {
         current: 1,
         total: 0,
         pageSize: 10, // 每页中显示10条数据
         showSizeChanger: true,
-        pageSizeOptions: ['10', '20', '30', '50'], // 每页中显示的数据
+        pageSizeOptions: ["10", "20", "30", "50"], // 每页中显示的数据
         showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
       },
-      currentAppId:''
+      currentAppId: ""
     }
   },
   created() {
@@ -125,23 +126,23 @@ export default {
         }
       })
     },
-    tableChange (pageOptions) {
+    tableChange(pageOptions) {
       this.pagination.current = pageOptions.current
       this.pagination.pageSize = pageOptions.pageSize
       this.queryApply()
     },
     add() {
       this.visible = true
-      this.currentAppId = ''
+      this.currentAppId = ""
       this.form = this.$form.createForm(this)
     },
     edit(data) {
-      this.pageTitle = '编辑应用'
+      this.pageTitle = "编辑应用"
       this.visible = true
       this.currentAppId = data.id
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.form.setFieldsValue({
-          studioName:data.studioName,
+          studioName: data.studioName
         })
       })
     },
@@ -158,7 +159,7 @@ export default {
       this.visible = false
     },
     handleOk() {
-      this.form.validateFields((err,values) => {
+      this.form.validateFields((err, values) => {
         if (!err) {
           const params = {
             appType: 0,
@@ -173,23 +174,23 @@ export default {
             theme: "",
             width: "1024"
           }
-          let fun 
+          let fun
           let msg
           if (params.id) {
-            msg = '修改应用成功'
-            fun = 'edit'
+            msg = "修改应用成功"
+            fun = "edit"
           } else {
-            msg = '新建应用成功'
-            fun = 'add'
+            msg = "新建应用成功"
+            fun = "add"
           }
           api[fun](params).then(res => {
-              if (res.code === 0) {
-                this.$message.success(msg)
-                this.visible = false
-                this.queryApply()
-              }
-            })
-        } 
+            if (res.code === 0) {
+              this.$message.success(msg)
+              this.visible = false
+              this.queryApply()
+            }
+          })
+        }
       })
     }
   }

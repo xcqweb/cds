@@ -14,7 +14,8 @@ import {
   dealWidgetData,
   dealHomePage,
   isGroup,
-  findWidgetChildren
+  findWidgetChildren,
+  pageWidgetsNum
 } from "@u/deal"
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -36,7 +37,6 @@ export default new Vuex.Store({
     isShowSelection: false, // 是否显示框选,
     showHelpLine: false, // 辅助线
     hint: { show: false, text: "" }, // 提示信息
-    saveTime: new Date().getTime(),
     textEditor: { show: false, widget: null }, //显示文本编辑器
     dataConfigList: [] //应用数据源动态配置
   },
@@ -45,9 +45,6 @@ export default new Vuex.Store({
       // 设置标尺
       const tempRuler = { ...state.ruler, ...data }
       state.ruler = tempRuler
-    },
-    setSaveTime(state, data) {
-      state.saveTime = data
     },
     setTextEditor(state, data) {
       const tempObj = state.textEditor
@@ -70,15 +67,19 @@ export default new Vuex.Store({
     },
     delPage(state, data) {
       let arr = []
-      if(!data.pid) {
-        const children = state.apply.pages.filter(item=>item.pid === data.pageId)
-        if(children.length) {
+      if (!data.pid) {
+        const children = state.apply.pages.filter(
+          item => item.pid === data.pageId
+        )
+        if (children.length) {
           arr = arr.concat(children)
         }
       }
       arr.push(data)
-      arr.forEach(page=>{
-        const resIndex = state.apply.pages.findIndex(item => item.pageId == page.pageId)
+      arr.forEach(page => {
+        const resIndex = state.apply.pages.findIndex(
+          item => item.pageId == page.pageId
+        )
         if (resIndex != -1) {
           state.apply.pages.splice(resIndex, 1)
         }
@@ -175,8 +176,11 @@ export default new Vuex.Store({
         zIndex
       } = data
       let currentPage = this.getters.currentPage
-      let widgetNum = currentPage.widgetsInfo[cname] || 0
-      currentPage.widgetsInfo[cname] = ++widgetNum
+      let widgetNum = 0
+      if(currentPage.widgets.length) {
+        widgetNum = pageWidgetsNum(currentPage.widgets,cname)
+      } 
+      widgetNum++
       cid = cid || `${uuid(16, 16)}`
       zIndex = zIndex || currentPage.widgets.length + config.widgetInitZIndex
       let widget = {
@@ -345,7 +349,8 @@ export default new Vuex.Store({
             id: data.id,
             dataRate: data.dataRate || 3,
             navPosition: data.navPosition,
-            navStyle: data.navStyle
+            navStyle: data.navStyle,
+            updateTime: data.updateTime
           })
         }
       })
@@ -378,14 +383,14 @@ export default new Vuex.Store({
       if (params.length) {
         widgetApi.modifyPatch(params).then(res => {
           if (res.code === 0) {
-            store.commit("setSaveTime", new Date().getTime())
+            store.dispatch("updateApply", { updateTime: new Date().getTime() })
             if (!isNoTip) {
               Vue.prototype.$message.success("保存成功")
             }
           }
         })
       } else {
-        store.commit("setSaveTime", new Date().getTime())
+        store.dispatch("updateApply", { updateTime: new Date().getTime() })
         if (!isNoTip) {
           Vue.prototype.$message.success("保存成功")
         }
@@ -401,18 +406,14 @@ export default new Vuex.Store({
     updateApply(store, data) {
       const params = { id: store.state.apply.id, ...data }
       store.commit("setApply", data)
-      appApi.edit(params).then(res => {
-        if (res.code === 0) {
-          store.commit("setSaveTime", new Date().getTime())
-        }
-      })
+      appApi.edit(params)
     },
     updatePageInfo(store, data) {
       const params = { pageId: store.state.currentPageId, ...data }
       store.commit("setPageInfo", data)
       pageApi.modify(params).then(res => {
         if (res.code === 0) {
-          store.commit("setSaveTime", new Date().getTime())
+          store.dispatch("updateApply", { updateTime: new Date().getTime() })
         }
       })
     }

@@ -7,26 +7,26 @@
 import baseWidget from "@/mixins/base-widget"
 import TextCon from "../../components/text-con"
 const cname = "GtCircle"
-const borderColor = '#bbb'
-const backgroundColor = '#fff'
+const borderColor = "#bbb"
+const backgroundColor = "#fff"
 export default {
   name: cname,
   components: {
     TextCon
   },
   mixins: [baseWidget],
-  computed:{
+  computed: {
     circleStyle() {
-      let res = {borderRadius:'100%'}
+      let res = { borderRadius: "100%" }
       res.borderColor = this.borderColor || borderColor
       res.backgroundColor = this.backgroundColor || backgroundColor
       return {
         ...this.styleObj,
         ...res,
-        borderStyle:this.borderStyle,
-        borderWidth:`${this.borderWidth}px`,
+        borderStyle: this.borderStyle,
+        borderWidth: `${this.borderWidth}px`
       }
-    },
+    }
   },
   data() {
     return {}
