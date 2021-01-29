@@ -5,9 +5,9 @@
       <a-icon type="plus" class="icon" @click="addPage" />
     </div>
     <div class="scroll-con">
-      <page-menu :pages="pages" />
+      <page-menu :pages="pages" @clickAddFlag="clickAddFlag"/>
     </div>
-    <page-popmenu />
+    <page-popmenu :show-del="showDel"/>
   </div>
 </template>
 <script>
@@ -25,25 +25,37 @@ export default {
       let pages = this.$store.state.apply.pages
       pages = arrayToTree(pages, { parentProperty: "pid", customID: "pageId" })
       return pages
+    },
+    showDel() {
+      return this.pages.length !==1
     }
   },
   data() {
-    return {}
+    return {
+      clickAdd:true,
+    }
   },
   created() {},
   methods: {
+    clickAddFlag(val) {
+      this.clickAdd = val
+    },
     addPage() {
-      const { width, height } = this.$store.state.apply
-      const len = this.$store.state.apply.pages.length + 1
+      if(!this.clickAdd) { // 新建页面请求成功后，才可以点击下一次新增
+        return
+      }
+      const { width, height, pages} = this.$store.state.apply
+      const len = pages.length + 1
       const newPageId = `new-page-${len}`
-      this.$store.commit("addPage", {
+      let temp = {
         pageId: newPageId,
         width,
         height,
         pid: "",
         pageName: `页面 ${len}`,
         isEdit: true
-      })
+      }
+      this.$store.commit("addPage",temp )
       this.$store.commit("setCurrentPageId", newPageId)
     }
   }

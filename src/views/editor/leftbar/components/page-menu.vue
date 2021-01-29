@@ -25,7 +25,10 @@
         </a>
         <div class="name-con">
           <div class="name-icon">
-            <svg-icon :icon-class="`${page.isHome ? 'page-icon-home' : 'page-icon'}`" class-name="icon" />
+            <svg-icon
+              :icon-class="`${page.isHome ? 'page-icon-home' : 'page-icon'}`"
+              class-name="icon"
+            />
           </div>
           <div class="name" :class="{ 'is-eidt': page.isEdit }">
             <input
@@ -67,6 +70,10 @@ export default {
     pages: {
       type: Array,
       default: () => []
+    },
+    clickAdd: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -114,6 +121,7 @@ export default {
       this.savePage(pageId)
     },
     savePage(pageId) {
+      this.$emit("clickAddFlag",false)
       let method
       const tempPage = this.$store.state.apply.pages.find(
         item => item.pageId == pageId
@@ -136,6 +144,7 @@ export default {
             resObj = { ...resObj, newPageId: res.data.pageId }
           }
           this.$store.commit("setPageInfo", resObj)
+          this.$emit("clickAddFlag",true)
           this.$message.success(msg)
         }
       })

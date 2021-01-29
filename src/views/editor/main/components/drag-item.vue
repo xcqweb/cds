@@ -35,30 +35,30 @@ import { cloneDeep } from "lodash"
 import { isGroup, findWidgetChildren, clickWhichWidget } from "@u/deal"
 import config from "@/config"
 export default {
-  name:'DragItem',
-  props:{
-    widget:Object,
-    pwidget:Object,
+  name: "DragItem",
+  props: {
+    widget: Object,
+    pwidget: Object
   },
   components: {
-    VueDraggableResizable,
+    VueDraggableResizable
   },
   mixins: [helpComputed, helpMethods],
-  computed:{
+  computed: {
     calculateLeft() {
       let res = this.widget.attrs.left
-      if(this.pwidget) {
+      if (this.pwidget) {
         res = this.widget.attrs.left - this.pwidget.attrs.left
       }
       return res
     },
     calculateTop() {
       let res = this.widget.attrs.top
-      if(this.pwidget) {
+      if (this.pwidget) {
         res = this.widget.attrs.top - this.pwidget.attrs.top
       }
       return res
-    },
+    }
   },
   methods: {
     onDragStart(left, top) {
@@ -231,7 +231,7 @@ export default {
         })
       }
     }
-  }  
+  }
 }
 </script>
 <style lang="less">

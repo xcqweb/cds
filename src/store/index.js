@@ -69,10 +69,18 @@ export default new Vuex.Store({
       state.apply.pages.push(dealPageData(data))
     },
     delPage(state, data) {
-      const resIndex = state.apply.pages.findIndex(item => item.pageId == data)
-      if (resIndex != -1) {
-        state.apply.pages.splice(resIndex, 1)
+      let arr = []
+      arr.push(data.pageId)
+      const children = state.apply.pages.filter(item=>item.pid === data.pageId)
+      if(children.length) {
+        arr = arr.concat(children)
       }
+      arr.forEach(page=>{
+        const resIndex = state.apply.pages.findIndex(item => item.pageId == page.pageId)
+        if (resIndex != -1) {
+          state.apply.pages.splice(resIndex, 1)
+        }
+      })
     },
     setHomePage(state, data) {
       const resIndex = state.apply.pages.findIndex(item => item.pageId == data)

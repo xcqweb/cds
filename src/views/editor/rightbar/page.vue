@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="title item-con">
-       <label>页面样式</label>
+      <label>页面样式</label>
     </div>
 
     <div class="item-con">

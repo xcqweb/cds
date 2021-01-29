@@ -86,11 +86,19 @@
         <svg-icon icon-class="to-bottom" class-name="icon" />
         <span>置底</span>
       </a>
-      <a class="center-item" @click.prevent="group" :class="{'disabled':selectWidgetsCount<2}">
+      <a
+        class="center-item"
+        @click.prevent="group"
+        :class="{ disabled: selectWidgetsCount < 2 }"
+      >
         <svg-icon icon-class="group" class-name="icon" />
         <span>组合</span>
       </a>
-      <a class="center-item" @click.prevent="ungroup" :class="{'disabled':!isGroupWidget}">
+      <a
+        class="center-item"
+        @click.prevent="ungroup"
+        :class="{ disabled: !isGroupWidget }"
+      >
         <svg-icon icon-class="ungroup" class-name="icon" />
         <span>解散</span>
       </a>
@@ -107,7 +115,7 @@ import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
 import baseOperate from "@/mixins/base-operate"
 import undoManager from "@u/undo-manager"
-import {isGroup} from '@u/deal'
+import { isGroup } from "@u/deal"
 export default {
   name: "ToolbarCenter",
   mixins: [helpMethods, helpComputed, baseOperate],
@@ -140,9 +148,9 @@ export default {
     selectWidgetsCount() {
       return this.selectWidgets.length
     },
-    isGroupWidget()  {
+    isGroupWidget() {
       let res = false
-      if(this.selectWidgetsCount) {
+      if (this.selectWidgetsCount) {
         res = isGroup(this.selectWidgets[0])
       }
       return res

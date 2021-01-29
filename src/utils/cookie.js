@@ -24,7 +24,7 @@ export function setToken(accessToken, tokenType) {
   }
 }
 
-export function removeToken () {
+export function removeToken() {
   Cookie.remove(COOKIE_TOKEN_KEY, { domain: HOST_NAME })
   Cookie.remove(COOKIE_TOKENTYPE_KEY, { domain: HOST_NAME })
 }

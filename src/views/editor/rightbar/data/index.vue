@@ -377,7 +377,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .data-con {
-  color:#040c2c;
+  color: #040c2c;
   .data-item-wrap {
     width: 100%;
     height: 30px;

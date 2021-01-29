@@ -5,7 +5,8 @@
       ref="viewCon"
       @scroll="handleScroll"
       :style="viewConStyle"
-      @dragover.prevent @drop="drop"
+      @dragover.prevent
+      @drop="drop"
     >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
@@ -101,7 +102,7 @@ export default {
         width: width + "px",
         height: height + "px",
         backgroundColor,
-        transform: `scale(${scale})`,
+        transform: `scale(${scale})`
       }
       if (backgroundImage) {
         res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
@@ -129,10 +130,10 @@ export default {
       }
     }
   },
-  watch:{
+  watch: {
     scale() {
       this.centerView()
-    },
+    }
   },
   data() {
     return {}
@@ -281,7 +282,7 @@ export default {
       height: 100%;
     }
     .canvas-sub {
-      z-index:1;
+      z-index: 1;
       .canvas-main;
       pointer-events: none;
     }

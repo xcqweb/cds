@@ -1,7 +1,7 @@
 import Vue from "vue"
 import axios from "axios"
 import { getToken } from "@/utils/cookie"
-import { logout } from '@/utils/auth'
+import { logout } from "@/utils/auth"
 const instance = axios.create({
   timeout: 6000
 })

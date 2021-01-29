@@ -23,6 +23,7 @@
         <a-input
           size="small"
           v-model="attrs.borderWidth"
+          :min="0"
           type="number"
           style="width:24%;"
         />

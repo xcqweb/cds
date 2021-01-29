@@ -139,7 +139,7 @@ export default {
     opacity: 1,
     visible: false,
     borderRadius: 0,
-    color:'#040c2c',
+    color: "#040c2c"
   },
   eventList: [
     { label: "点击", value: "click" },
@@ -170,5 +170,5 @@ export default {
     { label: "亮色", value: "light" },
     { label: "暗色", value: "dark" }
   ],
-  editableWidetList: ["GtText", "GtRect", "GtCircle","GtButton"]
+  editableWidetList: ["GtText", "GtRect", "GtCircle", "GtButton"]
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="apply-con">
-    <a-button class="btn-con" type="link" @click.prevent="e => add(e, true)">
+    <a-button class="btn-con" type="primary" @click.prevent="e => add(e, true)">
       + 新增
     </a-button>
     <div class="main-con">
@@ -196,8 +196,9 @@ export default {
 .apply-con {
   height: 100%;
   color: rgb(91, 107, 115);
+  margin-top: 50px;
   .btn-con {
-    padding: 10px 100px;
+    margin-left: 100px;
   }
   .main-con {
     margin: 10px 100px;

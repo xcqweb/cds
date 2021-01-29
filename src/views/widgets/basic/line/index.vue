@@ -142,7 +142,7 @@ export default {
     return {}
   },
   mounted() {
-    if(!this.isPreview) {
+    if (!this.isPreview) {
       this.elBase = document.querySelector(".view-con")
       this.leftEl = document.querySelector(".left-con")
       this.elBase.addEventListener("mousedown", this.deselect, true)
@@ -152,7 +152,7 @@ export default {
     }
   },
   beforeDestroy() {
-    if(!this.isPreview) {
+    if (!this.isPreview) {
       this.elBase.removeEventListener("mousedown", this.deselect, true)
       this.leftEl.removeEventListener("mousedown", this.deselect, true)
       this.elBase.removeEventListener("mouseup", this.mouseup, true)
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     elmDown(evt) {
-      if(!this.isPreview) {
+      if (!this.isPreview) {
         this.dragging = true
         let { x, y } = evt
         this.lastX = x - this.left
@@ -192,7 +192,7 @@ export default {
         let top = y - this.lastY
         this.$store.commit("updateWidgetAttrs", { left, top, cid: this.cid })
         this.$store.commit("setRuler", {
-          shadow: { x: left, y: top, width:this.width, height:this.height }
+          shadow: { x: left, y: top, width: this.width, height: this.height }
         })
       }
     },

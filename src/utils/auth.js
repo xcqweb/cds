@@ -1,5 +1,5 @@
-import {removeToken} from './cookie'
-export const logout = (url='/login') => {
+import { removeToken } from "./cookie"
+export const logout = () => {
   removeToken()
-  location.href="/login"
+  location.href = `/auth/login?fromUrl=${location.host}/ruban_cds`
 }

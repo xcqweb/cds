@@ -83,6 +83,6 @@ export default {
 .widget-style-con {
   position: relative;
   width: 100%;
-  color:#040c2c;
+  color: #040c2c;
 }
 </style>
