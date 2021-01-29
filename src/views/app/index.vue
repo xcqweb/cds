@@ -121,13 +121,14 @@ export default {
       api.list(params).then(res => {
         if (res.code === 0) {
           this.data = res.data.records
+          this.pagination.total = res.data.total
         }
       })
     },
     tableChange (pageOptions) {
       this.pagination.current = pageOptions.current
       this.pagination.pageSize = pageOptions.pageSize
-      this.loadData()
+      this.queryApply()
     },
     add() {
       this.visible = true
@@ -157,7 +158,7 @@ export default {
       this.visible = false
     },
     handleOk() {
-      this.form.validate((err,valid) => {
+      this.form.validateFields((err,values) => {
         if (!err) {
           const params = {
             appType: 0,
@@ -166,7 +167,7 @@ export default {
             height: "768",
             picUrl: "",
             scale: "1",
-            studioName: this.form.studioName,
+            studioName: values.studioName,
             id: this.currentAppId,
             tenantId: "",
             theme: "",
