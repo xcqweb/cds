@@ -70,11 +70,13 @@ export default new Vuex.Store({
     },
     delPage(state, data) {
       let arr = []
-      arr.push(data.pageId)
-      const children = state.apply.pages.filter(item=>item.pid === data.pageId)
-      if(children.length) {
-        arr = arr.concat(children)
+      if(!data.pid) {
+        const children = state.apply.pages.filter(item=>item.pid === data.pageId)
+        if(children.length) {
+          arr = arr.concat(children)
+        }
       }
+      arr.push(data)
       arr.forEach(page=>{
         const resIndex = state.apply.pages.findIndex(item => item.pageId == page.pageId)
         if (resIndex != -1) {
