@@ -5,7 +5,11 @@
     class="color-picker-con"
     v-click-out-side="hide"
   >
-    <sketch-picker v-model="color" @input="updateValue"></sketch-picker>
+    <sketch-picker
+      v-model="color"
+      @input="updateValue"
+      ref="aa"
+    ></sketch-picker>
   </div>
 </template>
 <script>
@@ -27,10 +31,10 @@ export default {
       color: []
     }
   },
+  mounted() {},
   methods: {
     updateValue(val) {
-      this.$emit("colorChange", val.hex)
-      this.hide()
+      this.$emit("colorChange", val.hex8)
     },
     hide() {
       this.$emit("update:visible", false)

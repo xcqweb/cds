@@ -66,6 +66,11 @@ export default {
       margin-bottom: 10px;
     }
   }
+  label {
+    font-weight: 800;
+    margin-right: 10px;
+    line-height: 18px;
+  }
   .fs {
     display: flex;
     justify-content: space-between;
@@ -99,23 +104,6 @@ export default {
     }
     .ant-tabs-ink-bar {
       background-color: #1740dc;
-    }
-  }
-  .ant-input-affix-wrapper .ant-input-suffix {
-    right: 6px;
-  }
-  .ant-input-affix-wrapper .ant-input:not(:last-child) {
-    padding-right: 15px;
-  }
-  .ant-input {
-    border-radius: 2px;
-    border: 1px solid #f0f1f3;
-    font-size: 12px;
-    color: #040c2c;
-    &:focus,
-    &:hover {
-      box-shadow: unset;
-      border-color: #40a9ff;
     }
   }
 }

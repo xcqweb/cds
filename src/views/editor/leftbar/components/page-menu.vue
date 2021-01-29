@@ -25,7 +25,7 @@
         </a>
         <div class="name-con">
           <div class="name-icon">
-            <svg-icon icon-class="page-icon" class-name="icon" />
+            <svg-icon :icon-class="`${page.isHome ? 'page-icon-home' : 'page-icon'}`" class-name="icon" />
           </div>
           <div class="name" :class="{ 'is-eidt': page.isEdit }">
             <input
@@ -105,7 +105,6 @@ export default {
       widgetApi.queryAll({ pageId }).then(res => {
         if (res.code === 0) {
           this.$store.commit("setCurrentPageWidgets", dealWidgetData(res.data))
-          this.$store.commit("setSaveTime", res.data.updateTime)
         }
       })
       this.$store.commit("setCurrentPageId", pageId)
@@ -206,12 +205,12 @@ li {
         flex-shrink: 0;
         justify-content: center;
         align-items: center;
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
         margin-right: 8px;
         .icon {
-          width: 9px;
-          height: 12px;
+          width: 16px;
+          height: 16px;
           color: rgb(141, 158, 167);
         }
       }

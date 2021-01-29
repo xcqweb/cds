@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="title item-con">
-      页面样式
+       <label>页面样式</label>
     </div>
 
     <div class="item-con">
@@ -142,9 +142,9 @@
     </div>
     <div class="item-con fs">
       <label>数据拉取频率</label>
-      <a-input-number
+      <a-input
         size="small"
-        v-model="dataRate"
+        v-model.number="dataRate"
         type="number"
         :min="3"
         suffix="秒"
@@ -377,15 +377,6 @@ export default {
   color: #040c2c;
   width: 100%;
   position: relative;
-  .title {
-    font-size: 14px;
-    font-weight: 500;
-  }
-  label {
-    font-weight: 500;
-    margin-right: 10px;
-    line-height: 18px;
-  }
   .page-custom {
     margin-top: 10px;
     display: flex;
@@ -425,6 +416,7 @@ export default {
       justify-content: center;
     }
     .pic-con {
+      position: relative;
       .pic-cls {
         max-width: 130px;
         max-height: 81px;
@@ -432,9 +424,9 @@ export default {
       .icon-del {
         color: #333;
         cursor: pointer;
-        position: relative;
-        top: -32px;
-        right: -6px;
+        position: absolute;
+        top: -3px;
+        right: 0;
       }
     }
   }

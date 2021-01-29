@@ -5,11 +5,12 @@
       ref="viewCon"
       @scroll="handleScroll"
       :style="viewConStyle"
+      @dragover.prevent @drop="drop"
     >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
-          <div class="canvas-main" :style="widgetConStyle">
-            <div class="group-list" @dragover.prevent @drop="drop">
+          <div class="canvas-main">
+            <div class="group-list">
               <widget-item
                 v-for="widget in widgets"
                 :key="widget.cid"
@@ -17,7 +18,7 @@
               />
             </div>
           </div>
-          <div class="canvas-sub" :style="widgetConStyle">
+          <div class="canvas-sub">
             <!-- 控件拖拽框 -->
             <widget-drag />
             <!-- 提示框 -->
@@ -44,10 +45,10 @@ import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import arrayToTree from "array-to-tree"
-import WidgetItem from "../components/widget-item"
+import WidgetItem from "./components/widget-item"
 import components from "@/views/widgets/index"
-import Contextmenu from "../components/contextmenu"
-import WidgetDrag from "../components/widget-drag"
+import Contextmenu from "./components/contextmenu"
+import WidgetDrag from "./components/widget-drag"
 import TextEditor from "@c/text-editor"
 export default {
   name: "EditorMain",
@@ -70,6 +71,9 @@ export default {
       let widgets = this.currentPage.widgets
       widgets = arrayToTree(widgets, { parentProperty: "pid", customID: "cid" })
       return widgets
+    },
+    scale() {
+      return this.$store.state.apply.scale
     },
     portConStyle() {
       const { scale, width, height } = this.$store.state.apply
@@ -96,23 +100,18 @@ export default {
       const res = {
         width: width + "px",
         height: height + "px",
-        backgroundColor
+        backgroundColor,
+        transform: `scale(${scale})`,
       }
       if (backgroundImage) {
         res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
-        res.backgroundSize = "contain"
+        res.backgroundSize = "cover"
       } else {
         if (gridEnable) {
           res.backgroundImage = createGridBg(size, color, scale)
         }
       }
       return res
-    },
-    widgetConStyle() {
-      const { scale } = this.$store.state.apply
-      return {
-        transform: `scale(${scale})`
-      }
     },
     ruleEnable() {
       return this.$store.state.apply.ruleEnable
@@ -129,6 +128,11 @@ export default {
         top: top + "px"
       }
     }
+  },
+  watch:{
+    scale() {
+      this.centerView()
+    },
   },
   data() {
     return {}
@@ -277,6 +281,7 @@ export default {
       height: 100%;
     }
     .canvas-sub {
+      z-index:1;
       .canvas-main;
       pointer-events: none;
     }

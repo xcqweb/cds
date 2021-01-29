@@ -37,6 +37,14 @@ export default {
       color: rgb(91, 107, 115);
       background: rgb(242, 242, 242);
     }
+    &.disabled {
+      position: relative;
+      pointer-events: none;
+      color: rgb(200, 205, 208);
+      span {
+        color: rgb(200, 205, 208);
+      }
+    }
   }
 }
 </style>

@@ -31,7 +31,7 @@ import helpComputed from "@/mixins/help-computed"
 import baseOperate from "@/mixins/base-operate"
 import key from "keymaster"
 import { cloneDeep } from "lodash"
-import {isGroup,findWidgetChildren,findWidgetById} from "@u/deal"
+import { isGroup, findWidgetChildren } from "@u/deal"
 import { uuid } from "@u/uuid"
 export default {
   name: "Contextmenu",
@@ -183,17 +183,29 @@ export default {
     },
     paste() {
       if (this.copyData && this.copyData.length) {
-        let resArr = []
         this.copyData.forEach(item => {
           let cid = uuid(16, 16)
           if (!this.isCut) {
             this.$store.commit("updateWidget", { cid: item.cid, active: false })
           }
-          this.$store.commit("widgetAdd", { ...this.dealCopyItem(item), cid,pid:'',active: true })
-          if(isGroup(item)) {
-            let widgetChildren = findWidgetChildren(this.currentPage.widgets,item.cid)
-            widgetChildren.forEach(w=>{
-              this.$store.commit("widgetAdd", { ...this.dealCopyItem(w), cid,pid:cid,active: true })
+          this.$store.commit("widgetAdd", {
+            ...this.dealCopyItem(item),
+            cid,
+            pid: "",
+            active: true
+          })
+          if (isGroup(item)) {
+            let widgetChildren = findWidgetChildren(
+              this.currentPage.widgets,
+              item.cid
+            )
+            widgetChildren.forEach(w => {
+              this.$store.commit("widgetAdd", {
+                ...this.dealCopyItem(w),
+                cid,
+                pid: cid,
+                active: true
+              })
             })
           }
         })
@@ -203,7 +215,6 @@ export default {
       item.copyNum = item.copyNum + 1
       item = { ...item.attrs, ...item }
       let len = item.copyNum === 1 ? "" : item.copyNum
-      item.left = item.left
       item.top = item.top + item.height
       item.dname = `${item.name || item.cname} Copy${len}`
       return item
@@ -216,7 +227,7 @@ export default {
       this.$store.commit("widgetDel")
     },
     dealCopyData(isCut) {
-      if (this.selectWidgets.length) {                                       
+      if (this.selectWidgets.length) {
         this.isCut = isCut
         this.copyData = cloneDeep(this.selectWidgets)
       }

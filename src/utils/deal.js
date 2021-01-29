@@ -59,7 +59,7 @@ export const isGroup = widget => {
 }
 
 export const findWidgetChildren = (widgetList, cid) => {
-  if (!isGroup(findWidgetById(widgetList,cid))) {
+  if (!isGroup(findWidgetById(widgetList, cid))) {
     return []
   }
   return widgetList.filter(item => item.pid === cid)
@@ -75,12 +75,12 @@ export const pointIsInWidget = (point, widget) => {
 /**
 判断当前点击的是哪个子控件
  */
-export function clickWhichWidget(widgets,widget,point) {
+export function clickWhichWidget(widgets, widget, point) {
   let res = null
-  const widgetChildren = findWidgetChildren(widgets,widget.cid)
-  if(widgetChildren.length) {
-    for(let i=0;i<widgetChildren.length;i++) {
-      if(pointIsInWidget(point,widgetChildren[i])) {
+  const widgetChildren = findWidgetChildren(widgets, widget.cid)
+  if (widgetChildren.length) {
+    for (let i = 0; i < widgetChildren.length; i++) {
+      if (pointIsInWidget(point, widgetChildren[i])) {
         res = widgetChildren[i]
         break
       }
@@ -147,7 +147,8 @@ export function dealWidgetData(data) {
         fontFamily: item.fontFamily || dw.fontFamily,
         opacity: item.opacity || dw.opacity,
         visible: item.visible || dw.visible,
-        borderRadius: item.borderRadius || dw.borderRadius
+        borderRadius: item.borderRadius || dw.borderRadius,
+        color:item.color || dw.color
       }
     })
   })

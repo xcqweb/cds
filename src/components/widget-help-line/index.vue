@@ -91,7 +91,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .help-line-con {
-  z-index: 999;
+  z-index: 9999;
   pointer-events: none;
   height: 100%;
   width: 100%;

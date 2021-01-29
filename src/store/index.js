@@ -9,7 +9,13 @@ import pageApi from "@a/page"
 import widgetApi from "@a/widget"
 import { cloneDeep } from "lodash"
 import arrayToTree from "array-to-tree"
-import { dealPageData, dealWidgetData, dealHomePage,isGroup,findWidgetChildren } from "@u/deal"
+import {
+  dealPageData,
+  dealWidgetData,
+  dealHomePage,
+  isGroup,
+  findWidgetChildren
+} from "@u/deal"
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
@@ -254,10 +260,12 @@ export default new Vuex.Store({
       }
       const currentPage = this.getters.currentPage
       let tempArr = []
-      widgets.forEach(item=>{
-        if(isGroup(item)) {
-          tempArr = tempArr.concat(findWidgetChildren(currentPage.widgets,item.cid))
-        } 
+      widgets.forEach(item => {
+        if (isGroup(item)) {
+          tempArr = tempArr.concat(
+            findWidgetChildren(currentPage.widgets, item.cid)
+          )
+        }
         tempArr.push(item)
       })
       tempArr.forEach(item => {
@@ -270,15 +278,25 @@ export default new Vuex.Store({
         }
       })
       // 寻找控件的pid数量为1的，（组合里面只剩一个元素时候，要删除组合)
-      if(this.getters.selectWidgets.length === 1 && !isGroup(this.getters.currentWidget)) {
+      if (
+        this.getters.selectWidgets.length === 1 &&
+        !isGroup(this.getters.currentWidget)
+      ) {
         let tempWidgets = cloneDeep(currentPage.widgets)
-        tempWidgets = arrayToTree(tempWidgets, { parentProperty: "pid", customID: "cid" })
-        tempWdigets.forEach(item=>{
-          if(item.length === 1) {
-            let resIndex1 = currentPage.widgets.findIndex(w=>w.cid == item.pid)
-            let resIndex2 = currentPage.widgets.findIndex(w=>w.cid == item.cid)
+        tempWidgets = arrayToTree(tempWidgets, {
+          parentProperty: "pid",
+          customID: "cid"
+        })
+        tempWidgets.forEach(item => {
+          if (item.length === 1) {
+            let resIndex1 = currentPage.widgets.findIndex(
+              w => w.cid == item.pid
+            )
+            let resIndex2 = currentPage.widgets.findIndex(
+              w => w.cid == item.cid
+            )
             currentPage.widgets.splice(resIndex1, 1)
-            currentPage.widgets.splice(resIndex2, 1,{isEdit:true,pid:''})
+            currentPage.widgets.splice(resIndex2, 1, { isEdit: true, pid: "" })
           }
         })
       }

@@ -1,6 +1,7 @@
 import Vue from "vue"
 import axios from "axios"
 import { getToken } from "@/utils/cookie"
+import { logout } from '@/utils/auth'
 const instance = axios.create({
   timeout: 6000
 })
@@ -14,6 +15,7 @@ const errDeal = error => {
     }
     if (data.status === 401) {
       Vue.prototype.$message.error("登录已失效")
+      logout()
     } else {
       Vue.prototype.$message.error(
         data.msg || data.message || "服务端异常，请联系技术支持"
@@ -38,6 +40,7 @@ instance.interceptors.response.use(response => {
     switch (code) {
       case 401:
         Vue.prototype.$message.error("登录已失效")
+        logout()
         break
       default:
         Vue.prototype.$message.error(data.msg)

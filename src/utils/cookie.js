@@ -23,3 +23,8 @@ export function setToken(accessToken, tokenType) {
     Cookie.set(COOKIE_TOKENTYPE_KEY, tokenType, { expires, domain: HOST_NAME })
   }
 }
+
+export function removeToken () {
+  Cookie.remove(COOKIE_TOKEN_KEY, { domain: HOST_NAME })
+  Cookie.remove(COOKIE_TOKENTYPE_KEY, { domain: HOST_NAME })
+}

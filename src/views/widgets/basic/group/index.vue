@@ -20,6 +20,4 @@ export default {
   methods: {}
 }
 </script>
-<style lang="less" scoped>
- 
-</style>
+<style lang="less" scoped></style>
