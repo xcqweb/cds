@@ -5,11 +5,12 @@
       ref="viewCon"
       @scroll="handleScroll"
       :style="viewConStyle"
+      @dragover.prevent @drop="drop"
     >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
           <div class="canvas-main">
-            <div class="group-list" @dragover.prevent @drop="drop">
+            <div class="group-list">
               <widget-item
                 v-for="widget in widgets"
                 :key="widget.cid"
@@ -44,10 +45,10 @@ import SelectionWidget from "@c/selection-widget/"
 import WidgetHelpLine from "@c/widget-help-line/"
 import helpComputed from "@/mixins/help-computed"
 import arrayToTree from "array-to-tree"
-import WidgetItem from "../components/widget-item"
+import WidgetItem from "./components/widget-item"
 import components from "@/views/widgets/index"
-import Contextmenu from "../components/contextmenu"
-import WidgetDrag from "../components/widget-drag"
+import Contextmenu from "./components/contextmenu"
+import WidgetDrag from "./components/widget-drag"
 import TextEditor from "@c/text-editor"
 export default {
   name: "EditorMain",
@@ -280,6 +281,7 @@ export default {
       height: 100%;
     }
     .canvas-sub {
+      z-index:1;
       .canvas-main;
       pointer-events: none;
     }

@@ -34,7 +34,7 @@ export default {
   mounted() {},
   methods: {
     updateValue(val) {
-      this.$emit("colorChange", val.hex)
+      this.$emit("colorChange", val.hex8)
     },
     hide() {
       this.$emit("update:visible", false)

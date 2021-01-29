@@ -93,6 +93,7 @@ export default {
   border: 1px solid rgb(41, 141, 248);
   pointer-events: auto;
   text-align: center;
+  z-index:999999;
   .text {
     user-select: text;
     width: 100%;

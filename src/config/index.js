@@ -71,6 +71,26 @@ export default {
       ]
     },
     {
+      name: "装饰组件",
+      value: "decorate",
+      list: [
+        {
+          cname: "GtBorderAnimate1",
+          name: "边框1",
+          width: 400,
+          height: 300,
+          icon: "widget-image"
+        },
+        {
+          cname: "GtBorderAnimate2",
+          name: "边框2",
+          width: 400,
+          height: 300,
+          icon: "widget-image"
+        }
+      ]
+    },
+    {
       name: "图表组件",
       value: "chart",
       list: []
@@ -118,7 +138,8 @@ export default {
     fontFamily: "PingFangSC-Regular",
     opacity: 1,
     visible: false,
-    borderRadius: 0
+    borderRadius: 0,
+    color:'#040c2c',
   },
   eventList: [
     { label: "点击", value: "click" },
@@ -149,5 +170,5 @@ export default {
     { label: "亮色", value: "light" },
     { label: "暗色", value: "dark" }
   ],
-  editableWidetList: ["GtText", "GtRect", "GtCircle"]
+  editableWidetList: ["GtText", "GtRect", "GtCircle","GtButton"]
 }

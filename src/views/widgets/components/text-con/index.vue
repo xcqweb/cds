@@ -16,7 +16,7 @@ export default {
   computed: {
     textEditorShow() {
       const obj = this.$store.state.textEditor
-      return obj.show && this.cid == obj.cid
+      return obj.show && this.cid == obj.widget.cid
     },
     objStyle() {
       return {
