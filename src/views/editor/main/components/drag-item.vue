@@ -21,6 +21,7 @@
     @dragstop="onDragStop(widget)"
     @resizestop="onResizeStop(widget)"
     @rotatestop="onRotateStop"
+    @activated="onActivated(widget)"
     @deactivated="onDeactivated(widget)"
     @dblclick.native="dblclick(widget, $event)"
     :resizable="widget.active"
@@ -207,6 +208,12 @@ export default {
       let { width, height } = this.currentPage
       this.$store.commit("setRuler", {
         shadow: { x: 0, y: 0, width, height }
+      })
+    },
+    onActivated(widget) {
+      const {left,top,width,height} = widget.attrs
+      this.$store.commit("setRuler", {
+        shadow: { x: left, y: top, width, height }
       })
     },
     updateHint(show, text) {
