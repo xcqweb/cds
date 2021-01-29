@@ -32,7 +32,7 @@
         </div>
         <div
           class="font-color"
-          :style="{ backgroundColor: colorModel }"
+          :style="{ background: colorModel }"
           @click="showColorPicker('fontColor', $event)"
         />
       </div>
@@ -88,6 +88,7 @@
   </div>
 </template>
 <script>
+const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 const fontFamilyList = [
   { label: "苹方字体", value: "PingFangSC-Regular" },
   { label: "微软雅黑", value: "Microsoft YaHei" },
@@ -131,7 +132,11 @@ export default {
       return this.attrs.fontWeight
     },
     colorModel() {
-      return this.attrs.color
+      let color = this.attrs.color
+      if(color === '#00000000' || color === 'transparent') {
+        color = transparentImg
+      }
+      return color
     },
     justifyContentModel() {
       return this.attrs.justifyContent

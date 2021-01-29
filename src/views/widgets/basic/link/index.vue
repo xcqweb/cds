@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-link" :style="styleLink">
+  <div class="gt-link" :style="linkStyle">
     <span v-if="!linkUrl" class="eg-text">
       Web Page
     </span>
@@ -16,7 +16,7 @@ export default {
     return {}
   },
   computed: {
-    styleLink() {
+    linkStyle() {
       return { ...this.styleObj, backgroundColor: "#ebebeb" }
     }
   },

@@ -39,9 +39,6 @@ export default {
   pointer-events: none;
   white-space: pre-wrap;
   display: flex;
-  position: absolute;
-  left: 0;
-  top: 0;
   word-break: break-word;
   overflow: hidden;
 }

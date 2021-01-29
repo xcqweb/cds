@@ -5,7 +5,7 @@
       <div class="fs">
         <div
           class="border-bg"
-          :style="{ backgroundColor: attrs.borderColor }"
+          :style="{ background:borderColor }"
           @click="showColorPicker('borderColor', $event)"
         />
         <a-select v-model="attrs.borderStyle" size="small" style="width:40%;">
@@ -32,6 +32,7 @@
   </div>
 </template>
 <script>
+const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 import helpComputed from "@/mixins/help-computed"
 export default {
   name: "WidgetBorder",
@@ -40,7 +41,14 @@ export default {
     show() {
       const widgetNames = ["GtLink"]
       return !widgetNames.includes(this.cname)
-    }
+    },
+    borderColor() {
+      let color = this.attrs.borderColor
+      if(color === '#00000000' || color === 'transparent') {
+        color = transparentImg
+      }
+      return color
+    },
   },
   data() {
     return {

@@ -165,6 +165,7 @@ import config from "@/config"
 import { getToken } from "@/utils/cookie"
 import fileApi from "@a/file"
 const pageSizeList = ["1366 * 768", "1280 * 720", "1920 * 1080", "自定义"]
+const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 export default {
   name: "PageStyle",
   mixins: [helpComputed],
@@ -199,7 +200,11 @@ export default {
         if (this.currentPage) {
           backgroundColor = this.currentPage.backgroundColor
         }
-        return { backgroundColor }
+        let background = backgroundColor
+        if(backgroundColor === '#00000000' || backgroundColor === 'transparent') {
+          background = transparentImg
+        }
+        return { background }
       },
       set(backgroundColor) {
         this.$store.dispatch("updatePageInfo", { backgroundColor })
@@ -238,7 +243,11 @@ export default {
           let grid = this.currentPage.grid || config.grid
           color = grid.color
         }
-        return { backgroundColor: color }
+        let background = color
+        if(color === '#00000000' || color === 'transparent') {
+          background = transparentImg
+        }
+        return { background }
       },
       set(val) {
         let { size } = this.currentPage.grid
@@ -341,7 +350,6 @@ export default {
         this.backgroundImage = response.data
       }
     },
-    onNavStyleChange() {},
     pageSizeChange(val) {
       if (val == "自定义") {
         this.showPageCustom = true

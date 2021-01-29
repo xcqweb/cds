@@ -63,6 +63,10 @@ export default {
   },
   methods: {
     onDragStart(left, top) {
+      if(this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       this.startDragLeft = left
       this.startDargTop = top
       if (this.selectWidgets.length === 1) {
@@ -78,6 +82,10 @@ export default {
       }
     },
     onDrag(left, top, widget) {
+      if(this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       if (this.selectWidgets.length === 1) {
         this.updateHint(true, `${left},${top}`)
         const { rotate, width, height } = widget.attrs
@@ -107,6 +115,10 @@ export default {
       })
     },
     onResizeStart(left, top, width, height, widget) {
+      if(this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       this.startResizeWidth = width
       this.startResizeHeight = height
       const widgetChildren = findWidgetChildren(
@@ -119,6 +131,10 @@ export default {
       }
     },
     onResize(left, top, width, height, widget) {
+      if(this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       this.$store.commit("updateWidgetAttrs", {
         left,
         top,

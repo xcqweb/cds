@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-image" :style="imageStyleObj">
+  <div class="gt-image" :style="imageStyle">
     <svg
       v-if="!imgSrc"
       xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@ export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
-    imageStyleObj() {
+    imageStyle() {
       return { ...this.styleObj, backgroundColor: "#e8e8e8" }
     },
     imgSrcDeal() {

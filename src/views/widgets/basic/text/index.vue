@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-text" :style="styleObj">
+  <div class="gt-text" :style="textStyle">
     <text-con v-bind="$props" />
   </div>
 </template>
@@ -13,6 +13,16 @@ export default {
     TextCon
   },
   mixins: [baseWidget],
+  computed:{
+    textStyle() {
+      return {
+        ...this.styleObj,
+        borderStyle:this.borderStyle,
+        borderWidth:this.borderWidth,
+        borderColor:this.borderColor,
+      }
+    },
+  },
   data() {
     return {}
   },

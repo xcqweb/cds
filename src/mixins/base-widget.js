@@ -38,7 +38,6 @@ export default {
         transform: `rotate(0deg)`,
         zIndex: `${this.zIndex}`,
         opacity: this.opacity,
-        backgroundColor: this.backgroundColor
       }
     }
   },

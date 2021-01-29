@@ -155,14 +155,17 @@ export default {
   methods: {
     drop(evt) {
       const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
-      const item = JSON.parse(dataTransfer.getData("item"))
-      const { dx, dy } = item
-      const ele = document.querySelector(".viewport")
-      let { left, top } = ele.getBoundingClientRect() // 画布与文档的距离
-      item.left = x - left - dx
-      item.top = y - top - dy
-      this.$store.commit("widgetAdd", { ...item })
-      undoManager.saveApplyChange()
+      const dataItem = dataTransfer.getData("item")
+      if(dataItem) {
+        const item = JSON.parse(dataItem)
+        const { dx, dy } = item
+        const ele = document.querySelector(".viewport")
+        let { left, top } = ele.getBoundingClientRect() // 画布与文档的距离
+        item.left = x - left - dx
+        item.top = y - top - dy
+        this.$store.commit("widgetAdd", { ...item })
+        undoManager.saveApplyChange()
+      }
     },
     init() {
       this.dealRulerSize()
