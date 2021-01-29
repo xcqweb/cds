@@ -13,9 +13,8 @@
       <path
         :d="d"
         stroke="transparent"
-        stroke-width="16"
+        stroke-width="10"
         style="pointer-events: auto;"
-        @mousedown.stop="elmDown"
       />
     </svg>
   </div>
@@ -103,52 +102,9 @@ export default {
   data() {
     return {}
   },
-  mounted() {
-    this.elBase = document.querySelector(".view-con")
-    this.leftEl = document.querySelector(".left-con")
-    this.elBase.addEventListener("mousedown", this.deselect, true)
-    this.leftEl.addEventListener("mousedown", this.deselect, true)
-    this.elBase.addEventListener("mouseup", this.mouseup, true)
-    this.elBase.addEventListener("mousemove",this.mousemove,true)
+  created() {
   },
-   beforeDestroy() {
-    this.elBase.removeEventListener("mousedown", this.deselect, true)
-    this.leftEl.removeEventListener("mousedown", this.deselect, true)
-    this.elBase.removeEventListener("mouseup", this.mouseup, true)
-    this.elBase.removeEventListener("mousemove",this.mousemove,true)
-  },
-  methods: {
-    elmDown(evt) {
-      this.dragging = true
-      let {x,y} = evt
-      this.lastX = x - this.left
-      this.lastY = y - this.top
-      this.getBasePos()
-      this.$store.commit('updateWidget',{active:true,cid:this.cid})
-    },
-    getBasePos() {
-      const ele = document.querySelector(".viewport")
-      const {left,top} = ele.getBoundingClientRect()
-      this.basePos = {x:left,y:top}
-    },
-    deselect(e) {
-      const target = e.target || e.srcElement
-      if(!this.$el.contains(target) && target.classList && !target.classList.contains('handle-line')) {
-        this.$store.commit('updateWidget',{active:false,cid:this.cid})
-      }
-    },
-    mousemove(evt) {
-      let { x, y } = evt
-      if(this.dragging) {
-        let left = x - this.lastX 
-        let top = y - this.lastY
-        this.$store.commit('updateWidgetAttrs',{left,top,cid:this.cid})
-      }
-    },
-    mouseup(evt) {
-      this.dragging = false
-    },
-  }
+  methods: {}
 }
 </script>
 <style lang="less" scoped>

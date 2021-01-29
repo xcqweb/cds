@@ -2,14 +2,14 @@
   <div :style="objStyle">
     <template v-if="widget.active">
       <div 
-        class="handle-line" 
+        class="handle" 
         :style="startStyle" 
-        @mousedown.stop="mousedown($event,'start')" 
+        @mousedown="mousedown" 
       />
       <div 
-        class="handle-line" 
+        class="handle" 
         :style="endStyle"
-        @mousedown.stop="mousedown($event,'end')" 
+        @mousedown="mousedown" 
       />
     </template>
   </div>
@@ -33,13 +33,11 @@ export default {
       }
     },
     rotate() {
-      return this.widget.attrs.rotate
+      const {rotate} = this.widget.attrs
+      return rotate
     },
     cursor() {
       let resIndex = Math.floor((this.rotate + 23)/45)
-      if(resIndex>=8) {
-        resIndex = 0
-      }
       return cursors[resIndex]
     },
     startStyle() {
@@ -53,8 +51,6 @@ export default {
         cursor:this.cursor,
         left:`${left}px`,
         top:`${top}px`,
-        background:'red',
-        borderRadius:'100%'
       }
     },
     endStyle() {
@@ -76,95 +72,79 @@ export default {
     }
   },
   mounted() {
-    this.elBase = document.querySelector(".view-con")
+    this.elBase = document.querySelector("body")
+    this.elBase.addEventListener("mousedown", this.deselect, true)
     this.elBase.addEventListener("mouseup", this.mouseup, true)
-    this.elBase.addEventListener("mousemove",this.mousemove,true)
+    this.$nextTick(()=>{
+      this.ele = document.querySelector(".viewport")
+      this.elBase.addEventListener("mousemove",this.mousemove,true)
+    })
+    this.widgetAttrs = this.widget.attrs // 这个一定要放在刚开始，因为后面有改动left，要取初始的
   },
   beforeDestroy() {
+    this.elBase.removeEventListener("mousedown", this.deselect, true)
     this.elBase.removeEventListener("mouseup", this.mouseup, true)
     this.elBase.removeEventListener("mousemove",this.mousemove,true)
   },
   methods: {
-    mousedown(evt,type) {
-      this.resizing = true
-      this.type = type
-      this.getBasePos()
-      const {left,top,width,height} = this.widget.attrs
-      if(this.rotate<=90) {
-      this.spos = {x:left,y:top}
-      this.epos = {x:left+width,y:top+height}
-      }else if(this.rotate>90&&this.rotate<=180) {
-        this.spos = {x:left+width,y:top}
-        this.epos = {x:left,y:top+height}
-      }else if(this.rotate>=180&&this.rotate<270) {
-        this.spos = {x:left+width,y:top+height}
-        this.epos = {x:left,y:top}
-      }else{
-        this.spos = {x:left,y:top+height}
-        this.epos = {x:left+width,y:top}
+    deselect(e) {
+      const target = e.target || e.srcElement
+      if(!this.$el.contains(target)) {
+        if(this.widget.active) {
+          this.$store.commit('updateWidgetAttrs',{active:false,cid:this.widget.cid})
+        }
       }
     },
-    getBasePos() {
-      const ele = document.querySelector(".viewport")
-      const {left,top} = ele.getBoundingClientRect()
+    mousedown(evt) {
+      let {x,y} = evt
+      this.resizing = true
+      let { left, top } = this.ele.getBoundingClientRect()
       this.basePos = {x:left,y:top}
+      let {left:l,top:t} = this.widgetAttrs
+      let spos = {x:l,y:t}
+      let epos = {x:x-this.basePos.x,y:y-this.basePos.y}
+      let width = epos.x-spos.x
+      let height = epos.y-spos.y
+      let rotate = this.getAngle(width,height)
+      console.log(this.basePos,spos,epos,width,height,rotate,'--down')
     },
     mousemove(evt) {
       if(this.resizing) {
         let { x, y } = evt
-        let left
-        let top
-        let temp = {x:x-this.basePos.x,y:y-this.basePos.y}
-        console.log(this.type,"b---")
-        if(this.type=='end') {
-          let width = temp.x-this.spos.x
-          let height = temp.y-this.spos.y
-          let rotate = this.getAngle(width,height)
-          width = Math.abs(width)
-          height = Math.abs(height)
-          width = Math.max(1,width)
-          height = Math.max(1,height)
-          if(rotate>=90&&rotate<=180) {
-            left = this.spos.x - width
-            top = this.spos.y
-          }else if(rotate>180&&rotate<=270) {
-            left = this.spos.x - width
-            top = this.spos.y - height
-          }else if(rotate>270) {
-            top = this.spos.y - height
-            left = this.spos.x
-          }else {
-            left = this.spos.x
-            top = this.spos.y
-          }
-          this.$store.commit('updateWidgetAttrs',{width,height,left,top,cid:this.widget.cid,rotate})
-        } else {
-          let width = this.epos.x - temp.x
-          let height = this.epos.y - temp.y
-          let rotate = this.getAngle(width,height)
-          width = Math.abs(width)
-          height = Math.abs(height)
-          width = Math.max(1,width)
-          height = Math.max(1,height)
-           if(rotate>=90&&rotate<=180) {
-            left = this.epos.x
-            top = this.epos.y - height
-          }else if(rotate>180&&rotate<=270) {
-            left = this.epos.x
-            top = this.epos.y
-          }else if(rotate>270) {
-            top = this.epos.y
-            left = this.epos.x - width
-          }else {
-            left = this.epos.x - width
-            top = this.epos.y - height
-          }
-          this.$store.commit('updateWidgetAttrs',{width,height,left,top,cid:this.widget.cid,rotate})
+        let {left,top} = this.widgetAttrs
+        let spos = {x:left,y:top}
+        let epos = {x:x-this.basePos.x,y:y-this.basePos.y}
+        let width = epos.x-spos.x
+        let height = epos.y-spos.y
+        let rotate = this.getAngle(width,height)
+         console.log(this.basePos,spos,epos,width,height,rotate,'--move')
+        width = Math.abs(width)
+        height = Math.abs(height)
+        width = Math.max(1,width)
+        height = Math.max(1,height)
+        if(rotate>90&&rotate<=180) {
+          left = left - width
+        }else if(rotate>180&&rotate<=270) {
+          left = left - width
+          top = top - height
+        }else if(rotate>270) {
+          top = top - height
         }
+        this.$store.commit('updateWidgetAttrs',{width,height,left,top,cid:this.widget.cid,rotate})
       }
     },
     mouseup(evt) {
       this.resizing = false
+      let {x,y} = evt
+      let {left:l,top:t} = this.widget.attrs
+      let spos = {x:l,y:t}
+      let { left, top } = this.ele.getBoundingClientRect()
+      this.basePos = {x:left,y:top}
+      let epos = {x:x-this.basePos.x,y:y-this.basePos.y}
+      let width = epos.x-spos.x
+      let height = epos.y-spos.y
+      let rotate = this.getAngle(width,height)
+      console.log(this.basePos,spos,epos,width,height,rotate,'---up')
     },
     getAngle(x, y) {
       let theta = Math.atan2(y, x) // range (-PI, PI]
@@ -176,20 +156,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.help-hover-cls{
-  position: absolute;
-  top: -8px;
-  left: 0;
-  min-height: 16px;
-  cursor: move;
-  pointer-events: auto;
-}
-.handle-line {
+.handle {
   position: absolute;
   width: 18px;
   height: 18px;
   border: none;
-  z-index:1;
   pointer-events: auto;
   background: url("~@/assets/images/icon/resize-dot.svg") 100% 100%;
 }
