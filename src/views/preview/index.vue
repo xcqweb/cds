@@ -1,14 +1,16 @@
 <template>
-  <div class="preview-con-wrap" v-if="currentPage && apply">
-    <div class="preview-con" :style="viewStyleObj">
-      <widget-item
-        v-for="widget in widgets"
-        :key="widget.cid"
-        :widget="widget"
-        :action-list="actionMap.get(widget.cid)"
-      />
+  <div class="preview"  v-if="currentPage && apply">
+    <div class="preview-con-wrap">
+      <div class="preview-con" :style="viewStyleObj">
+        <widget-item
+          v-for="widget in widgets"
+          :key="widget.cid"
+          :widget="widget"
+          :action-list="actionMap.get(widget.cid)"
+        />
+      </div>
     </div>
-    <preview-menu v-if="currentPage && apply && position" />
+    <preview-menu v-if="position" />
     <frame-text v-if="showFrame" />
   </div>
   <loading v-else />
@@ -139,7 +141,10 @@ export default {
         width: `${width}px`,
         height: `${height}px`,
         backgroundColor: backgroundColor || "#fff",
-        backgroundImage: `url(${backgroundImage})`
+        backgroundImage: `url(${this.$imgUrl(backgroundImage)})`
+      }
+      if(backgroundImage) {
+        this.viewStyleObj.backgroundSize = 'cover'
       }
     },
     queryPageWidgets() {
@@ -316,6 +321,12 @@ export default {
 }
 </script>
 <style lang="less">
+.preview{
+  position: relative;
+  height:100%;
+  width:100%;
+  overflow: hidden;
+}
 .preview-con-wrap {
   height: 100%;
   width: 100%;

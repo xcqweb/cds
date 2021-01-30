@@ -10,16 +10,16 @@
         <a-switch v-model="attrs.visible" size="small" />
       </div>
       <div class="fs">
-        <label>不透明度</label>
+        <label>透明度</label>
         <a-slider
-          v-model.number="attrs.opacity"
+          v-model.number="opacity"
           :min="0"
           :max="100"
           style="width:30%"
         />
         <a-input
           size="small"
-          v-model.number="attrs.opacity"
+          v-model.number="opacity"
           type="number"
           style="width:30%"
           suffix="%"
@@ -45,7 +45,16 @@ export default {
       set(name) {
         this.$store.commit("updateWidgetAttrs", { name })
       }
-    }
+    },
+    opacity:{
+      get() {
+        let res = this.attrs.opacity || 1
+        return res*100
+      },
+      set(val) {
+        this.$store.commit("updateWidgetAttrs", { opacity:val/100})
+      }
+    },
   },
   data() {
     return {}

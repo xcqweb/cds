@@ -92,7 +92,7 @@ export const findWidgetById = (widgets, id) => {
   return widgets.find(item => item.cid === id)
 }
 export function dealPageData(data) {
-  const { grid, lines, backgroundColor} = config.defaultPage
+  const { grid, lines, backgroundColor } = config.defaultPage
   return {
     grid: data.grid || grid,
     pageId: data.pageId,
@@ -189,6 +189,6 @@ export function dealHomePage(pages) {
   return pages
 }
 
-export function pageWidgetsNum(widgets,cname) {
-  return widgets.filter(item=>item.cname === cname).length
+export function pageWidgetsNum(widgets, cname) {
+  return widgets.filter(item => item.cname === cname).length
 }

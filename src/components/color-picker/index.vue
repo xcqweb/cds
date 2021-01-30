@@ -5,11 +5,7 @@
     class="color-picker-con"
     v-click-out-side="hide"
   >
-    <sketch-picker
-      v-model="color"
-      @input="updateValue"
-      ref="aa"
-    ></sketch-picker>
+    <sketch-picker v-model="color" @input="updateValue"></sketch-picker>
   </div>
 </template>
 <script>

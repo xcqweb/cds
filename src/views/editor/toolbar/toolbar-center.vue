@@ -33,6 +33,11 @@
                 网格
               </a-checkbox>
             </a-menu-item>
+            <a-menu-item>
+              <a-checkbox @change="rulerRefLineChange" defaultChecked>
+                参考线
+              </a-checkbox>
+            </a-menu-item>
           </a-menu>
         </a-dropdown>
       </a>
@@ -157,7 +162,11 @@ export default {
     },
     updateTime() {
       let date = this.$store.state.apply.updateTime
-      date = new Date(date)
+      if (!date) {
+        date = new Date()
+      } else {
+        date = new Date(date)
+      }
       let min = date.getMinutes()
       if (min < 10) {
         min = `0${min}`
@@ -184,6 +193,15 @@ export default {
     }
   },
   methods: {
+    rulerRefLineChange(evt) {
+      let eles = document.querySelectorAll('#mb-ruler .lines')
+      let checked = evt.target.checked
+      if(eles) {
+        [].forEach.call(eles,ele=>{
+          ele.style.visibility = checked ? 'visible' : 'hidden'
+        })
+      }
+    },
     changeScale(item) {
       this.scaleText = item
     },

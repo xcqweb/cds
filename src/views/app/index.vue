@@ -165,14 +165,14 @@ export default {
             appType: 0,
             classifyId: "",
             descript: "test",
-            height: "768",
+            height: 768,
             picUrl: "",
             scale: "1",
             studioName: values.studioName,
             id: this.currentAppId,
             tenantId: "",
             theme: "",
-            width: "1024"
+            width: 1366
           }
           let fun
           let msg

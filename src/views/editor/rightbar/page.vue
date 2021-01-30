@@ -78,12 +78,13 @@
         </div>
         <div class="pic-con" v-else>
           <img :src="backgroundImage" class="pic-cls" />
-          <svg-icon
-            icon-class="delete"
-            class="icon-del"
-            @click.stop.native="delPagePic"
-          />
         </div>
+        <svg-icon
+          v-if="backgroundImage"
+          icon-class="delete"
+          class="icon-del"
+          @click.stop.native="delPagePic"
+        />
       </a-upload-dragger>
     </div>
     <div class="item-con">
@@ -406,6 +407,7 @@ export default {
     height: 89px;
     background: #f7f7f8;
     border-radius: 2px;
+    position: relative;
     .default-con {
       display: flex;
       flex-direction: column;
@@ -429,16 +431,17 @@ export default {
     .pic-con {
       position: relative;
       .pic-cls {
-        max-width: 130px;
-        max-height: 81px;
+        height: 85px;
+        max-width: 132px;
+        margin: 0 auto;
       }
-      .icon-del {
-        color: #333;
-        cursor: pointer;
-        position: absolute;
-        top: -3px;
-        right: 0;
-      }
+    }
+    .icon-del {
+      color: #333;
+      cursor: pointer;
+      position: absolute;
+      top: 3px;
+      right: 2px;
     }
   }
   .layout-item {

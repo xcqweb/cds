@@ -20,7 +20,12 @@ export default {
       let res = {}
       res.borderColor = this.borderColor || borderColor
       res.backgroundColor = this.backgroundColor || backgroundColor
-      return { ...this.styleObj, ...res }
+      return {
+        ...this.styleObj,
+        ...res,
+        borderStyle: this.borderStyle,
+        borderWidth: `${this.borderWidth}px`
+      }
     }
   },
   data() {
@@ -35,10 +40,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-color: rgb(187, 187, 187);
-  border-width: 1px;
-  border-style: solid;
   padding: 0px;
-  background: #fff;
 }
 </style>

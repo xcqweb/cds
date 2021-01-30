@@ -177,11 +177,11 @@ export default new Vuex.Store({
       } = data
       let currentPage = this.getters.currentPage
       let widgetNum = 0
-      if(currentPage.widgets.length) {
-        widgetNum = pageWidgetsNum(currentPage.widgets,cname)
-      } 
+      if (currentPage.widgets.length) {
+        widgetNum = pageWidgetsNum(currentPage.widgets, cname)
+      }
       widgetNum++
-      cid = cid || `${uuid(16, 16)}`
+      cid = cid || `${uuid(16, 48)}`
       zIndex = zIndex || currentPage.widgets.length + config.widgetInitZIndex
       let widget = {
         cid,
@@ -380,20 +380,20 @@ export default new Vuex.Store({
       if (delIds.length) {
         store.dispatch("patchDelWidgets", delIds)
       }
-      if (params.length) {
-        widgetApi.modifyPatch(params).then(res => {
-          if (res.code === 0) {
-            store.dispatch("updateApply", { updateTime: new Date().getTime() })
-            if (!isNoTip) {
-              Vue.prototype.$message.success("保存成功")
-            }
-          }
-        })
-      } else {
+      const updateTimeDeal = () => {
         store.dispatch("updateApply", { updateTime: new Date().getTime() })
         if (!isNoTip) {
           Vue.prototype.$message.success("保存成功")
         }
+      }
+      if (params.length) {
+        widgetApi.modifyPatch(params).then(res => {
+          if (res.code === 0) {
+            updateTimeDeal()
+          }
+        })
+      } else {
+        updateTimeDeal()
       }
     },
     patchDelWidgets(store, data) {

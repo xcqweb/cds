@@ -29,6 +29,10 @@ export default {
   },
   computed: {
     styleObj() {
+      let visibility = 'visible'
+      if(!this.visible) {
+        visibility = 'hidden'
+      }
       return {
         position: "absolute",
         width: `${this.width}px`,
@@ -37,7 +41,8 @@ export default {
         top: `0`,
         transform: `rotate(0deg)`,
         zIndex: `${this.zIndex}`,
-        opacity: this.opacity
+        opacity: this.opacity,
+        visibility,
       }
     }
   },

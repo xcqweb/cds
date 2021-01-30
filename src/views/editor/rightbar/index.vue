@@ -86,6 +86,12 @@ export default {
     display: flex;
     align-items: center;
   }
+  .ant-input-affix-wrapper .ant-input-suffix {
+    right: 6px;
+  }
+  .ant-input-affix-wrapper .ant-input:not(:last-child) {
+    padding-right: 15px;
+  }
   .ant-tabs {
     width: 100%;
     overflow: unset;

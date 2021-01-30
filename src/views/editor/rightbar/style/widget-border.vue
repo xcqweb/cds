@@ -8,7 +8,7 @@
           :style="{ background: borderColor }"
           @click="showColorPicker('borderColor', $event)"
         />
-        <a-select v-model="attrs.borderStyle" size="small" style="width:40%;">
+        <a-select v-model="attrs.borderStyle" size="small" style="width:36%;">
           <a-select-option
             v-for="(item, index) in borderList"
             :key="index"
@@ -22,10 +22,10 @@
         </a-select>
         <a-input
           size="small"
-          v-model="attrs.borderWidth"
+          v-model.number="attrs.borderWidth"
           :min="0"
           type="number"
-          style="width:24%;"
+          style="width:28%;"
         />
       </div>
     </div>

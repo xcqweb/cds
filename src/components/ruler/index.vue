@@ -33,7 +33,7 @@ export default {
         return { h: [], v: [] }
       },
       set(val) {
-        this.$store.commit("setRuler", { lines: val })
+        this.$store.commit("setPageInfo", { lines: val })
       }
     },
     scale() {

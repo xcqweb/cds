@@ -107,10 +107,9 @@ export default {
       if (backgroundImage) {
         res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
         res.backgroundSize = "cover"
-      } else {
-        if (gridEnable) {
-          res.backgroundImage = createGridBg(size, color, scale)
-        }
+        console.log(res, "t--a---")
+      } else if (gridEnable) {
+        res.backgroundImage = createGridBg(size, color, scale)
       }
       return res
     },
@@ -118,8 +117,8 @@ export default {
       return this.$store.state.apply.ruleEnable
     },
     viewConStyle() {
-      let left = 21 + 250
-      let top = 21
+      let left = 250
+      let top = 0
       if (!this.ruleEnable) {
         left = 250
         top = 0
@@ -259,9 +258,9 @@ export default {
   background-color: rgb(245, 245, 245);
   .view-con {
     position: absolute;
-    top: 21px;
+    top: 0;
     right: 230px;
-    left: calc(250px + 21px);
+    left: 250px;
     bottom: 0;
     overflow: auto;
   }

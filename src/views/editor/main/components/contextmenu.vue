@@ -184,7 +184,7 @@ export default {
     paste() {
       if (this.copyData && this.copyData.length) {
         this.copyData.forEach(item => {
-          let cid = uuid(16, 16)
+          let cid = uuid(16, 48)
           if (!this.isCut) {
             this.$store.commit("updateWidget", { cid: item.cid, active: false })
           }

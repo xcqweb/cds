@@ -20,12 +20,20 @@
 <script>
 import baseWidget from "@/mixins/base-widget"
 const cname = "GtImage"
+const borderColor = "transparent"
 export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
     imageStyle() {
-      return { ...this.styleObj, backgroundColor: "#e8e8e8" }
+      let res = { backgroundColor: "#e8e8e8" }
+      res.borderColor = this.borderColor || borderColor
+      return {
+        ...this.styleObj,
+        ...res,
+        borderStyle: this.borderStyle,
+        borderWidth: `${this.borderWidth}px`
+      }
     },
     imgSrcDeal() {
       return this.$imgUrl(this.imgSrc)
