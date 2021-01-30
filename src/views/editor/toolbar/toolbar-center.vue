@@ -120,7 +120,7 @@ import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
 import baseOperate from "@/mixins/base-operate"
 import undoManager from "@u/undo-manager"
-import { isGroup } from "@u/deal"
+import { isGroup,dealTimeFun } from "@u/deal"
 export default {
   name: "ToolbarCenter",
   mixins: [helpMethods, helpComputed, baseOperate],
@@ -161,21 +161,7 @@ export default {
       return res
     },
     updateTime() {
-      let date = this.$store.state.apply.updateTime
-      if (!date) {
-        date = new Date()
-      } else {
-        date = new Date(date)
-      }
-      let min = date.getMinutes()
-      if (min < 10) {
-        min = `0${min}`
-      }
-      let sec = date.getSeconds()
-      if (sec < 10) {
-        sec = `0${sec}`
-      }
-      return date.getHours() + ":" + min + ":" + sec
+      return dealTimeFun(this.$store.state.apply.updateTime)
     }
   },
   data() {

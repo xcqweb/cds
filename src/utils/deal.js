@@ -192,3 +192,20 @@ export function dealHomePage(pages) {
 export function pageWidgetsNum(widgets, cname) {
   return widgets.filter(item => item.cname === cname).length
 }
+
+export function dealTimeFun(date) {
+  if (!date) {
+    date = new Date()
+  } else {
+    date = new Date(date)
+  }
+  let min = date.getMinutes()
+  if (min < 10) {
+    min = `0${min}`
+  }
+  let sec = date.getSeconds()
+  if (sec < 10) {
+    sec = `0${sec}`
+  }
+  return date.getHours() + ":" + min + ":" + sec
+}

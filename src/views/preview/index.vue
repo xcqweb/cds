@@ -197,21 +197,18 @@ export default {
             tempArr.push(item)
             maps.set(item.paramType, tempArr)
           })
-          if (this.collectParamsMap) {
-            this.collectParamsMap.clear()
-          } else {
-            this.collectParamsMap = maps
-          }
           this.widgetDatasRequest.splice(0) // 切换页面时候清空上一个页面的绑定数据的请求值
-          this.requestLastData()
+          this.requestLastData(maps)
         }
       })
     },
     updateWidgetText(cid, frameText) {
       // 更新控件文本
-      if (!frameText) {
+      const resIndex = this.widgets.findIndex(item => item.cid === cid)
+      if (!frameText || resIndex == -1) {
         return
       }
+      const resItem = this.widgets[resIndex]
       let frameTexts = resItem.frameTexts
       if (frameTexts) {
         const tempIndex = frameTexts.findIndex(
@@ -226,13 +223,11 @@ export default {
         frameTexts = [frameText]
       }
       let defaultVal = frameTexts[0].paramValue
-
-      const resIndex = this.widgets.findIndex(item => item.cid === cid)
-      const resItem = this.widgets[resIndex]
+      let defaultName = frameTexts[0].paramMark
       if (resIndex != -1) {
         this.widgets.splice(resIndex, 1, {
           ...resItem,
-          text: defaultVal,
+          text: `${defaultName}=${defaultVal}`,
           frameTexts
         })
       }
@@ -251,15 +246,15 @@ export default {
       })
       this.widgetDatas.forEach(item => {
         key = `${item.deviceModelMark}-${item.deviceMark}-${item.paramMark}`
-        this.updateWidgetText(item.cid, maps.get(key))
+        this.updateWidgetText(item.widgetId, maps.get(key))
       })
       this.widgetDatasRequest
     },
-    requestLastData() {
+    requestLastData(maps) {
       // 最后一笔数据
       let requestArr = []
-      for (let key of this.collectParamsMap.keys()) {
-        let queryList = this.dealWidgetBind(this.collectParamsMap.get(key))
+      for (let key of maps.keys()) {
+        let queryList = this.dealWidgetBind(maps.get(key))
         if (queryList.length) {
           let p = instance.post(this.lastDataRequestUrl, {
             paramType: key,
@@ -275,7 +270,7 @@ export default {
       Promise.all(requestArr).then(res => {
         res.forEach(item => {
           if (item.code === 0 && item.data) {
-            dataRes.push(res.data.sourceList)
+            dataRes.push(item.data.sourceList)
           }
         })
         dataRes = dataRes.flat()
@@ -301,15 +296,15 @@ export default {
         splitArr = key.split("-")
         let valueList = modelMaps.get(key)
         valueList.forEach(item => {
-          if (item.paramType != 2) {
-            deviceParams.push(item.paramMark)
-          }
+          deviceParams.push(item.paramMark)
         })
-        queryList.push({
-          deviceModelMark: splitArr[0],
-          deviceParams,
-          deviceMark: splitArr[1]
-        })
+        if(deviceParams.length) {
+          queryList.push({
+            deviceModelMark: splitArr[0],
+            deviceParams,
+            deviceMark: splitArr[1]
+          })
+        }
       }
       return queryList
     }

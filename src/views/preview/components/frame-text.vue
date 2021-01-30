@@ -1,11 +1,14 @@
 <template>
-  <ul class="frame-text-con" :objStyle="objStyle">
+  <ul class="frame-text-con" :style="objStyle">
     <li v-for="(item, index) in frameTexts" :key="index">
       {{ item.paramMark }} = {{ item.paramValue }}
+      <br />
+      time = {{dealTime(item.ts)}}
     </li>
   </ul>
 </template>
 <script>
+import {dealTimeFun} from "@u/deal"
 export default {
   name: "FrameText",
   computed: {
@@ -22,7 +25,12 @@ export default {
         top: `${y}px`
       }
     }
-  }
+  },
+  methods: {
+    dealTime(ts) {
+      return dealTimeFun(ts)
+    }
+  },
 }
 </script>
 <style lang="less" scoped>
@@ -38,5 +46,9 @@ export default {
   overflow-y: auto;
   border-radius: 4px;
   transition: all 0.4s;
+  border:solid 1px #5D79E6;
+  pointer-events: none;
+  display:flex;
+  align-items: center;
 }
 </style>
