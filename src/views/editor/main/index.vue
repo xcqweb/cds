@@ -29,7 +29,7 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <text-editor v-if="isShowTextEditor" />
-            <contextmenu />
+            <contextmenu ref="cmenuRef"/>
           </div>
         </div>
       </div>
@@ -107,7 +107,6 @@ export default {
       if (backgroundImage) {
         res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
         res.backgroundSize = "cover"
-        console.log(res, "t--a---")
       } else if (gridEnable) {
         res.backgroundImage = createGridBg(size, color, scale)
       }
@@ -149,6 +148,10 @@ export default {
     })
   },
   beforeDestroy() {
+    const contextmenuEl = document.querySelector('.contextmenu-con')
+    if(contextmenuEl) {
+      contextmenuEl.remove()
+    }
     window.removeEventListener("resize", this.resizeFun)
   },
   methods: {

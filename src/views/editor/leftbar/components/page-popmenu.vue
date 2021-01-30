@@ -86,7 +86,7 @@ export default {
       if (this.page.children) {
         len = this.page.children.length
       }
-      const newPageId = `new-page-${len}`
+      const newPageId = `newpage*${len}`
       this.$store.commit("addPage", {
         pageId: newPageId,
         width,
@@ -106,13 +106,14 @@ export default {
       } else {
         len = this.$store.state.apply.pages.length
       }
-      const newPageId = `new-page-${++len}`
+      const newPageId = `${this.page.pageId}*pagecopy*${++len}`
       const newPageName = `${this.page.pageName} Copy`
       this.$store.commit("addPage", {
         ...this.page,
         pageId: newPageId,
         pageName: newPageName,
-        isEdit: true
+        isEdit: true,
+        isHome:false,
       })
       this.$store.commit("setCurrentPageId", newPageId)
       this.hidePagePopMenu()

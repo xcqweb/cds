@@ -178,10 +178,7 @@ export default {
       get() {
         let res = pageSizeList[0]
         if (this.currentPage) {
-          let { width, height } = this.currentPage
-          width = width || config.defaultPage.width
-          height = height || config.defaultPage.height
-          res = `${width}*${height}`
+          res = this.dealPagesize()
         }
         return res
       },
@@ -293,7 +290,10 @@ export default {
     navStyle() {
       this.navModel = this.navStyle.mode || "dark"
       this.navColorModel = this.navStyle.theme || 1
-    }
+    },
+    currentPage() {
+      this.dealPageSizeModel(this.pageSize)
+    },
   },
   data() {
     return {
@@ -314,11 +314,15 @@ export default {
     }
   },
   created() {
-    this.$nextTick(() => {
-      this.dealPageSizeModel(this.pageSize)
-    })
+    
   },
   methods: {
+    dealPagesize() {
+      let { width, height } = this.currentPage
+      width = width || config.defaultPage.width
+      height = height || config.defaultPage.height
+      return `${width}*${height}`
+    },
     dealPageSizeModel(val) {
       this.pageSizeModel = val
       const arr = val.split("*")

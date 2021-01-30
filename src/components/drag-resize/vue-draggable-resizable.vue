@@ -485,6 +485,7 @@ export default {
         // 鼠标没有进行移动
         const target = e.target || e.srcElement
         const regex = new RegExp("handle-([trmbl]{2})", "")
+        console.log(this.$el.contains(target))
         if (!this.$el.contains(target) && !regex.test(target.className)) {
           if (this.enabled) {
             this.enabled = false

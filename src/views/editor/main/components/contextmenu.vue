@@ -1,5 +1,5 @@
 <template>
-  <div class="contextmenu-con" :style="styleObj" v-if="showMenu">
+  <div class="contextmenu-con" :style="styleObj" v-show="showMenu">
     <ul v-click-out-side="hideMenu">
       <template v-for="item in list">
         <li

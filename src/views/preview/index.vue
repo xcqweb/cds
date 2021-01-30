@@ -1,7 +1,7 @@
 <template>
   <div class="preview"  v-if="currentPage && apply">
     <div class="preview-con-wrap">
-      <div class="preview-con" :style="viewStyleObj">
+      <div class="preview-con" :style="viewStyleObj" v-if="initAction">
         <widget-item
           v-for="widget in widgets"
           :key="widget.cid"
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      initAction:false,
       widgets: [],
       viewStyleObj: {},
       actionMap: new Map(),
@@ -172,6 +173,7 @@ export default {
             res.data.forEach(item => {
               this.actionMap.set(item.widgetId, item.widgetActionEntityList)
             })
+            this.initAction = true
           }
         })
     },

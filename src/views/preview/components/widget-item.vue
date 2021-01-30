@@ -67,7 +67,7 @@ export default {
       transform: `rotate(${rotate}deg)`,
       zIndex: "auto"
     }
-    if (this.actionList) {
+    if(this.actionList) {
       this.styleObj.cursor = "pointer"
     }
   },

@@ -47,7 +47,7 @@ export default {
       }
       const { width, height, pages } = this.$store.state.apply
       const len = pages.length + 1
-      const newPageId = `new-page-${len}`
+      const newPageId = `newpage*${len}`
       let temp = {
         pageId: newPageId,
         width,
