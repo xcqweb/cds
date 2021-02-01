@@ -207,9 +207,9 @@ export default {
 .mutual-item-action {
   background: #f7f7f8;
   border-radius: 2px;
-  margin-top: 10px;
+  margin-top: 15px;
   .item-action {
-    padding: 9px 10px;
+    padding: 5px 10px;
   }
 }
 </style>

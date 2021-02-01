@@ -314,7 +314,6 @@ export default {
         (selectWidgetsCount > 1 && !target.classList.contains("group-item") && !target.classList.contains("my-drag"))
       ) {
         if (this.enabled) {
-          console.log("abb---",e)
           this.enabled = false
           this.$emit("deactivated")
           this.$emit("update:active", false)

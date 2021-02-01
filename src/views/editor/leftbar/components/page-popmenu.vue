@@ -160,8 +160,8 @@ li {
     white-space: nowrap;
     cursor: pointer;
     &:hover {
-      background: rgb(245, 245, 245);
-      color: rgb(41, 141, 248);
+      background:#F3F5FD;
+      color: #1740DC;
     }
   }
 }

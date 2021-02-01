@@ -2,10 +2,11 @@
   <div class="widget-con">
     <div class="header">
       <span>组件</span>
-      <a-icon type="search" class="icon" @click="search" />
+      <a-input-search placeholder="请输入组件名称" style="width:140px;" @search="search" v-if="showSearch"/>
+      <a-icon type="search" class="icon" @click="showSearch=true" v-else/>
     </div>
     <div class="lib-con">
-      <a-select size="small" v-model="libType" class="select">
+      <a-select v-model="libType" class="select">
         <a-select-option
           :value="item.value"
           v-for="item in libs"
@@ -45,11 +46,13 @@ export default {
       libs: [{ label: "默认组件库", value: "default" }],
       libType: "default",
       activeKey: ["basic"],
-      widgets: config.widgets
+      widgets: config.widgets,
+      showSearch:false,
     }
   },
   methods: {
-    search() {},
+    search() {
+    },
     dragstart(evt, item) {
       const { x, y, srcElement } = evt // 开始拖拽时候，鼠标的位置
       const { left, top } = srcElement.getBoundingClientRect() // 拖拽元素与html文档的距离
@@ -71,6 +74,9 @@ export default {
     padding: 9px 10px;
     border-bottom: solid 1px #e5e6e9;
     color: #040c2c;
+    span{
+      font-weight:800;
+    }
     .icon {
       font-size: 12px;
       cursor: pointer;
@@ -78,7 +84,7 @@ export default {
   }
   .lib-con {
     padding: 9px 10px;
-    border-bottom: solid 1px #e5e6e9;
+    border-bottom: solid 1px #F0F1F3;
     .select {
       width: 100%;
       color: #040c2c;
@@ -119,7 +125,7 @@ export default {
       align-items: center;
       cursor: move;
       &:hover {
-        background: #e5e6e9;
+        background: #E5E6E9;
       }
     }
     .icon {

@@ -165,7 +165,7 @@ import helpComputed from "@/mixins/help-computed"
 import config from "@/config"
 import { getToken } from "@/utils/cookie"
 import fileApi from "@a/file"
-const pageSizeList = ["1366 * 768", "1280 * 720", "1920 * 1080", "自定义"]
+const pageSizeList = ["1366*768", "1280*720", "1920*1080", "自定义"]
 const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 export default {
   name: "PageStyle",
@@ -313,7 +313,11 @@ export default {
       fileData: { bucketName: fileApi.bucketName }
     }
   },
-  created() {},
+  mounted() {
+   if(this.currentPage) {
+    this.pageSize = this.dealPagesize()
+   }
+  },
   methods: {
     dealPagesize() {
       let { width, height } = this.currentPage
@@ -360,6 +364,7 @@ export default {
       if (val == "自定义") {
         this.showPageCustom = true
       } else {
+        this.showPageCustom = false
         this.pageSize = val
       }
     },

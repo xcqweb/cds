@@ -95,6 +95,8 @@ export default {
 }
 </script>
 <style lang="less">
+@lightDefaultFont:rgba(4, 12, 44, 0.85);
+@darkDefualtFont:rgba(255, 255, 255, 0.7);
 @light:#fff;
 @dark: #001529;
 @themeSet:{
@@ -116,7 +118,7 @@ export default {
   z-index: 100;
   &.dark {
     background: @dark;
-    color: #fff;
+    color:@darkDefualtFont;
     &.left {
       each(@themeSet,{
         &.@{key} {
@@ -124,6 +126,7 @@ export default {
             &:hover,
             &.select {
               background: @value;
+              color:@light;
             }
           }
         }
@@ -168,7 +171,7 @@ export default {
   }
   &.light {
     background: @light;
-    color: #040c2c;
+    color: @lightDefaultFont;
     &.left {
       each(@themeSet,{
         &.@{key} {

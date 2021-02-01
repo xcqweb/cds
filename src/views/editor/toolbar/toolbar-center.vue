@@ -9,52 +9,6 @@
         <svg-icon icon-class="redo" class-name="icon" />
         <span>重做</span>
       </a>
-      <a class="center-item" @click.prevent>
-        <a-dropdown>
-          <div>
-            <div style="display:flex;margin-bottom:3px;">
-              <svg-icon icon-class="canvas" class-name="icon" />
-              <svg-icon
-                icon-class="arrow-down"
-                slot="icon"
-                style="margin-left:3px;"
-              />
-            </div>
-            <span>画布</span>
-          </div>
-          <a-menu slot="overlay">
-            <a-menu-item>
-              <a-checkbox v-model="ruleModel">
-                标尺
-              </a-checkbox>
-            </a-menu-item>
-            <a-menu-item>
-              <a-checkbox v-model="gridModel">
-                网格
-              </a-checkbox>
-            </a-menu-item>
-            <a-menu-item>
-              <a-checkbox @change="rulerRefLineChange" defaultChecked>
-                参考线
-              </a-checkbox>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-      </a>
-      <a class="center-item room-item">
-        <a-dropdown>
-          <div>{{ scaleText }} <a-icon type="down" /></div>
-          <a-menu slot="overlay">
-            <a-menu-item
-              v-for="(item, index) in scaleList"
-              :key="index"
-              @click="changeScale(item)"
-            >
-              {{ item * 100 }}%
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-      </a>
     </div>
 
     <div>
@@ -166,7 +120,6 @@ export default {
   },
   data() {
     return {
-      scaleList: [0.25, 0.5, 0.75, 1, 1.5, 2.0, 3.0],
       alignModel: "left",
       alignList: [
         { value: "left", label: "左对齐" },
@@ -179,18 +132,6 @@ export default {
     }
   },
   methods: {
-    rulerRefLineChange(evt) {
-      let eles = document.querySelectorAll("#mb-ruler .lines")
-      let checked = evt.target.checked
-      if (eles) {
-        ;[].forEach.call(eles, ele => {
-          ele.style.visibility = checked ? "visible" : "hidden"
-        })
-      }
-    },
-    changeScale(item) {
-      this.scaleText = item
-    },
     dealAlign(item) {
       if (!this.selectWidgetsCount) {
         return
@@ -285,38 +226,5 @@ export default {
   & > div {
     display: flex;
   }
-  .center-item {
-    position: relative;
-    height: 100%;
-    width: 44px;
-    color: rgb(91, 107, 115);
-    border-top: 2px solid transparent;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .icon {
-      font-size: 16px;
-    }
-    span {
-      color: #040c2c;
-      border-top: 2px solid transparent;
-    }
-    .ant-dropdown-trigger {
-      text-align: center;
-    }
-    &.room-item {
-      width: 68px;
-      margin-left: 15px;
-    }
-  }
-}
-.ant-checkbox-wrapper {
-  font-size: 12px;
-  height: auto;
-}
-.ant-dropdown-menu-item {
-  font-size: 12px;
-  color: #040c2c;
 }
 </style>

@@ -12,7 +12,7 @@
           active: isCurrentPage(page),
           hover: page.pageId == hoverPageId
         }"
-        :style="{ paddingLeft: `${page.level * 14}px` }"
+        :style="{ paddingLeft: `${page.level * 17}px` }"
       >
         <a
           class="expander"
@@ -228,6 +228,7 @@ li {
       display: flex;
       width: 12px;
       margin-left: -12px;
+      margin-right:2px;
       color: rgb(200, 205, 208);
       &.is-expand {
         transform: rotate(90deg);
@@ -245,7 +246,7 @@ li {
         align-items: center;
         width: 16px;
         height: 16px;
-        margin-right: 8px;
+        margin-right: 5px;
         .icon {
           width: 16px;
           height: 16px;
@@ -294,7 +295,7 @@ li {
       }
       &:hover,
       &.hover {
-        color: rgb(41, 141, 248);
+        color:#1740DC;
       }
     }
     .active-circle {
@@ -302,11 +303,11 @@ li {
       right: 10px;
       width: 6px;
       height: 6px;
-      color: rgb(41, 141, 248);
+      color:#1740DC;
     }
     &.hover,
     &:hover {
-      background: rgb(247, 247, 247);
+      background:#F3F5FD;
       color: unset;
       .actions {
         display: flex;
@@ -316,14 +317,14 @@ li {
       }
     }
     &.active {
-      color: rgb(41, 141, 248);
-      background: rgb(242, 248, 255);
+      color:#1740DC;
+      background:#F3F5FD;
       .expander {
-        color: rgb(41, 141, 248);
+        color:#1740DC;
       }
       .name-icon {
         .icon {
-          color: rgb(41, 141, 248);
+          color:#1740DC;
         }
       }
     }

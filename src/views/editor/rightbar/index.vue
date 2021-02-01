@@ -56,7 +56,7 @@ export default {
   box-shadow: 0px 2px 7px 0px rgba(0, 9, 43, 0.09);
   background-color: #ffffff;
   .item-con {
-    padding: 9px 10px;
+    padding: 15px 10px;
     border-bottom: solid 1px #e5e6e9;
     &.no-border {
       border: none;
@@ -88,6 +88,7 @@ export default {
   }
   .ant-input-affix-wrapper .ant-input-suffix {
     right: 6px;
+    font-size:12px;
   }
   .ant-input-affix-wrapper .ant-input:not(:last-child) {
     padding-right: 15px;
