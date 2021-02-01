@@ -401,7 +401,6 @@ export default new Vuex.Store({
           }
         })
       } else {
-        console.log("wc----nm--")
         updateTimeDeal()
       }
     },
