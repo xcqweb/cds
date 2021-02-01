@@ -39,7 +39,7 @@ export default {
   mixins: [helpComputed],
   computed: {
     show() {
-      const widgetNames = ["GtLink"]
+      const widgetNames = ["GtLink",'GtText']
       return !widgetNames.includes(this.cname)
     },
     borderColor() {

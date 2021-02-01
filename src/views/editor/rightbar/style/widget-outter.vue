@@ -18,7 +18,7 @@ export default {
   mixins: [helpComputed],
   computed: {
     show() {
-      const widgetNames = ["GtImage", "GtLink", "GtLine"]
+      const widgetNames = ["GtImage", "GtLink", "GtLine","GtText"]
       return !widgetNames.includes(this.cname)
     },
     background() {

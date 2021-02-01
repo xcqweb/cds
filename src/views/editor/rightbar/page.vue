@@ -314,9 +314,9 @@ export default {
     }
   },
   mounted() {
-   if(this.currentPage) {
-    this.pageSize = this.dealPagesize()
-   }
+    if(this.currentPage) {
+      this.pageSize = this.dealPagesize()
+    }
   },
   methods: {
     dealPagesize() {
