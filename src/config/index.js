@@ -70,26 +70,26 @@ export default {
         }
       ]
     },
-    {
-      name: "装饰组件",
-      value: "decorate",
-      list: [
-        {
-          cname: "GtBorderAnimate1",
-          name: "边框1",
-          width: 400,
-          height: 300,
-          icon: "widget-image"
-        },
-        {
-          cname: "GtBorderAnimate2",
-          name: "边框2",
-          width: 400,
-          height: 300,
-          icon: "widget-image"
-        }
-      ]
-    },
+    // {
+    //   name: "装饰组件",
+    //   value: "decorate",
+    //   list: [
+    //     {
+    //       cname: "GtBorderAnimate1",
+    //       name: "边框1",
+    //       width: 400,
+    //       height: 300,
+    //       icon: "widget-image"
+    //     },
+    //     {
+    //       cname: "GtBorderAnimate2",
+    //       name: "边框2",
+    //       width: 400,
+    //       height: 300,
+    //       icon: "widget-image"
+    //     }
+    //   ]
+    // },
     {
       name: "图表组件",
       value: "chart",

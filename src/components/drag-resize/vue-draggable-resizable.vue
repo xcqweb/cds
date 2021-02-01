@@ -311,7 +311,7 @@ export default {
         (!this.$el.contains(target) &&
           !regex.test(target.className) &&
           selectWidgetsCount == 1) ||
-        (selectWidgetsCount > 1 && !target.classList.contains("group-item"))
+        (selectWidgetsCount > 1 && !target.classList.contains("group-item") && !target.classList.contains("my-drag"))
       ) {
         if (this.enabled) {
           this.enabled = false
@@ -485,8 +485,10 @@ export default {
         // 鼠标没有进行移动
         const target = e.target || e.srcElement
         const regex = new RegExp("handle-([trmbl]{2})", "")
-        console.log(this.$el.contains(target))
-        if (!this.$el.contains(target) && !regex.test(target.className)) {
+         const selectWidgetsCount = this.$store.getters.selectWidgets.length
+        let flag = selectWidgetsCount==1 && !this.$el.contains(target) && !regex.test(target.className)
+          || selectWidgetsCount>1 && !target.classList.contains("group-item")
+        if (flag) {
           if (this.enabled) {
             this.enabled = false
             this.$emit("deactivated")

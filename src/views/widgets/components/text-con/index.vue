@@ -31,7 +31,7 @@ export default {
         visibility: `${this.textEditorShow ? "hidden" : "visible"}`
       }
     }
-  },
+  }
 }
 </script>
 <style type="less" scoped>

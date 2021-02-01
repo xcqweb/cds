@@ -29,7 +29,7 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <text-editor v-if="isShowTextEditor" />
-            <contextmenu ref="cmenuRef"/>
+            <contextmenu ref="cmenuRef" />
           </div>
         </div>
       </div>
@@ -148,8 +148,8 @@ export default {
     })
   },
   beforeDestroy() {
-    const contextmenuEl = document.querySelector('.contextmenu-con')
-    if(contextmenuEl) {
+    const contextmenuEl = document.querySelector(".contextmenu-con")
+    if (contextmenuEl) {
       contextmenuEl.remove()
     }
     window.removeEventListener("resize", this.resizeFun)

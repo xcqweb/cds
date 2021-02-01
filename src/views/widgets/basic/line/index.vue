@@ -147,16 +147,12 @@ export default {
       this.leftEl = document.querySelector(".left-con")
       this.elBase.addEventListener("mousedown", this.deselect, true)
       this.leftEl.addEventListener("mousedown", this.deselect, true)
-      this.elBase.addEventListener("mouseup", this.mouseup, true)
-      this.elBase.addEventListener("mousemove", this.mousemove, true)
     }
   },
   beforeDestroy() {
     if (!this.isPreview) {
       this.elBase.removeEventListener("mousedown", this.deselect, true)
       this.leftEl.removeEventListener("mousedown", this.deselect, true)
-      this.elBase.removeEventListener("mouseup", this.mouseup, true)
-      this.elBase.removeEventListener("mousemove", this.mousemove, true)
     }
   },
   methods: {
@@ -176,6 +172,8 @@ export default {
       this.basePos = { x: left, y: top }
     },
     deselect(e) {
+      this.elBase.addEventListener("mouseup", this.mouseup, true)
+      this.elBase.addEventListener("mousemove", this.mousemove, true)
       const target = e.target || e.srcElement
       if (
         !this.$el.contains(target) &&
@@ -198,6 +196,8 @@ export default {
     },
     mouseup() {
       this.dragging = false
+      this.elBase.removeEventListener("mouseup", this.mouseup, true)
+      this.elBase.removeEventListener("mousemove", this.mousemove, true)
     }
   }
 }

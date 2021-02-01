@@ -82,16 +82,16 @@ export default {
     return {}
   },
   mounted() {
-    this.elBase = document.querySelector(".view-con")
-    this.elBase.addEventListener("mouseup", this.mouseup, true)
-    this.elBase.addEventListener("mousemove", this.mousemove, true)
+   
   },
   beforeDestroy() {
-    this.elBase.removeEventListener("mouseup", this.mouseup, true)
-    this.elBase.removeEventListener("mousemove", this.mousemove, true)
+    
   },
   methods: {
     mousedown(evt, type) {
+      this.elBase = document.querySelector(".view-con")
+      this.elBase.addEventListener("mouseup", this.mouseup, true)
+      this.elBase.addEventListener("mousemove", this.mousemove, true)
       this.resizing = true
       this.getBasePos()
       const { left, top, width, height } = this.widget.attrs
@@ -195,6 +195,8 @@ export default {
     },
     mouseup() {
       this.resizing = false
+      this.elBase.removeEventListener("mouseup", this.mouseup, true)
+      this.elBase.removeEventListener("mousemove", this.mousemove, true)
     },
     getAngle(x, y) {
       let theta = Math.atan2(y, x) // range (-PI, PI]

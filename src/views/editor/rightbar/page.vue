@@ -293,7 +293,7 @@ export default {
     },
     currentPage() {
       this.dealPageSizeModel(this.pageSize)
-    },
+    }
   },
   data() {
     return {
@@ -313,9 +313,7 @@ export default {
       fileData: { bucketName: fileApi.bucketName }
     }
   },
-  created() {
-    
-  },
+  created() {},
   methods: {
     dealPagesize() {
       let { width, height } = this.currentPage

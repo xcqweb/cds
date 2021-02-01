@@ -1,5 +1,5 @@
 <template>
-  <div class="preview"  v-if="currentPage && apply">
+  <div class="preview" v-if="currentPage && apply">
     <div class="preview-con-wrap">
       <div class="preview-con" :style="viewStyleObj" v-if="initAction">
         <widget-item
@@ -54,6 +54,12 @@ export default {
     },
     showFrame() {
       return this.$store.state.preview.frameContent.show
+    },
+    widgets() {
+      return arrayToTree(this.originalWidgets, {
+        parentProperty: "pid",
+        customID: "cid"
+      })
     }
   },
   watch: {
@@ -68,9 +74,9 @@ export default {
   },
   data() {
     return {
-      initAction:false,
-      widgets: [],
+      initAction: false,
       viewStyleObj: {},
+      originalWidgets: [],
       actionMap: new Map(),
       lastDataRequestUrl: "",
       widgetDatas: [], // 控件绑定的数据
@@ -120,14 +126,13 @@ export default {
           pages = dealHomePage(pages)
           this.$store.commit("preview/setPages", pages)
           this.$store.commit("preview/setCurrentPage", pages[0])
-          // this.startTimerPullData()
         }
       })
     },
-    startTimerPullData() {
+    startTimerPullData(maps) {
       // 定时拉取
-      this.timer = setTimeout(() => {
-        this.requestLastData()
+      this.timer = setInterval(() => {
+        this.requestLastData(maps)
       }, (this.apply.dataRate || 3) * 1000)
     },
     initPageAttrs() {
@@ -144,8 +149,8 @@ export default {
         backgroundColor: backgroundColor || "#fff",
         backgroundImage: `url(${this.$imgUrl(backgroundImage)})`
       }
-      if(backgroundImage) {
-        this.viewStyleObj.backgroundSize = 'cover'
+      if (backgroundImage) {
+        this.viewStyleObj.backgroundSize = "cover"
       }
     },
     queryPageWidgets() {
@@ -157,10 +162,7 @@ export default {
           if (res.data.length) {
             tempArr = dealWidgetData(res.data)
           }
-          this.widgets = arrayToTree(tempArr, {
-            parentProperty: "pid",
-            customID: "cid"
-          })
+          this.originalWidgets = tempArr
         }
       })
     },
@@ -197,18 +199,20 @@ export default {
             tempArr.push(item)
             maps.set(item.paramType, tempArr)
           })
-          this.widgetDatasRequest.splice(0) // 切换页面时候清空上一个页面的绑定数据的请求值
-          this.requestLastData(maps)
+          if(maps.size) {
+            this.requestLastData(maps)
+            this.startTimerPullData(maps)
+          }
         }
       })
     },
     updateWidgetText(cid, frameText) {
       // 更新控件文本
-      const resIndex = this.widgets.findIndex(item => item.cid === cid)
+      const resIndex = this.originalWidgets.findIndex(item => item.cid === cid)
       if (!frameText || resIndex == -1) {
         return
       }
-      const resItem = this.widgets[resIndex]
+      const resItem = this.originalWidgets[resIndex]
       let frameTexts = resItem.frameTexts
       if (frameTexts) {
         const tempIndex = frameTexts.findIndex(
@@ -225,7 +229,7 @@ export default {
       let defaultVal = frameTexts[0].paramValue
       let defaultName = frameTexts[0].paramMark
       if (resIndex != -1) {
-        this.widgets.splice(resIndex, 1, {
+        this.originalWidgets.splice(resIndex, 1, {
           ...resItem,
           text: `${defaultName}=${defaultVal}`,
           frameTexts
@@ -298,7 +302,7 @@ export default {
         valueList.forEach(item => {
           deviceParams.push(item.paramMark)
         })
-        if(deviceParams.length) {
+        if (deviceParams.length) {
           queryList.push({
             deviceModelMark: splitArr[0],
             deviceParams,
@@ -311,17 +315,17 @@ export default {
   },
   beforeDestroy() {
     if (this.timer) {
-      window.clearTimeout(this.timer)
+      clearInterval(this.timer)
       this.timer = null
     }
   }
 }
 </script>
 <style lang="less">
-.preview{
+.preview {
   position: relative;
-  height:100%;
-  width:100%;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 }
 .preview-con-wrap {

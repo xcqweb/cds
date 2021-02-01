@@ -67,7 +67,7 @@
       />
     </div>
     <div class="item-action fs" v-if="action.actionType == 'show-hide-widget'">
-      <label>显示</label>
+      <label style="font-weight:normal;">显示</label>
       <a-select
         v-model="action.content.showWidgetId"
         size="small"
@@ -85,42 +85,42 @@
       </a-select>
     </div>
     <div class="item-action fs" v-if="action.actionType == 'show-hide-widget'">
-      <label>隐藏</label>
+      <label style="font-weight:normal;">隐藏</label>
       <a-select
         v-model="action.content.hideWidgetId"
         size="small"
         style="width:80%;"
+        @blur.native="saveAction"
       >
         <a-select-option
           v-for="item in widgets"
           :key="item.cid"
           :value="item.cid"
           placeholder="请选择"
-          @blur.native="saveAction"
         >
           {{ item.name }}
         </a-select-option>
       </a-select>
     </div>
     <div class="item-action fs" v-if="action.actionType == 'open-link'">
-      <label>方式</label>
+      <label style="font-weight:normal;">方式</label>
       <a-select
         v-model="action.content.openWay"
         size="small"
         style="width:80%;"
+        @blur.native="saveAction"
       >
         <a-select-option
           v-for="item in openListWayList"
           :key="item.value"
           :value="item.value"
-          @blur.native="saveAction"
         >
           {{ item.label }}
         </a-select-option>
       </a-select>
     </div>
     <div class="item-action" v-if="action.actionType == 'open-link'">
-      <label style="display:block;margin-bottom:6px;">输入连接</label>
+      <label style="display:block;margin-bottom:6px;font-weight:normal;">输入连接</label>
       <a-textarea
         placeholder="请输入连接地址"
         :rows="3"

@@ -120,7 +120,7 @@ import helpComputed from "@/mixins/help-computed"
 import helpMethods from "@/mixins/help-methods"
 import baseOperate from "@/mixins/base-operate"
 import undoManager from "@u/undo-manager"
-import { isGroup,dealTimeFun } from "@u/deal"
+import { isGroup, dealTimeFun } from "@u/deal"
 export default {
   name: "ToolbarCenter",
   mixins: [helpMethods, helpComputed, baseOperate],
@@ -180,11 +180,11 @@ export default {
   },
   methods: {
     rulerRefLineChange(evt) {
-      let eles = document.querySelectorAll('#mb-ruler .lines')
+      let eles = document.querySelectorAll("#mb-ruler .lines")
       let checked = evt.target.checked
-      if(eles) {
-        [].forEach.call(eles,ele=>{
-          ele.style.visibility = checked ? 'visible' : 'hidden'
+      if (eles) {
+        ;[].forEach.call(eles, ele => {
+          ele.style.visibility = checked ? "visible" : "hidden"
         })
       }
     },

@@ -29,9 +29,9 @@ export default {
   },
   computed: {
     styleObj() {
-      let visibility = 'visible'
-      if(!this.visible) {
-        visibility = 'hidden'
+      let visibility = "visible"
+      if (!this.visible) {
+        visibility = "hidden"
       }
       return {
         position: "absolute",
@@ -42,7 +42,7 @@ export default {
         transform: `rotate(0deg)`,
         zIndex: `${this.zIndex}`,
         opacity: this.opacity,
-        visibility,
+        visibility
       }
     }
   },

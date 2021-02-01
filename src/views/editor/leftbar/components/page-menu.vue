@@ -63,7 +63,7 @@
 <script>
 import pageApi from "@a/page"
 import widgetApi from "@a/widget"
-import { dealWidgetData,dealPageData } from "@u/deal"
+import { dealWidgetData, dealPageData } from "@u/deal"
 export default {
   name: "PageMenu",
   props: {
@@ -120,7 +120,7 @@ export default {
       this.$store.commit("setCurrentPageId", pageId)
     },
     hideEdit({ pageName, pageId }) {
-      if(!pageId.includes("pagecopy")) {
+      if (!pageId.includes("pagecopy")) {
         this.$store.commit("setPageInfo", { pageName })
       }
       this.savePage(pageId)
@@ -131,7 +131,7 @@ export default {
       let tempPage
       this.isAdd = pageId.includes("newpage")
       this.isCopy = pageId.includes("pagecopy")
-      if(this.isCopy) {
+      if (this.isCopy) {
         const tempArr = pageId.split("*")
         tempPage = this.$store.state.apply.pages.find(
           item => item.pageId == tempArr[0]
@@ -148,26 +148,26 @@ export default {
         method = "add"
         msg = `新建页面成功`
         params = { ...params, pageId: "" }
-      } else if(this.isCopy) {
-        method = 'copy'
-        params = {pageId:tempPage.pageId,pageName:tempPage.pageName}
+      } else if (this.isCopy) {
+        method = "copy"
+        params = { pageId: tempPage.pageId, pageName: tempPage.pageName }
         msg = `页面复制成功`
       } else {
         method = "modify"
         msg = `页面名称修改成功`
-      } 
+      }
       pageApi[method](params).then(res => {
         if (res.code === 0) {
-          if(this.isCopy) {
+          if (this.isCopy) {
             const tempArr = pageId.split("*")
-            if(res.data) {
+            if (res.data) {
               resObj = { pageId, isEdit: false, newPageId: res.data.pageId }
               const temp = dealPageData(res.data)
-              this.$store.commit("setPageInfo",{...temp,...resObj})
+              this.$store.commit("setPageInfo", { ...temp, ...resObj })
               this.loadPageData(tempArr[0])
             }
           } else {
-            resObj = { pageId, isEdit: false}
+            resObj = { pageId, isEdit: false }
             if (this.isAdd) {
               resObj = { ...resObj, newPageId: res.data.pageId }
             }

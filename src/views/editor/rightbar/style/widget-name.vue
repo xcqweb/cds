@@ -46,15 +46,15 @@ export default {
         this.$store.commit("updateWidgetAttrs", { name })
       }
     },
-    opacity:{
+    opacity: {
       get() {
         let res = this.attrs.opacity || 1
-        return res*100
+        return res * 100
       },
       set(val) {
-        this.$store.commit("updateWidgetAttrs", { opacity:val/100})
+        this.$store.commit("updateWidgetAttrs", { opacity: val / 100 })
       }
-    },
+    }
   },
   data() {
     return {}

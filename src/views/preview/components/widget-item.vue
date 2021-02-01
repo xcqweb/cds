@@ -1,6 +1,7 @@
 <template>
   <div
     class="group-item"
+    :id="widget.cid"
     :style="styleObj"
     @click="click"
     @dblclick="dblclick"
@@ -49,10 +50,11 @@ export default {
   },
   data() {
     return {
-      styleObj: {}
+      styleObj: {},
     }
   },
   created() {
+    console.log(this.widget)
     let { width, height, left, top, rotate } = this.widget.attrs
     if (this.pwidget) {
       const { left: pleft, top: ptop } = this.pwidget.attrs
@@ -67,7 +69,7 @@ export default {
       transform: `rotate(${rotate}deg)`,
       zIndex: "auto"
     }
-    if(this.actionList) {
+    if (this.actionList) {
       this.styleObj.cursor = "pointer"
     }
   },
@@ -110,7 +112,17 @@ export default {
         }
       })
     },
-    changeWidgetVisible(content) {},
+    changeWidgetVisible(content) {
+      const {hideWidgetId,showWidgetId} = content
+      const ele1 = document.querySelector(`#${hideWidgetId}`)
+      const ele2 = document.querySelector(`#${showWidgetId}`)
+      if(ele1) {
+        ele1.style.display="none"
+      }
+      if(ele2) {
+        ele2.style.display="block"
+      }
+    },
     openLink(content) {
       const { openWay, linkUrl } = content
       window.open(linkUrl, openWay)

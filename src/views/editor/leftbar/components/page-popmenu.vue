@@ -113,7 +113,7 @@ export default {
         pageId: newPageId,
         pageName: newPageName,
         isEdit: true,
-        isHome:false,
+        isHome: false
       })
       this.$store.commit("setCurrentPageId", newPageId)
       this.hidePagePopMenu()

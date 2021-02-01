@@ -216,6 +216,10 @@ export default new Vuex.Store({
           item => item.cid == currentWidget.cid
         )
         const resAttrs = { ...currentWidget.attrs, ...attrs }
+        resAttrs.left = parseInt(resAttrs.left)
+        resAttrs.top = parseInt(resAttrs.top)
+        resAttrs.width = parseInt(resAttrs.width)
+        resAttrs.height = parseInt(resAttrs.height)
         currentWidget.attrs = resAttrs
         currentWidget.isEdit = true
         currentPage.widgets.splice(currentWidgetIndex, 1, { ...currentWidget })
@@ -227,6 +231,10 @@ export default new Vuex.Store({
       selectWidgets.forEach(item => {
         let resIndex = currentPage.widgets.findIndex(w => w.cid == item.cid)
         let resAttrs = { ...item.attrs, ...attrs }
+        resAttrs.left = parseInt(resAttrs.left)
+        resAttrs.top = parseInt(resAttrs.top)
+        resAttrs.width = parseInt(resAttrs.width)
+        resAttrs.height = parseInt(resAttrs.height)
         item.attrs = resAttrs
         item.isEdit = true
         currentPage.widgets.splice(resIndex, 1, { ...item })
@@ -393,6 +401,7 @@ export default new Vuex.Store({
           }
         })
       } else {
+        console.log("wc----nm--")
         updateTimeDeal()
       }
     },

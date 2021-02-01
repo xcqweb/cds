@@ -7,7 +7,7 @@
   >
     <header class="color-picker-header">
       <div class="header-text">颜色设置</div>
-      <a-icon type="close" style="cursor:pointer;" @click.native="hide"/>
+      <a-icon type="close" style="cursor:pointer;" @click.native="hide" />
     </header>
     <sketch-picker v-model="color" @input="updateValue"></sketch-picker>
   </div>
@@ -45,7 +45,7 @@ export default {
 <style lang="less" scoped>
 .color-picker-con {
   position: absolute;
-  background:#fff;
+  background: #fff;
   .color-picker-header {
     display: flex;
     justify-content: space-between;
