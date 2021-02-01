@@ -150,7 +150,7 @@ export default {
         backgroundImage: `url(${this.$imgUrl(backgroundImage)})`
       }
       if (backgroundImage) {
-        this.viewStyleObj.backgroundSize = "cover"
+        this.viewStyleObj.backgroundSize = "100% 100%"
       }
     },
     queryPageWidgets() {

@@ -29,7 +29,7 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <text-editor v-if="isShowTextEditor" />
-            <contextmenu ref="cmenuRef" />
+            <contextmenu ref="cmenuRef"/>
           </div>
         </div>
       </div>
@@ -76,6 +76,12 @@ export default {
     scale() {
       return this.$store.state.apply.scale
     },
+    width() {
+      return this.currentPage.width
+    },
+    height() {
+      return this.currentPage.height
+    },
     portConStyle() {
       const { scale, width, height } = this.$store.state.apply
       let conWidth = width * 2
@@ -105,10 +111,13 @@ export default {
         transform: `scale(${scale})`
       }
       if (backgroundImage) {
-        res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
-        res.backgroundSize = "cover"
-      } else if (gridEnable) {
-        res.backgroundImage = createGridBg(size, color, scale)
+        res.backgroundImage = `url(${this.$imgUrl(backgroundImage)})`
+        res.backgroundRepeat = 'no-repeat'
+        res.backgroundSize = "100% 100%"
+      } else {
+        if (gridEnable) {
+          res.backgroundImage = createGridBg(size, color, scale)
+        }
       }
       return res
     },
@@ -116,8 +125,8 @@ export default {
       return this.$store.state.apply.ruleEnable
     },
     viewConStyle() {
-      let left = 250
-      let top = 0
+      let left = 21+250
+      let top = 21
       if (!this.ruleEnable) {
         left = 250
         top = 0
@@ -131,7 +140,13 @@ export default {
   watch: {
     scale() {
       this.centerView()
-    }
+    },
+    width() {
+      this.centerView()
+    },
+    height() {
+      this.centerView()
+    },
   },
   data() {
     return {}
@@ -148,8 +163,8 @@ export default {
     })
   },
   beforeDestroy() {
-    const contextmenuEl = document.querySelector(".contextmenu-con")
-    if (contextmenuEl) {
+    const contextmenuEl = document.querySelector('.contextmenu-con')
+    if(contextmenuEl) {
       contextmenuEl.remove()
     }
     window.removeEventListener("resize", this.resizeFun)
@@ -228,8 +243,8 @@ export default {
       const { scale } = this.$store.state.apply
       const { left: viewLeft, top: viewTop } = this.viewProps()
       const { left: portLeft, top: portTop } = this.portProps()
-      const x = parseInt((viewLeft - portLeft) / scale)
-      const y = parseInt((viewTop - portTop - 4) / scale)
+      const x = (viewLeft - portLeft ) / scale
+      const y = (viewTop - portTop) / scale
       this.$store.commit("setRuler", { startPos: { x, y } })
     },
     dealRulerCorner() {
@@ -261,9 +276,9 @@ export default {
   background-color: rgb(245, 245, 245);
   .view-con {
     position: absolute;
-    top: 0;
+    top: 21px;
     right: 230px;
-    left: 250px;
+    left: calc(250px + 21px);
     bottom: 0;
     overflow: auto;
   }
