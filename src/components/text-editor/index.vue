@@ -15,50 +15,52 @@ import helpComputed from "@/mixins/help-computed"
 export default {
   name: "TextEditor",
   mixins: [helpComputed],
+  computed:{
+    objStyle() {
+      let {
+        left,
+        top,
+        width,
+        height,
+        color,
+        justifyContent,
+        alignItems,
+        fontFamily,
+        fontSize,
+        rotate,
+        fontWeight
+      } = this.operateWidget.attrs
+      return {
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        color,
+        justifyContent,
+        alignItems,
+        fontFamily,
+        transform: "rotate(" + rotate + "deg)",
+        fontSize: `${fontSize}px`,
+        fontWeight: fontWeight ? "bolder" : "normal"
+      }
+    },
+  },
   data() {
     return {
-      objStyle: {},
       text: ""
     }
   },
   mounted() {
-    const widget = this.textEditor.widget
-    let {
-      left,
-      top,
-      width,
-      height,
-      color,
-      justifyContent,
-      alignItems,
-      fontFamily,
-      fontSize,
-      rotate,
-      fontWeight
-    } = widget.attrs
-    this.objStyle = {
-      left: `${left}px`,
-      top: `${top}px`,
-      width: `${width}px`,
-      height: `${height}px`,
-      color,
-      justifyContent,
-      alignItems,
-      fontFamily,
-      transform: "rotate(" + rotate + "deg)",
-      fontSize: `${fontSize}px`,
-      fontWeight: fontWeight ? "bolder" : "normal"
-    }
-    this.text = widget.text
-    this.$store.commit("updateWidget", { active: false, cid: widget.cid })
+    
+    this.text = this.operateWidget.text
+    this.$store.commit("updateWidget", { active: false, cid: this.operateWidget.cid })
     this.selectText(this.$refs.textRef)
   },
   methods: {
     blur() {
-      const widget = this.textEditor.widget
       const text = this.$refs.textRef.innerText
-      this.$store.commit("setTextEditor", { show: false, widget: null })
-      this.$store.commit("updateWidget", { cid: widget.cid, text })
+      this.$store.commit("updateWidget", { cid:  this.operateWidget.cid, text:text.trim() })
+      this.$store.commit("setTextEditor", { show: false,  widget: null })
     },
     selectText(obj) {
       let range

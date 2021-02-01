@@ -23,10 +23,13 @@ export default {
       return this.$store.state.textEditor
     },
     operateWidget() {
+      let res 
       if (this.currentWidget) {
         return this.currentWidget
       }
-      let res = findWidgetById(this.currentPage.widgets,this.textEditor.widget.cid)
+      if(this.textEditor.widget) {
+        res = findWidgetById(this.currentPage.widgets,this.textEditor.widget.cid)
+      }
       return res
     },
     cname() {
