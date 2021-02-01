@@ -314,6 +314,7 @@ export default {
         (selectWidgetsCount > 1 && !target.classList.contains("group-item") && !target.classList.contains("my-drag"))
       ) {
         if (this.enabled) {
+          console.log("abb---",e)
           this.enabled = false
           this.$emit("deactivated")
           this.$emit("update:active", false)
@@ -487,7 +488,7 @@ export default {
         const regex = new RegExp("handle-([trmbl]{2})", "")
          const selectWidgetsCount = this.$store.getters.selectWidgets.length
         let flag = selectWidgetsCount==1 && !this.$el.contains(target) && !regex.test(target.className)
-          || selectWidgetsCount>1 && !target.classList.contains("group-item")
+          || selectWidgetsCount>1 && !target.classList.contains("group-item") && !target.classList.contains("my-drag")
         if (flag) {
           if (this.enabled) {
             this.enabled = false
