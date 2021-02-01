@@ -52,7 +52,7 @@ export default {
       let res = {}
       switch (this.colorType) {
         case "fontColor":
-          res = { color: val, cid: this.textEditor.cid }
+          res = { color: val, cid: this.operateWidget.cid }
           break
         case "fillColor":
           res = { backgroundColor: val }
@@ -61,7 +61,11 @@ export default {
           res = { borderColor: val }
           break
       }
-      this.selectWidgets.forEach(item => {
+      let tempArr = this.selectWidgets
+      if(!this.selectWidgets.length) {
+        tempArr = [this.operateWidget]
+      }
+      tempArr.forEach(item => {
         this.$store.commit("updateWidgetAttrs", { ...res, cid: item.cid })
       })
     },

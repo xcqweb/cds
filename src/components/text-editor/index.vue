@@ -3,11 +3,11 @@
     class="text-editor-con"
     :style="objStyle"
     contenteditable="true"
-    v-click-out-side="{ cb: blur, elExclude: 'text-style-con' }"
+    v-click-out-side="{ cb: blur, elExclude: ['text-style-con','color-picker-con'] }"
   >
-    <div class="text" ref="textRef">
+    <span class="text" ref="textRef">
       {{ text }}
-    </div>
+    </span>
   </div>
 </template>
 <script>
@@ -96,7 +96,6 @@ export default {
   z-index: 999999;
   .text {
     user-select: text;
-    width: 100%;
     white-space: pre-wrap;
     word-break: break-word;
   }

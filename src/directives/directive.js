@@ -38,12 +38,25 @@ Vue.directive("clickOutSide", {
       clickOutSide = value
     }
     el.handler = function(e) {
-      let elExclude
+      let elExclude = []
       if (value.elExclude) {
-        elExclude = document.querySelector(`.${value.elExclude}`)
+        value.elExclude.forEach(item=>{
+          let tempEle = document.querySelector(`.${item}`)
+          if(tempEle) {
+            elExclude.push(tempEle)
+          }
+        })
       }
       if (el && !el.contains(e.target)) {
-        if (!elExclude || !elExclude.contains(e.target)) {
+        let resFlag = true
+        if(elExclude.length) {
+          elExclude.forEach(item=>{
+            if(item.contains(e.target)) {
+              resFlag = false
+            }
+          })
+        }
+        if (!elExclude.length || resFlag) {
           clickOutSide(e)
         }
       }

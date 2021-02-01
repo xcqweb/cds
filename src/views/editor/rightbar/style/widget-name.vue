@@ -1,7 +1,7 @@
 <template>
   <div class="widget-name-con">
     <div class="item-con">
-      <div class="fs item-name" v-if="selectWidgets.length == 1">
+      <div class="fs item-name" v-if="selectWidgets.length == 1 || textEditorShowFlag">
         <label>组件名称</label>
         <a-input size="small" v-model.trim="displayName" style="width: 60%" />
       </div>
@@ -37,14 +37,18 @@ export default {
     displayName: {
       get() {
         let res = ""
-        if (this.currentWidget) {
-          res = this.currentWidget.name
+        if (this.operateWidget) {
+          res = this.operateWidget.name
         }
         return res
       },
       set(name) {
         this.$store.commit("updateWidgetAttrs", { name })
       }
+    },
+    textEditorShowFlag() {
+      // 编辑控件文本
+      return this.textEditor.show
     },
     opacity: {
       get() {
