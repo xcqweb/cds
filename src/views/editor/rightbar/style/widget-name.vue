@@ -48,7 +48,7 @@ export default {
     },
     opacity: {
       get() {
-        let res = this.attrs.opacity || 1
+        let res = this.attrs.opacity || 0
         return res * 100
       },
       set(val) {
