@@ -11,7 +11,7 @@
       </div>
     </div>
     <preview-menu v-if="position" />
-    <frame-text v-if="showFrame" />
+    <frame-text v-show="showFrame" />
   </div>
   <loading v-else />
 </template>
@@ -201,7 +201,7 @@ export default {
           })
           if(maps.size) {
             this.requestLastData(maps)
-            this.startTimerPullData(maps)
+            //this.startTimerPullData(maps)
           }
         }
       })
@@ -216,7 +216,7 @@ export default {
       let frameTexts = resItem.frameTexts
       if (frameTexts) {
         const tempIndex = frameTexts.findIndex(
-          item => item.paramMark == frameText.frameText
+          item => item.paramMark == frameText.paramMark
         )
         if (tempIndex != -1) {
           frameTexts[tempIndex] = frameText
@@ -300,7 +300,7 @@ export default {
         splitArr = key.split("-")
         let valueList = modelMaps.get(key)
         valueList.forEach(item => {
-          deviceParams.push(item.paramMark)
+            deviceParams.push(item.paramMark)
         })
         if (deviceParams.length) {
           queryList.push({

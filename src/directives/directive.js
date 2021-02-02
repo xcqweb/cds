@@ -78,6 +78,7 @@ Vue.directive("inputNumber", {
     tempEl.addEventListener('input', el.handler)
   },
   unbind: function(el) {
+    const tempEl = el.firstChild
     tempEl.removeEventListener('input', el.handler)
   }
 })

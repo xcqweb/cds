@@ -55,7 +55,6 @@ export default {
   },
   created() {
     let { width, height, left, top, rotate, zIndex } = this.widget.attrs
-    console.log( this.widget,"a----------")
     if (this.pwidget) {
       const { left: pleft, top: ptop } = this.pwidget.attrs
       left = left - pleft

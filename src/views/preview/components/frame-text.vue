@@ -34,6 +34,9 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+ul,li{
+  list-style: none;
+}
 .frame-text-con {
   position: absolute;
   padding: 6px;
@@ -50,5 +53,6 @@ export default {
   pointer-events: none;
   display: flex;
   align-items: center;
+  flex-direction: column;
 }
 </style>

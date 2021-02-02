@@ -209,6 +209,8 @@ export default {
           this.paramType = 2
           break
       }
+      this.choosedData.paramMark = ''
+      this.chooseData.paramName = ''
       this.choosedData.paramType = this.paramType
     },
     getDatasourceConfig() {
@@ -334,7 +336,7 @@ export default {
         params.id = this.choosedData.id
         api.edit(params).then(res => {
           if (res.code == 0) {
-            // this.$message.success("修改成功")
+            this.$message.success("保存成功")
           }
         })
       } else {
