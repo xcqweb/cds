@@ -70,10 +70,17 @@ Vue.directive("clickOutSide", {
 })
 
 Vue.directive("inputNumber", {
-  bind: function(el) {
+  bind: function(el,{ value }) {
     const tempEl = el.firstChild
     el.handler = function() {
-      tempEl.value = Number(tempEl.value.replace(/\D+/, ''))
+      let res = Number(tempEl.value.replace(/\D+/, ''))
+      if(value.max) {
+        res = Math.min(res,value.max)
+      }
+      if(value.min || value.min === 0) {
+        res = Math.max(res,value.min)
+      }
+      tempEl.value = res
     }
     tempEl.addEventListener('input', el.handler)
   },

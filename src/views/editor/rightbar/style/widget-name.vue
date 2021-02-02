@@ -20,9 +20,9 @@
         <a-input
           size="small"
           v-model.number="opacity"
-          type="number"
-          style="width:30%"
+          style="width:24%"
           suffix="%"
+          v-input-number="{min:0,max:100}"
         />
       </div>
     </div>

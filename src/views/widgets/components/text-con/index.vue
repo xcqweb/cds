@@ -28,7 +28,7 @@ export default {
         fontFamily: this.fontFamily,
         fontSize: `${this.fontSize}px`,
         fontWeight: this.fontWeight ? "bolder" : "normal",
-        visibility: `${this.textEditorShow ? "hidden" : "visible"}`
+        display: `${this.textEditorShow ? "none" : "flex"}`
       }
     }
   }

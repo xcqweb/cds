@@ -145,7 +145,7 @@ export function dealWidgetData(data) {
         fontSize: item.fontSize || dw.fontSize,
         fontFamily: item.fontFamily || dw.fontFamily,
         opacity: item.opacity || dw.opacity,
-        visible: item.visible || dw.visible,
+        visible: item.visible,
         borderRadius: item.borderRadius || dw.borderRadius,
         color: item.color || dw.color
       }
