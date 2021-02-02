@@ -272,7 +272,7 @@ export default {
       height: 16px;
       left:50%;
       margin-left:-86px;
-      transform:rotate(270deg);
+      transform:rotate(90deg);
       .path-wapper {
         fill:@dark;
       }

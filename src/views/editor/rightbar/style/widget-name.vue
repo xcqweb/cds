@@ -43,7 +43,7 @@ export default {
         return res
       },
       set(name) {
-        this.$store.commit("updateWidgetAttrs", { name })
+        this.$store.commit("updateWidget", { name })
       }
     },
     textEditorShowFlag() {
