@@ -20,6 +20,7 @@
           v-model.number="attrs.rotate"
           suffix="R"
           style="width: 30%;"
+          v-input-number
         />
       </div>
       <div class="input-con fv" v-if="show" style="margin-bottom:0;">
@@ -28,12 +29,14 @@
           v-model.number="attrs.width"
           suffix="W"
           style="width: 30%;margin-right:5%;"
+          v-input-number
         />
         <a-input
           size="small"
           v-model.number="attrs.height"
           suffix="H"
           style="width: 30%;margin-right:5%;"
+           v-input-number
         />
          <a-input
           v-if="cname == 'GtRect'"
@@ -41,6 +44,7 @@
           v-model.number="attrs.borderRadius"
           suffix="C"
           style="width: 30%"
+          v-input-number
         />
       </div>
     </div>

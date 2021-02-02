@@ -129,7 +129,7 @@ export function dealWidgetData(data) {
         height: item.height,
         left: item.left,
         top: item.top,
-        zIndex: item.zindex,
+        zIndex: item.zIndex,
         rotate: item.rotate || dw.rotate,
         arrow: item.arrow || dw.arrow,
         linkUrl: item.linkUrl || dw.linkUrl,
