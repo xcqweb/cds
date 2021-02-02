@@ -10,7 +10,7 @@
         <a-switch v-model="attrs.visible" size="small" />
       </div>
       <div class="fs">
-        <label>透明度</label>
+        <label>不透明度</label>
         <a-slider
           v-model.number="opacity"
           :min="0"
