@@ -42,6 +42,10 @@ export default {
       if (this.widget.cname == "GtLine") {
         rotate = 0
       }
+      rotate = String(rotate).trim()
+      if(!rotate) {
+        rotate = 0
+      }
       return {
         width: `${width}px`,
         height: `${height}px`,

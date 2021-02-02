@@ -8,7 +8,7 @@ export default {
         maxY = 0
         // maxZIndex = 0
       selectWidgets.forEach(item => {
-        let { left, top, width, height, zIndex } = dealRotatePos(item.attrs)
+        let { left, top, width, height } = dealRotatePos(item.attrs)
         minX = Math.min(left, minX)
         minY = Math.min(top, minY)
         maxX = Math.max(left + width, maxX)
