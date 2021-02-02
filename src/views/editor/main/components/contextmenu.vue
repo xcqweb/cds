@@ -192,7 +192,7 @@ export default {
             ...this.dealCopyItem(item),
             cid,
             pid: "",
-            active: true
+            active: false
           })
           if (isGroup(item)) {
             let widgetChildren = findWidgetChildren(
@@ -204,7 +204,7 @@ export default {
                 ...this.dealCopyItem(w),
                 cid,
                 pid: cid,
-                active: true
+                active: false
               })
             })
           }

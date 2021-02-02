@@ -17,11 +17,12 @@
         </a-select-option>
       </a-select>
       <div class="fs style-con">
-        <a-input
+        <a-input-number
           size="small"
           v-model="fontSizeModel"
-          type="number"
           style="width:30%;"
+          :min="12"
+          :max="100"
         />
         <div
           class="bold fc"

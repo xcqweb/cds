@@ -82,11 +82,11 @@ Vue.directive("inputNumber", {
       }
       tempEl.value = res
     }
-    tempEl.addEventListener('input', el.handler)
+    tempEl&&tempEl.addEventListener('input', el.handler)
   },
   unbind: function(el) {
     const tempEl = el.firstChild
-    tempEl.removeEventListener('input', el.handler)
+    tempEl&&tempEl.removeEventListener('input', el.handler)
   }
 })
 
