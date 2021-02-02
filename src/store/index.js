@@ -181,7 +181,8 @@ export default new Vuex.Store({
         width,
         height,
         rotate,
-        zIndex
+        zIndex,
+        text
       } = data
       let currentPage = this.getters.currentPage
       let widgetNum = 0
@@ -199,6 +200,7 @@ export default new Vuex.Store({
         isEdit: true,
         copyNum: 0,
         active: true, // 激活当前控件
+        text:text || '',
         attrs: {
           ...config.defaultWidget,
           width,

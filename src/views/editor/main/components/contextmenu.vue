@@ -217,6 +217,7 @@ export default {
       let len = item.copyNum === 1 ? "" : item.copyNum
       item.top = item.top + item.height
       item.dname = `${item.name || item.cname} Copy${len}`
+      console.log(item,"c---------")
       return item
     },
     copy() {

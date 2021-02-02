@@ -219,7 +219,7 @@ export function dealTimeFun(date,isYear) {
     month = month < 10 ? '0' + month : month
     day = date.getDate()
     day = day < 10 ? ('0' + day) : day
+    res = `${year}-${month}-${day} ${res}`
   }
-  res = `${year}-${month}-${day} ${res}`
   return res
 }
