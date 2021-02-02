@@ -24,7 +24,8 @@ export default {
         ...this.styleObj,
         ...res,
         borderStyle: this.borderStyle,
-        borderWidth: `${this.borderWidth}px`
+        borderWidth: `${this.borderWidth}px`,
+        borderRadius: this.borderRadius
       }
     }
   },

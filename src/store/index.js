@@ -117,6 +117,14 @@ export default new Vuex.Store({
           }
         }
       })
+      // 重置所有控件的z-index 
+      page.widgets.forEach((item,index)=>{
+        let zIndex = index + 1 + config.widgetInitZIndex
+        let tempWdiget = { ...item }
+        tempWdiget.attrs.zIndex = zIndex
+        tempWdiget.isEdit = true
+        page.widgets.splice(index, 1, tempWdiget)
+      })
     },
     initPages(state, data) {
       data = data.map(item => {

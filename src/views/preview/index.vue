@@ -147,9 +147,9 @@ export default {
         width: `${width}px`,
         height: `${height}px`,
         backgroundColor: backgroundColor || "#fff",
-        backgroundImage: `url(${this.$imgUrl(backgroundImage)})`
       }
       if (backgroundImage) {
+        this.viewStyleObj.backgroundImage = `url(${this.$imgUrl(backgroundImage)})`
         this.viewStyleObj.backgroundSize = "100% 100%"
       }
     },

@@ -54,8 +54,8 @@ export default {
     }
   },
   created() {
-    console.log(this.widget)
-    let { width, height, left, top, rotate } = this.widget.attrs
+    let { width, height, left, top, rotate, zIndex } = this.widget.attrs
+    console.log( this.widget,"a----------")
     if (this.pwidget) {
       const { left: pleft, top: ptop } = this.pwidget.attrs
       left = left - pleft
@@ -67,7 +67,7 @@ export default {
       left: `${left}px`,
       top: `${top}px`,
       transform: `rotate(${rotate}deg)`,
-      zIndex: "auto"
+      zIndex:`${zIndex}`
     }
     if (this.actionList) {
       this.styleObj.cursor = "pointer"
