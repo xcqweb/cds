@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     dealTime(ts) {
-      return dealTimeFun(ts)
+      return dealTimeFun(ts,true)
     }
   }
 }

@@ -81,7 +81,7 @@
         <div
           class="data-item-wrap fs"
           @click="chooseDevice"
-          v-if="choosedData.paramMark"
+          v-if="choosedData.paramMark && dataItem !== 'state'"
         >
           {{ choosedData.paramName || choosedData.paramMark }}
           <svg-icon
@@ -210,7 +210,7 @@ export default {
           break
       }
       this.choosedData.paramMark = ''
-      this.chooseData.paramName = ''
+      this.choosedData.paramName = ''
       this.choosedData.paramType = this.paramType
     },
     getDatasourceConfig() {
@@ -232,6 +232,7 @@ export default {
               const temp = this.choosedData.paramType
               this.dataItem = dataItemArr[temp]
               this.paramType = temp
+              this.stateModel = this.choosedData.paramMark
             }
           }
         })

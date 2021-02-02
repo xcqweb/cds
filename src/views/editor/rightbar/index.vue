@@ -19,7 +19,7 @@ import PageStyle from "./page.vue"
 import WidgetStyle from "./style"
 import Mutual from "./mutual"
 import Datasource from "./data"
-const showDataWidgetList = ["GtRect", "GtCircle", "GtText"]
+const showDataWidgetList = ["GtRect", "GtCircle"]
 import helpComputed from "@/mixins/help-computed"
 export default {
   mixins: [helpComputed],

@@ -254,10 +254,10 @@ export default new Vuex.Store({
       if (data.cid) {
         currentWidget = currentPage.widgets.find(item => item.cid == data.cid)
       }
-      const currentWidgetIndex = currentPage.widgets.findIndex(
-        item => item.cid == currentWidget.cid
-      )
-      if (currentWidget) {
+      if(currentWidget) {
+          const currentWidgetIndex = currentPage.widgets.findIndex(
+            item => item.cid == currentWidget.cid
+          )
         currentPage.widgets.splice(currentWidgetIndex, 1, {
           ...currentWidget,
           ...data,

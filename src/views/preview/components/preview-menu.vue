@@ -292,12 +292,6 @@ export default {
       height: 16px;
       left:50%;
       margin-left:-86px;
-      .path-wapper {
-        fill:@dark;
-      }
-      .path-arrow{
-        fill:@light;
-      }
     }
   }
   &:hover{

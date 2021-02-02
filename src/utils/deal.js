@@ -193,12 +193,17 @@ export function pageWidgetsNum(widgets, cname) {
   return widgets.filter(item => item.cname === cname).length
 }
 
-export function dealTimeFun(date) {
+export function dealTimeFun(date,isYear) {
+  let res
   if (!date) {
     date = new Date()
   } else {
     date = new Date(date)
   }
+  let year
+  let month
+  let day
+ 
   let min = date.getMinutes()
   if (min < 10) {
     min = `0${min}`
@@ -207,5 +212,14 @@ export function dealTimeFun(date) {
   if (sec < 10) {
     sec = `0${sec}`
   }
-  return date.getHours() + ":" + min + ":" + sec
+  res = date.getHours() + ":" + min + ":" + sec
+  if(isYear) {
+    year = date.getFullYear()
+    month = date.getMonth() + 1
+    month = month < 10 ? '0' + month : month
+    day = date.getDate()
+    day = day < 10 ? ('0' + day) : day
+  }
+  res = `${year}-${month}-${day} ${res}`
+  return res
 }
