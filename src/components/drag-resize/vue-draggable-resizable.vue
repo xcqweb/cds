@@ -92,10 +92,6 @@ export default {
     z: {
       type: [String, Number],
       default: "auto",
-      validator: function(val) {
-        let valid = typeof val === "string" ? val === "auto" : val >= 0
-        return valid
-      }
     },
     handles: {
       type: Array,
@@ -618,9 +614,7 @@ export default {
 
   watch: {
     r(val) {
-      if (val >= 0) {
-        this.rotate = val % 360
-      }
+      this.rotate = val % 360
     },
     w(val) {
       this.width = val
