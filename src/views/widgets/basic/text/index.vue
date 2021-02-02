@@ -17,9 +17,9 @@ export default {
     textStyle() {
       return {
         ...this.styleObj,
-        borderStyle: this.borderStyle,
-        borderWidth: this.borderWidth,
-        borderColor: this.borderColor
+        // borderStyle: this.borderStyle,
+        // borderWidth: this.borderWidth,
+        // borderColor: this.borderColor
       }
     }
   },
