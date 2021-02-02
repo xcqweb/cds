@@ -5,9 +5,7 @@
     contenteditable="true"
     v-click-out-side="{ cb: blur, elExclude: ['text-style-con','color-picker-con'] }"
   >
-    <span class="text" ref="textRef">
-      {{ text }}
-    </span>
+    <span class="text" ref="textRef">{{ text }}</span>
   </div>
 </template>
 <script>
