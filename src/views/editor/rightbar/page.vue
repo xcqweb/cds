@@ -143,14 +143,21 @@
     </div>
     <div class="item-con fs">
       <label>数据拉取频率</label>
-      <a-input
+      <a-select v-model="dataRate" style="width: 60%">
+        <a-select-option v-for="item in dataRateList" 
+          :key="item.value" 
+          :value="item.value">
+          {{item.label}}
+        </a-select-option>
+      </a-select>
+      <!-- <a-input
         size="small"
         v-model.number="dataRate"
         type="number"
         :min="3"
         suffix="秒"
         style="width: 60%"
-      />
+      /> -->
     </div>
     <color-picker
       :visible.sync="visibleColor"
@@ -310,7 +317,29 @@ export default {
       navColorList: config.navColorList,
       headerInfo: { Authorization: getToken() },
       uploadUrl: fileApi.uploadFile,
-      fileData: { bucketName: fileApi.bucketName }
+      fileData: { bucketName: fileApi.bucketName },
+      dataRateList: [
+        {
+          value: 5,
+          label: '5秒'
+        },
+        {
+          value: 10,
+          label: '10秒'
+        },
+        {
+          value: 30,
+          label: '30秒'
+        },
+        {
+          value: 60,
+          label: '1分钟'
+        },
+        {
+          value: 300,
+          label: '5分钟'
+        },
+      ],
     }
   },
   mounted() {
