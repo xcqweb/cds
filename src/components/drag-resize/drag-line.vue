@@ -110,7 +110,6 @@ export default {
       this.basePos = {x:left,y:top}
     },
     mousemove(evt) {
-      debugger
       if(this.resizing) {
         let { x, y } = evt
         let left
