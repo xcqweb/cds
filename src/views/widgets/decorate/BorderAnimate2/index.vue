@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-border2" :style="styleObj"/>
+  <div class="gt-border2" :style="styleObj" />
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"
@@ -10,9 +10,7 @@ export default {
   data() {
     return {}
   },
-  created() {
-    
-  },
+  created() {},
   methods: {}
 }
 </script>
@@ -34,8 +32,8 @@ export default {
     background-image: conic-gradient(transparent, #a8efff, transparent 30%);
     animation: rotate 4s linear infinite;
   }
-	
-	&:after {
+
+  &:after {
     content: "";
     position: absolute;
     z-index: -1;

@@ -216,8 +216,8 @@ export default {
     cursor: pointer;
     &:hover,
     &.select {
-      color: #298df8;
-      background: #f2f8ff;
+      color: #fff;
+      background: #1740DC;
     }
   }
 }

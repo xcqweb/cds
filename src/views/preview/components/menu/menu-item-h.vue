@@ -38,7 +38,7 @@ export default {
     pages: {
       type: Array,
       default: () => []
-    }
+    },
   },
   computed: {
     currentPage() {
@@ -85,6 +85,7 @@ export default {
   position: relative;
   padding: 0 20px;
   justify-content: center;
+  overflow: hidden;
   ul,
   li {
     list-style: none;

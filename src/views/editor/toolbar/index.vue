@@ -46,5 +46,30 @@ export default {
       }
     }
   }
+  .center-item {
+    position: relative;
+    height: 100%;
+    width: 44px;
+    color: rgb(91, 107, 115);
+    border-top: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .icon {
+      font-size: 16px;
+    }
+    span {
+      color: #040c2c;
+      border-top: 2px solid transparent;
+    }
+    .ant-dropdown-trigger {
+      text-align: center;
+    }
+    &.room-item {
+      width: 68px;
+      margin-left: 15px;
+    }
+  }
 }
 </style>

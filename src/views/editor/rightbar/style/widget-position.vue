@@ -1,53 +1,50 @@
 <template>
   <div class="widget-position-con">
     <div class="item-con">
-      <div class="input-con fs">
+      <div class="fv" :class="{'input-con':show}">
         <a-input
           size="small"
           v-model.number="attrs.left"
-          type="number"
           suffix="X"
-          style="width: 40%"
+          style="width: 30%;margin-right:5%;"
         />
         <a-input
           size="small"
           v-model.number="attrs.top"
-          type="number"
           suffix="Y"
-          style="width: 40%"
+          style="width: 30%;margin-right:5%;"
+        />
+        <a-input
+          v-if="show" 
+          size="small"
+          v-model.number="attrs.rotate"
+          suffix="R"
+          style="width: 30%;"
+          v-input-number
         />
       </div>
-      <div class="input-con fs" v-if="show">
+      <div class="input-con fv" v-if="show" style="margin-bottom:0;">
         <a-input
           size="small"
           v-model.number="attrs.width"
-          type="number"
           suffix="W"
-          style="width: 40%"
+          style="width: 30%;margin-right:5%;"
+          v-input-number
         />
         <a-input
           size="small"
           v-model.number="attrs.height"
-          type="number"
           suffix="H"
-          style="width: 40%"
+          style="width: 30%;margin-right:5%;"
+           v-input-number
         />
-      </div>
-      <div class="input-con fs" v-if="show">
-        <a-input
-          size="small"
-          v-model.number="attrs.rotate"
-          type="number"
-          suffix="R"
-          style="width: 40%"
-        />
-        <a-input
+         <a-input
           v-if="cname == 'GtRect'"
           size="small"
           v-model.number="attrs.borderRadius"
-          type="number"
           suffix="C"
-          style="width: 40%"
+          style="width: 30%"
+          v-input-number
         />
       </div>
     </div>

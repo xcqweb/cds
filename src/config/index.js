@@ -70,26 +70,26 @@ export default {
         }
       ]
     },
-    {
-      name: "装饰组件",
-      value: "decorate",
-      list: [
-        {
-          cname: "GtBorderAnimate1",
-          name: "边框1",
-          width: 400,
-          height: 300,
-          icon: "widget-image"
-        },
-        {
-          cname: "GtBorderAnimate2",
-          name: "边框2",
-          width: 400,
-          height: 300,
-          icon: "widget-image"
-        }
-      ]
-    },
+    // {
+    //   name: "装饰组件",
+    //   value: "decorate",
+    //   list: [
+    //     {
+    //       cname: "GtBorderAnimate1",
+    //       name: "边框1",
+    //       width: 400,
+    //       height: 300,
+    //       icon: "widget-image"
+    //     },
+    //     {
+    //       cname: "GtBorderAnimate2",
+    //       name: "边框2",
+    //       width: 400,
+    //       height: 300,
+    //       icon: "widget-image"
+    //     }
+    //   ]
+    // },
     {
       name: "图表组件",
       value: "chart",
@@ -111,7 +111,6 @@ export default {
     widgets: [],
     width: 1366,
     height: 768,
-    widgetsInfo: {}, // 控件信息
     lines: {
       // 坐标辅助线
       h: [],
@@ -126,10 +125,10 @@ export default {
     arrow: "empty",
     linkUrl: "",
     imgSrc: "",
-    borderColor: "#bbb",
+    borderColor: "",
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "",
     backgroundImage: "",
     justifyContent: "center",
     alignItems: "center",
@@ -137,9 +136,9 @@ export default {
     fontSize: 12,
     fontFamily: "PingFangSC-Regular",
     opacity: 1,
-    visible: false,
+    visible: true,
     borderRadius: 0,
-    color:'#040c2c',
+    color: "#040c2c"
   },
   eventList: [
     { label: "点击", value: "click" },
@@ -170,5 +169,5 @@ export default {
     { label: "亮色", value: "light" },
     { label: "暗色", value: "dark" }
   ],
-  editableWidetList: ["GtText", "GtRect", "GtCircle","GtButton"]
+  editableWidetList: ["GtText", "GtRect", "GtCircle", "GtButton"]
 }

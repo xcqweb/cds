@@ -92,10 +92,6 @@ export default {
     z: {
       type: [String, Number],
       default: "auto",
-      validator: function(val) {
-        let valid = typeof val === "string" ? val === "auto" : val >= 0
-        return valid
-      }
     },
     handles: {
       type: Array,
@@ -311,7 +307,7 @@ export default {
         (!this.$el.contains(target) &&
           !regex.test(target.className) &&
           selectWidgetsCount == 1) ||
-        (selectWidgetsCount > 1 && !target.classList.contains("group-item"))
+        (selectWidgetsCount > 1 && !target.classList.contains("group-item") && !target.classList.contains("my-drag"))
       ) {
         if (this.enabled) {
           this.enabled = false
@@ -485,7 +481,10 @@ export default {
         // 鼠标没有进行移动
         const target = e.target || e.srcElement
         const regex = new RegExp("handle-([trmbl]{2})", "")
-        if (!this.$el.contains(target) && !regex.test(target.className)) {
+         const selectWidgetsCount = this.$store.getters.selectWidgets.length
+        let flag = selectWidgetsCount==1 && !this.$el.contains(target) && !regex.test(target.className)
+          || selectWidgetsCount>1 && !target.classList.contains("group-item") && !target.classList.contains("my-drag")
+        if (flag) {
           if (this.enabled) {
             this.enabled = false
             this.$emit("deactivated")
@@ -615,9 +614,7 @@ export default {
 
   watch: {
     r(val) {
-      if (val >= 0) {
-        this.rotate = val % 360
-      }
+      this.rotate = val % 360
     },
     w(val) {
       this.width = val
@@ -669,6 +666,9 @@ export default {
 }
 .vdrr.active {
   z-index: 1 !important;
+}
+.vdrr.active:after {
+  display: none;
 }
 .handle {
   box-sizing: border-box;

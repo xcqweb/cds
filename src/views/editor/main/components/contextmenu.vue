@@ -1,5 +1,5 @@
 <template>
-  <div class="contextmenu-con" :style="styleObj" v-if="showMenu">
+  <div class="contextmenu-con" :style="styleObj" v-show="showMenu">
     <ul v-click-out-side="hideMenu">
       <template v-for="item in list">
         <li
@@ -184,7 +184,7 @@ export default {
     paste() {
       if (this.copyData && this.copyData.length) {
         this.copyData.forEach(item => {
-          let cid = uuid(16, 16)
+          let cid = uuid(16, 48)
           if (!this.isCut) {
             this.$store.commit("updateWidget", { cid: item.cid, active: false })
           }
@@ -192,7 +192,7 @@ export default {
             ...this.dealCopyItem(item),
             cid,
             pid: "",
-            active: true
+            active: false
           })
           if (isGroup(item)) {
             let widgetChildren = findWidgetChildren(
@@ -204,7 +204,7 @@ export default {
                 ...this.dealCopyItem(w),
                 cid,
                 pid: cid,
-                active: true
+                active: false
               })
             })
           }
@@ -217,6 +217,7 @@ export default {
       let len = item.copyNum === 1 ? "" : item.copyNum
       item.top = item.top + item.height
       item.dname = `${item.name || item.cname} Copy${len}`
+      console.log(item,"c---------")
       return item
     },
     copy() {

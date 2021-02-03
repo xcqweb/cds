@@ -22,7 +22,8 @@
     "vue-sketch-ruler": "^1.0.3",
     "vuex": "^3.4.0",
     "vuex-history": "^1.0.1",
-    "iview": "^3.5.4"
+    "iview": "^3.5.4",
+    "clamp": "^1.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

@@ -1,13 +1,13 @@
 <template>
   <div class="preview-menu-con" :class="conCls" :style="objStyle">
     <menu-item-v v-if="position == 1" :pages="pages" />
-    <menu-item-h v-if="position == 2" :pages="pages" />
+    <menu-item-h v-if="position == 2" :pages="pages" :showMenu="showMenu"/>
     <div class="trigger-con" :class="triggerCls" @click.stop="operateMenu">
       <svg
+        v-if="position==1"
         xmlns="http://www.w3.org/2000/svg"
         class="svg-icon"
         viewBox="0 0 16 86"
-        aria-hidden="true"
         width="16"
         height="86"
       >
@@ -19,6 +19,26 @@
           <path
             class="path-arrow"
             d="M10.758 48.766a.778.778 0 000-1.127L6.996 43l3.762-4.639a.778.778 0 000-1.127.85.85 0 00-1.172 0l-4.344 5.202a.78.78 0 000 1.128l4.344 5.202a.85.85 0 001.172 0z"
+            fill-rule="nonzero"
+          />
+        </g>
+      </svg>
+      <svg 
+       v-if="position==2"
+        xmlns="http://www.w3.org/2000/svg"
+        class="svg-icon"
+        viewBox="0 0 86 16"
+        width="86" 
+        height="16"
+      >
+        <g fill-rule="evenodd">
+          <path  
+            class="path-wapper"
+            d="M0.000,-0.000 L86.000,-0.000 L78.000,16.000 L8.000,16.000 L0.000,-0.000 Z"
+          />
+          <path 
+            class="path-arrow"
+            d="M36.544,10.407 L43.615,3.336 C44.006,2.946 44.639,2.946 45.029,3.336 L52.100,10.407 C52.491,10.798 52.491,11.431 52.100,11.821 C51.710,12.212 51.077,12.212 50.686,11.821 L44.322,5.457 L37.958,11.821 C37.568,12.212 36.935,12.212 36.544,11.821 C36.154,11.431 36.154,10.798 36.544,10.407 Z"
             fill-rule="nonzero"
           />
         </g>
@@ -95,6 +115,8 @@ export default {
 }
 </script>
 <style lang="less">
+@lightDefaultFont:rgba(4, 12, 44, 0.85);
+@darkDefualtFont:rgba(255, 255, 255, 0.7);
 @light:#fff;
 @dark: #001529;
 @themeSet:{
@@ -116,7 +138,7 @@ export default {
   z-index: 100;
   &.dark {
     background: @dark;
-    color: #fff;
+    color:@darkDefualtFont;
     &.left {
       each(@themeSet,{
         &.@{key} {
@@ -124,6 +146,7 @@ export default {
             &:hover,
             &.select {
               background: @value;
+              color:@light;
             }
           }
         }
@@ -168,7 +191,7 @@ export default {
   }
   &.light {
     background: @light;
-    color: #040c2c;
+    color: @lightDefaultFont;
     &.left {
       each(@themeSet,{
         &.@{key} {
@@ -246,7 +269,7 @@ export default {
       left:100%;
     }
     &.trigger-top{
-      top:-31px;
+      top:100%;
     }
   }
   &.left {
@@ -269,13 +292,6 @@ export default {
       height: 16px;
       left:50%;
       margin-left:-86px;
-      transform:rotate(270deg);
-      .path-wapper {
-        fill:@dark;
-      }
-      .path-arrow{
-        fill:@light;
-      }
     }
   }
   &:hover{

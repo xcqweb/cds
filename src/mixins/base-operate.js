@@ -18,7 +18,7 @@ export default {
         }
       })
       widgets = this.selectWidgets
-      const cid = uuid(16, 16)
+      const cid = uuid(16, 48)
       widgets.forEach(item => {
         this.$store.commit("updateWidget", {
           pid: cid,

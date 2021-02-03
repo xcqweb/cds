@@ -1,7 +1,7 @@
 <template>
   <div class="widget-name-con">
     <div class="item-con">
-      <div class="fs item-name" v-if="selectWidgets.length == 1">
+      <div class="fs item-name" v-if="selectWidgets.length == 1 || textEditorShowFlag">
         <label>组件名称</label>
         <a-input size="small" v-model.trim="displayName" style="width: 60%" />
       </div>
@@ -12,17 +12,17 @@
       <div class="fs">
         <label>不透明度</label>
         <a-slider
-          v-model.number="attrs.opacity"
+          v-model.number="opacity"
           :min="0"
           :max="100"
           style="width:30%"
         />
         <a-input
           size="small"
-          v-model.number="attrs.opacity"
-          type="number"
-          style="width:30%"
+          v-model.number="opacity"
+          style="width:24%"
           suffix="%"
+          v-input-number="{min:0,max:100}"
         />
       </div>
     </div>
@@ -37,13 +37,26 @@ export default {
     displayName: {
       get() {
         let res = ""
-        if (this.currentWidget) {
-          res = this.currentWidget.name
+        if (this.operateWidget) {
+          res = this.operateWidget.name
         }
         return res
       },
       set(name) {
-        this.$store.commit("updateWidgetAttrs", { name })
+        this.$store.commit("updateWidget", { name })
+      }
+    },
+    textEditorShowFlag() {
+      // 编辑控件文本
+      return this.textEditor.show
+    },
+    opacity: {
+      get() {
+        let res = this.attrs.opacity || 0
+        return res * 100
+      },
+      set(val) {
+        this.$store.commit("updateWidgetAttrs", { opacity: val / 100 })
       }
     }
   },

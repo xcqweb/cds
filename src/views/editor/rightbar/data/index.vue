@@ -81,7 +81,7 @@
         <div
           class="data-item-wrap fs"
           @click="chooseDevice"
-          v-if="choosedData.paramMark"
+          v-if="choosedData.paramMark && dataItem !== 'state'"
         >
           {{ choosedData.paramName || choosedData.paramMark }}
           <svg-icon
@@ -209,6 +209,8 @@ export default {
           this.paramType = 2
           break
       }
+      this.choosedData.paramMark = ''
+      this.choosedData.paramName = ''
       this.choosedData.paramType = this.paramType
     },
     getDatasourceConfig() {
@@ -230,6 +232,7 @@ export default {
               const temp = this.choosedData.paramType
               this.dataItem = dataItemArr[temp]
               this.paramType = temp
+              this.stateModel = this.choosedData.paramMark
             }
           }
         })
@@ -334,7 +337,7 @@ export default {
         params.id = this.choosedData.id
         api.edit(params).then(res => {
           if (res.code == 0) {
-            // this.$message.success("修改成功")
+            this.$message.success("保存成功")
           }
         })
       } else {
@@ -377,7 +380,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .data-con {
-  color:#040c2c;
+  color: #040c2c;
   .data-item-wrap {
     width: 100%;
     height: 30px;

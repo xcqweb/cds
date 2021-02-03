@@ -4,21 +4,29 @@
       <label>填充颜色</label>
       <div
         class="fill-bg"
-        :style="{ backgroundColor: attrs.backgroundColor }"
+        :style="{ background }"
         @click="showColorPicker('fillColor', $event)"
       />
     </div>
   </div>
 </template>
 <script>
+const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 import helpComputed from "@/mixins/help-computed"
 export default {
   name: "WidgetOutter",
   mixins: [helpComputed],
   computed: {
     show() {
-      const widgetNames = ["GtImage", "GtLink", "GtLine"]
+      const widgetNames = ["GtImage", "GtLink", "GtLine","GtText"]
       return !widgetNames.includes(this.cname)
+    },
+    background() {
+      let color = this.attrs.backgroundColor
+      if (color === "#00000000" || color === "transparent") {
+        color = transparentImg
+      }
+      return color
     }
   },
   data() {

@@ -5,11 +5,11 @@
     class="color-picker-con"
     v-click-out-side="hide"
   >
-    <sketch-picker
-      v-model="color"
-      @input="updateValue"
-      ref="aa"
-    ></sketch-picker>
+    <header class="color-picker-header">
+      <div class="header-text">颜色设置</div>
+      <a-icon type="close" style="cursor:pointer;" @click.native="hide" />
+    </header>
+    <sketch-picker v-model="color" @input="updateValue"></sketch-picker>
   </div>
 </template>
 <script>
@@ -45,5 +45,15 @@ export default {
 <style lang="less" scoped>
 .color-picker-con {
   position: absolute;
+  background: #fff;
+  .color-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 0;
+  }
+  .vc-sketch {
+    box-shadow: unset;
+  }
 }
 </style>

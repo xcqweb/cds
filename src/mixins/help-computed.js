@@ -1,3 +1,4 @@
+import {findWidgetById} from '@u/deal'
 export default {
   computed: {
     currentPageIndex() {
@@ -22,10 +23,14 @@ export default {
       return this.$store.state.textEditor
     },
     operateWidget() {
+      let res 
       if (this.currentWidget) {
         return this.currentWidget
       }
-      return this.textEditor.widget
+      if(this.textEditor.widget) {
+        res = findWidgetById(this.currentPage.widgets,this.textEditor.widget.cid)
+      }
+      return res
     },
     cname() {
       let res = ""

@@ -2,15 +2,23 @@
   <div class="widget-drag-con">
     <template v-for="widget in widgets">
       <drag-line
+        class="gt-line-wrap"
+        :class="{ active: widget.active }"
         v-if="widget.cname == 'GtLine'"
         :widget="widget"
         :key="widget.cid"
       />
       <template v-else>
-        <div v-if="widget.pid" :style="objStyle(widget)" :key="widget.cid" class="p-drag-con" :class="{'active':widget.active}">
-          <drag-item :widget="widget" :pwidget="getPwidget(widget)"/>
+        <div
+          v-if="widget.pid"
+          :style="objStyle(widget)"
+          :key="widget.cid"
+          class="p-drag-con"
+          :class="{ active: widget.active }"
+        >
+          <drag-item :widget="widget" :pwidget="getPwidget(widget)" />
         </div>
-        <drag-item :widget="widget" :key="widget.cid" v-else/>
+        <drag-item :widget="widget" :key="widget.cid" v-else />
       </template>
     </template>
   </div>
@@ -18,7 +26,7 @@
 <script>
 import DragLine from "./drag-line"
 import DragItem from "./drag-item"
-import {findWidgetById } from "@u/deal"
+import { findWidgetById } from "@u/deal"
 export default {
   name: "WidgetDrag",
   components: {
@@ -28,28 +36,27 @@ export default {
   computed: {
     widgets() {
       return this.$store.getters.currentPage.widgets
-    },
+    }
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     objStyle(widget) {
       let pwidget = this.getPwidget(widget)
-      const {left,top,width,height,rotate} = pwidget.attrs
+      const { left, top, width, height, rotate } = pwidget.attrs
       return {
-        left:`${left}px`,
-        top:`${top}px`,
-        width:`${width}px`,
-        height:`${height}px`,
-        transform: `rotate(${rotate}deg)`,
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+        transform: `rotate(${rotate}deg)`
       }
     },
     getPwidget(widget) {
-      return findWidgetById(this.widgets,widget.pid)
-    },
-  },
+      return findWidgetById(this.widgets, widget.pid)
+    }
+  }
 }
 </script>
 <style lang="less">
@@ -57,11 +64,30 @@ export default {
   pointer-events: none;
   width: 100%;
   height: 100%;
-  .p-drag-con{
+  .p-drag-con {
     position: absolute;
     pointer-events: none;
-    &.active{
-      z-index:1;
+    &.active {
+      z-index: 1;
+    }
+  }
+  .gt-line-wrap{
+    pointer-events: auto;
+    .gt-line{
+      &:hover{
+        .line{
+          stroke: #298df8;
+        }
+      }
+    }
+    &.active {
+      z-index: 1 !important;
+      .gt-line{
+        .line{
+          stroke-dasharray: 3,4;
+          stroke: #298df8;
+        }
+      }
     }
   }
 }

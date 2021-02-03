@@ -42,12 +42,12 @@ export default {
         undoManager.clearHistory()
       })
     })
-    this.saveTimer = setTimeout(() => {
+    this.saveTimer = setInterval(() => {
       this.$store.dispatch("patchModifyWidgets", true)
     }, 1000 * 60 * 2) // 2min
   },
   beforeDestroy() {
-    clearTimeout(this.saveTimer)
+    clearInterval(this.saveTimer)
     this.saveTimer = null
   },
   methods: {}

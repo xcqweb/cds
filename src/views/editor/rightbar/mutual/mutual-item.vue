@@ -15,7 +15,7 @@
       />
     </div>
     <div class="item-action fs">
-      <label>事件</label>
+      <label style="font-weight:normal;">事件</label>
       <a-select
         size="small"
         v-model="action.eventType"
@@ -33,7 +33,7 @@
       </a-select>
     </div>
     <div class="item-action fs">
-      <label>动作</label>
+      <label style="font-weight:normal;">动作</label>
       <a-select
         size="small"
         style="width:80%;"
@@ -51,7 +51,7 @@
       </a-select>
     </div>
     <div class="item-action fs" v-if="action.actionType == 'link-page'">
-      <label>页面</label>
+      <label style="font-weight:normal;">页面</label>
       <a-cascader
         :options="pages"
         placeholder="选择跳转的页面"
@@ -67,7 +67,7 @@
       />
     </div>
     <div class="item-action fs" v-if="action.actionType == 'show-hide-widget'">
-      <label>显示</label>
+      <label style="font-weight:normal;">显示</label>
       <a-select
         v-model="action.content.showWidgetId"
         size="small"
@@ -85,42 +85,42 @@
       </a-select>
     </div>
     <div class="item-action fs" v-if="action.actionType == 'show-hide-widget'">
-      <label>隐藏</label>
+      <label style="font-weight:normal;">隐藏</label>
       <a-select
         v-model="action.content.hideWidgetId"
         size="small"
         style="width:80%;"
+        @blur.native="saveAction"
       >
         <a-select-option
           v-for="item in widgets"
           :key="item.cid"
           :value="item.cid"
           placeholder="请选择"
-          @blur.native="saveAction"
         >
           {{ item.name }}
         </a-select-option>
       </a-select>
     </div>
     <div class="item-action fs" v-if="action.actionType == 'open-link'">
-      <label>方式</label>
+      <label style="font-weight:normal;">方式</label>
       <a-select
         v-model="action.content.openWay"
         size="small"
         style="width:80%;"
+        @blur.native="saveAction"
       >
         <a-select-option
           v-for="item in openListWayList"
           :key="item.value"
           :value="item.value"
-          @blur.native="saveAction"
         >
           {{ item.label }}
         </a-select-option>
       </a-select>
     </div>
     <div class="item-action" v-if="action.actionType == 'open-link'">
-      <label style="display:block;margin-bottom:6px;">输入连接</label>
+      <label style="display:block;margin-bottom:6px;font-weight:normal;">输入连接</label>
       <a-textarea
         placeholder="请输入连接地址"
         :rows="3"
@@ -207,9 +207,9 @@ export default {
 .mutual-item-action {
   background: #f7f7f8;
   border-radius: 2px;
-  margin-top: 10px;
+  margin-top: 15px;
   .item-action {
-    padding: 9px 10px;
+    padding: 5px 10px;
   }
 }
 </style>

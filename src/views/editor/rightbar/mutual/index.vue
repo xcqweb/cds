@@ -40,9 +40,7 @@ export default {
       if (this.currentWidget) {
         mutualApi.list({ widgetId: this.currentWidget.cid }).then(res => {
           if (res.code == 0) {
-            if (res.data.length) {
-              this.mutualList = res.data
-            }
+            this.mutualList = res.data || []
           }
         })
       }
@@ -60,7 +58,7 @@ export default {
       }
       this.mutualList.push(params)
       mutualApi.add(params).then(res => {
-        console.log(res, "新增交互")
+        params.actionId = res.data.actionId
       })
     }
   }

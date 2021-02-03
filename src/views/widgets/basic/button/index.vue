@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-button" :style="styleObj">
+  <div class="gt-button" :style="buttonStyle">
     <text-con v-bind="$props" />
   </div>
 </template>
@@ -7,12 +7,27 @@
 import baseWidget from "@/mixins/base-widget"
 import TextCon from "../../components/text-con"
 const cname = "GtButton"
+const borderColor = "#bbb"
+const backgroundColor = "#fff"
 export default {
   name: cname,
   components: {
     TextCon
   },
   mixins: [baseWidget],
+  computed: {
+    buttonStyle() {
+      let res = { borderRadius: "4px" }
+      res.borderColor = this.borderColor || borderColor
+      res.backgroundColor = this.backgroundColor || backgroundColor
+      return {
+        ...this.styleObj,
+        ...res,
+        borderStyle: this.borderStyle,
+        borderWidth: `${this.borderWidth}px`
+      }
+    }
+  },
   data() {
     return {}
   },
@@ -26,13 +41,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .gt-button {
-  border-color: rgb(187, 187, 187);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 4px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
 }
 </style>

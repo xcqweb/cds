@@ -5,7 +5,8 @@
       ref="viewCon"
       @scroll="handleScroll"
       :style="viewConStyle"
-      @dragover.prevent @drop="drop"
+      @dragover.prevent
+      @drop="drop"
     >
       <div class="viewport-con" :style="portConStyle">
         <div class="viewport" :style="portStyle" ref="viewport">
@@ -28,7 +29,7 @@
             <!-- 辅助线 -->
             <widget-help-line />
             <text-editor v-if="isShowTextEditor" />
-            <contextmenu />
+            <contextmenu ref="cmenuRef"/>
           </div>
         </div>
       </div>
@@ -75,6 +76,12 @@ export default {
     scale() {
       return this.$store.state.apply.scale
     },
+    width() {
+      return this.currentPage.width
+    },
+    height() {
+      return this.currentPage.height
+    },
     portConStyle() {
       const { scale, width, height } = this.$store.state.apply
       let conWidth = width * 2
@@ -101,11 +108,12 @@ export default {
         width: width + "px",
         height: height + "px",
         backgroundColor,
-        transform: `scale(${scale})`,
+        transform: `scale(${scale})`
       }
       if (backgroundImage) {
-        res.background = `url(${this.$imgUrl(backgroundImage)}) no-repeat`
-        res.backgroundSize = "cover"
+        res.backgroundImage = `url(${this.$imgUrl(backgroundImage)})`
+        res.backgroundRepeat = 'no-repeat'
+        res.backgroundSize = "100% 100%"
       } else {
         if (gridEnable) {
           res.backgroundImage = createGridBg(size, color, scale)
@@ -117,7 +125,7 @@ export default {
       return this.$store.state.apply.ruleEnable
     },
     viewConStyle() {
-      let left = 21 + 250
+      let left = 21+250
       let top = 21
       if (!this.ruleEnable) {
         left = 250
@@ -129,8 +137,14 @@ export default {
       }
     }
   },
-  watch:{
+  watch: {
     scale() {
+      this.centerView()
+    },
+    width() {
+      this.centerView()
+    },
+    height() {
       this.centerView()
     },
   },
@@ -149,19 +163,26 @@ export default {
     })
   },
   beforeDestroy() {
+    const contextmenuEl = document.querySelector('.contextmenu-con')
+    if(contextmenuEl) {
+      contextmenuEl.remove()
+    }
     window.removeEventListener("resize", this.resizeFun)
   },
   methods: {
     drop(evt) {
       const { dataTransfer, x, y } = evt // 拖拽结束，鼠标与文档的距离
-      const item = JSON.parse(dataTransfer.getData("item"))
-      const { dx, dy } = item
-      const ele = document.querySelector(".viewport")
-      let { left, top } = ele.getBoundingClientRect() // 画布与文档的距离
-      item.left = x - left - dx
-      item.top = y - top - dy
-      this.$store.commit("widgetAdd", { ...item })
-      undoManager.saveApplyChange()
+      const dataItem = dataTransfer.getData("item")
+      if (dataItem) {
+        const item = JSON.parse(dataItem)
+        const { dx, dy } = item
+        const ele = document.querySelector(".viewport")
+        let { left, top } = ele.getBoundingClientRect() // 画布与文档的距离
+        item.left = x - left - dx
+        item.top = y - top - dy
+        this.$store.commit("widgetAdd", { ...item })
+        undoManager.saveApplyChange()
+      }
     },
     init() {
       this.dealRulerSize()
@@ -222,8 +243,8 @@ export default {
       const { scale } = this.$store.state.apply
       const { left: viewLeft, top: viewTop } = this.viewProps()
       const { left: portLeft, top: portTop } = this.portProps()
-      const x = parseInt((viewLeft - portLeft) / scale)
-      const y = parseInt((viewTop - portTop - 4) / scale)
+      const x = (viewLeft - portLeft ) / scale
+      const y = (viewTop - portTop) / scale
       this.$store.commit("setRuler", { startPos: { x, y } })
     },
     dealRulerCorner() {
@@ -281,7 +302,7 @@ export default {
       height: 100%;
     }
     .canvas-sub {
-      z-index:1;
+      z-index: 1;
       .canvas-main;
       pointer-events: none;
     }

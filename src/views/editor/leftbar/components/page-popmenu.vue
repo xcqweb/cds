@@ -23,14 +23,10 @@
 import pageApi from "@a/page"
 export default {
   name: "PagePopmenu",
-  computed: {
-    showDel() {
-      let res = true
-      const len = this.$store.state.apply.pages.length
-      if (len == 1) {
-        res = false
-      }
-      return res
+  props: {
+    showDel: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -86,8 +82,11 @@ export default {
     },
     addChildPage() {
       const { width, height } = this.$store.state.apply
-      let len = this.$store.state.apply.pages.length
-      const newPageId = `new-page-${len}`
+      let len = 0
+      if (this.page.children) {
+        len = this.page.children.length
+      }
+      const newPageId = `newpage*${len}`
       this.$store.commit("addPage", {
         pageId: newPageId,
         width,
@@ -101,14 +100,20 @@ export default {
       this.hidePagePopMenu()
     },
     copy() {
-      const len = this.$store.state.apply.pages.length + 1
-      const newPageId = `new-page-${len}`
+      let len = 0
+      if (this.page.children) {
+        len = this.page.children.length
+      } else {
+        len = this.$store.state.apply.pages.length
+      }
+      const newPageId = `${this.page.pageId}*pagecopy*${++len}`
       const newPageName = `${this.page.pageName} Copy`
       this.$store.commit("addPage", {
         ...this.page,
         pageId: newPageId,
         pageName: newPageName,
-        isEdit: true
+        isEdit: true,
+        isHome: false
       })
       this.$store.commit("setCurrentPageId", newPageId)
       this.hidePagePopMenu()
@@ -121,7 +126,7 @@ export default {
         onOk: () => {
           pageApi.del(pageId).then(res => {
             if (res.code === 0) {
-              this.$store.commit("delPage", this.page.pageId)
+              this.$store.commit("delPage", this.page)
               this.$message.success("删除页面成功")
               this.hidePagePopMenu()
             }
@@ -155,8 +160,8 @@ li {
     white-space: nowrap;
     cursor: pointer;
     &:hover {
-      background: rgb(245, 245, 245);
-      color: rgb(41, 141, 248);
+      background:#F3F5FD;
+      color: #1740DC;
     }
   }
 }

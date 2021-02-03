@@ -17,11 +17,12 @@
         </a-select-option>
       </a-select>
       <div class="fs style-con">
-        <a-input
+        <a-input-number
           size="small"
           v-model="fontSizeModel"
-          type="number"
           style="width:30%;"
+          :min="12"
+          :max="100"
         />
         <div
           class="bold fc"
@@ -32,7 +33,7 @@
         </div>
         <div
           class="font-color"
-          :style="{ backgroundColor: colorModel }"
+          :style="{ background: colorModel }"
           @click="showColorPicker('fontColor', $event)"
         />
       </div>
@@ -88,6 +89,7 @@
   </div>
 </template>
 <script>
+const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 const fontFamilyList = [
   { label: "苹方字体", value: "PingFangSC-Regular" },
   { label: "微软雅黑", value: "Microsoft YaHei" },
@@ -112,7 +114,7 @@ export default {
       set(fontFamily) {
         this.$store.commit("updateWidgetAttrs", {
           fontFamily,
-          cid: this.textEditor.cid
+          cid: this.operateWidget.cid
         })
       }
     },
@@ -123,7 +125,7 @@ export default {
       set(fontSize) {
         this.$store.commit("updateWidgetAttrs", {
           fontSize,
-          cid: this.textEditor.cid
+          cid: this.operateWidget.cid
         })
       }
     },
@@ -131,7 +133,11 @@ export default {
       return this.attrs.fontWeight
     },
     colorModel() {
-      return this.attrs.color
+      let color = this.attrs.color
+      if (color === "#00000000" || color === "transparent") {
+        color = transparentImg
+      }
+      return color
     },
     justifyContentModel() {
       return this.attrs.justifyContent
@@ -149,7 +155,7 @@ export default {
     changeFontBold(val) {
       this.$store.commit("updateWidgetAttrs", {
         fontWeight: !val,
-        cid: this.textEditor.cid
+        cid: this.operateWidget.cid
       })
     },
     showColorPicker(type, evt) {
@@ -161,7 +167,7 @@ export default {
       res[arr[type - 1]] = align
       this.$store.commit("updateWidgetAttrs", {
         ...res,
-        cid: this.textEditor.cid
+        cid: this.operateWidget.cid
       })
     }
   }

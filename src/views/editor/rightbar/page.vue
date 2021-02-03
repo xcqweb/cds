@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="title item-con">
-       <label>页面样式</label>
+      <label>页面样式</label>
     </div>
 
     <div class="item-con">
@@ -78,12 +78,13 @@
         </div>
         <div class="pic-con" v-else>
           <img :src="backgroundImage" class="pic-cls" />
-          <svg-icon
-            icon-class="delete"
-            class="icon-del"
-            @click.stop.native="delPagePic"
-          />
         </div>
+        <svg-icon
+          v-if="backgroundImage"
+          icon-class="delete"
+          class="icon-del"
+          @click.stop.native="delPagePic"
+        />
       </a-upload-dragger>
     </div>
     <div class="item-con">
@@ -142,14 +143,21 @@
     </div>
     <div class="item-con fs">
       <label>数据拉取频率</label>
-      <a-input
+      <a-select v-model="dataRate" style="width: 60%">
+        <a-select-option v-for="item in dataRateList" 
+          :key="item.value" 
+          :value="item.value">
+          {{item.label}}
+        </a-select-option>
+      </a-select>
+      <!-- <a-input
         size="small"
         v-model.number="dataRate"
         type="number"
         :min="3"
         suffix="秒"
         style="width: 60%"
-      />
+      /> -->
     </div>
     <color-picker
       :visible.sync="visibleColor"
@@ -164,7 +172,8 @@ import helpComputed from "@/mixins/help-computed"
 import config from "@/config"
 import { getToken } from "@/utils/cookie"
 import fileApi from "@a/file"
-const pageSizeList = ["1366 * 768", "1280 * 720", "1920 * 1080", "自定义"]
+const pageSizeList = ["1366*768", "1280*720", "1920*1080", "自定义"]
+const transparentImg = `url(${require("@/assets/images/transparent.png")})`
 export default {
   name: "PageStyle",
   mixins: [helpComputed],
@@ -176,10 +185,7 @@ export default {
       get() {
         let res = pageSizeList[0]
         if (this.currentPage) {
-          let { width, height } = this.currentPage
-          width = width || config.defaultPage.width
-          height = height || config.defaultPage.height
-          res = `${width}*${height}`
+          res = this.dealPagesize()
         }
         return res
       },
@@ -199,7 +205,14 @@ export default {
         if (this.currentPage) {
           backgroundColor = this.currentPage.backgroundColor
         }
-        return { backgroundColor }
+        let background = backgroundColor
+        if (
+          backgroundColor === "#00000000" ||
+          backgroundColor === "transparent"
+        ) {
+          background = transparentImg
+        }
+        return { background }
       },
       set(backgroundColor) {
         this.$store.dispatch("updatePageInfo", { backgroundColor })
@@ -238,7 +251,11 @@ export default {
           let grid = this.currentPage.grid || config.grid
           color = grid.color
         }
-        return { backgroundColor: color }
+        let background = color
+        if (color === "#00000000" || color === "transparent") {
+          background = transparentImg
+        }
+        return { background }
       },
       set(val) {
         let { size } = this.currentPage.grid
@@ -280,6 +297,9 @@ export default {
     navStyle() {
       this.navModel = this.navStyle.mode || "dark"
       this.navColorModel = this.navStyle.theme || 1
+    },
+    currentPage() {
+      this.dealPageSizeModel(this.pageSize)
     }
   },
   data() {
@@ -297,15 +317,43 @@ export default {
       navColorList: config.navColorList,
       headerInfo: { Authorization: getToken() },
       uploadUrl: fileApi.uploadFile,
-      fileData: { bucketName: fileApi.bucketName }
+      fileData: { bucketName: fileApi.bucketName },
+      dataRateList: [
+        {
+          value: 5,
+          label: '5秒'
+        },
+        {
+          value: 10,
+          label: '10秒'
+        },
+        {
+          value: 30,
+          label: '30秒'
+        },
+        {
+          value: 60,
+          label: '1分钟'
+        },
+        {
+          value: 300,
+          label: '5分钟'
+        },
+      ],
     }
   },
-  created() {
-    this.$nextTick(() => {
-      this.dealPageSizeModel(this.pageSize)
-    })
+  mounted() {
+    if(this.currentPage) {
+      this.pageSize = this.dealPagesize()
+    }
   },
   methods: {
+    dealPagesize() {
+      let { width, height } = this.currentPage
+      width = width || config.defaultPage.width
+      height = height || config.defaultPage.height
+      return `${width}*${height}`
+    },
     dealPageSizeModel(val) {
       this.pageSizeModel = val
       const arr = val.split("*")
@@ -341,11 +389,11 @@ export default {
         this.backgroundImage = response.data
       }
     },
-    onNavStyleChange() {},
     pageSizeChange(val) {
       if (val == "自定义") {
         this.showPageCustom = true
       } else {
+        this.showPageCustom = false
         this.pageSize = val
       }
     },
@@ -395,6 +443,7 @@ export default {
     height: 89px;
     background: #f7f7f8;
     border-radius: 2px;
+    position: relative;
     .default-con {
       display: flex;
       flex-direction: column;
@@ -418,16 +467,17 @@ export default {
     .pic-con {
       position: relative;
       .pic-cls {
-        max-width: 130px;
-        max-height: 81px;
+        height: 85px;
+        max-width: 132px;
+        margin: 0 auto;
       }
-      .icon-del {
-        color: #333;
-        cursor: pointer;
-        position: absolute;
-        top: -3px;
-        right: 0;
-      }
+    }
+    .icon-del {
+      color: #333;
+      cursor: pointer;
+      position: absolute;
+      top: 3px;
+      right: 2px;
     }
   }
   .layout-item {

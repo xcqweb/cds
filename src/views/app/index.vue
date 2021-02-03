@@ -1,44 +1,48 @@
 <template>
   <div class="apply-con">
-    <a-button class="btn-con" type="link" @click.prevent="e => add(e, true)">
+    <a-button class="btn-con" type="primary" @click.prevent="add">
       + 新增
     </a-button>
     <div class="main-con">
       <a-modal
         v-model="visible"
-        title="新增应用"
+        :title="pageTitle"
         @ok="handleOk"
         @cancel="handleCancel"
         ok-text="提交"
         cancel-text="取消"
       >
-        <a-form-model
-          ref="ruleForm"
-          :model="form"
-          :rules="rules"
+        <a-form
+          :form="form"
           :label-col="{ span: 5 }"
           :wrapper-col="{ span: 12 }"
         >
-          <a-form-model-item
-            ref="studioName"
-            label="应用名称"
-            prop="studioName"
-          >
+          <a-form-item label="应用名称">
             <a-input
-              v-model="form.studioName"
-              @blur="
-                () => {
-                  $refs.studioName.onFieldBlur()
+              v-decorator="[
+                'studioName',
+                {
+                  rules: [
+                    { required: true, message: '应用名称不能为空' },
+                    {
+                      pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/g,
+                      message: '应用名称不能包含除下划线以外的其他特殊字符'
+                    }
+                  ]
                 }
-              "
+              ]"
+              placeholder="请输入应用名称"
+              :maxLength="50"
             />
-          </a-form-model-item>
-        </a-form-model>
+          </a-form-item>
+        </a-form>
       </a-modal>
       <a-table
         :columns="columns"
         :data-source="data"
         rowKey="id"
+        :pagination="pagination"
+        @change="tableChange"
         style="width:100%"
       >
         <a
@@ -80,37 +84,36 @@ const columns = [
 export default {
   data() {
     return {
+      pageTitle: "新增应用",
       data: [],
       columns,
       visible: false,
-      formLayout: "horizontal",
-      form: {
-        studioName: ""
+      form: this.$form.createForm(this),
+      pagination: {
+        current: 1,
+        total: 0,
+        pageSize: 10, // 每页中显示10条数据
+        showSizeChanger: true,
+        pageSizeOptions: ["10", "20", "30", "50"], // 每页中显示的数据
+        showTotal: total => `共有 ${total} 条数据` // 分页中显示总的数据
       },
-      rules: {
-        studioName: [
-          { required: true, message: "请输入应用名称", trigger: "blur" },
-          { min: 3, message: "至少输入3个字符", trigger: "blur" }
-        ]
-      },
-      appId: ""
+      currentAppId: ""
     }
   },
   created() {
     this.queryApply()
   },
   methods: {
-    jump(e) {
-      // 命名的路由
-      this.$router.push({ path: "/editor", query: { appId: e.id } })
+    jump(record) {
+      this.$router.push({ path: "/editor", query: { appId: record.id } })
     },
     queryApply() {
       let params = {
         appType: "",
         classifyId: "",
         keyword: "",
-        limit: 10,
-        pageNo: 1,
+        limit: this.pagination.pageSize,
+        pageNo: this.pagination.current,
         state: 1,
         status: 0,
         studioName: "",
@@ -119,19 +122,31 @@ export default {
       api.list(params).then(res => {
         if (res.code === 0) {
           this.data = res.data.records
+          this.pagination.total = res.data.total
         }
       })
     },
-    add(e) {
-      console.log("click", e)
-      this.visible = true
+    tableChange(pageOptions) {
+      this.pagination.current = pageOptions.current
+      this.pagination.pageSize = pageOptions.pageSize
+      this.queryApply()
     },
-    edit(e) {
+    add() {
       this.visible = true
-      this.form = e
+      this.currentAppId = ""
+      this.form = this.$form.createForm(this)
+    },
+    edit(data) {
+      this.pageTitle = "编辑应用"
+      this.visible = true
+      this.currentAppId = data.id
+      this.$nextTick(() => {
+        this.form.setFieldsValue({
+          studioName: data.studioName
+        })
+      })
     },
     del(e) {
-      console.log(e)
       api.del(e.id).then(res => {
         if (res.code === 0) {
           this.$message.success("删除应用成功")
@@ -142,49 +157,39 @@ export default {
     //关闭模态框
     handleCancel() {
       this.visible = false
-      this.resetForm()
-    },
-    resetForm() {
-      this.$refs.ruleForm.resetFields()
     },
     handleOk() {
-      this.$refs.ruleForm.validate(valid => {
-        if (valid) {
+      this.form.validateFields((err, values) => {
+        if (!err) {
           const params = {
             appType: 0,
             classifyId: "",
             descript: "test",
-            height: "768",
+            height: 768,
             picUrl: "",
             scale: "1",
-            studioName: this.form.studioName,
-            id: this.form.id,
+            studioName: values.studioName,
+            id: this.currentAppId,
             tenantId: "",
             theme: "",
-            width: "1024"
+            width: 1366
           }
-          if (this.form.id) {
-            api.edit(params).then(res => {
-              if (res.code === 0) {
-                this.$message.success("修改应用成功")
-                this.resetForm()
-                this.visible = false
-                this.queryApply()
-              }
-            })
+          let fun
+          let msg
+          if (params.id) {
+            msg = "修改应用成功"
+            fun = "edit"
           } else {
-            api.add(params).then(res => {
-              if (res.code === 0) {
-                this.$message.success("新建应用成功")
-                this.resetForm()
-                this.visible = false
-                this.queryApply()
-              }
-            })
+            msg = "新建应用成功"
+            fun = "add"
           }
-        } else {
-          console.log("error submit!!")
-          return false
+          api[fun](params).then(res => {
+            if (res.code === 0) {
+              this.$message.success(msg)
+              this.visible = false
+              this.queryApply()
+            }
+          })
         }
       })
     }
@@ -196,8 +201,9 @@ export default {
 .apply-con {
   height: 100%;
   color: rgb(91, 107, 115);
+  margin-top: 50px;
   .btn-con {
-    padding: 10px 100px;
+    margin-left: 100px;
   }
   .main-con {
     margin: 10px 100px;

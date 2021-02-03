@@ -22,10 +22,12 @@
   background-color: @c-primary;
   border-color: @c-primary;
 }
-.ant-btn-primary:hover{
-  color: @c-white;
-  background-color: @c-primary-dark;
-  border-color: @c-primary-dark;
+.ant-btn-primary{
+  &:hover,&:focus {
+    color: @c-white;
+    background-color: @c-primary-dark;
+    border-color: @c-primary-dark;
+  }
 }
 .ant-btn-primary:active, .ant-btn-primary.active{
   color: @c-white;
@@ -51,6 +53,9 @@
   border-color: @c-primary-light !important;
   box-shadow: 0 0 0 1px @c-primary-light !important;
   background-color: @c-white  !important;
+}
+.ant-input{
+  font-size: 12px;
 }
 .ant-input[disabled]{
   background: @c-white;
@@ -115,7 +120,6 @@
 @select-border-color: @c-bg-1;
 @select-background: @c-white;
 @select-item-selected-bg: @c-primary;
-// @select-item-active-bg: @c-primary;
 @select-dropdown-line-height: @f-default-line-height;
 .ant-select-arrow{
   color: @c-text;
@@ -123,9 +127,6 @@
 }
 .ant-select{
   color: @c-text-light-4;
-}
-.ant-select-selection{
-  // border: none;
 }
 .ant-select-selection:hover{
   background-color: @c-primary1;
@@ -289,4 +290,13 @@
   .ant-select-dropdown-menu-item{
     font-size: @f-default;
   }
+}
+.ant-select-selection__rendered{
+  font-size: 12px;
+}
+.ant-collapse-header{
+  font-size:12px;
+}
+.ant-collapse-content,.ant-collapse-item{
+  border-color:#F0F1F3!important;
 }

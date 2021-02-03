@@ -1,5 +1,5 @@
 <template>
-  <div class="gt-image" :style="imageStyleObj">
+  <div class="gt-image" :style="imageStyle">
     <svg
       v-if="!imgSrc"
       xmlns="http://www.w3.org/2000/svg"
@@ -20,12 +20,20 @@
 <script>
 import baseWidget from "@/mixins/base-widget"
 const cname = "GtImage"
+const borderColor = "transparent"
 export default {
   name: cname,
   mixins: [baseWidget],
   computed: {
-    imageStyleObj() {
-      return { ...this.styleObj, backgroundColor: "#e8e8e8" }
+    imageStyle() {
+      let res = { backgroundColor: "#e8e8e8" }
+      res.borderColor = this.borderColor || borderColor
+      return {
+        ...this.styleObj,
+        ...res,
+        borderStyle: this.borderStyle,
+        borderWidth: `${this.borderWidth}px`
+      }
     },
     imgSrcDeal() {
       return this.$imgUrl(this.imgSrc)

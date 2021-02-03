@@ -1,5 +1,7 @@
 <template>
-  <div class="group-item" :style="groupStyleObj" />
+  <div class="group-item" :style="groupStyleObj">
+    <slot />
+  </div>
 </template>
 <script>
 import baseWidget from "@/mixins/base-widget"

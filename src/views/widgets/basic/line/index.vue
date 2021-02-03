@@ -26,18 +26,20 @@
       </defs>
       <path
         :d="d"
+        class="line1"
+        stroke="transparent"
+        stroke-width="16"
+        style="pointer-events: auto;"
+        @mousedown.stop="elmDown"
+      />
+      <path
+        class="line"
+        :d="d"
         :stroke="stroke"
         :stroke-width="strokeWidth"
         :stroke-dasharray="strokeDasharray"
         :marker-start="`url(#arrow_left${cid})`"
         :marker-end="`url(#arrow_right${cid})`"
-      />
-      <path
-        :d="d"
-        stroke="transparent"
-        stroke-width="16"
-        style="pointer-events: auto;"
-        @mousedown.stop="elmDown"
       />
     </svg>
   </div>
@@ -142,26 +144,22 @@ export default {
     return {}
   },
   mounted() {
-    if(!this.isPreview) {
+    if (!this.isPreview) {
       this.elBase = document.querySelector(".view-con")
       this.leftEl = document.querySelector(".left-con")
       this.elBase.addEventListener("mousedown", this.deselect, true)
       this.leftEl.addEventListener("mousedown", this.deselect, true)
-      this.elBase.addEventListener("mouseup", this.mouseup, true)
-      this.elBase.addEventListener("mousemove", this.mousemove, true)
     }
   },
   beforeDestroy() {
-    if(!this.isPreview) {
+    if (!this.isPreview) {
       this.elBase.removeEventListener("mousedown", this.deselect, true)
       this.leftEl.removeEventListener("mousedown", this.deselect, true)
-      this.elBase.removeEventListener("mouseup", this.mouseup, true)
-      this.elBase.removeEventListener("mousemove", this.mousemove, true)
     }
   },
   methods: {
     elmDown(evt) {
-      if(!this.isPreview) {
+      if (!this.isPreview) {
         this.dragging = true
         let { x, y } = evt
         this.lastX = x - this.left
@@ -176,6 +174,8 @@ export default {
       this.basePos = { x: left, y: top }
     },
     deselect(e) {
+      this.elBase.addEventListener("mouseup", this.mouseup, true)
+      this.elBase.addEventListener("mousemove", this.mousemove, true)
       const target = e.target || e.srcElement
       if (
         !this.$el.contains(target) &&
@@ -192,12 +192,14 @@ export default {
         let top = y - this.lastY
         this.$store.commit("updateWidgetAttrs", { left, top, cid: this.cid })
         this.$store.commit("setRuler", {
-          shadow: { x: left, y: top, width:this.width, height:this.height }
+          shadow: { x: left, y: top, width: this.width, height: this.height }
         })
       }
     },
     mouseup() {
       this.dragging = false
+      this.elBase.removeEventListener("mouseup", this.mouseup, true)
+      this.elBase.removeEventListener("mousemove", this.mousemove, true)
     }
   }
 }
@@ -212,6 +214,9 @@ export default {
     height: 100%;
     transition: inherit;
     position: absolute;
+  }
+  .line1{
+    cursor: move;
   }
 }
 </style>

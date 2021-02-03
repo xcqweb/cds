@@ -1,15 +1,17 @@
 <template>
-  <div class="preview-con-wrap" v-if="currentPage && apply">
-    <div class="preview-con" :style="viewStyleObj">
-      <widget-item
-        v-for="widget in widgets"
-        :key="widget.cid"
-        :widget="widget"
-        :action-list="actionMap.get(widget.cid)"
-      />
+  <div class="preview" v-if="currentPage && apply">
+    <div class="preview-con-wrap">
+      <div class="preview-con" :style="viewStyleObj" v-if="initAction">
+        <widget-item
+          v-for="widget in widgets"
+          :key="widget.cid"
+          :widget="widget"
+          :action-list="actionMap.get(widget.cid)"
+        />
+      </div>
     </div>
-    <preview-menu v-if="currentPage && apply && position" />
-    <frame-text v-if="showFrame" />
+    <preview-menu v-if="position" />
+    <frame-text v-show="showFrame" />
   </div>
   <loading v-else />
 </template>
@@ -52,6 +54,12 @@ export default {
     },
     showFrame() {
       return this.$store.state.preview.frameContent.show
+    },
+    widgets() {
+      return arrayToTree(this.originalWidgets, {
+        parentProperty: "pid",
+        customID: "cid"
+      })
     }
   },
   watch: {
@@ -66,8 +74,9 @@ export default {
   },
   data() {
     return {
-      widgets: [],
+      initAction: false,
       viewStyleObj: {},
+      originalWidgets: [],
       actionMap: new Map(),
       lastDataRequestUrl: "",
       widgetDatas: [], // 控件绑定的数据
@@ -117,14 +126,13 @@ export default {
           pages = dealHomePage(pages)
           this.$store.commit("preview/setPages", pages)
           this.$store.commit("preview/setCurrentPage", pages[0])
-          // this.startTimerPullData()
         }
       })
     },
-    startTimerPullData() {
+    startTimerPullData(maps) {
       // 定时拉取
-      this.timer = setTimeout(() => {
-        this.requestLastData()
+      this.timer = setInterval(() => {
+        this.requestLastData(maps)
       }, (this.apply.dataRate || 3) * 1000)
     },
     initPageAttrs() {
@@ -139,7 +147,10 @@ export default {
         width: `${width}px`,
         height: `${height}px`,
         backgroundColor: backgroundColor || "#fff",
-        backgroundImage: `url(${backgroundImage})`
+      }
+      if (backgroundImage) {
+        this.viewStyleObj.backgroundImage = `url(${this.$imgUrl(backgroundImage)})`
+        this.viewStyleObj.backgroundSize = "100% 100%"
       }
     },
     queryPageWidgets() {
@@ -151,10 +162,7 @@ export default {
           if (res.data.length) {
             tempArr = dealWidgetData(res.data)
           }
-          this.widgets = arrayToTree(tempArr, {
-            parentProperty: "pid",
-            customID: "cid"
-          })
+          this.originalWidgets = tempArr
         }
       })
     },
@@ -167,6 +175,7 @@ export default {
             res.data.forEach(item => {
               this.actionMap.set(item.widgetId, item.widgetActionEntityList)
             })
+            this.initAction = true
           }
         })
     },
@@ -190,25 +199,24 @@ export default {
             tempArr.push(item)
             maps.set(item.paramType, tempArr)
           })
-          if (this.collectParamsMap) {
-            this.collectParamsMap.clear()
-          } else {
-            this.collectParamsMap = maps
+          if(maps.size) {
+            this.requestLastData(maps)
+            //this.startTimerPullData(maps)
           }
-          this.widgetDatasRequest.splice(0) // 切换页面时候清空上一个页面的绑定数据的请求值
-          this.requestLastData()
         }
       })
     },
     updateWidgetText(cid, frameText) {
       // 更新控件文本
-      if (!frameText) {
+      const resIndex = this.originalWidgets.findIndex(item => item.cid === cid)
+      if (!frameText || resIndex == -1) {
         return
       }
+      const resItem = this.originalWidgets[resIndex]
       let frameTexts = resItem.frameTexts
       if (frameTexts) {
         const tempIndex = frameTexts.findIndex(
-          item => item.paramMark == frameText.frameText
+          item => item.paramMark == frameText.paramMark
         )
         if (tempIndex != -1) {
           frameTexts[tempIndex] = frameText
@@ -219,13 +227,11 @@ export default {
         frameTexts = [frameText]
       }
       let defaultVal = frameTexts[0].paramValue
-
-      const resIndex = this.widgets.findIndex(item => item.cid === cid)
-      const resItem = this.widgets[resIndex]
+      let defaultName = frameTexts[0].paramMark
       if (resIndex != -1) {
-        this.widgets.splice(resIndex, 1, {
+        this.originalWidgets.splice(resIndex, 1, {
           ...resItem,
-          text: defaultVal,
+          text: `${defaultName}=${defaultVal}`,
           frameTexts
         })
       }
@@ -244,15 +250,15 @@ export default {
       })
       this.widgetDatas.forEach(item => {
         key = `${item.deviceModelMark}-${item.deviceMark}-${item.paramMark}`
-        this.updateWidgetText(item.cid, maps.get(key))
+        this.updateWidgetText(item.widgetId, maps.get(key))
       })
       this.widgetDatasRequest
     },
-    requestLastData() {
+    requestLastData(maps) {
       // 最后一笔数据
       let requestArr = []
-      for (let key of this.collectParamsMap.keys()) {
-        let queryList = this.dealWidgetBind(this.collectParamsMap.get(key))
+      for (let key of maps.keys()) {
+        let queryList = this.dealWidgetBind(maps.get(key))
         if (queryList.length) {
           let p = instance.post(this.lastDataRequestUrl, {
             paramType: key,
@@ -268,7 +274,7 @@ export default {
       Promise.all(requestArr).then(res => {
         res.forEach(item => {
           if (item.code === 0 && item.data) {
-            dataRes.push(res.data.sourceList)
+            dataRes.push(item.data.sourceList)
           }
         })
         dataRes = dataRes.flat()
@@ -294,28 +300,34 @@ export default {
         splitArr = key.split("-")
         let valueList = modelMaps.get(key)
         valueList.forEach(item => {
-          if (item.paramType != 2) {
             deviceParams.push(item.paramMark)
-          }
         })
-        queryList.push({
-          deviceModelMark: splitArr[0],
-          deviceParams,
-          deviceMark: splitArr[1]
-        })
+        if (deviceParams.length) {
+          queryList.push({
+            deviceModelMark: splitArr[0],
+            deviceParams,
+            deviceMark: splitArr[1]
+          })
+        }
       }
       return queryList
     }
   },
   beforeDestroy() {
     if (this.timer) {
-      window.clearTimeout(this.timer)
+      clearInterval(this.timer)
       this.timer = null
     }
   }
 }
 </script>
 <style lang="less">
+.preview {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 .preview-con-wrap {
   height: 100%;
   width: 100%;

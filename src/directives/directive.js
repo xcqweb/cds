@@ -38,12 +38,25 @@ Vue.directive("clickOutSide", {
       clickOutSide = value
     }
     el.handler = function(e) {
-      let elExclude
+      let elExclude = []
       if (value.elExclude) {
-        elExclude = document.querySelector(`.${value.elExclude}`)
+        value.elExclude.forEach(item=>{
+          let tempEle = document.querySelector(`.${item}`)
+          if(tempEle) {
+            elExclude.push(tempEle)
+          }
+        })
       }
       if (el && !el.contains(e.target)) {
-        if (!elExclude || !elExclude.contains(e.target)) {
+        let resFlag = true
+        if(elExclude.length) {
+          elExclude.forEach(item=>{
+            if(item.contains(e.target)) {
+              resFlag = false
+            }
+          })
+        }
+        if (!elExclude.length || resFlag) {
           clickOutSide(e)
         }
       }
@@ -55,3 +68,25 @@ Vue.directive("clickOutSide", {
     el.handler = null
   }
 })
+
+Vue.directive("inputNumber", {
+  bind: function(el,{ value }) {
+    const tempEl = el.firstChild
+    el.handler = function() {
+      let res = Number(tempEl.value.replace(/\D+/, ''))
+      if(value.max) {
+        res = Math.min(res,value.max)
+      }
+      if(value.min || value.min === 0) {
+        res = Math.max(res,value.min)
+      }
+      tempEl.value = res
+    }
+    tempEl&&tempEl.addEventListener('input', el.handler)
+  },
+  unbind: function(el) {
+    const tempEl = el.firstChild
+    tempEl&&tempEl.removeEventListener('input', el.handler)
+  }
+})
+

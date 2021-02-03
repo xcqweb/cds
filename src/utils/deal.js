@@ -92,14 +92,13 @@ export const findWidgetById = (widgets, id) => {
   return widgets.find(item => item.cid === id)
 }
 export function dealPageData(data) {
-  const { grid, lines, backgroundColor, widgetsInfo } = config.defaultPage
+  const { grid, lines, backgroundColor } = config.defaultPage
   return {
     grid: data.grid || grid,
     pageId: data.pageId,
     widgets: [],
     width: data.width,
     height: data.height,
-    widgetsInfo: data.widgetsInfo || widgetsInfo,
     lines: data.lines || lines,
     sort: data.sort,
     pid: data.pid,
@@ -146,9 +145,9 @@ export function dealWidgetData(data) {
         fontSize: item.fontSize || dw.fontSize,
         fontFamily: item.fontFamily || dw.fontFamily,
         opacity: item.opacity || dw.opacity,
-        visible: item.visible || dw.visible,
+        visible: item.visible,
         borderRadius: item.borderRadius || dw.borderRadius,
-        color:item.color || dw.color
+        color: item.color || dw.color
       }
     })
   })
@@ -188,4 +187,39 @@ export function dealHomePage(pages) {
     }
   }
   return pages
+}
+
+export function pageWidgetsNum(widgets, cname) {
+  return widgets.filter(item => item.cname === cname).length
+}
+
+export function dealTimeFun(date,isYear) {
+  let res
+  if (!date) {
+    date = new Date()
+  } else {
+    date = new Date(date)
+  }
+  let year
+  let month
+  let day
+ 
+  let min = date.getMinutes()
+  if (min < 10) {
+    min = `0${min}`
+  }
+  let sec = date.getSeconds()
+  if (sec < 10) {
+    sec = `0${sec}`
+  }
+  res = date.getHours() + ":" + min + ":" + sec
+  if(isYear) {
+    year = date.getFullYear()
+    month = date.getMonth() + 1
+    month = month < 10 ? '0' + month : month
+    day = date.getDate()
+    day = day < 10 ? ('0' + day) : day
+    res = `${year}-${month}-${day} ${res}`
+  }
+  return res
 }

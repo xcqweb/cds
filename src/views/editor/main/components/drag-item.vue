@@ -21,6 +21,7 @@
     @dragstop="onDragStop(widget)"
     @resizestop="onResizeStop(widget)"
     @rotatestop="onRotateStop"
+    @activated="onActivated(widget)"
     @deactivated="onDeactivated(widget)"
     @dblclick.native="dblclick(widget, $event)"
     :resizable="widget.active"
@@ -35,33 +36,37 @@ import { cloneDeep } from "lodash"
 import { isGroup, findWidgetChildren, clickWhichWidget } from "@u/deal"
 import config from "@/config"
 export default {
-  name:'DragItem',
-  props:{
-    widget:Object,
-    pwidget:Object,
+  name: "DragItem",
+  props: {
+    widget: Object,
+    pwidget: Object
   },
   components: {
-    VueDraggableResizable,
+    VueDraggableResizable
   },
   mixins: [helpComputed, helpMethods],
-  computed:{
+  computed: {
     calculateLeft() {
       let res = this.widget.attrs.left
-      if(this.pwidget) {
+      if (this.pwidget) {
         res = this.widget.attrs.left - this.pwidget.attrs.left
       }
       return res
     },
     calculateTop() {
       let res = this.widget.attrs.top
-      if(this.pwidget) {
+      if (this.pwidget) {
         res = this.widget.attrs.top - this.pwidget.attrs.top
       }
       return res
-    },
+    }
   },
   methods: {
     onDragStart(left, top) {
+      if (this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       this.startDragLeft = left
       this.startDargTop = top
       if (this.selectWidgets.length === 1) {
@@ -77,6 +82,10 @@ export default {
       }
     },
     onDrag(left, top, widget) {
+      if (this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       if (this.selectWidgets.length === 1) {
         this.updateHint(true, `${left},${top}`)
         const { rotate, width, height } = widget.attrs
@@ -106,6 +115,10 @@ export default {
       })
     },
     onResizeStart(left, top, width, height, widget) {
+      if (this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       this.startResizeWidth = width
       this.startResizeHeight = height
       const widgetChildren = findWidgetChildren(
@@ -118,6 +131,10 @@ export default {
       }
     },
     onResize(left, top, width, height, widget) {
+      if (this.pwidget) {
+        left += this.pwidget.attrs.left
+        top += this.pwidget.attrs.top
+      }
       this.$store.commit("updateWidgetAttrs", {
         left,
         top,
@@ -209,6 +226,12 @@ export default {
         shadow: { x: 0, y: 0, width, height }
       })
     },
+    onActivated(widget) {
+      const { left, top, width, height } = widget.attrs
+      this.$store.commit("setRuler", {
+        shadow: { x: left, y: top, width, height }
+      })
+    },
     updateHint(show, text) {
       this.$store.commit("setHint", { show, text })
     },
@@ -231,7 +254,7 @@ export default {
         })
       }
     }
-  }  
+  }
 }
 </script>
 <style lang="less">
@@ -285,6 +308,21 @@ export default {
         height: 0;
         border: 0;
       }
+    }
+  }
+  &:after{
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    border: 1px solid #298df8;
+    display: none;
+  }
+  &:hover{
+    &:after{
+      display: block;
     }
   }
 }
