@@ -12,6 +12,12 @@
         @mousedown.stop="mousedown($event, 'end')"
       />
     </template>
+    <component
+      :is="widget.cname"
+      v-bind="widget.attrs"
+      :text="widget.text"
+      :cid="widget.cid"
+    />
   </div>
 </template>
 <script>
@@ -25,10 +31,14 @@ const cursors = [
   "n-resize",
   "ne-resize"
 ]
+import components from "@/views/widgets/index"
 export default {
   name: "DragLine",
   props: {
     widget: Object
+  },
+  components: {
+    ...components
   },
   computed: {
     objStyle() {

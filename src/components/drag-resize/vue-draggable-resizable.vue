@@ -667,6 +667,9 @@ export default {
 .vdrr.active {
   z-index: 1 !important;
 }
+.vdrr.active:after {
+  display: none;
+}
 .handle {
   box-sizing: border-box;
   display: none;

@@ -26,18 +26,20 @@
       </defs>
       <path
         :d="d"
+        class="line1"
+        stroke="transparent"
+        stroke-width="16"
+        style="pointer-events: auto;"
+        @mousedown.stop="elmDown"
+      />
+      <path
+        class="line"
+        :d="d"
         :stroke="stroke"
         :stroke-width="strokeWidth"
         :stroke-dasharray="strokeDasharray"
         :marker-start="`url(#arrow_left${cid})`"
         :marker-end="`url(#arrow_right${cid})`"
-      />
-      <path
-        :d="d"
-        stroke="transparent"
-        stroke-width="16"
-        style="pointer-events: auto;"
-        @mousedown.stop="elmDown"
       />
     </svg>
   </div>
@@ -212,6 +214,9 @@ export default {
     height: 100%;
     transition: inherit;
     position: absolute;
+  }
+  .line1{
+    cursor: move;
   }
 }
 </style>

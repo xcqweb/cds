@@ -310,5 +310,20 @@ export default {
       }
     }
   }
+  &:after{
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    border: 1px solid #298df8;
+    display: none;
+  }
+  &:hover{
+    &:after{
+      display: block;
+    }
+  }
 }
 </style>

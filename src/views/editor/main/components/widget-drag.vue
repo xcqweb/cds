@@ -2,6 +2,8 @@
   <div class="widget-drag-con">
     <template v-for="widget in widgets">
       <drag-line
+        class="gt-line-wrap"
+        :class="{ active: widget.active }"
         v-if="widget.cname == 'GtLine'"
         :widget="widget"
         :key="widget.cid"
@@ -67,6 +69,25 @@ export default {
     pointer-events: none;
     &.active {
       z-index: 1;
+    }
+  }
+  .gt-line-wrap{
+    pointer-events: auto;
+    .gt-line{
+      &:hover{
+        .line{
+          stroke: #298df8;
+        }
+      }
+    }
+    &.active {
+      z-index: 1 !important;
+      .gt-line{
+        .line{
+          stroke-dasharray: 3,4;
+          stroke: #298df8;
+        }
+      }
     }
   }
 }
